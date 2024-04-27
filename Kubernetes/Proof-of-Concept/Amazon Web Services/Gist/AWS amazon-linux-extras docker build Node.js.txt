@@ -1,0 +1,765 @@
+###########################################################################################################################
+
+# AWS # amazon-linux-extras # docker build # Node.js
+
+***************************************************************************************************************************
+
+# AWS CloudShell
+
+***************************************************************************************************************************
+
+[
+$ sudo yum update
+$ sudo yum upgrade
+]
+
+
+[
+$ sudo yum install -y docker
+]
+$ sudo amazon-linux-extras install docker
+
+
+$ sudo docker version
+
+
+[
+$ sudo usermod -a -G docker ec2-user
+]
+
+
+$ sudo dockerd
+
+
+# Actions New tab
+$ sudo docker version
+
+***************************************************************************************************************************
+
+$ sudo docker pull dockerrajani/mongo-aws-linux-x86-64:version1.0.0
+
+
+$ sudo docker run \
+  --name=mongo \
+  --rm \
+  dockerrajani/mongo-aws-linux-x86-64:version1.0.0
+
+
+# Actions New tab
+# container # mongo # shell
+$ sudo docker exec -it mongo bash
+root@44d2152f50af:/# mongosh
+test> db.version()
+test> show dbs
+test> exit
+root@44d2152f50af:/# exit
+
+
+# sudo docker # network
+[
+$ sudo docker network ls
+]
+$ sudo docker network create node-mongodb-app-network
+[
+$ sudo docker network rm node-mongodb-app-network 
+]
+
+
+$ sudo docker run \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-app-network \
+  dockerrajani/mongo-aws-linux-x86-64:version1.0.0
+
+
+[
+$ sudo docker run \
+  --name=mongo4 \
+  --rm \
+  mongo:4.2.0
+
+
+# Actions New tab
+$ sudo docker exec -it mongo4 bash
+root@f8ec7a0e1f06:/# mongo
+test> db.version()
+test> show dbs
+test> exit
+]
+
+***************************************************************************************************************************
+
+# Node.js
+
+# node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0
+
+***************************************************************************************************************************
+# Actions New tab
+$ sudo mkdir -p Version1.0.0
+
+
+$ cd Version1.0.0
+
+
+$ sudo pwd
+
+
+$ sudo nano index.js
+[
+const path = require('path')
+const express = require('express')
+const { MongoClient } = require('mongodb')
+const multer = require('multer')
+const { marked } = require('marked')
+
+const app = express()
+const port = process.env.PORT || 3000
+const mongoURL = process.env.MONGO_URL || 'mongodb://localhost:27017/dev'
+const client = new MongoClient(mongoURL)
+
+async function initMongo() {
+  console.log('Initialising MongoDB...')
+  let success = false
+  while (!success) {
+    try {
+      await client.connect()
+      success = true
+    } catch {
+      console.log('Error connecting to MongoDB, retrying in 1 second')
+      await new Promise(resolve => setTimeout(resolve, 1000))
+    }
+  }
+  console.log('MongoDB initialised')
+  return client.db(client.s.options.dbName).collection('notes')
+}
+
+async function start() {
+  const db = await initMongo()
+
+  app.set('view engine', 'pug')
+  app.set('views', path.join(__dirname, 'views'))
+  app.use(express.static(path.join(__dirname, 'public')))
+  app.use(express.static(path.join(__dirname, '/images')))
+
+  app.get('/', async (req, res) => {
+    res.render('index', { notes: await retrieveNotes(db) })
+  })
+
+  app.post(
+    '/note',
+    multer({ dest: path.join(__dirname, 'public/uploads/') }).single('image'),
+    async (req, res) => {
+      if (!req.body.upload && req.body.description) {
+        await saveNote(db, { description: req.body.description })
+        res.redirect('/')
+      } else if (req.body.upload && req.file) {
+        const link = `/uploads/${encodeURIComponent(req.file.filename)}`
+        res.render('index', {
+          content: `${req.body.description} ![](${link})`,
+          notes: await retrieveNotes(db),
+        })
+      }
+    },
+  )
+
+  app.listen(port, () => {
+    console.log(`App listening on http://localhost:${port}`)
+  })
+}
+
+async function saveNote(db, note) {
+  await db.insertOne(note)
+}
+
+async function retrieveNotes(db) {
+  const notes = await db.find().toArray()
+  const sortedNotes = notes.reverse()
+  return sortedNotes.map(it => ({ ...it, description: marked(it.description) }))
+}
+
+start()
+]
+$ sudo cat index.js
+
+
+$ sudo mkdir -p views  
+
+    
+$ sudo nano views/index.pug
+[
+html
+  head
+    title= title
+    link(rel="stylesheet", href="tachyons.min.css")
+  body.ph3.pt0.pb4.mw7.center.sans-serif
+    h1.f2.mb0 #[img(src='/images/Node.png')] #[span.green N]ode.js #[img(src='/images/MongoDB.png')] #[span.green M]ongoDB 
+    <!-- img(src="https://avatars.githubusercontent.com/u/9950313?s=48&v=4") -->
+    // img(src='https://avatars.githubusercontent.com/u/45120?s=48&v=4')
+    p.f5.mt1.mb4.lh-copy A Node.js-MongoDB image upload app.
+    form(action="/note" method="POST" enctype="multipart/form-data")
+      ol.list.pl0
+        li.mv3
+          label.f6.b.db.mb2(for="image") Upload an image
+          input.f6.link.dim.br1.ba.b--black-20.ph3.pv2.mb2.dib.black.bg-white.pointer(type="file" name="image")
+          input.f6.link.dim.br1.ba.bw1.ph3.pv2.mb2.dib.black.bg-white.pointer.ml2(type="submit" value="Upload" name="upload")
+        li.mv3
+          label.f6.b.db.mb2(for="description") Write your content here
+          textarea.f4.db.border-box.hover-black.w-100.measure.ba.b--black-20.pa2.br2.mb2(rows="5" name="description") #{content || ''}
+          input.f6.link.dim.br1.ba.bw1.ph3.pv2.mb2.dib.black.bg-white.pointer(type="submit" value="Publish" name="publish")
+    if notes.length > 0
+      ul.list.pl0
+        p.f6.b.db.mb2 Notes
+        each note in notes
+          li.mv3.bb.bw2.b--light-yellow.bg-washed-yellow.ph4.pv2
+            p.measure!= note.description
+    else
+      p.lh-copy.f6 You don't have any notes yet.
+]
+$ sudo cat views/index.pug
+
+
+[
+$ sudo mkdir -p public
+]
+$ sudo curl -L https://raw.githubusercontent.com/tachyons-css/tachyons/master/css/tachyons.min.css
+$ sudo wget https://raw.githubusercontent.com/tachyons-css/tachyons/master/css/tachyons.min.css --directory-prefix=public
+$ sudo cat public/tachyons.min.css
+
+
+$ sudo curl --output Node.png "https://avatars.githubusercontent.com/u/9950313?s=48&v=4" --create-dirs --output-dir public/images
+$ sudo ls public/images/Node.png
+$ sudo curl --output MongoDB.png "https://avatars.githubusercontent.com/u/45120?s=48&v=4" --create-dirs --output-dir public/images
+$ sudo ls public/images/MongoDB.png
+
+
+# package name: (version1.0.0):
+node-mongodb-app
+$ sudo npm init
+
+$ sudo cat package.json 
+
+$ sudo npm list --global
+$ sudo npm list
+
+$ sudo npm --version
+$ sudo npm update --global
+$ sudo npm upgrade --global
+$ sudo npm outdated --global
+
+[
+$ sudo npm install -g npm-add-script 
+]
+$ sudo npmAddScript -k start -v "node index.js"
+[
+$ sudo npmAddScript -k mongodb -v "mongod"
+]
+
+$ sudo npm run-script
+
+$ sudo cat package.json
+
+$ sudo npm install express
+$ sudo npm install marked
+$ sudo npm install mongodb
+$ sudo npm install multer
+$ sudo npm install pug
+
+$ sudo npm list --global
+$ sudo npm list
+
+$ sudo cat package.json
+
+[
+$ sudo npm run mongodb -- --dbpath /opt/homebrew/var/mongodb
+[
+throw new Error("unsupported architecture, ia32 and x64 are the only valid options");
+]
+$ sudo npm run start
+]
+$ sudo node index.js
+
+***************************************************************************************************************************
+
+# Actions New tab
+$ cd Version1.0.0
+
+
+$ sudo nano Dockerfile
+[
+FROM node:20.9-slim
+WORKDIR /usr/src/app
+COPY . .
+RUN npm install
+CMD [ "node", "index.js" ]
+]
+
+
+$ sudo cat Dockerfile
+
+[
+sudo echo node_modules > .dockerignore
+]
+$ sudo nano .dockerignore
+node_modules
+
+$ sudo cat .dockerignore
+
+$ sudo cat package.json
+
+$ sudo cat package-lock.json
+
+$ sudo docker build -t node-mongodb-app-amazon-linux-extras-x86-64 .
+
+[
+$ sudo docker run -it --rm -p 3000:3000 node-mongodb-app-amazon-linux-extras-x86-64
+]
+
+$ sudo docker container list 
+$ sudo docker image list --all
+
+[
+# Container ID of node-mongodb-app-amazon-linux-extras-x86-64 
+# 2bbdbd085638
+$ sudo docker exec -it 2bbdbd085638 bash
+]
+
+$ sudo docker tag node-mongodb-app-amazon-linux-extras-x86-64 dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0
+
+$ sudo docker login
+
+$ sudo docker push dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0
+
+https://hub.docker.com/repository/docker/dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64
+
+$ sudo docker pull dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0
+
+
+# sudo docker # network
+[
+$ sudo docker network ls
+]
+$ sudo docker network create node-mongodb-app-network
+[
+$ sudo docker network rm node-mongodb-app-network 
+]
+
+# Actions New tab
+$ sudo docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0
+
+***************************************************************************************************************************
+
+# Node.js
+
+# node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+***************************************************************************************************************************
+
+# Actions New tab
+$ sudo mkdir -p Version2.0.0
+
+
+$ cd Version2.0.0
+
+
+$ sudo pwd
+
+
+$ sudo nano index.js
+[
+const path = require('path')
+const express = require('express')
+const { MongoClient } = require('mongodb')
+const multer = require('multer')
+const { marked } = require('marked')
+
+// minio
+const minio = require('minio')
+
+const app = express()
+const port = process.env.PORT || 3000
+const mongoURL = process.env.MONGO_URL || 'mongodb://localhost:27017/dev'
+const client = new MongoClient(mongoURL)
+
+// minio
+const minioHost = process.env.MINIO_HOST || 'localhost'
+const minioBucket = 'image-storage'
+
+async function initMongo() {
+  console.log('Initialising MongoDB...')
+  let success = false
+  while (!success) {
+    try {
+      await client.connect()
+      success = true
+    } catch {
+      console.log('Error connecting to MongoDB, retrying in 1 second')
+      await new Promise(resolve => setTimeout(resolve, 1000))
+    }
+  }
+  console.log('MongoDB initialised')
+  return client.db(client.s.options.dbName).collection('notes')
+}
+
+// minio
+async function initMinIO() {
+  console.log('Initialising MinIO...')
+  const client = new minio.Client({
+    endPoint: minioHost,
+    port: 9000,
+    useSSL: false,
+    accessKey: process.env.MINIO_ACCESS_KEY,
+    secretKey: process.env.MINIO_SECRET_KEY,
+  })
+  let success = false
+  while (!success) {
+    try {
+      if (!(await client.bucketExists(minioBucket))) {
+        await client.makeBucket(minioBucket)
+      }
+      success = true
+    } catch {
+      await new Promise(resolve => setTimeout(resolve, 1000))
+    }
+  }
+  console.log('MinIO initialised')
+  return client
+}
+
+async function start() {
+  const db = await initMongo()
+  
+  // minio
+  const minio = await initMinIO()
+
+  app.set('view engine', 'pug')
+  app.set('views', path.join(__dirname, 'views'))
+  app.use(express.static(path.join(__dirname, 'public')))
+  app.use(express.static(path.join(__dirname, '/images')))
+
+  app.get('/', async (req, res) => {
+    res.render('index', { notes: await retrieveNotes(db) })
+  })
+
+  app.post(
+    '/note',
+    
+    // minio
+    multer({ storage: multer.memoryStorage() }).single('image'),
+    
+    async (req, res) => {
+      if (!req.body.upload && req.body.description) {
+        await saveNote(db, { description: req.body.description })
+        res.redirect('/')
+      } else if (req.body.upload && req.file) {
+      
+        // minio
+        await minio.putObject(
+          minioBucket,
+          req.file.originalname,
+          req.file.buffer,
+        )
+        
+        // minio
+        const link = `/img/${encodeURIComponent(req.file.originalname)}`
+        
+        res.render('index', {
+          content: `${req.body.description} ![](${link})`,
+          notes: await retrieveNotes(db),
+        })
+      }
+    },
+  )
+
+  // minio
+  app.get('/img/:name', async (req, res) => {
+    const stream = await minio.getObject(
+      minioBucket,
+      decodeURIComponent(req.params.name),
+    )
+    stream.pipe(res)
+  })
+
+  app.listen(port, () => {
+    console.log(`App listening on http://localhost:${port}`)
+  })
+}
+
+async function saveNote(db, note) {
+  await db.insertOne(note)
+}
+
+async function retrieveNotes(db) {
+  const notes = await db.find().toArray()
+  const sortedNotes = notes.reverse()
+  return sortedNotes.map(it => ({ ...it, description: marked(it.description) }))
+}
+
+start()
+]
+$ sudo cat index.js
+
+
+[
+$ sudo mkdir -p public
+]
+$ sudo sudo curl -L https://raw.githubusercontent.com/tachyons-css/tachyons/master/css/tachyons.min.css
+$ sudo sudo wget https://raw.githubusercontent.com/tachyons-css/tachyons/master/css/tachyons.min.css --directory-prefix=public
+$ sudo cat public/tachyons.min.css
+
+
+$ sudo curl --output Node.png "https://avatars.githubusercontent.com/u/9950313?s=48&v=4" --create-dirs --output-dir public/images
+$ sudo ls public/images/Node.png
+$ sudo curl --output MongoDB.png "https://avatars.githubusercontent.com/u/45120?s=48&v=4" --create-dirs --output-dir public/images
+$ sudo ls public/images/MongoDB.png
+$ sudo curl --output Minio.png "https://avatars.githubusercontent.com/u/695951?s=48&v=4" --create-dirs --output-dir public/images
+$ sudo ls public/images/Minio.png
+
+
+$ sudo nano public/custom.style.css
+[
+.brick-red {
+  color: #c72b48
+}
+]
+$ sudo cat public/custom.style.css
+
+
+$ sudo mkdir -p views
+
+
+$ sudo nano views/index.pug
+[
+html
+  head
+    title= title
+    link(rel="stylesheet", href="tachyons.min.css")
+    link(rel="stylesheet", href="custom.style.css")
+  body.ph3.pt0.pb4.mw7.center.sans-serif
+    h1.f2.mb0 #[img(src='/images/Node.png')] #[span.green N]ode #[img(src='/images/MongoDB.png')] #[span.green M]ongoDB #[img(src='/images/Minio.png')] #[span.brick-red Minio]
+    <!-- img(src="https://avatars.githubusercontent.com/u/9950313?s=48&v=4") -->
+    // img(src='https://avatars.githubusercontent.com/u/45120?s=48&v=4')
+    // img(src='https://avatars.githubusercontent.com/u/695951?s=48&v=4')
+    p.f5.mt1.mb4.lh-copy A Node.js-MongoDB-Minio image upload app.
+    form(action="/note" method="POST" enctype="multipart/form-data")
+      ol.list.pl0
+        li.mv3
+          label.f6.b.db.mb2(for="image") Upload an image
+          input.f6.link.dim.br1.ba.b--black-20.ph3.pv2.mb2.dib.black.bg-white.pointer(type="file" name="image")
+          input.f6.link.dim.br1.ba.bw1.ph3.pv2.mb2.dib.black.bg-white.pointer.ml2(type="submit" value="Upload" name="upload")
+        li.mv3
+          label.f6.b.db.mb2(for="description") Write your content here
+          textarea.f4.db.border-box.hover-black.w-100.measure.ba.b--black-20.pa2.br2.mb2(rows="5" name="description") #{content || ''}
+          input.f6.link.dim.br1.ba.bw1.ph3.pv2.mb2.dib.black.bg-white.pointer(type="submit" value="Publish" name="publish")
+    if notes.length > 0
+      ul.list.pl0
+        p.f6.b.db.mb2 Notes
+        each note in notes
+          li.mv3.bb.bw2.b--light-yellow.bg-washed-yellow.ph4.pv2
+            p.measure!= note.description
+    else
+      p.lh-copy.f6 You don't have any notes yet.
+]
+$ sudo cat views/index.pug
+
+
+# package name: (Version2.0.0)
+node-mongodb-app
+# version: (1.0.0) 
+2.0.0
+$ sudo npm init
+
+$ sudo cat package.json 
+
+$ sudo npm list --global
+$ sudo npm list
+
+$ sudo npm --version
+$ sudo npm update --global
+$ sudo npm upgrade --global
+$ sudo npm outdated --global
+
+[
+$ sudo npm install -g npm-add-script 
+]
+$ sudo npmAddScript -k start -v "node index.js"
+[
+$ sudo npmAddScript -k mongodb -v "mongod"
+]
+
+$ sudo npm run-script
+
+$ sudo cat package.json  
+
+$ sudo npm install express
+$ sudo npm install marked
+$ sudo npm install mongodb
+$ sudo npm install multer
+$ sudo npm install pug
+$ sudo npm install marked
+$ sudo npm install minio
+
+$ sudo npm list --global
+$ sudo npm list
+
+$ sudo cat package.json
+[
+{
+  "name": "node-mongodb-app",
+  "version": "2.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "marked": "^9.1.5",
+    "minio": "^7.1.3",
+    "mongodb": "^6.2.0",
+    "multer": "^1.4.5-lts.1",
+    "pug": "^3.0.2"
+  }
+}
+]
+
+
+$ sudo node index.js
+
+***************************************************************************************************************************
+
+# Actions New tab
+$ cd Version2.0.0
+
+
+$ sudo nano Dockerfile
+[
+FROM node:20.9-slim
+WORKDIR /usr/src/app
+COPY . .
+RUN npm install
+CMD [ "node", "index.js" ]
+]
+
+
+$ sudo cat Dockerfile
+
+[
+sudo echo node_modules > .dockerignore
+]
+$ sudo nano .dockerignore
+node_modules
+
+$ sudo cat .dockerignore
+
+$ sudo cat package.json
+
+$ sudo cat package-lock.json
+
+$ sudo docker build -t node-mongodb-app-version-2-amazon-linux-extras-x86-64 .
+
+[
+$ sudo docker run -it --rm -p 3000:3000 node-mongodb-app-version-2-amazon-linux-extras-x86-64
+]
+
+$ sudo docker container list 
+$ sudo docker image list --all
+
+[
+# Container ID of node-mongodb-app-version-2-amazon-linux-extras-x86-64
+# 09c06b5c8a97
+$ sudo docker exec -it 09c06b5c8a97 bash
+]
+
+$ sudo docker tag node-mongodb-app-version-2-amazon-linux-extras-x86-64 dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+$ sudo docker login
+
+$ sudo docker push dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+https://hub.docker.com/repository/docker/dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64
+
+$ sudo docker pull dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+
+# sudo docker # network
+[
+$ sudo docker network ls
+]
+$ sudo docker network create node-mongodb-app-network
+[
+$ sudo docker network rm node-mongodb-app-network 
+]
+
+# Actions New tab
+$ sudo docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+***************************************************************************************************************************
+
+[
+$ sudo docker ps --all --quiet
+$ sudo docker stop $(sudo docker ps -a -q)
+$ sudo docker rm $(sudo docker ps -a -q) --force
+]
+$ sudo docker container list --all --quiet
+$ sudo docker stop $(sudo docker container list -a -q)
+$ sudo docker rm $(sudo docker container list -a -q) --force
+$ sudo docker container prune
+
+$ sudo docker image list --all --quiet
+$ sudo docker rmi $(sudo docker image list -a -q) --force 
+$ sudo docker image prune --all
+
+$ sudo docker volume list --quiet
+$ sudo docker volume rm $(sudo docker volume list --quiet) --force
+$ sudo docker volume prune
+
+$ sudo docker network list --quiet --filter "type=custom"
+$ sudo docker network rm $(sudo docker network list --quiet --filter "type=custom")
+$ sudo docker network prune
+
+$ sudo docker system info
+$ sudo docker system prune --all --volumes
+
+
+# Tab where dockerd was started
+control + c
+
+
+[
+$ ps aux | grep -v grep | grep docker | awk '{print $2}' 
+
+# $ sudo kill <>
+]
+
+
+[
+$ sudo ls /var/run/docker.pid
+$ sudo rm -rf /var/run/docker.pid
+]
+
+
+$ sudo yum remove docker
+
+$ sudo ls /var/lib/docker
+$ sudo rm -rf /var/lib/docker
+
+$ sudo ls /var/lib/containerd
+$ sudo rm -rf /var/lib/containerd
+
+***************************************************************************************************************************
+###########################################################################################################################

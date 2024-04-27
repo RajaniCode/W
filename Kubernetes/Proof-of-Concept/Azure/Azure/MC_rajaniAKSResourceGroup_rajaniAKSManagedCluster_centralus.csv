@@ -1,0 +1,9 @@
+﻿NAME,TYPE,LOCATION,
+"2a35c914-72e1-4300-9c42-49da531f582e","Public IP address","Central US"
+"aks-agentpool-90090784-nsg","Network security group","Central US"
+"aks-agentpool-90090784-routetable","Route table","Central US"
+"aks-nodepool1-24448357-vmss","Virtual machine scale set","Central US"
+"aks-vnet-90090784","Virtual network","Central US"
+"kubernetes","Load balancer","Central US"
+"kubernetes-a152d622c93ad42118bf0243a403ec18","Public IP address","Central US"
+"rajaniAKSManagedCluster-agentpool","Managed Identity","Central US"

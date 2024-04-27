@@ -1,0 +1,40 @@
+
+// OpenJDK 16
+// % export PATH="/Users/rajaniapple/Downloads/Software/OpenJDK/JDK16.0.2/jdk-16.0.2.jdk/Contents/Home/bin/":$PATH
+
+
+# pom.xml
+# --enable-preview --add-modules
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>16</source>
+          <target>16</target>
+          <compilerArgs>
+            <arg>--add-modules</arg>
+            <arg>jdk.incubator.foreign</arg>
+            <arg>--enable-preview</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+// Skip Test
+
+% mvn clean install -DskipTests
+# OR
+% mvn package -Dmaven.test.skip
+
+% java --enable-preview --add-modules jdk.incubator.foreign -cp target/Example-1.0-SNAPSHOT.jar com.sample.App
+
+
+rajaniapple@Rajanis-MacBook-Pro Example % java --enable-preview --add-modules jdk.incubator.foreign -cp target/Example-1.0-SNAPSHOT.jar com.sample.App
+WARNING: Using incubator modules: jdk.incubator.foreign
+/Users/rajaniapple/Desktop/Java17/Java16/Maven/PackageInstaller/JDKIncubatorForeign/Example/hello.so
+Hello, World!
+Unique ID : 123e4567-e89b-12d3-a456-556642440000
+rajaniapple@Rajanis-MacBook-Pro Example % 

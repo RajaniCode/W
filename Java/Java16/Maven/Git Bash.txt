@@ -1,0 +1,264 @@
+
+rajanis@MSSPLLAP165 MINGW64 /
+$ export PATH=$PATH:"/C/Users/rajanis/Downloads/Java/JDK/jdk-15.0.1/bin/:/C/Users/rajanis/Downloads/Java/Apache Maven/Apache Maven 3.6.3/apache-maven-3.6.3/bin/"
+
+rajanis@MSSPLLAP165 MINGW64 /
+$ java --version
+openjdk 15.0.1 2020-10-20
+OpenJDK Runtime Environment (build 15.0.1+9-18)
+OpenJDK 64-Bit Server VM (build 15.0.1+9-18, mixed mode, sharing)
+
+rajanis@MSSPLLAP165 MINGW64 /
+$ mvn -v
+Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f)
+Maven home: C:\Users\rajanis\Downloads\Java\Apache Maven\Apache Maven 3.6.3\apache-maven-3.6.3
+Java version: 15.0.1, vendor: Oracle Corporation, runtime: C:\Users\rajanis\Downloads\Java\JDK\jdk-15.0.1
+Default locale: en_GB, platform encoding: Cp1252
+OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
+
+rajanis@MSSPLLAP165 MINGW64 /
+$ cd "D:\RajaniS Master Folder\Java\Maven\Example\2020"
+
+rajanis@MSSPLLAP165 MINGW64 /d/RajaniS Master Folder/Java/Maven/Example/2020
+$ mkdir Exercise
+
+rajanis@MSSPLLAP165 MINGW64 /d/RajaniS Master Folder/Java/Maven/Example/2020
+$ cd Exercise
+
+rajanis@MSSPLLAP165 MINGW64 /d/RajaniS Master Folder/Java/Maven/Example/2020/Exercise
+$ mvn archetype:generate -DgroupId=com.sample -DartifactId=KeyGenerator -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------< org.apache.maven:standalone-pom >-------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO]
+[INFO] >>> maven-archetype-plugin:3.2.0:generate (default-cli) > generate-sources @ standalone-pom >>>
+[INFO]
+[INFO] <<< maven-archetype-plugin:3.2.0:generate (default-cli) < generate-sources @ standalone-pom <<<
+[INFO]
+[INFO]
+[INFO] --- maven-archetype-plugin:3.2.0:generate (default-cli) @ standalone-pom ---
+[INFO] Generating project in Batch mode
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/archetypes/maven-archetype-quickstart/1.0/maven-archetype-quickstart-1.0.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/archetypes/maven-archetype-quickstart/1.0/maven-archetype-quickstart-1.0.pom (703 B at 1.5 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/archetypes/maven-archetype-quickstart/1.0/maven-archetype-quickstart-1.0.jar
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/archetypes/maven-archetype-quickstart/1.0/maven-archetype-quickstart-1.0.jar (4.3 kB at 10 kB/s)
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Old (1.x) Archetype: maven-archetype-quickstart:1.0
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: basedir, Value: D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise
+[INFO] Parameter: package, Value: com.sample
+[INFO] Parameter: groupId, Value: com.sample
+[INFO] Parameter: artifactId, Value: KeyGenerator
+[INFO] Parameter: packageName, Value: com.sample
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] project created from Old (1.x) Archetype in dir: D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  9.400 s
+[INFO] Finished at: 2020-10-30T01:54:30+05:30
+[INFO] ------------------------------------------------------------------------
+
+rajanis@MSSPLLAP165 MINGW64 /d/RajaniS Master Folder/Java/Maven/Example/2020/Exercise
+$ cd KeyGenerator
+
+rajanis@MSSPLLAP165 MINGW64 /d/RajaniS Master Folder/Java/Maven/Example/2020/Exercise/KeyGenerator
+$ mvn package
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ----------------------< com.sample:KeyGenerator >-----------------------
+[INFO] Building KeyGenerator 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-jar-plugin/2.4/maven-jar-plugin-2.4.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-jar-plugin/2.4/maven-jar-plugin-2.4.pom (5.8 kB at 4.6 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-jar-plugin/2.4/maven-jar-plugin-2.4.jar
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-jar-plugin/2.4/maven-jar-plugin-2.4.jar (34 kB at 54 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/junit/junit/4.13.1/junit-4.13.1.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/junit/junit/4.13.1/junit-4.13.1.pom (25 kB at 55 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/junit/junit/4.13.1/junit-4.13.1.jar
+Downloaded from central: https://repo.maven.apache.org/maven2/junit/junit/4.13.1/junit-4.13.1.jar (383 kB at 282 kB/s)
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ KeyGenerator ---
+[WARNING] Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\src\main\resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ KeyGenerator ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding Cp1252, i.e. build is platform dependent!
+[INFO] Compiling 1 source file to D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\target\classes
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ KeyGenerator ---
+[WARNING] Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\src\test\resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ KeyGenerator ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding Cp1252, i.e. build is platform dependent!
+[INFO] Compiling 1 source file to D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\target\test-classes
+[INFO]
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ KeyGenerator ---
+[INFO] Surefire report directory: D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\target\surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.sample.AppTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.109 sec
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO]
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ KeyGenerator ---
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/2.1/plexus-archiver-2.1.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0/plexus-utils-3.0.jar
+Downloading from central: https://repo.maven.apache.org/maven2/commons-lang/commons-lang/2.1/commons-lang-2.1.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/2.0.2/plexus-io-2.0.2.jar
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/2.1/plexus-archiver-2.1.jar (184 kB at 240 kB/s)
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/2.0.2/plexus-io-2.0.2.jar (58 kB at 44 kB/s)
+Downloaded from central: https://repo.maven.apache.org/maven2/commons-lang/commons-lang/2.1/commons-lang-2.1.jar (208 kB at 137 kB/s)
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0/plexus-utils-3.0.jar (226 kB at 139 kB/s)
+[INFO] Building jar: D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\target\KeyGenerator-1.0-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  8.010 s
+[INFO] Finished at: 2020-10-30T02:18:07+05:30
+[INFO] ------------------------------------------------------------------------
+
+rajanis@MSSPLLAP165 MINGW64 /d/RajaniS Master Folder/Java/Maven/Example/2020/Exercise/KeyGenerator
+$ java -cp target/KeyGenerator-1.0-SNAPSHOT.jar com.sample.App
+Hello World!
+Unique ID : ab929870-272f-454e-a321-e8cd0a649f4f
+
+rajanis@MSSPLLAP165 MINGW64 /d/RajaniS Master Folder/Java/Maven/Example/2020/Exercise/KeyGenerator
+$ mvn test
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ----------------------< com.sample:KeyGenerator >-----------------------
+[INFO] Building KeyGenerator 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ KeyGenerator ---
+[WARNING] Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\src\main\resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ KeyGenerator ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ KeyGenerator ---
+[WARNING] Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\src\test\resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ KeyGenerator ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO]
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ KeyGenerator ---
+[INFO] Surefire report directory: D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\target\surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.sample.AppTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.11 sec
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.641 s
+[INFO] Finished at: 2020-10-30T02:18:27+05:30
+[INFO] ------------------------------------------------------------------------
+
+rajanis@MSSPLLAP165 MINGW64 /d/RajaniS Master Folder/Java/Maven/Example/2020/Exercise/KeyGenerator
+$ mvn -Dtest=AppTest test
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ----------------------< com.sample:KeyGenerator >-----------------------
+[INFO] Building KeyGenerator 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ KeyGenerator ---
+[WARNING] Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\src\main\resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ KeyGenerator ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ KeyGenerator ---
+[WARNING] Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\src\test\resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ KeyGenerator ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO]
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ KeyGenerator ---
+[INFO] Surefire report directory: D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\target\surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.sample.AppTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.109 sec
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.620 s
+[INFO] Finished at: 2020-10-30T02:18:44+05:30
+[INFO] ------------------------------------------------------------------------
+
+rajanis@MSSPLLAP165 MINGW64 /d/RajaniS Master Folder/Java/Maven/Example/2020/Exercise/KeyGenerator
+$ mvn -Dtest=AppTest#testApp test
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ----------------------< com.sample:KeyGenerator >-----------------------
+[INFO] Building KeyGenerator 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ KeyGenerator ---
+[WARNING] Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\src\main\resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ KeyGenerator ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ KeyGenerator ---
+[WARNING] Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\src\test\resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ KeyGenerator ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO]
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ KeyGenerator ---
+[INFO] Surefire report directory: D:\RajaniS Master Folder\Java\Maven\Example\2020\Exercise\KeyGenerator\target\surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.sample.AppTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.094 sec
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.589 s
+[INFO] Finished at: 2020-10-30T02:18:53+05:30
+[INFO] ------------------------------------------------------------------------
+
+rajanis@MSSPLLAP165 MINGW64 /d/RajaniS Master Folder/Java/Maven/Example/2020/Exercise/KeyGenerator
+$

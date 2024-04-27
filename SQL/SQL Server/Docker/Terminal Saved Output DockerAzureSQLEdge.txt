@@ -1,0 +1,109 @@
+Last login: Thu Jul 20 00:16:15 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % arch
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % docker version
+Client:
+ Cloud integration: v1.0.35
+ Version:           24.0.2
+ API version:       1.43
+ Go version:        go1.20.4
+ Git commit:        cb74dfc
+ Built:             Thu May 25 21:51:16 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.21.1 (114176)
+ Engine:
+  Version:          24.0.2
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.4
+  Git commit:       659604f
+  Built:            Thu May 25 21:50:59 2023
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.21
+  GitCommit:        3dce8eb055cbb6872793272b4f20ed16117344f8
+ runc:
+  Version:          1.1.7
+  GitCommit:        v1.1.7-0-g860f061
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro ~ % docker pull mcr.microsoft.com/azure-sql-edge:latest
+latest: Pulling from azure-sql-edge
+c58359f0ed07: Pull complete 
+f9c126982b5c: Pull complete 
+589ba23f4d73: Pull complete 
+0c037bc6ac64: Pull complete 
+ce1f004ff642: Pull complete 
+4e0b1d630a9d: Pull complete 
+cf712679c0f8: Pull complete 
+7f5ed2ab3c5b: Pull complete 
+56e4c7793de3: Pull complete 
+89f8b7dcee44: Pull complete 
+82fa393cf611: Pull complete 
+Digest: sha256:902628a8be89e35dfb7895ca31d602974c7bafde4d583a0d0873844feb1c42cf
+Status: Downloaded newer image for mcr.microsoft.com/azure-sql-edge:latest
+mcr.microsoft.com/azure-sql-edge:latest
+
+What's Next?
+  View summary of image vulnerabilities and recommendations → docker scout quickview mcr.microsoft.com/azure-sql-edge:latest
+rajaniapple@Rajanis-MacBook-Pro ~ % docker run --cap-add SYS_PTRACE -e 'ACCEPT_EULA=1' -e 'MSSQL_SA_PASSWORD=@zure$QLEdge1433' -p 1433:1433 --name azuresqledge -d mcr.microsoft.com/azure-sql-edge
+275578ce3d04751a9981e88033d4183e49f61fc6bfd7b9933a43b8242c497f7d
+rajaniapple@Rajanis-MacBook-Pro ~ % docker ps -a
+CONTAINER ID   IMAGE                              COMMAND                  CREATED          STATUS          PORTS                              NAMES
+275578ce3d04   mcr.microsoft.com/azure-sql-edge   "/opt/mssql/bin/perm…"   32 seconds ago   Up 31 seconds   1401/tcp, 0.0.0.0:1433->1433/tcp   azuresqledge
+rajaniapple@Rajanis-MacBook-Pro ~ % mssql -u sa -p
+Enter password: ****************
+Connecting to localhost...done
+
+sql-cli version 0.6.2
+Enter ".help" for usage hints.
+mssql> SELECT @@VERSION;
+                                                                                                                                                                         
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Microsoft Azure SQL Edge Developer (RTM) - 15.0.2000.1574 (ARM64) 
+	Jan 25 2023 10:36:08 
+	Copyright (C) 2019 Microsoft Corporation
+	Linux (Ubuntu 18.04.6 LTS aarch64) <ARM64>
+
+1 row(s) returned
+
+Executed in 1 ms
+mssql> SELECT DB_NAME();
+      
+------
+master
+
+1 row(s) returned
+
+Executed in 1 ms
+mssql> SELECT name FROM sys.tables;
+name                 
+---------------------
+spt_fallback_db      
+spt_fallback_dev     
+spt_fallback_usg     
+spt_monitor          
+MSreplication_options
+
+5 row(s) returned
+
+Executed in 1 ms
+mssql> .help
+command             description                                     
+------------------  ------------------------------------------------
+.help               Shows this message                              
+.databases          Lists all the databases                         
+.tables             Lists all the tables                            
+.sprocs             Lists all the stored procedures                 
+.search TYPE VALUE  Searches for a value of specific type (col|text)
+.indexes TABLE      Lists all the indexes of a table                
+.read FILENAME      Execute commands in a file                      
+.run FILENAME       Execute the file as a sql script                
+.schema TABLE       Shows the schema of a table                     
+.analyze            Analyzes the database for missing indexes.      
+.quit               Exit the cli                                    
+
+mssql> .quit                                                                                                                                                        rajaniapple@Rajanis-MacBook-Pro ~ % 

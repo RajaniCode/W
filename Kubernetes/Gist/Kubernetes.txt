@@ -1,0 +1,2632 @@
+# Kubernetes
+• Container management platform
+• Kubernetes supports container orchestration 
+
+
+# What is container management?
+• Container management is the process of organizing, adding, removing, or updating a significant number of containers.
+• Containers are an excellent choice when developing software based on microservice architectures.
+
+
+# What is container orchestration?
+• A container orchestrator is a system that automatically deploys and manages containerized apps. 
+• Dynamically adjust number of container instances.
+• Automatically update running instances.
+
+
+# Define Kubernetes
+• Kubernetes is a portable, extensible open-source platform for managing and orchestrating containerized workloads. 
+
+
+# Kubernetes benefits
+• Self-healing
+• Dynamic scaling
+• Automating rolling updates
+• Managing storage
+• Managing network traffic
+• Storing and managing sensitive information such as usernames and passwords
+
+
+# Kubernetes considerations
+• Monitoring
+• Microservices
+• Databases
+• Runtime
+
+
+# What is a computer cluster?
+• A cluster is a set of computers that you configure to work together and view as a single system. 
+
+
+# Kubernetes architecture [Kubernetes cluster: At least one main plane and one or more nodes]
+• Kubernetes control plane: The Kubernetes control plane in a Kubernetes cluster runs a collection of services that [manage the orchestration] functionality in Kubernetes.
+1. API server
+You can think of the API server as the [front end] to your Kubernetes cluster's control plane. All the communication between the components in Kubernetes is done through this API.
+The component that provides this API is called [kube-apiserver].
+2. Backing store
+The backing store is a persistence store that your Kubernetes cluster uses to save the [complete configuration] of a Kubernetes cluster. 
+Kubernetes uses a high-availability, distributed, and reliable key-value store called [etcd].
+This key-value store stores the [current state and the desired state] of all objects within your cluster.
+3. Scheduler
+The scheduler is the component that's responsible for the [assignment of workloads] across all nodes. 
+The scheduler [monitors the cluster] [for newly created containers] and assigns them to nodes.
+4. Controller manager
+The controller manager [launches and monitors the controllers] [configured for a cluster] through the API server.
+5. Cloud controller manager
+The cloud controller manager [integrates with the underlying cloud technologies] in your cluster when the cluster is running in a cloud environment.
+
+• Kubernetes node: A node in a Kubernetes cluster is where your [compute workloads run]. 
+1. Kubelet
+The kubelet is the [agent that runs on each node] in the cluster and [monitors work] requests from the API server.
+The kubelet [monitors the nodes] and makes sure that the [containers scheduled on each node run] as expected.
+2. Kube-proxy
+The kube-proxy component is responsible for [local cluster networking[, and runs on each node. 
+It ensures that each node has a [unique IP address].
+3. Container runtime
+The container runtime is the [underlying software] that runs containers on a Kubernetes cluster. 
+The runtime is responsible for [fetching, starting, and stopping] container images. 
+Kubernetes supports several container runtimes, including but not limited to [Docker, containerd, rkt, CRI-O, and frakti[.
+
+
+# kubectl
+• Uses a configuration file that includes the following configuration information
+1. Cluster configuration specifies a [cluster name, certificate information, and the service API endpoint] associated with the cluster.
+2. User configuration specifies the [users and their permission levels] when they're accessing the configured clusters.
+3. Context configuration [groups clusters and users] by using a friendly name.
+
+
+# Kubernetes pods
+• A pod represents a [single instance of an app] running in Kubernetes. 
+• The [workloads] that you run on Kubernetes are [containerized apps]. 
+• Unlike in a Docker environment, you [can't run containers directly] on Kubernetes.
+• You [package the container] into a Kubernetes object called a pod. 
+• A pod is the [smallest object] that you can create in Kubernetes.
+&
+• A single pod can hold a [group of one or more containers]. 
+• However, a pod typically doesn't contain multiples of the same app.
+&
+• A pod includes information about the [shared storage and network configuration and a specification] about how to run its packaged containers.
+• You use [pod templates] to define the information about the pods that run in your cluster. 
+• Pod templates are [YAML-coded files] that you reuse and include in other objects to manage pod deployments.
+
+
+# Lifecycle of a Kubernetes pod
+Scheduled
+|
+ `->Pending<-------------------------------<------------<--------.
+  |                                                              |
+  |`------->Running->----.                                     	 |
+  |                      |                                       |
+  |                      |                                       |
+  |                      `-----------,----->Succeeded--->Result  |
+  |                       `|        |                            |
+  |                        |        |                            |
+  |                        |         `-----<------------<--------|
+  |                        |                                     |
+  |                         `----,---,----->Failed------>Result  |
+  |                             |   |                            |
+  |`------->-------->-----------'   |                            |
+  |                                 |                            |  
+   `------->Unknown->---------------------->------------>--------'
+
+
+# Phases in a pod's lifecycle
+• Pending
+The pod has been accepted by the cluster, but [one or more of the containers isn't set up] or ready to run. 
+• Running
+The pod transitions to a running state after all of the [resources] within the pod are [ready].
+• Succeeded
+The pod transitions to a succeeded state after the [pod completes its intended task] and runs successfully.
+• Failed
+Pods can transition to a failed state [from Pending/Running/Unknown state].
+• Unknown
+If the [state] of the pod [can't be determined], the pod is an Unknown state.
+&
+• Pods are kept on a cluster until a controller, the control plane, or a user explicitly removes them. 
+• When a pod is deleted and is replaced by a new pod, the new pod is an entirely new instance of the pod based on the pod manifest.
+
+
+# Container states
+• Waiting
+[Default state] of a container and the state that the container is in when it's [not running or terminated].
+• Running
+The container is running [as expected] without any problems.
+• Terminated
+The container is no longer running, either all [tasks finished or the container failed] for some reason.
+
+
+# Pod deployment options using kubectl
+• Pod templates
+1 A pod template enables you to define the [configuration of the pod] you want to deploy.
+2 The template contains information such as the [name of container image] and which [container registry] to use to fetch the images.
+3 The template may also include [runtime configuration information], such as ports to use. 
+4 Templates are [defined by using YAML] in the same way as when you create Docker files.
+
+• Replication controllers
+1. A replication controller uses pod templates and [defines a specified number of pods] that must run.
+2. The controller helps you [run multiple instances of the same pod], and ensures pods are always running on one or more nodes in the cluster. 
+3. The controller [replaces running pods] in this way with new pods if they fail, are deleted, or are terminated.
+
+• Replica sets
+1. A replica set replaces the replication controller as the [preferred way] to deploy replicas.
+2. A replica set includes the same functionality as a replication controller, but it has an [extra configuration option] to include a [selector value].
+3. A selector enables the replica set to [identify all the pods] running underneath it. 
+4. Using this feature, you can [manage pods labeled with the same value] as the selector value, [but not created] with the replicated set.
+
+• Deployments
+1. A deployment creates a [management object one level higher than a replica set], and allows you to deploy and manage updates for pods in a cluster.
+2. Deployments, by default, provide a [rolling update strategy] for updating pods. You can also use a [re-create strategy]. 
+3. Deployments also provide you with a [rollback strategy], which you can execute by using [kubectl].
+4. Deployments make use of [YAML-based definition files] and make it easy to manage deployments. Keep in mind that deployments allow you to [apply any changes] to your cluster.
+
+&
+These files make use of YAML to describe the intended state of the pod or pods to be deployed.
+
+
+# Deployment considerations (specific about configuring networking and storage for a cluster)
+• Kubernetes networking
+1. By default, the pods and nodes [can't communicate] with each other by using [different IP address ranges].
+2. The pod's IP address is [temporary], and [can't be used to reconnect] to a newly created pod. 
+3. Kubernetes expects you to configure networking in such a way that:
+- Pods can communicate with one another [across nodes] [without Network Address Translation (NAT)].
+- Nodes can communicate ]with all pods], and vice versa, [without NAT].
+- Agents on a node can communicate with all [nodes and pods].
+
+• Kubernetes services
+1. Provides [stable networking for pods], enables communication between [nodes, pods, and users] of your app, both internal and external, to the cluster.
+2. Kubernetes [assigns a service an IP address] on creation, just like a node or pod.
+3. These addresses get assigned [from a service cluster's IP range]; for example, 10.96.0.0/12.
+4. A service is also [assigned a Domain Name System (DNS)] name based on the service name, and an IP port.
+5. Three types of services to expose your app's components.
+- ClusterIP: The [address] assigned to a service that makes the service available to a set of services [inside the cluster]. E.g. communication between the app front-end and app back-end.
+- NodePort: The [node port] between 30000 and 32767 that the Kubernetes [control plane assigns] to the service. E.g. access the app front end through a node IP and port address.
+- LoadBalancer: The load balancer that allows for the [distribution of load between nodes] running your app, and [exposing the pod to public network access]. E.g. configure load balancers when you use cloud providers.
+
+• How to group pods
+1. Managing pods [by IP address isn't practical]. Pod IP addresses [change] as controllers re-create them, and you might have any number of pods running.
+2. A service object allows you to target and manage specific pods in your cluster [by using selector labels]. 
+3. You set the selector label in a service definition to [match the pod label] defined in the pod's definition file.
+
+• Kubernetes storage (Pod volumes, Persistent volumes)
+1. Kubernetes uses the [same storage volume concept] that you find when using [Docker]. 
+2. [Docker] volumes are [less managed] than the Kubernetes volumes, because Docker volume [lifetimes aren't managed]. 
+3. The [Kubernetes] volume's lifetime is an [explicit lifetime] that [matches] the [pod's lifetime].
+4. This lifetime match means a volume [outlives the containers] that run in the pod. However, if the pod is removed, so is the volume.
+5. Kubernetes provides options to provision [persistent storage[ with the use of [PersistentVolumes].
+6. You can also [request specific storage] for pods by using [PersistentVolumeClaims].
+
+###########################################################################################################################
+
+
+
+
+###########################################################################################################################
+
+# NB
+Ingress > Cluster > Nodes > Pods > Containers > App/DB
+
+# Kubernetes v1.28 supports clusters with up to 5,000 nodes.
+# More specifically, Kubernetes is designed to accommodate configurations that meet all of the following criteria:
+• No more than 110 pods per node
+• No more than 5,000 nodes
+• No more than 150,000 total pods
+• No more than 300,000 total containers
+
+###########################################################################################################################
+
+
+
+
+# minikube # docker # kubectl
+###########################################################################################################################
+
+% docker --version
+
+% docker version
+
+% docker info
+
+
+# The connection to the server 127.0.0.1:49400 was refused - did you specify the right host or port? # % minikube start
+# % kubectl version --output=yaml
+# % kubectl version
+
+
+% minikube version
+
+
+
+
+## Create a minikube cluster
+% minikube start
+
+
+% minikube ip
+
+
+% minikube profile list
+
+
+# profile # minikube
+% minikube service list -p minikube
+
+
+% minikube addons list
+
+
+% kubectl version
+
+
+% kubectl config view
+
+
+# Open the Dashboard
+# Start a new terminal, and leave this running
+% minikube dashboard --url
+# http://127.0.0.1:49392/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/
+# Switch to the original terminal window
+
+
+# NB
+[
+% kubectl cluster-info
+
+
+# namespaces/namespace/ns
+% kubectl get namespaces -o wide
+
+
+# nodes/node
+% kubectl get nodes -o wide
+
+
+# services/service/svc
+% kubectl get services -o wide
+
+
+# endpoints/ep
+% kubectl get endpoints -o wide
+
+
+# events/event
+% kubectl get events -o wide
+# node
+% kubectl get events --field-selector involvedObject.kind=Node
+
+
+# pods # services # deployments # replicasets
+% kubectl get all -o wide
+]
+
+
+
+
+## Create Deployment
+% kubectl create deployment hello-node --image=registry.k8s.io/e2e-test-images/agnhost:2.39 -- /agnhost netexec --http-port=8080
+
+# NB
+[
+% kubectl cluster-info
+
+
+# namespaces/namespace/ns
+% kubectl get namespaces -o wide
+
+
+# nodes/node/no
+% kubectl get nodes -o wide
+
+
+# services/service/svc
+% kubectl get services -o wide
+
+
+# events/event/ev
+% kubectl get events -o wide
+# node
+% kubectl get events --field-selector involvedObject.kind=Node
+
+
+# endpoints/ep
+% kubectl get endpoints
+% kubectl get endpoints -o wide
+% kubectl get endpoints -n default
+% kubectl get endpoints --all-namespaces
+
+
+# pods # services # deployments # replicasets
+% kubectl get all -o wide
+
+
+# deployments/deployment/deploy
+% kubectl get deployments -o wide
+# deployment # rollout status # deployment.apps/hello-node
+% kubectl rollout status deployment.apps/hello-node
+
+
+# pods/pod/po
+% kubectl get pods -o wide
+% kubectl get pods --watch
+# pod # app=hello-node
+% kubectl get pods -l app=hello-node
+# containers
+% kubectl get pods hello-node-7579565d66-2ck97 -o jsonpath='{.spec.containers[*].name}'
+# app # hello-node
+% kubectl get pods -o jsonpath="{.items[*].spec.containers[*].image}" -l app=hello-node
+# STATUS # Running
+% kubectl get pods --field-selector status.phase=Running
+% kubectl get pods --field-selector status.phase!=Running
+
+
+# events/event/ev
+# Pod
+% kubectl get events --field-selector involvedObject.kind=Pod -o wide
+# Deployment
+% kubectl get events --field-selector involvedObject.kind=Deployment -o wide
+
+
+# log
+# pod # hello-node-7579565d66-2ck97
+# container # agnhost
+% kubectl logs hello-node-7579565d66-2ck97 -c agnhost
+
+
+# replicasets/replicaset/rs
+% kubectl get replicasets -o wide
+
+
+# storageclasses/storageclass/sc
+% kubectl get storageclasses -o wide
+
+
+# ingresses/ingress/ing
+% kubectl get ingresses -o wide
+
+
+% kubectl get nodes,services,deployments,pods,replicasets,storageclasses,ingresses -o wide
+]
+
+
+
+
+## Create Service 
+
+# NodePort #
+% kubectl expose deployment hello-node --type=NodePort --port=8080
+
+# get # service # hello-node # EXTERNAL-IP # <none> #
+% kubectl get services hello-node
+
+# access # service # hello-node
+% minikube service hello-node
+[
+Stop the tunnel for service hello-node (control + C)
+]
+
+# delete # service # hello-node
+% kubectl delete services hello-node
+[
+# get # service # hello-node
+% kubectl get services hello-node
+]
+
+# port forward
+% kubectl expose deployment hello-node --type=NodePort --port=8080
+% kubectl port-forward service/hello-node 7080:8080
+[
+# http://localhost:7080/
+]
+
+# delete # service # hello-node
+% kubectl delete services hello-node
+[
+# get # service # hello-node
+% kubectl get services hello-node
+]
+
+# LoadBalancer #
+% kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+
+# get # service # hello-node # EXTERNAL-IP # <pending> #
+% kubectl get services hello-node
+
+# access # service # hello-node
+% minikube service hello-node
+[
+Stop the tunnel for service hello-node (control + C)
+]
+
+# delete # service # hello-node
+% kubectl delete services hello-node
+[
+# get # service # hello-node
+% kubectl get services hello-node
+]
+
+
+# Ingress #
+% minikube addons list
+% minikube addons enable ingress
+[
+% minikube addons disable ingress
+]
+
+% curl -L https://storage.googleapis.com/minikube-site-examples/ingress-example.yaml
+% wget https://storage.googleapis.com/minikube-site-examples/ingress-example.yaml
+% cat ingress-example.yaml
+
+% kubectl apply -f ingress-example.yaml
+[
+% kubectl delete -f ingress-example.yaml
+]
+
+# Wait for ingress address
+# ingress # example-ingress # HOSTS # * # ADDRESS # 192.168.49.2 #
+% kubectl get ingresses example-ingress
+
+# In another terminal window, start the tunnel to create a routable IP
+% sudo minikube tunnel
+
+# Switch to the original terminal window
+% curl http://127.0.0.1:80/foo
+% open http://127.0.0.1:80/foo
+% curl http://127.0.0.1:80/bar
+% open http://127.0.0.1:80/bar
+
+[
+# get # service # foo-service # EXTERNAL-IP # <none> #
+% kubectl get services foo-service
+# get # service # bar-service # EXTERNAL-IP # <none> #
+% kubectl get services bar-service
+
+% minikube service foo-service
+% minikube service bar-service
+]
+
+
+
+# NB # options # -n/--namespace # -o/--output # -c/--container # -w/--watch
+[
+% kubectl cluster-info
+
+
+# namespaces/namespace/ns
+% kubectl get namespaces
+% kubectl get namespaces -o wide
+% kubectl describe namespaces 
+# namespace # default
+% kubectl describe namespaces default
+# kube-system
+% kubectl describe namespaces kube-system
+
+
+# nodes/node/no
+% kubectl get nodes
+% kubectl get nodes -o wide
+% kubectl get nodes -n default
+% kubectl get nodes --all-namespaces
+# node # minikube
+% kubectl get nodes minikube
+% kubectl describe nodes minikube
+# node # status # minikube
+% minikube status -p minikube
+
+
+# services/service/svc
+% kubectl get services
+% kubectl get services -o wide
+% kubectl get services -n default
+% kubectl get services --all-namespaces
+# service # kubernetes
+% kubectl get services kubernetes
+% kubectl describe services kubernetes
+
+
+# events/event/ev
+% kubectl get events
+% kubectl get events -o wide
+% kubectl get events -n default
+% kubectl get events --all-namespaces
+# node
+% kubectl get events --field-selector involvedObject.kind=Node
+# node # minikube
+% kubectl get events minikube
+% kubectl describe events minikube
+
+
+# endpoints/ep
+% kubectl get endpoints
+% kubectl get endpoints -o wide
+% kubectl get endpoints -n default
+% kubectl get endpoints --all-namespaces
+ 
+
+# pods # services # deployments # replicasets
+% kubectl get all 
+% kubectl get all -o wide
+% kubectl get all -n default
+% kubectl get all --all-namespaces
+
+
+# deployments/deployment/deploy
+% kubectl get deployments
+% kubectl get deployments -o wide
+% kubectl get deployments -n default
+% kubectl get deployments --all-namespaces
+# deployment # hello-node
+% kubectl get deployments hello-node
+% kubectl describe deployments hello-node
+# deployment # rollout status # deployment.apps/hello-node
+% kubectl rollout status deployment.apps/hello-node
+
+
+# pods/pod/po
+% kubectl get pods
+% kubectl get pods -o wide
+% kubectl get pods -n default
+% kubectl get pods --all-namespaces
+% kubectl get pods --watch
+% kubectl get po -A -o wide
+# minikube # kubectl
+% minikube kubectl -- get pods -A -o wide
+# pod # app=hello-node
+% kubectl get pods -l app=hello-node
+# pod # hello-node-7579565d66-2ck97
+% kubectl get pods hello-node-7579565d66-2ck97
+% kubectl describe pods hello-node-7579565d66-2ck97
+# containers
+% kubectl get pods hello-node-7579565d66-2ck97 -o jsonpath='{.spec.containers[*].name}'
+# app # hello-node
+% kubectl get pods -o jsonpath="{.items[*].spec.containers[*].image}" -l app=hello-node
+# STATUS # Running
+% kubectl get pods --field-selector status.phase=Running
+% kubectl get pods --field-selector status.phase!=Running
+
+
+# events/event/ev
+# Pod
+% kubectl get events --field-selector involvedObject.kind=Pod
+% kubectl get events --field-selector involvedObject.kind=Pod -o wide
+% kubectl get events --field-selector involvedObject.kind=Pod -n default
+% kubectl get events --field-selector involvedObject.kind=Pod --all-namespaces
+# Deployment
+% kubectl get events --field-selector involvedObject.kind=Deployment
+% kubectl get events --field-selector involvedObject.kind=Deployment -o wide
+% kubectl get events --field-selector involvedObject.kind=Deployment -n default
+% kubectl get events --field-selector involvedObject.kind=Deployment --all-namespaces
+
+
+# log
+# pod # hello-node-7579565d66-2ck97
+# container # agnhost
+% kubectl logs hello-node-7579565d66-2ck97 -c agnhost
+# all containers # true # default
+% kubectl logs hello-node-7579565d66-2ck97 --all-containers=true
+
+
+# replicasets/replicaset/rs
+% kubectl get replicasets
+% kubectl get replicasets -o wide
+% kubectl get replicasets -n default
+% kubectl get replicasets --all-namespaces
+# replicaset # hello-node-7579565d66
+% kubectl get replicasets hello-node-7579565d66
+% kubectl describe replicasets hello-node-7579565d66
+
+
+# persistentvolumeclaims/persistentvolumeclaim/pvc
+% kubectl get persistentvolumeclaims
+% kubectl get persistentvolumeclaims -o wide
+% kubectl get persistentvolumeclaims -n default
+% kubectl get persistentvolumeclaims --all-namespaces
+# VOLUME # mongo-pvc
+% kubectl get persistentvolumeclaims mongo-pvc
+% kubectl describe persistentvolumeclaims mongo-pvc
+
+
+# storageclasses/storageclass/sc
+% kubectl get storageclasses
+% kubectl get storageclasses -o wide
+% kubectl get storageclasses -n default
+% kubectl get storageclasses --all-namespaces
+# gp2
+% kubectl get storageclasses gp2
+% kubectl describe storageclasses gp2
+
+
+# ingresses/ingress/ing
+% kubectl get ingresses
+% kubectl get ingresses -o wide
+% kubectl get ingresses -n default
+% kubectl get ingresses --all-namespaces
+
+
+% kubectl get nodes,services,deployments,pods,replicasets,storageclasses,ingresses
+% kubectl get nodes,services,deployments,pods,replicasets,storageclasses,ingresses -o wide
+% kubectl get nodes,services,deployments,pods,replicasets,storageclasses,ingresses -n default
+% kubectl get nodes,services,deployments,pods,replicasets,storageclasses,ingresses --all-namespaces
+
+
+% minikube addons list
+# minikube addons # ingress # enable
+% minikube addons enable ingress
+# minikube addons # ingress # disable
+% minikube addons disable ingress
+
+
+# In another terminal window, start the tunnel to create a routable IP
+% sudo minikube tunnel
+]
+
+
+
+
+## Clean up
+% kubectl get all
+
+# delete # pod  # hello-node-7579565d66-tg9wt
+% kubectl delete pod hello-node-7579565d66-tg9wt
+
+# delete # service # hello-node
+% kubectl delete service hello-node
+
+# delete # deployment # hello-node
+% kubectl delete deployment hello-node
+
+
+% minikube image ls
+% minikube image ls --format table
+# image # <name>
+% minikube image rm <name>
+
+# Stop the Minikube cluster
+% minikube stop
+
+# Delete the Minikube VM
+% minikube delete
+[
+# minikube delete all profiles
+% minikube delete --all
+]
+
+
+% docker --version
+
+% docker version
+
+% docker system info
+
+% docker context list
+
+% docker context show 
+
+% docker context inspect default
+
+# remove # context
+# desktop-linux
+# % docker context rm desktop-linux --force
+# colima
+# % docker context rm colima
+
+% docker ps
+
+% docker ps --all
+
+% docker ps --all --format "table"
+
+% docker ps --all --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+
+% docker container list
+
+% docker container list --all
+
+% docker container list --all --format "table"
+
+% docker container list --all --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+
+% docker container list -all --filter status=exited --filter status=created
+
+% docker container prune
+
+% docker system prune
+
+% docker system prune --volumes
+
+% docker system prune --all
+
+% docker system prune --volumes --all
+
+% docker image list
+# image # <name>
+% docker image rm <name>
+
+% docker image prune
+
+% docker image prune --all
+
+% docker volume list 
+
+% docker volume prune
+
+% docker volume prune --all
+
+% docker network list
+[
+# network # mongodb
+% docker network create mongodb
+% docker network rm mongodb
+]
+
+% docker network prune
+
+
+# remove folder # .docker # .minikube # .kube
+# % ls /Users/usernameapple/.docker
+# % rm -rf /Users/usernameapple/.docker
+% ls /Users/usernameapple/.minikube
+% rm -rf /Users/usernameapple/.minikube
+% ls /Users/usernameapple/.kube
+% rm -rf /Users/usernameapple/.kube
+
+###########################################################################################################################
+
+
+
+
+# Kubernetes Local Image # Node.js App
+###########################################################################################################################
+
+## Kubernetes Local Image
+
+% sw_vers
+[
+ProductName:		macOS
+ProductVersion:		14.0
+BuildVersion:		23A344
+]
+
+% arch
+[
+arm64
+]
+
+% node -v
+[
+v20.9.0
+]
+
+% npm -v
+[
+10.1.0
+]
+
+
+% cd /Users/usernameapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-app
+
+
+% nano index.js
+[
+const express = require('express');
+const app = express();
+const  port = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Kubernetes Local Image');
+});
+
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
+});
+]
+% cat index.js
+
+
+% nano Dockerfile
+[
+FROM node:20.9-slim
+WORKDIR /usr/src/app
+COPY . .
+RUN npm install
+CMD [ "node", "index.js" ]
+]
+
+
+% cat Dockerfile
+
+
+% echo node_modules > .dockerignore
+
+
+% cat .dockerignore
+
+
+% npm init  
+[
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help init` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (app) 
+version: (1.0.0) 
+description: 
+entry point: (index.js) 
+test command: 
+git repository: 
+keywords: 
+author: 
+license: (ISC) 
+About to write to /Users/usernameapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-app/package.json:
+
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
+
+Is this OK? (yes)
+]
+
+
+% cat package.json
+
+
+% npm install express
+
+
+% cat package.json
+
+
+% cat package-lock.json
+
+
+% docker version
+
+
+% docker build -t node-app .
+
+
+% docker run -it -p 3000:3000 node-app
+
+
+# In another terminal window
+% open http://localhost:3000/
+[
+http://localhost:3000/
+Kubernetes Local Image
+]
+
+
+% docker ps
+[
+CONTAINER ID   IMAGE      COMMAND                  CREATED          STATUS          PORTS                    NAMES
+01b4b5dad574   node-app   "docker-entrypoint.s…"   23 seconds ago   Up 22 seconds   0.0.0.0:3000->3000/tcp   funny_pike
+]
+% docker stop 01b4b5dad574
+[
+01b4b5dad574
+]
+
+
+# Switch to the original terminal window
+% minikube start
+
+
+% nano k8s.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app-deployment
+  labels:
+    app: node-app-label
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: node-app-label  
+  template:
+    metadata:
+      labels:
+        app: node-app-label  
+    spec:
+      containers:
+      - name: node-app
+        image: node-app 
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-app-service 
+spec:
+  selector:
+    app: node-app-label 
+  type: LoadBalancer     
+  ports:
+  - protocol: TCP        
+    port: 5000           
+    targetPort: 3000    
+    nodePort: 31110
+]
+% cat k8s.yaml
+% kubectl apply -f k8s.yaml
+[
+% kubectl delete -f k8s.yaml
+]
+
+
+[
+% kubectl get pods
+NAME                                   READY   STATUS              RESTARTS   AGE
+node-app-deployment-54db5577dc-nqzp2   0/1     ErrImageNeverPull   0          8s
+
+% kubectl get pods --watch
+NAME                                   READY   STATUS              RESTARTS   AGE
+node-app-deployment-54db5577dc-nqzp2   0/1     ErrImageNeverPull   0          23s
+
+# control + C
+]
+
+
+% kubectl get all 
+
+
+# minikube environment variables # % env # % docker-env # 1 #
+% eval $(minikube docker-env)
+[
+% env
+]
+[
+% echo $(minikube docker-env)
+export DOCKER_TLS_VERIFY="1" export DOCKER_HOST="tcp://127.0.0.1:49551" export DOCKER_CERT_PATH="/Users/usernameapple/.minikube/certs" export MINIKUBE_ACTIVE_DOCKERD="minikube" # To point your shell to minikube's docker-daemon, run: # eval $(minikube -p minikube docker-env)
+]
+
+% echo $DOCKER_TLS_VERIFY
+% echo $DOCKER_HOST
+% echo $DOCKER_CERT_PATH
+% echo $MINIKUBE_ACTIVE_DOCKERD
+
+
+# Re-run docker build
+% docker build -t node-app .
+
+
+[
+% minikube image ls
+]
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| docker.io/library/node-app              | latest  | c82ea86b468f2 | 172MB  |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+
+% kubectl rollout restart deployment node-app-deployment
+
+
+% kubectl get pods
+[
+NAME                                   READY   STATUS        RESTARTS   AGE
+node-app-deployment-54db5577dc-nqzp2   1/1     Terminating   0          2m22s
+node-app-deployment-5f89d4898c-9hz25   1/1     Running       0          8s
+]
+
+
+% kubectl get pods --watch
+[
+NAME                                   READY   STATUS        RESTARTS   AGE
+node-app-deployment-54db5577dc-nqzp2   1/1     Terminating   0          2m37s
+node-app-deployment-5f89d4898c-9hz25   1/1     Running       0          23s
+]
+# control + C
+
+
+% kubectl get all 
+
+
+% minikube service node-app-service
+[
+http://localhost:3000/
+Kubernetes Local Image
+]
+# control + C
+
+
+# minikube image load # 2 #
+# delete # deployment # node-app-deployment
+% kubectl delete -n default deployment node-app-deployment
+
+# delete # service # node-app-service
+% kubectl delete -n default service node-app-service
+
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| docker.io/library/node-app              | latest  | c82ea86b468f2 | 172MB  |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+# delete # image # node-app
+[
+% minikube image rm node-app
+]
+% minikube image rm docker.io/library/node-app:latest
+
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+# minikube environment variables unset # % env # % docker-env -u
+% eval $(minikube docker-env -u)
+[
+% env
+]
+[
+% echo $(minikube docker-env -u)
+unset DOCKER_TLS_VERIFY; unset DOCKER_HOST; unset DOCKER_CERT_PATH; unset MINIKUBE_ACTIVE_DOCKERD; unset SSH_AUTH_SOCK; unset SSH_AGENT_PID;
+]
+
+% echo $DOCKER_TLS_VERIFY
+% echo $DOCKER_HOST
+% echo $DOCKER_CERT_PATH
+% echo $MINIKUBE_ACTIVE_DOCKERD
+
+# Re-run docker build
+% docker build -t node-app .
+
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+# minikube image load
+% minikube image load node-app
+
+
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| docker.io/library/node-app              | latest  | b98d543180189 | 172MB  |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+
+% kubectl apply -f k8s.yaml
+
+
+% kubectl get pods
+[
+NAME                                   READY   STATUS    RESTARTS   AGE
+node-app-deployment-54db5577dc-q29rv   1/1     Running   0          7s
+]
+
+
+% kubectl get pods --watch
+[
+NAME                                   READY   STATUS    RESTARTS   AGE
+node-app-deployment-54db5577dc-q29rv   1/1     Running   0          28s
+]
+
+
+% kubectl get all
+
+
+% minikube service node-app-service
+[
+http://localhost:3000/
+Kubernetes Local Image
+]
+# control + C
+
+
+# minikube image build # 3 #
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| docker.io/library/node-app              | latest  | b98d543180189 | 172MB  |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+[
+% minikube image rm node-app
+]
+% minikube image rm docker.io/library/node-app:latest
+[
+❗  Failed to remove images for profile minikube error removing images: remove image docker: docker rmi docker.io/library/node-app:latest: Process exited with status 1
+stdout:
+
+stderr:
+Error response from daemon: conflict: unable to remove repository reference "docker.io/library/node-app:latest" (must force) - container aa12a1c75b41 is using its referenced image b98d54318018
+]
+
+% docker ps
+[
+CONTAINER ID   IMAGE                                 COMMAND                  CREATED          STATUS          PORTS							NAMES
+0e75e90a7c7c   gcr.io/k8s-minikube/kicbase:v0.0.40   "/usr/local/bin/entr…"   12 minutes ago   Up 12 minutes   127.0.0.1:49631->22/tcp, 127.0.0.1:49632->2376/tcp, 127.0.0.1:49634->5000/tcp, 127.0.0.1:49635->8443/tcp, 127.0.0.1:49633->32443/tcp   											minikube
+]
+% docker stop 0e75e90a7c7c
+[
+0e75e90a7c7c
+]
+
+% minikube image ls --format table
+[
+|-------|-----|----------|------|
+| Image | Tag | Image ID | Size |
+|-------|-----|----------|------|
+|-------|-----|----------|------|
+]
+
+# Docker Desktop
+[
+Delete All Containers
+Delete All Images
+Delete All Volumes
+% docker network prune
+% minikube profile list
+% minikube delete # Removing /Users/usernameapple/.minikube/machines/minikube ...
+[
+% minikube delete --all
+]
+% ls /Users/usernameapple/.minikube
+% rm -rf /Users/usernameapple/.minikube
+% ls /Users/usernameapple/.kube
+% rm -rf /Users/usernameapple/.kube
+]
+
+% docker version
+
+% minikube start
+
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+% minikube image build -t node-app .
+
+
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| docker.io/library/node-app              | latest  | d380982aa4d7c | 172MB  |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+
+% kubectl apply -f k8s.yaml
+
+
+% kubectl get pods
+[
+NAME                                   READY   STATUS    RESTARTS   AGE
+node-app-deployment-54db5577dc-gqtd6   1/1     Running   0          7s
+]
+
+
+% kubectl get pods --watch
+[
+NAME                                   READY   STATUS    RESTARTS   AGE
+node-app-deployment-54db5577dc-gqtd6   1/1     Running   0          19s
+]
+# control + C
+
+
+% kubectl get all 
+
+
+% minikube service node-app-service
+[
+http://localhost:3000/
+Kubernetes Local Image
+]
+# control + C
+
+###########################################################################################################################
+
+
+
+
+# microk8s-vm # multipass # kubectl
+###########################################################################################################################
+
+# Explore the functionality of a Kubernetes cluster
+• Your goal is to explore a Kubernetes installation with a single-node cluster.
+• You're going to configure a MicroK8s environment that's easy to set up and tear down.
+• Then, you'll deploy an NGINX website and scale it out to multiple instances.
+• Finally, you'll go through the steps to delete the running pods and clean up the cluster.
+&
+• Keep in mind that there are other options, such as MiniKube and Kubernetes support in Docker, to do the same.
+
+
+
+
+# What is MicroK8s?
+• MicroK8s is an option for deploying a single-node Kubernetes cluster as a single package to target workstations and Internet of Things (IoT) devices.
+• Canonical, the creator of Ubuntu Linux, originally developed and still maintains MicroK8s.
+
+
+
+
+# 1 # Install MicroK8s on macOS
+• To run MicroK8s on macOS, use Multipass.
+• Multipass is a lightweight VM manager for Linux, Windows, and macOS.
+
+1. You have two options to install Multipass on macOS. Either download and install the latest release of Multipass for macOS from GitHub, or to install Multipass with the brew cask install multipass command, use Homebrew.
+
+% brew install --cask multipass
+
+
+2. In a command console, run the multipass launch command to configure and run the microk8s-vm image. This step might take a few minutes to complete, depending on the speed of your internet connection and desktop.
+
+% multipass launch --name microk8s-vm --memory 4G --disk 40G
+
+
+3. After you receive the launch confirmation for microk8s-vm, run the multipass shell microk8s-vm command to enter the VM instance.
+
+% multipass shell microk8s-vm
+
+At this point, you can access the Ubuntu VM that will host your cluster. You still have to install MicroK8s. Follow these steps.
+
+
+4. Install the MicroK8s snap app. This step might take a few minutes to complete, depending on the speed of your internet connection and desktop.
+
+% sudo snap install microk8s --classic
+
+A successful installation shows the following message:
+
+2020-03-16T12:50:59+02:00 INFO Waiting for restart...
+microk8s v1.17.3 from Canonical✓ installed
+
+You're now ready to install add-ons on the cluster.
+
+
+
+
+# 2 # Prepare the cluster
+• To view the status of the installed add-ons on your cluster, run the status command in MicroK8s.
+• These add-ons provide several services, some of which you covered previously.
+• One example is DNS functionality.
+
+1. To check the status of the installation, run the microk8s.status --wait-ready command.
+
+% sudo microk8s.status --wait-ready
+
+Notice that you can enable several add-ons on your cluster. Don't worry about the add-ons that you don't recognize. You'll enable only three of these add-ons in your cluster.
+
+microk8s is running
+addons:
+cilium: disabled
+dashboard: disabled
+dns: disabled
+fluentd: disabled
+gpu: disabled
+helm3: disabled
+helm: disabled
+ingress: disabled
+istio: disabled
+jaeger: disabled
+juju: disabled
+knative: disabled
+kubeflow: disabled
+linkerd: disabled
+metallb: disabled
+metrics-server: disabled
+prometheus: disabled
+rbac: disabled
+registry: disabled
+storage: disabled
+
+
+2. Next, you'll enable the DNS, Dashboard, and Registry add-ons. Here's the purpose of each add-on:
+Add-ons		Purpose
+DNS		Deploys the [coreDNS service].
+Dashboard	Deploys the [kubernetes-dashboard service] and several other services that support its functionality. It's a general-purpose, [web-based UI] for Kubernetes clusters.
+Registry	Deploys a [private registry] and several services that support its functionality. To store private containers, use this registry.
+
+To install the add-ons, run the following command.
+
+% sudo microk8s.enable dns dashboard registry
+
+You're now ready to access your cluster by running kubectl.
+
+
+
+
+# 3 # Explore the Kubernetes cluster
+• MicroK8s provides a version of kubectl that you can use to interact with your new Kubernetes cluster.
+• This copy of kubectl allows you to have a parallel installation of another system-wide kubectl instance without affecting its functionality.
+
+1. Run the snap alias command to alias microk8s.kubectl to kubectl. This step simplifies usage.
+
+% sudo snap alias microk8s.kubectl kubectl
+
+The following output appears when the command finishes successfully:
+
+Added:
+  - microk8s.kubectl as kubectl
+
+
+
+
+# 4 # Display cluster node information
+• Recall from earlier that a Kubernetes cluster exists out of control planes and worker nodes.
+• Let's explore the new cluster to see what's installed.
+
+1. Check the nodes that are running in your cluster.
+You know that MicroK8s is a single-node cluster installation, so you expect to see only one node. Keep in mind, though, that this node is both the control plane and a worker node in the cluster. Confirm this configuration by running the kubectl get nodes command. To retrieve information about all the resources in your cluster, run the kubectl get command:
+
+% sudo kubectl get nodes
+
+The result is similar to the following example, which shows you that there's only one node in the cluster with the name microk8s-vm. Notice that the node is in a ready state. The ready state indicates that the control plane might schedule workloads on this node.
+
+NAME          STATUS   ROLES    AGE   VERSION
+microk8s-vm   Ready    <none>   35m   v1.17.3
+
+You can get more information for the specific resource that's requested. For example, let's assume that you need to find the IP address of the node. To fetch extra information from the API server, run the -o wide parameter:
+
+% sudo kubectl get nodes -o wide
+
+The result is similar to the following example. Notice that you now can see the internal IP address of the node, the OS running on the node, the kernel version, and the container runtime.
+
+NAME          STATUS   ROLES    AGE   VERSION   INTERNAL-IP      EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+microk8s-vm   Ready    <none>   36m   v1.17.3   192.168.56.132   <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   containerd://1.2.5
+
+
+2. The next step is to explore the services running on your cluster. As with nodes, to find information about the services running on the cluster, run the kubectl get command.
+
+% sudo kubectl get services -o wide
+
+The result is similar to the following example, but notice that only one service is listed. You installed add-ons on the cluster earlier, and you'd expect to see these services as well.
+
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+kubernetes   ClusterIP   10.152.183.1   <none>        443/TCP   37m   <none>
+
+The reason for the single service listing is that Kubernetes uses a concept called namespaces to logically divide a cluster into multiple virtual clusters.
+
+To fetch all services in all namespaces, pass the --all-namespaces parameter:
+
+% sudo kubectl get services -o wide --all-namespaces
+
+The result is similar to the following example. Notice that you have three namespaces in your cluster. They're the default, container-registry, and kube-system namespaces. Here, you can see the registry, kube-dns, and kubernetes-dashboard instances that you installed. You'll also see the supporting services that were installed alongside some of the add-ons.
+
+NAMESPACE            NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                  AGE   SELECTOR
+container-registry   registry                    NodePort    10.152.183.36    <none>        5000:32000/TCP           28m   app=registry
+default              kubernetes                  ClusterIP   10.152.183.1     <none>        443/TCP                  37m   <none>
+kube-system          dashboard-metrics-scraper   ClusterIP   10.152.183.130   <none>        8000/TCP                 28m   k8s-app=dashboard-metrics-scraper
+kube-system          heapster                    ClusterIP   10.152.183.115   <none>        80/TCP                   28m   k8s-app=heapster
+kube-system          kube-dns                    ClusterIP   10.152.183.10    <none>        53/UDP,53/TCP,9153/TCP   28m   k8s-app=kube-dns
+kube-system          kubernetes-dashboard        ClusterIP   10.152.183.132   <none>        443/TCP                  28m   k8s-app=kubernetes-dashboard
+kube-system          monitoring-grafana          ClusterIP   10.152.183.88    <none>        80/TCP                   28m   k8s-app=influxGrafana
+kube-system          monitoring-influxdb         ClusterIP   10.152.183.232   <none>        8083/TCP,8086/TCP        28m   k8s-app=influxGrafana
+
+Now that you can see the services running on the cluster, you can schedule a workload on the worker node.
+
+
+
+
+# 5 # Install a web server on a cluster
+• You want to schedule a web server on the cluster to serve a website to your customers.
+• You can choose from several options.
+• For this example, you'll use NGINX.
+• Recall from earlier that you can use pod manifest files to describe your pods, replica sets, and deployments to define workloads.
+• Because you haven't covered these files in detail, you'll use kubectl to directly pass the information to the API server.
+• Even though the use of kubectl is handy, using manifest files is a best practice.
+• Manifest files allow you to roll forward or roll back deployments with ease in your cluster.
+• These files also help document the configuration of a cluster.
+
+1. To create your NGINX deployment, run the kubectl create deployment command. Specify the name of the deployment and the container image to create a single instance of the pod.
+
+% sudo kubectl create deployment nginx --image=nginx
+
+The result is similar to the following example:
+
+deployment.apps/nginx created
+
+
+2. To fetch the information about your deployment, run kubectl get deployments:
+
+% sudo kubectl get deployments
+
+The result is similar to the following example. Notice that the name of the deployment matches the name you gave it, and that one deployment with this name is in a ready state and available.
+
+[
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+nginx   1/1     1            1           18s
+]
+[
+ubuntu@microk8s-vm:~$ sudo kubectl get deployments
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+nginx   0/1     1            0           18s
+]
+
+3. The deployment created a pod. To fetch info about your cluster's pods, run the kubectl get pods command:
+
+% sudo kubectl get pods
+
+The result is similar to the following example. Notice that the name of the pod is a generated value prefixed with the name of the deployment, and the pod has a status of Running.
+
+NAME                     READY   STATUS    RESTARTS   AGE
+nginx-86c57db685-dj6lz   1/1     Running   0          33s
+
+
+
+
+# 6 # Test the website installation
+• Test the NGINX installation by connecting to the web server through the pod's IP address.
+
+1. To find the address of the pod, pass the -o wide parameter:
+
+% sudo kubectl get pods -o wide
+
+The result is similar to the following example. Notice that the command returns both the IP address of the node, and the node name on which the workload is scheduled.
+
+NAME                     READY   STATUS    RESTARTS   AGE     IP           NODE          NOMINATED NODE   READINESS GATES
+nginx-86c57db685-dj6lz   1/1     Running   0          4m17s   10.1.83.10   microk8s-vm   <none>           <none>
+
+
+2. To access the website, run wget:
+
+[
+% wget 10.1.83.10
+]
+[
+ubuntu@microk8s-vm:~$ wget 10.1.254.73
+]
+
+The result is similar to the following example:
+
+--2020-03-16 13:34:17--  http://10.1.83.10/
+Connecting to 10.1.83.10:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 612 [text/html]
+Saving to: 'index.html'
+
+index.html                                    100%[==============================================================================================>]     612  --.-KB/s    in 0s
+
+2020-03-16 13:34:17 (150 MB/s) - 'index.html' saved [612/612]
+
+
+
+
+# 7 # Scale a web server deployment on a cluster
+• Assume that you suddenly see an increase in users who access your website, and the website starts failing because of the load.
+• You can deploy more instances of the site in your cluster and split the load across the instances.
+• To scale the number of replicas in your deployment, run the kubectl scale command.
+• You specify the number of replicas you need and the name of the deployment.
+
+1. To scale the total of NGINX pods to three, run the kubectl scale command:
+
+% sudo kubectl scale --replicas=3 deployments/nginx
+
+The result is similar to the following example:
+
+deployment.apps/nginx scaled
+
+The scale command allows you to scale the instance count up or down.
+
+
+2. To check the number of running pods, run the kubectl get command, and again pass the -o wide parameter:
+
+% sudo kubectl get pods -o wide
+
+The result is similar to the following example. Notice that you now see three running pods, each with a unique IP address.
+
+NAME                     READY   STATUS    RESTARTS   AGE     IP           NODE          NOMINATED NODE   READINESS GATES
+nginx-86c57db685-dj6lz   1/1     Running   0          7m57s   10.1.83.10   microk8s-vm   <none>           <none>
+nginx-86c57db685-lzrwp   1/1     Running   0          9s      10.1.83.12   microk8s-vm   <none>           <none>
+nginx-86c57db685-m7vdd   1/1     Running   0          9s      10.1.83.11   microk8s-vm   <none>           <none>
+ubuntu@microk8s-vm:~$
+
+You'd need to apply several more configurations to the cluster to effectively expose your website as a public-facing website. Examples include installing a load balancer and mapping node IP addresses. This type of configuration forms part of advanced aspects that you'll explore in the future.
+
+
+
+
+# 8 # Uninstall MicroK8s
+• To recover space on your development machine, you can remove everything you've deployed so far, even the VM. Keep in mind that this procedure is optional.
+
+1. To remove the add-ons from the cluster, run the microk8s.disable command, and specify the add-ons to remove:
+
+% sudo microk8s.disable dashboard dns registry
+
+
+2. To remove MicroK8s from the VM, run the snap remove command:
+
+% sudo snap remove microk8s
+
+
+
+
+# 9 # If you want to remove the Multipass VM manager from your machine, there are a few extra steps to take on Windows and macOS.
+
+1. To exit the VM, run the exit command:
+
+% exit
+
+
+2. To stop the VM, run the multipass stop command and specify the VM's name:
+
+% multipass stop microk8s-vm
+
+
+3. To delete and purge the VM instance, run multipass delete, then run multipass purge:
+
+% multipass delete microk8s-vm
+
+% multipass purge
+
+###########################################################################################################################
+
+
+
+
+# microk8s-vm # multipass # kubectl
+# Terminal Output
+###########################################################################################################################
+
+Last login: Mon Oct  9 12:08:30 on console
+usernameapple@Rajanis-MacBook-Pro ~ % arch
+arm64
+usernameapple@Rajanis-MacBook-Pro ~ % pwd
+/Users/usernameapple
+usernameapple@Rajanis-MacBook-Pro ~ % cd /Users/usernameapple/Desktop/Technology/Kubernetes/Exercise 
+usernameapple@Rajanis-MacBook-Pro Exercise % pwd
+/Users/usernameapple/Desktop/Technology/Kubernetes/Exercise
+usernameapple@Rajanis-MacBook-Pro Exercise % brew --version
+Homebrew 4.1.0
+usernameapple@Rajanis-MacBook-Pro Exercise % brew install --cask multipass
+Running `brew update --auto-update`...
+==> Auto-updated Homebrew!
+Updated 4 taps (homebrew/services, mongodb/brew, homebrew/core and homebrew/cask).
+==> New Formulae
+aerleon                                 eza                                     meson-python                            python-setuptools
+apify-cli                               falco                                   mfem                                    python-tk@3.12
+apprise                                 falcoctl                                mgis                                    python@3.12
+arm-none-eabi-binutils                  feishu2md                               mjml                                    qalculate-qt
+arm-none-eabi-gcc                       fwupd                                   modsecurity                             recoverpy
+arm-none-eabi-gdb                       ggshield                                mongodb/brew/mongodb-community@6.0      riscv64-elf-binutils
+asn                                     ghc@9.4                                 mongodb/brew/mongodb-enterprise@6.0     riscv64-elf-gcc
+asnmap                                  gickup                                  mongodb/brew/mongodb-mongocryptd@6.0    riscv64-elf-gdb
+bandicoot                               gismo                                   mtbl                                    risor
+bashunit                                gitea                                   mvfst                                   roadrunner
+bazel-diff                              go@1.20                                 mysql-client@8.0                        rpmspectool
+bazel-remote                            goread                                  mysql@8.0                               s3scanner
+biome                                   gotestwaf                               netlistsvg                              sbom-tool
+blake3                                  helidon                                 notation                                scoutsuite
+bozohttpd                               hyfetch                                 numbat                                  shuffledns
+build2                                  img2pdf                                 ollama                                  smlfmt
+caracal                                 imgdiet                                 onionprobe                              spacer
+cargo-all-features                      imgdiff                                 orbiton                                 sqlsmith
+cargo-auditable                         incus                                   orcania                                 squiid
+cargo-binutils                          iocextract                              orogene                                 surelog
+cargo-deps                              jr                                      plog                                    tailwindcss
+cargo-docset                            json2ts                                 postgresql@16                           talhelper
+cdi                                     katana                                  powerlevel10k                           terraform-graph-beautifier
+cdxgen                                  killport                                prettierd                               terragrunt-atlantis-config
+chaoskube                               kor                                     proxify                                 tf-profile
+checkdmarc                              kosli-cli                               pter                                    toxiproxy
+cloud-sql-proxy                         ldeep                                   pwned                                   tpm
+cloudfox                                ldid-procursus                          pyspelling                              trafilatura
+cloudlist                               legitify                                pystring                                udp2raw-multiplatform
+codelimit                               libgit2@1.6                             python-argcomplete                      uffizzi
+coder                                   libimobiledevice-glue                   python-certifi                          uhdm
+colmap                                  libjcat                                 python-click                            uncover
+counts                                  libmapper                               python-cryptography                     urlfinder
+cryptopp                                libpanel                                python-flit-core                        vulkan-utility-libraries
+ctpv                                    libshumate                              python-gdbm@3.12                        vunnel
+cyclonedx-gomod                         libxmlb                                 python-lxml                             web-ext
+cyclonedx-python                        llm                                     python-markupsafe                       woodpecker-cli
+czkawka                                 llvm@16                                 python-mutagen                          wtfis
+dezoomify-rs                            lune                                    python-packaging                        xlsxio
+dnsrobocert                             lxi-tools                               python-pycurl                           yazi
+dolphie                                 mariadb@11.0                            python-pyparsing                        yder
+dovi_tool                               massdriver                              python-pyproject-hooks
+ebook2cw                                medusa                                  python-pytz
+==> New Casks
+4k-video-downloaderplus    cloudnet                   git-credential-manager     modrinth                   ripx                       updf
+aifun                      crystalfetch               herd                       monotype                   routine                    viso
+akuity                     devtunnel                  hhkb                       mutedeck                   rustrover                  voicepeak
+apidog                     dockx                      hovrly                     muyu                       sf                         wetype
+applite                    draw-things                hp-easy-admin              paulxstretch               sfm                        wiso-steuer-2022
+ava                        dropbox-dash               hypercal                   pieces                     shattered-pixel-dungeon    wiso-steuer-2023
+batteryboi                 dropshelf                  iem-plugin-suite           pieces-os                  simple-web-server          xiaomi-cloud
+bepo                       ecodms-client              json-viewer                piphero                    space-capsule              zspace
+browser-deputy             elektron-transfer          jukebox                    playdate-mirror            sparkplate                 zui
+chainner                   energiza                   keyclu                     proxy-audio-device         spundle
+cilicon                    expo-orbit                 kreya                      recipeui                   stash
+clickhouse                 finbar                     lm-studio                  replay                     telegram-a
+clinq                      floorp                     luniistore                 reqable                    to-audio-converter
+clop                       font-finagler              meld-studio                rippling                   twelite-stage
+
+You have 11 outdated formulae installed.
+
+==> Downloading https://raw.githubusercontent.com/Homebrew/homebrew-cask/ab42dcfce67dfcbcc97bc4d4428f238ad881fd6f/Casks/m/multipass.rb
+######################################################################################################################################################### 100.0%
+==> Downloading https://github.com/canonical/multipass/releases/download/v1.12.2/multipass-1.12.2+mac-Darwin.pkg
+==> Downloading from https://objects.githubusercontent.com/github-production-release-asset-2e65be/114128199/f558434a-3d96-4210-8a69-a65d7917d83f?X-Amz-Algorithm
+######################################################################################################################################################### 100.0%
+==> Installing Cask multipass
+==> Running installer for multipass with sudo; the password may be necessary.
+Password:
+installer: Package name is multipass
+installer: Installing at base path /
+installer: The install was successful.
+🍺  multipass was successfully installed!
+usernameapple@Rajanis-MacBook-Pro Exercise % multipass launch --name microk8s-vm --memory 4G --disk 40G
+Launched: microk8s-vm
+usernameapple@Rajanis-MacBook-Pro Exercise % multipass shell microk8s-vm
+Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.0-84-generic aarch64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Mon Oct  9 14:34:41 IST 2023
+
+  System load:             0.07177734375
+  Usage of /:              3.6% of 38.59GB
+  Memory usage:            4%
+  Swap usage:              0%
+  Processes:               89
+  Users logged in:         0
+  IPv4 address for enp0s1: 192.168.64.2
+  IPv6 address for enp0s1: fd1d:a80c:e456:91f0:5054:ff:fe7a:b7c5
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+ubuntu@microk8s-vm:~$ sudo snap install microk8s --classic
+Download snap "microk8s" (5896) from channel "1.27/stable"	60% 3.09MB/s 20.0
+Download snap "microk8s" (5896) from channel "1.27/stable"	60% 3.08MB/
+Download snap "microk8s" (5896) from channel "1.27/stable"	61% 3.07MB/s 2
+Download snap "microk8s" (5896) from channel "1.27/stable"	61% 3.06MB/s 2
+Download snap "microk8s" (5896) from channel "1.27/stable"	61% 3.05MB/s                                         
+Download snap "microk8s" (5896) from channel "1.27/stable"	76% 
+Download snap "microk8s" (5896) from channel "1.27/stable"	88%
+Download Run install hook oRun instaRun instamicrok8s (1.27/stable) v1.27.5 from Canonical✓ installed
+ubuntu@microk8s-vm:~$ sudo microk8s.status --wait-ready
+microk8s is running
+high-availability: no
+  datastore master nodes: 127.0.0.1:19001
+  datastore standby nodes: none
+addons:
+  enabled:
+    dns                  # (core) CoreDNS
+    ha-cluster           # (core) Configure high availability on the current node
+    helm                 # (core) Helm - the package manager for Kubernetes
+    helm3                # (core) Helm 3 - the package manager for Kubernetes
+  disabled:
+    cert-manager         # (core) Cloud native certificate management
+    community            # (core) The community addons repository
+    dashboard            # (core) The Kubernetes dashboard
+    host-access          # (core) Allow Pods connecting to Host services smoothly
+    hostpath-storage     # (core) Storage class; allocates storage from host directory
+    ingress              # (core) Ingress controller for external access
+    kube-ovn             # (core) An advanced network fabric for Kubernetes
+    mayastor             # (core) OpenEBS MayaStor
+    metallb              # (core) Loadbalancer for your Kubernetes cluster
+    metrics-server       # (core) K8s Metrics Server for API access to service metrics
+    minio                # (core) MinIO object storage
+    observability        # (core) A lightweight observability stack for logs, traces and metrics
+    prometheus           # (core) Prometheus operator for monitoring and logging
+    rbac                 # (core) Role-Based Access Control for authorisation
+    registry             # (core) Private image registry exposed on localhost:32000
+    storage              # (core) Alias to hostpath-storage add-on, deprecated
+ubuntu@microk8s-vm:~$ sudo microk8s.enable dns dashboard registry
+Infer repository core for addon dns
+Infer repository core for addon dashboard
+Infer repository core for addon registry
+WARNING: Do not enable or disable multiple addons in one command.
+         This form of chained operations on addons will be DEPRECATED in the future.
+         Please, enable one addon at a time: 'microk8s enable <addon>'
+Addon core/dns is already enabled
+Enabling Kubernetes Dashboard
+Infer repository core for addon metrics-server
+Enabling Metrics-Server
+serviceaccount/metrics-server created
+clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/system:metrics-server created
+rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
+clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
+clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+service/metrics-server created
+deployment.apps/metrics-server created
+apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
+clusterrolebinding.rbac.authorization.k8s.io/microk8s-admin created
+Metrics-Server is enabled
+Applying manifest
+serviceaccount/kubernetes-dashboard created
+service/kubernetes-dashboard created
+secret/kubernetes-dashboard-certs created
+secret/kubernetes-dashboard-csrf created
+secret/kubernetes-dashboard-key-holder created
+configmap/kubernetes-dashboard-settings created
+role.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrole.rbac.authorization.k8s.io/kubernetes-dashboard created
+rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+deployment.apps/kubernetes-dashboard created
+service/dashboard-metrics-scraper created
+deployment.apps/dashboard-metrics-scraper created
+secret/microk8s-dashboard-token created
+
+If RBAC is not enabled access the dashboard using the token retrieved with:
+
+microk8s kubectl describe secret -n kube-system microk8s-dashboard-token
+
+Use this token in the https login UI of the kubernetes-dashboard service.
+
+In an RBAC enabled setup (microk8s enable RBAC) you need to create a user with restricted
+permissions as shown in:
+https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
+
+Infer repository core for addon hostpath-storage
+Enabling default storage class.
+WARNING: Hostpath storage is not suitable for production environments.
+         A hostpath volume can grow beyond the size limit set in the volume claim manifest.
+
+deployment.apps/hostpath-provisioner created
+storageclass.storage.k8s.io/microk8s-hostpath created
+serviceaccount/microk8s-hostpath created
+clusterrole.rbac.authorization.k8s.io/microk8s-hostpath created
+clusterrolebinding.rbac.authorization.k8s.io/microk8s-hostpath created
+Storage will be available soon.
+The registry will be created with the size of 20Gi.
+Default storage class will be used.
+namespace/container-registry created
+persistentvolumeclaim/registry-claim created
+deployment.apps/registry created
+service/registry created
+configmap/local-registry-hosting configured
+ubuntu@microk8s-vm:~$ sudo snap alias microk8s.kubectl kubectl
+Added:
+  - microk8s.kubectl as kubectl
+ubuntu@microk8s-vm:~$ sudo kubectl get nodes
+NAME          STATUS   ROLES    AGE   VERSION
+microk8s-vm   Ready    <none>   10m   v1.27.5
+ubuntu@microk8s-vm:~$ sudo kubectl get nodes -o wide
+NAME          STATUS   ROLES    AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+microk8s-vm   Ready    <none>   12m   v1.27.5   192.168.64.2   <none>        Ubuntu 22.04.3 LTS   5.15.0-84-generic   containerd://1.6.15
+ubuntu@microk8s-vm:~$ sudo kubectl get services -o wide
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+kubernetes   ClusterIP   10.152.183.1   <none>        443/TCP   13m   <none>
+ubuntu@microk8s-vm:~$ sudo kubectl get services -o wide --all-namespaces
+NAMESPACE            NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                  AGE     SELECTOR
+default              kubernetes                  ClusterIP   10.152.183.1     <none>        443/TCP                  15m     <none>
+kube-system          kube-dns                    ClusterIP   10.152.183.10    <none>        53/UDP,53/TCP,9153/TCP   15m     k8s-app=kube-dns
+kube-system          metrics-server              ClusterIP   10.152.183.136   <none>        443/TCP                  8m36s   k8s-app=metrics-server
+kube-system          kubernetes-dashboard        ClusterIP   10.152.183.227   <none>        443/TCP                  8m35s   k8s-app=kubernetes-dashboard
+kube-system          dashboard-metrics-scraper   ClusterIP   10.152.183.145   <none>        8000/TCP                 8m35s   k8s-app=dashboard-metrics-scraper
+container-registry   registry                    NodePort    10.152.183.28    <none>        5000:32000/TCP           8m33s   app=registry
+ubuntu@microk8s-vm:~$ sudo kubectl create deployment nginx --image=nginx
+deployment.apps/nginx created
+ubuntu@microk8s-vm:~$ sudo kubectl get deployments
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+nginx   0/1     1            0           18s
+ubuntu@microk8s-vm:~$ sudo kubectl get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+nginx-77b4fdf86c-j6r6s   1/1     Running   0          5m12s
+ubuntu@microk8s-vm:~$ sudo kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE    IP            NODE          NOMINATED NODE   READINESS GATES
+nginx-77b4fdf86c-j6r6s   1/1     Running   0          6m5s   10.1.254.73   microk8s-vm   <none>           <none>
+ubuntu@microk8s-vm:~$ wget 10.1.254.73
+--2023-10-09 15:11:15--  http://10.1.254.73/
+Connecting to 10.1.254.73:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 615 [text/html]
+Saving to: ‘index.html’
+
+index.html                              100%[===============================================================================>]     615  --.-KB/s    in 0s      
+
+2023-10-09 15:11:15 (31.6 MB/s) - ‘index.html’ saved [615/615]
+
+ubuntu@microk8s-vm:~$ sudo kubectl scale --replicas=3 deployments/nginx
+deployment.apps/nginx scaled
+ubuntu@microk8s-vm:~$ sudo kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE   IP            NODE          NOMINATED NODE   READINESS GATES
+nginx-77b4fdf86c-j6r6s   1/1     Running   0          13m   10.1.254.73   microk8s-vm   <none>           <none>
+nginx-77b4fdf86c-nffx8   1/1     Running   0          36s   10.1.254.74   microk8s-vm   <none>           <none>
+nginx-77b4fdf86c-d8jjr   1/1     Running   0          36s   10.1.254.75   microk8s-vm   <none>           <none>
+ubuntu@microk8s-vm:~$ arch
+aarch64
+ubuntu@microk8s-vm:~$ pwd
+/home/ubuntu
+ubuntu@microk8s-vm:~$ ls -a
+.  ..  .bash_logout  .bashrc  .cache  .profile  .ssh  .sudo_as_admin_successful  index.html
+ubuntu@microk8s-vm:~$ cat index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+ubuntu@microk8s-vm:~$ sudo microk8s.disable dashboard dns registry
+Infer repository core for addon dashboard
+Infer repository core for addon dns
+Infer repository core for addon registry
+WARNING: Do not enable or disable multiple addons in one command.
+         This form of chained operations on addons will be DEPRECATED in the future.
+         Please, disable one addon at a time: 'microk8s disable <addon>'
+Disabling Dashboard
+serviceaccount "kubernetes-dashboard" deleted
+service "kubernetes-dashboard" deleted
+secret "kubernetes-dashboard-certs" deleted
+secret "kubernetes-dashboard-csrf" deleted
+secret "kubernetes-dashboard-key-holder" deleted
+configmap "kubernetes-dashboard-settings" deleted
+role.rbac.authorization.k8s.io "kubernetes-dashboard" deleted
+clusterrole.rbac.authorization.k8s.io "kubernetes-dashboard" deleted
+rolebinding.rbac.authorization.k8s.io "kubernetes-dashboard" deleted
+clusterrolebinding.rbac.authorization.k8s.io "kubernetes-dashboard" deleted
+deployment.apps "kubernetes-dashboard" deleted
+service "dashboard-metrics-scraper" deleted
+deployment.apps "dashboard-metrics-scraper" deleted
+Dashboard is disabled
+Disabling DNS
+Reconfiguring kubelet
+Removing DNS manifest
+deployment.apps "coredns" deleted
+pod/coredns-7745f9f87f-dprgt condition met
+serviceaccount "coredns" deleted
+configmap "coredns" deleted
+service "kube-dns" deleted
+clusterrole.rbac.authorization.k8s.io "coredns" deleted
+clusterrolebinding.rbac.authorization.k8s.io "coredns" deleted
+DNS is disabled
+Disabling the private registry
+namespace "container-registry" deleted
+persistentvolumeclaim "registry-claim" deleted
+deployment.apps "registry" deleted
+service "registry" deleted
+configmap "local-registry-hosting" deleted
+configmap/local-registry-hosting created
+The registry is disabled. Use 'microk8s disable hostpath-storage:destroy-storage' to free the storage space.
+ubuntu@microk8s-vm:~$ sudo snap remove microk8s
+microk8s removed
+ubuntu@microk8s-vm:~$ ls -a
+.  ..  .bash_logout  .bashrc  .cache  .profile  .ssh  .sudo_as_admin_successful  index.html
+ubuntu@microk8s-vm:~$ cat .profile
+# ~/.profile: executed by the command interpreter for login shells.
+# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
+# exists.
+# see /usr/share/doc/bash/examples/startup-files for examples.
+# the files are located in the bash-doc package.
+
+# the default umask is set in /etc/profile; for setting the umask
+# for ssh logins, install and configure the libpam-umask package.
+#umask 022
+
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+	. "$HOME/.bashrc"
+    fi
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+ubuntu@microk8s-vm:~$ ls -a
+.  ..  .bash_logout  .bashrc  .cache  .profile  .ssh  .sudo_as_admin_successful  index.html
+ubuntu@microk8s-vm:~$ cat .bashrc
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# colored GCC warnings and errors
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+ubuntu@microk8s-vm:~$ ls -a
+.  ..  .bash_logout  .bashrc  .cache  .profile  .ssh  .sudo_as_admin_successful  index.html
+ubuntu@microk8s-vm:~$ cat .sudo_as_admin_successful
+ubuntu@microk8s-vm:~$ cat .bash_logout
+# ~/.bash_logout: executed by bash(1) when login shell exits.
+
+# when leaving the console clear the screen to increase privacy
+
+if [ "$SHLVL" = 1 ]; then
+    [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
+fi
+ubuntu@microk8s-vm:~$ exit
+logout
+usernameapple@Rajanis-MacBook-Pro Exercise % multipass stop microk8s-vm
+usernameapple@Rajanis-MacBook-Pro Exercise % multipass delete microk8s-vm
+usernameapple@Rajanis-MacBook-Pro Exercise % multipass purge
+usernameapple@Rajanis-MacBook-Pro Exercise % 
+
+###########################################################################################################################
+
+
+
+
+# microk8s-vm # multipass # kubectl
+# mongodb-mongosh
+# Use Port Forwarding to Access Applications in a Cluster
+# Terminal Output
+###########################################################################################################################
+
+Last login: Tue Oct 10 11:15:03 on ttys000
+usernameapple@Rajanis-MacBook-Pro ~ % arch                                                                         
+arm64
+usernameapple@Rajanis-MacBook-Pro ~ % pwd                        
+/Users/usernameapple
+usernameapple@Rajanis-MacBook-Pro ~ % cd /Users/usernameapple/Desktop/Technology/Kubernetes/Proof-of-Concept/MongoDB 
+usernameapple@Rajanis-MacBook-Pro MongoDB % pwd                                                                          
+/Users/usernameapple/Desktop/Technology/Kubernetes/Proof-of-Concept/MongoDB
+usernameapple@Rajanis-MacBook-Pro MongoDB % multipass --version                                                          
+multipass   1.12.2+mac
+multipassd  1.12.2+mac
+usernameapple@Rajanis-MacBook-Pro MongoDB % multipass shell microk8s-vm                                                  
+Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.0-84-generic aarch64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Tue Oct 10 04:48:32 UTC 2023
+
+  System load:             0.3076171875
+  Usage of /:              3.6% of 38.59GB
+  Memory usage:            4%
+  Swap usage:              0%
+  Processes:               95
+  Users logged in:         0
+  IPv4 address for enp0s1: 192.168.64.4
+  IPv6 address for enp0s1: fd1d:a80c:e456:91f0:5054:ff:fec2:ba42
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+Last login: Tue Oct 10 11:16:00 2023 from 192.168.64.1
+ubuntu@microk8s-vm:~$ sudo kubectl cluster-info
+Kubernetes control plane is running at https://127.0.0.1:16443
+CoreDNS is running at https://127.0.0.1:16443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+ubuntu@microk8s-vm:~$ sudo kubectl get nodes -o wide
+NAME          STATUS   ROLES    AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+microk8s-vm   Ready    <none>   71m   v1.27.5   192.168.64.4   <none>        Ubuntu 22.04.3 LTS   5.15.0-84-generic   containerd://1.6.15
+ubuntu@microk8s-vm:~$ sudo kubectl get services -o wide
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+kubernetes   ClusterIP   10.152.183.1   <none>        443/TCP   71m   <none>
+ubuntu@microk8s-vm:~$ sudo kubectl get deployments -o wide
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES   SELECTOR
+nginx   1/1     1            1           64m   nginx        nginx    app=nginx
+ubuntu@microk8s-vm:~$ sudo kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE   IP            NODE          NOMINATED NODE   READINESS GATES
+nginx-77b4fdf86c-ndmbl   1/1     Running   0          64m   10.1.254.73   microk8s-vm   <none>           <none>
+ubuntu@microk8s-vm:~$ sudo kubectl get replicasets -o wide
+NAME               DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES   SELECTOR
+nginx-77b4fdf86c   1         1         1       64m   nginx        nginx    app=nginx,pod-template-hash=77b4fdf86c
+ubuntu@microk8s-vm:~$ sudo kubectl apply -f https://k8s.io/examples/application/mongodb/mongo-service.yaml
+service/mongo created
+ubuntu@microk8s-vm:~$ sudo kubectl get services -o wide
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE   SELECTOR
+kubernetes   ClusterIP   10.152.183.1     <none>        443/TCP     73m   <none>
+mongo        ClusterIP   10.152.183.242   <none>        27017/TCP   30s   app.kubernetes.io/component=backend,app.kubernetes.io/name=mongo
+nginx-77b4fdf86c-ndmbl   1/1     Running   0          67m   10.1.254.73   microk8s-vm   <none>           <none>
+ubuntu@microk8s-vm:~$ sudo kubectl get service mongo
+NAME    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
+mongo   ClusterIP   10.152.183.242   <none>        27017/TCP   2m4s
+ubuntu@microk8s-vm:~$ sudo kubectl describe service mongo
+Name:              mongo
+Namespace:         default
+Labels:            app.kubernetes.io/component=backend
+                   app.kubernetes.io/name=mongo
+Annotations:       <none>
+Selector:          app.kubernetes.io/component=backend,app.kubernetes.io/name=mongo
+Type:              ClusterIP
+IP Family Policy:  SingleStack
+IP Families:       IPv4
+IP:                10.152.183.242
+IPs:               10.152.183.242
+Port:              <unset>  27017/TCP
+TargetPort:        27017/TCP
+Endpoints:         <none>
+Session Affinity:  None
+Events:            <none>
+ubuntu@microk8s-vm:~$ sudo kubectl apply -f https://k8s.io/examples/application/mongodb/mongo-deployment.yaml
+deployment.apps/mongo created
+ubuntu@microk8s-vm:~$ sudo kubectl get deployments -o wide
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES      SELECTOR
+nginx   1/1     1            1           69m   nginx        nginx       app=nginx
+mongo   0/1     1            0           25s   mongo        mongo:4.2   app.kubernetes.io/component=backend,app.kubernetes.io/name=mongo
+ubuntu@microk8s-vm:~$ sudo kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE   IP            NODE          NOMINATED NODE   READINESS GATES
+nginx-77b4fdf86c-ndmbl   1/1     Running   0          70m   10.1.254.73   microk8s-vm   <none>           <none>
+mongo-7d96cb4cf-85fhp    1/1     Running   0          53s   10.1.254.74   microk8s-vm   <none>           <none>
+ubuntu@microk8s-vm:~$ sudo kubectl get replicasets -o wide
+NAME               DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES      SELECTOR
+nginx-77b4fdf86c   1         1         1       70m   nginx        nginx       app=nginx,pod-template-hash=77b4fdf86c
+mongo-7d96cb4cf    1         1         1       63s   mongo        mongo:4.2   app.kubernetes.io/component=backend,app.kubernetes.io/name=mongo,pod-template-hash=7d96cb4cf
+ubuntu@microk8s-vm:~$ wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc | sudo tee /etc/apt/trusted.gpg.d/server-7.0.asc
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1
+
+mQINBGPILWABEACqeWP/ktugdlWEyk7YTXo3n19+5Om4AlSdIyKv49vAlKtzCfMA
+QkZq3mfvjXiKMuLnL2VeElAJQIYcPoqnHf6tJbdrNv4AX2uI1cTsvGW7YS/2WNwJ
+C/+vBa4o+yA2CG/MVWZRbtOjkFF/W07yRFtNHAcgdmpIjdWgSnPQr9eIqLuWXIhy
+H7EerKsba227Vd/HfvKnAy30Unlsdywy7wi1FupzGJck0TPoOVGmsSpSyIQu9A4Z
+uC6TE/NcJHvaN0JuHwM+bQo9oWirGsZ1NCoVqSY8/sasdUc7T9r90MbUcH674YAR
+8OKYVBzU0wch4VTFhfHZecKHQnZf+V4dmP9oXnu4fY0/0w3l4jaew7Ind7kPg3yN
+hvgAkBK8yRAbSu1NOtHDNiRoHGEQFgct6trVOvCqHbN/VToLNtGk0rhKGOp8kuSF
+OJ02PJPxF3/zHGP8n8khCjUJcrilYPqRghZC8ZWnCj6GJVg6WjwLi+hPwNMi8xK6
+cjKhRW3eCy5Wcn73PzVBX9f7fSeFDJec+IfS47eNkxunHAOUMXa2+D+1xSWgEfK0
+PClfyWPgLIXY2pGQ6v8l3A6P5gJv4o38/E1h1RTcO3H1Z6cgZLIORZHPyAj50SPQ
+cjzftEcz56Pl/Cyw3eMYC3qlbABBgsdeb6KB6G5dkNxI4or3MgmxcwfnkwARAQAB
+tDdNb25nb0RCIDcuMCBSZWxlYXNlIFNpZ25pbmcgS2V5IDxwYWNrYWdpbmdAbW9u
+Z29kYi5jb20+iQI+BBMBAgAoBQJjyC1gAhsDBQkJZgGABgsJCAcDAgYVCAIJCgsE
+FgIDAQIeAQIXgAAKCRAWDSa7F4W6OM+eD/sE7KbJyRNWyPCRTqqJXrXvyPqZtbFX
+8sio0lQ8ghn4f7lmb7LnFroUsmBeWaYirM8O3b2+iQ9oj4GeR3gbRZsEhFXQfL54
+SfrmG9hrWWpJllgPP7Six+jrzcjvkf1TENqw4jRP+cJhuihH1Gfizo9ktwwoN9Yr
+m7vgh+focEEmx8dysS38ApLxKlUEfTsE9bYsClgqyY1yrt3v4IpGbf66yfyBHNgY
+sObR3sngDRVbap7PwNyREGsuAFfKr/Dr37HfrjY7nsn3vH7hbDpSBh+H7a0b/chS
+mM60aaG4biWpvmSC7uxA/t0gz+NQuC4HL+qyNPUxvyIO+TwlaXfCI6ixazyrH+1t
+F7Bj5mVsne7oeWjRrSz85jK3Tpn9tj3Fa7PCDA6auAlPK8Upbhuoajev4lIydNd2
+70yO0idm/FtpX5a8Ck7KSHDvEnXpN70imayoB4Fs2Kigi2BdZOOdib16o5F/9cx9
+piNa7HotHCLTfR6xRmelGEPWKspU1Sm7u2A5vWgjfSab99hiNQ89n+I7BcK1M3R1
+w/ckl6qBtcxz4Py+7jYIJL8BYz2tdreWbdzWzjv+XQ8ZgOaMxhL9gtlfyYqeGfnp
+hYW8LV7a9pavxV2tLuVjMM+05ut/d38IkTV7OSJgisbSGcmycXIzxsipyXJVGMZt
+MFw3quqJhQMRsA==
+=gbRM
+-----END PGP PUBLIC KEY BLOCK-----
+ubuntu@microk8s-vm:~$ sudo apt-get install gnupg
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+gnupg is already the newest version (2.2.27-3ubuntu2.1).
+gnupg set to manually installed.
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+ubuntu@microk8s-vm:~$ wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc | sudo tee /etc/apt/trusted.gpg.d/server-7.0.asc
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1
+
+mQINBGPILWABEACqeWP/ktugdlWEyk7YTXo3n19+5Om4AlSdIyKv49vAlKtzCfMA
+QkZq3mfvjXiKMuLnL2VeElAJQIYcPoqnHf6tJbdrNv4AX2uI1cTsvGW7YS/2WNwJ
+C/+vBa4o+yA2CG/MVWZRbtOjkFF/W07yRFtNHAcgdmpIjdWgSnPQr9eIqLuWXIhy
+H7EerKsba227Vd/HfvKnAy30Unlsdywy7wi1FupzGJck0TPoOVGmsSpSyIQu9A4Z
+uC6TE/NcJHvaN0JuHwM+bQo9oWirGsZ1NCoVqSY8/sasdUc7T9r90MbUcH674YAR
+8OKYVBzU0wch4VTFhfHZecKHQnZf+V4dmP9oXnu4fY0/0w3l4jaew7Ind7kPg3yN
+hvgAkBK8yRAbSu1NOtHDNiRoHGEQFgct6trVOvCqHbN/VToLNtGk0rhKGOp8kuSF
+OJ02PJPxF3/zHGP8n8khCjUJcrilYPqRghZC8ZWnCj6GJVg6WjwLi+hPwNMi8xK6
+cjKhRW3eCy5Wcn73PzVBX9f7fSeFDJec+IfS47eNkxunHAOUMXa2+D+1xSWgEfK0
+PClfyWPgLIXY2pGQ6v8l3A6P5gJv4o38/E1h1RTcO3H1Z6cgZLIORZHPyAj50SPQ
+cjzftEcz56Pl/Cyw3eMYC3qlbABBgsdeb6KB6G5dkNxI4or3MgmxcwfnkwARAQAB
+tDdNb25nb0RCIDcuMCBSZWxlYXNlIFNpZ25pbmcgS2V5IDxwYWNrYWdpbmdAbW9u
+Z29kYi5jb20+iQI+BBMBAgAoBQJjyC1gAhsDBQkJZgGABgsJCAcDAgYVCAIJCgsE
+FgIDAQIeAQIXgAAKCRAWDSa7F4W6OM+eD/sE7KbJyRNWyPCRTqqJXrXvyPqZtbFX
+8sio0lQ8ghn4f7lmb7LnFroUsmBeWaYirM8O3b2+iQ9oj4GeR3gbRZsEhFXQfL54
+SfrmG9hrWWpJllgPP7Six+jrzcjvkf1TENqw4jRP+cJhuihH1Gfizo9ktwwoN9Yr
+m7vgh+focEEmx8dysS38ApLxKlUEfTsE9bYsClgqyY1yrt3v4IpGbf66yfyBHNgY
+sObR3sngDRVbap7PwNyREGsuAFfKr/Dr37HfrjY7nsn3vH7hbDpSBh+H7a0b/chS
+mM60aaG4biWpvmSC7uxA/t0gz+NQuC4HL+qyNPUxvyIO+TwlaXfCI6ixazyrH+1t
+F7Bj5mVsne7oeWjRrSz85jK3Tpn9tj3Fa7PCDA6auAlPK8Upbhuoajev4lIydNd2
+70yO0idm/FtpX5a8Ck7KSHDvEnXpN70imayoB4Fs2Kigi2BdZOOdib16o5F/9cx9
+piNa7HotHCLTfR6xRmelGEPWKspU1Sm7u2A5vWgjfSab99hiNQ89n+I7BcK1M3R1
+w/ckl6qBtcxz4Py+7jYIJL8BYz2tdreWbdzWzjv+XQ8ZgOaMxhL9gtlfyYqeGfnp
+hYW8LV7a9pavxV2tLuVjMM+05ut/d38IkTV7OSJgisbSGcmycXIzxsipyXJVGMZt
+MFw3quqJhQMRsA==
+=gbRM
+-----END PGP PUBLIC KEY BLOCK-----
+ubuntu@microk8s-vm:~$ echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse
+ubuntu@microk8s-vm:~$ sudo apt-get update
+Ign:1 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 InRelease
+Get:2 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 Release [2090 B]
+Hit:3 http://ports.ubuntu.com/ubuntu-ports jammy InRelease
+Get:4 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 Release.gpg [866 B]
+Get:5 http://ports.ubuntu.com/ubuntu-ports jammy-updates InRelease [119 kB]
+Get:6 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0/multiverse amd64 Packages [14.0 kB]
+Get:7 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0/multiverse arm64 Packages [13.0 kB]
+Get:8 http://ports.ubuntu.com/ubuntu-ports jammy-backports InRelease [109 kB]
+Get:9 http://ports.ubuntu.com/ubuntu-ports jammy-security InRelease [110 kB]
+Get:10 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 Packages [13.9 MB]
+Get:11 http://ports.ubuntu.com/ubuntu-ports jammy/universe Translation-en [5652 kB]                                                                            
+Get:12 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 c-n-f Metadata [277 kB]                                                                       
+Get:13 http://ports.ubuntu.com/ubuntu-ports jammy/multiverse arm64 Packages [184 kB]                                                                           
+Get:14 http://ports.ubuntu.com/ubuntu-ports jammy/multiverse Translation-en [112 kB]                                                                           
+Get:15 http://ports.ubuntu.com/ubuntu-ports jammy/multiverse arm64 c-n-f Metadata [7064 B]                                                                     
+Get:16 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 Packages [933 kB]                                                                         
+Get:17 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main Translation-en [233 kB]                                                                         
+Get:18 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 c-n-f Metadata [15.3 kB]                                                                  
+Get:19 http://ports.ubuntu.com/ubuntu-ports jammy-updates/restricted arm64 Packages [630 kB]                                                                   
+Get:20 http://ports.ubuntu.com/ubuntu-ports jammy-updates/restricted Translation-en [157 kB]                                                                   
+Get:21 http://ports.ubuntu.com/ubuntu-ports jammy-updates/restricted arm64 c-n-f Metadata [380 B]                                                              
+Get:22 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 Packages [898 kB]                                                                     
+Get:23 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe Translation-en [216 kB]                                                                     
+Get:24 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 c-n-f Metadata [19.3 kB]                                                              
+Get:25 http://ports.ubuntu.com/ubuntu-ports jammy-updates/multiverse arm64 Packages [23.5 kB]                                                                  
+Get:26 http://ports.ubuntu.com/ubuntu-ports jammy-updates/multiverse Translation-en [9768 B]                                                                   
+Get:27 http://ports.ubuntu.com/ubuntu-ports jammy-updates/multiverse arm64 c-n-f Metadata [260 B]                                                              
+Get:28 http://ports.ubuntu.com/ubuntu-ports jammy-backports/main arm64 Packages [41.4 kB]                                                                      
+Get:29 http://ports.ubuntu.com/ubuntu-ports jammy-backports/main Translation-en [10.5 kB]                                                                      
+Get:30 http://ports.ubuntu.com/ubuntu-ports jammy-backports/main arm64 c-n-f Metadata [388 B]                                                                  
+Get:31 http://ports.ubuntu.com/ubuntu-ports jammy-backports/restricted arm64 c-n-f Metadata [116 B]                                                            
+Get:32 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe arm64 Packages [22.7 kB]                                                                  
+Get:33 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe Translation-en [16.4 kB]                                                                  
+Get:34 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe arm64 c-n-f Metadata [576 B]                                                              
+Get:35 http://ports.ubuntu.com/ubuntu-ports jammy-backports/multiverse arm64 c-n-f Metadata [116 B]                                                            
+Get:36 http://ports.ubuntu.com/ubuntu-ports jammy-security/main arm64 Packages [735 kB]                                                                        
+Get:37 http://ports.ubuntu.com/ubuntu-ports jammy-security/main Translation-en [175 kB]                                                                        
+Get:38 http://ports.ubuntu.com/ubuntu-ports jammy-security/main arm64 c-n-f Metadata [11.1 kB]                                                                 
+Get:39 http://ports.ubuntu.com/ubuntu-ports jammy-security/restricted arm64 Packages [623 kB]                                                                  
+Get:40 http://ports.ubuntu.com/ubuntu-ports jammy-security/restricted Translation-en [154 kB]                                                                  
+Get:41 http://ports.ubuntu.com/ubuntu-ports jammy-security/restricted arm64 c-n-f Metadata [384 B]                                                             
+Get:42 http://ports.ubuntu.com/ubuntu-ports jammy-security/universe arm64 Packages [700 kB]                                                                    
+Get:43 http://ports.ubuntu.com/ubuntu-ports jammy-security/universe Translation-en [144 kB]                                                                    
+Get:44 http://ports.ubuntu.com/ubuntu-ports jammy-security/universe arm64 c-n-f Metadata [14.1 kB]                                                             
+Get:45 http://ports.ubuntu.com/ubuntu-ports jammy-security/multiverse arm64 Packages [19.7 kB]                                                                 
+Get:46 http://ports.ubuntu.com/ubuntu-ports jammy-security/multiverse Translation-en [7060 B]                                                                  
+Get:47 http://ports.ubuntu.com/ubuntu-ports jammy-security/multiverse arm64 c-n-f Metadata [232 B]                                                             
+Fetched 26.3 MB in 17s (1587 kB/s)                                                                                                                             
+Reading package lists... Done
+ubuntu@microk8s-vm:~$ sudo apt-get install -y mongodb-mongosh
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following NEW packages will be installed:
+  mongodb-mongosh
+0 upgraded, 1 newly installed, 0 to remove and 18 not upgraded.
+Need to get 44.1 MB of archives.
+After this operation, 206 MB of additional disk space will be used.
+Get:1 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0/multiverse arm64 mongodb-mongosh arm64 2.0.1 [44.1 MB]
+Fetched 44.1 MB in 8s (5705 kB/s)                                                                                                                              
+Selecting previously unselected package mongodb-mongosh.
+(Reading database ... 66214 files and directories currently installed.)
+Preparing to unpack .../mongodb-mongosh_2.0.1_arm64.deb ...
+Unpacking mongodb-mongosh (2.0.1) ...
+Setting up mongodb-mongosh (2.0.1) ...
+Processing triggers for man-db (2.10.2-1) ...
+Scanning processes...                                                                                                                                           
+Scanning linux images...                                                                                                                                        
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+ubuntu@microk8s-vm:~$ mongosh --version
+2.0.1
+ubuntu@microk8s-vm:~$ sudo kubectl get deployments -o wide
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES      SELECTOR
+nginx   1/1     1            1           69m   nginx        nginx       app=nginx
+mongo   0/1     1            0           25s   mongo        mongo:4.2   app.kubernetes.io/component=backend,app.kubernetes.io/name=mongo
+ubuntu@microk8s-vm:~$ sudo kubectl get deployments mongo
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+mongo   1/1     1            1           19m
+ubuntu@microk8s-vm:~$ sudo kubectl port-forward deployment/mongo 28015:27017
+Forwarding from 127.0.0.1:28015 -> 27017
+Forwarding from [::1]:28015 -> 27017
+Handling connection for 28015
+Handling connection for 28015
+Handling connection for 28015
+Handling connection for 28015
+Handling connection for 28015
+E1010 12:04:12.255320  145125 portforward.go:394] error copying from local connection to remote stream: read tcp4 127.0.0.1:28015->127.0.0.1:37020: read: connection reset by peer
+^Cubuntu@microk8s-vm:~sudo kubectl cluster-infofo
+Kubernetes control plane is running at https://127.0.0.1:16443
+CoreDNS is running at https://127.0.0.1:16443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+ubuntu@microk8s-vm:~$ sudo kubectl get nodes -o wide
+NAME          STATUS   ROLES    AGE    VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+microk8s-vm   Ready    <none>   107m   v1.27.5   192.168.64.4   <none>        Ubuntu 22.04.3 LTS   5.15.0-84-generic   containerd://1.6.15
+ubuntu@microk8s-vm:~$ sudo kubectl get services -o wide
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE    SELECTOR
+kubernetes   ClusterIP   10.152.183.1     <none>        443/TCP     108m   <none>
+mongo        ClusterIP   10.152.183.242   <none>        27017/TCP   35m    app.kubernetes.io/component=backend,app.kubernetes.io/name=mongo
+ubuntu@microk8s-vm:~$ sudo kubectl get deployments -o wide
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS   IMAGES      SELECTOR
+nginx   1/1     1            1           101m   nginx        nginx       app=nginx
+mongo   1/1     1            1           32m    mongo        mongo:4.2   app.kubernetes.io/component=backend,app.kubernetes.io/name=mongo
+ubuntu@microk8s-vm:~$ sudo kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE    IP            NODE          NOMINATED NODE   READINESS GATES
+nginx-77b4fdf86c-ndmbl   1/1     Running   0          101m   10.1.254.73   microk8s-vm   <none>           <none>
+mongo-7d96cb4cf-85fhp    1/1     Running   0          32m    10.1.254.74   microk8s-vm   <none>           <none>
+ubuntu@microk8s-vm:~$ sudo kubectl get replicasets -o wide
+NAME               DESIRED   CURRENT   READY   AGE    CONTAINERS   IMAGES      SELECTOR
+nginx-77b4fdf86c   1         1         1       101m   nginx        nginx       app=nginx,pod-template-hash=77b4fdf86c
+mongo-7d96cb4cf    1         1         1       32m    mongo        mongo:4.2   app.kubernetes.io/component=backend,app.kubernetes.io/name=mongo,pod-template-hash=7d96cb4cf
+ubuntu@microk8s-vm:~$ ls -a
+.  ..  .bash_history  .bash_logout  .bashrc  .cache  .mongodb  .profile  .ssh  .sudo_as_admin_successful  index.html
+ubuntu@microk8s-vm:~$ ls -a
+.  ..  .bash_history  .bash_logout  .bashrc  .cache  .mongodb  .profile  .ssh  .sudo_as_admin_successful  index.html
+ubuntu@microk8s-vm:~$ ls .mongodb/
+mongosh
+ubuntu@microk8s-vm:~$ ls .mongodb/mongosh
+6524efb39afac5f689a1c65d_log  am-6524efb39afac5f689a1c65c.json  config  mongosh_repl_history  snippets  update-metadata.json
+ubuntu@microk8s-vm:~$ ls .mongodb/mongosh/snippets
+index.bson.br  package.json
+ubuntu@microk8s-vm:~$ cat .mongodb/mongosh/config
+{"userId":"6524efb39afac5f689a1c65c","telemetryAnonymousId":"6524efb39afac5f689a1c65c","enableTelemetry":true,"disableGreetingMessage":true}ubuntu@microk8s-vm:~$ 
+ubuntu@microk8s-vm:~$ cat .mongodb/mongosh/update-metadata.json
+{"updateURL":"https://downloads.mongodb.com/compass/mongosh.json","lastChecked":1696919476771,"etag":"\"d3daf8ac663be23ddc6f5627f79f34bf\"","latestKnownMongoshVersion":"2.0.1"}ubuntuls .mongodb/mongosh/snippets
+index.bson.br  package.json
+ubuntu@microk8s-vm:~cat .mongodb/mongosh/am-6524efb39afac5f689a1c65c.json
+{"count":2,"timestamp":1696919589211}ubuntu@microk8s-vm:~$
+ubuntu@microk8s-vm:~$ cat .mongodb/mongosh/6524efb39afac5f689a1c65d_log
+{"t":{"$date":"2023-10-10T06:31:15.996Z"},"s":"I","c":"MONGOSH","id":1000000000,"ctx":"log","msg":"Starting log","attr":{"execPath":"/usr/bin/mongosh","envInfo":{"EDITOR":null,"NODE_OPTIONS":null,"TERM":"xterm-256color"},"version":"2.0.1","distributionKind":"compiled","buildArch":"arm64","buildPlatform":"linux","buildTarget":"linux-arm64","buildTime":"2023-09-14T09:18:28.761Z","gitVersion":"225d4603f0d43d500a8847beaa980e906e9a35be","nodeVersion":"v20.6.1","opensslVersion":"3.0.10+quic","sharedOpenssl":false,"runtimeArch":"arm64","runtimePlatform":"linux","deps":{"nodeDriverVersion":"6.0.0","libmongocryptVersion":"1.9.0-20230828+git8e7f69f1c0","libmongocryptNodeBindingsVersion":"6.0.0"}}}
+{"t":{"$date":"2023-10-10T06:31:16.005Z"},"s":"I","c":"MONGOSH","id":1000000048,"ctx":"config","msg":"Loading global configuration file","attr":{"filename":"/etc/mongosh.conf","found":false}}
+{"t":{"$date":"2023-10-10T06:31:16.027Z"},"s":"I","c":"MONGOSH","id":1000000052,"ctx":"startup","msg":"Fetching update metadata","attr":{"updateURL":"https://downloads.mongodb.com/compass/mongosh.json","localFilePath":"/home/ubuntu/.mongodb/mongosh/update-metadata.json"}}
+{"t":{"$date":"2023-10-10T06:31:16.061Z"},"s":"E","c":"DEVTOOLS-CONNECT","id":1000000041,"ctx":"mongosh-deps","msg":"Missing optional dependency","attr":{"name":"saslprep","error":"Cannot find module 'saslprep'"}}
+{"t":{"$date":"2023-10-10T06:31:16.081Z"},"s":"I","c":"DEVTOOLS-CONNECT","id":1000000042,"ctx":"mongosh-connect","msg":"Initiating connection attempt","attr":{"uri":"mongodb://127.0.0.1:28015/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.1","driver":{"name":"nodejs|mongosh","version":"6.0.0|2.0.1"},"devtoolsConnectVersion":"2.4.1","host":"127.0.0.1:28015"}}
+{"t":{"$date":"2023-10-10T06:31:16.086Z"},"s":"I","c":"DEVTOOLS-CONNECT","id":1000000035,"ctx":"mongosh-connect","msg":"Server heartbeat succeeded","attr":{"connectionId":"127.0.0.1:28015"}}
+{"t":{"$date":"2023-10-10T06:31:16.097Z"},"s":"I","c":"DEVTOOLS-CONNECT","id":1000000037,"ctx":"mongosh-connect","msg":"Connection attempt finished"}
+{"t":{"$date":"2023-10-10T06:31:16.110Z"},"s":"I","c":"MONGOSH","id":1000000004,"ctx":"connect","msg":"Connecting to server","attr":{"session_id":"6524efb39afac5f689a1c65d","userId":null,"telemetryAnonymousId":"6524efb39afac5f689a1c65c","connectionUri":"mongodb://<ip address>:28015/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.1","is_atlas":false,"is_localhost":true,"is_do":false,"server_version":"4.2.24","node_version":"v20.6.1","mongosh_version":"2.0.1","server_os":"linux","server_arch":"aarch64","is_enterprise":false,"auth_type":null,"is_data_federation":false,"is_stream":false,"dl_version":null,"atlas_version":null,"is_genuine":true,"non_genuine_server_name":"mongodb","is_local_atlas":false,"fcv":"4.2","api_version":null,"api_strict":null,"api_deprecation_errors":null}}
+{"t":{"$date":"2023-10-10T06:31:16.111Z"},"s":"I","c":"MONGOSH","id":1000000011,"ctx":"shell-api","msg":"Performed API call","attr":{"method":"adminCommand","class":"Database","db":"test","arguments":{"cmd":{"ping":1}}}}
+{"t":{"$date":"2023-10-10T06:31:16.158Z"},"s":"I","c":"MONGOSH","id":1000000011,"ctx":"shell-api","msg":"Performed API call","attr":{"method":"getSiblingDB","class":"Database","db":"test","arguments":{"db":"admin"}}}
+{"t":{"$date":"2023-10-10T06:31:16.164Z"},"s":"I","c":"MONGOSH","id":1000000010,"ctx":"shell-api","msg":"Initialized context","attr":{"method":"setCtx","arguments":{}}}
+{"t":{"$date":"2023-10-10T06:31:16.169Z"},"s":"I","c":"MONGOSH","id":1000000009,"ctx":"shell-api","msg":"Used \"show\" command","attr":{"method":"show startupWarnings"}}
+{"t":{"$date":"2023-10-10T06:31:16.172Z"},"s":"I","c":"MONGOSH","id":1000000011,"ctx":"shell-api","msg":"Performed API call","attr":{"method":"adminCommand","class":"Database","db":"test","arguments":{"cmd":{"getLog":"startupWarnings"}}}}
+{"t":{"$date":"2023-10-10T06:31:16.173Z"},"s":"I","c":"MONGOSH","id":1000000011,"ctx":"shell-api","msg":"Performed API call","attr":{"method":"getSiblingDB","class":"Database","db":"test","arguments":{"db":"admin"}}}
+{"t":{"$date":"2023-10-10T06:31:16.176Z"},"s":"I","c":"MONGOSH","id":1000000009,"ctx":"shell-api","msg":"Used \"show\" command","attr":{"method":"show automationNotices"}}
+{"t":{"$date":"2023-10-10T06:31:16.176Z"},"s":"I","c":"MONGOSH","id":1000000011,"ctx":"shell-api","msg":"Performed API call","attr":{"method":"hello","class":"Database","db":"test","arguments":{}}}
+{"t":{"$date":"2023-10-10T06:31:16.176Z"},"s":"I","c":"MONGOSH","id":1000000009,"ctx":"shell-api","msg":"Used \"show\" command","attr":{"method":"show nonGenuineMongoDBCheck"}}
+{"t":{"$date":"2023-10-10T06:31:16.177Z"},"s":"I","c":"MONGOSH-SNIPPETS","id":1000000024,"ctx":"snippets","msg":"Fetching snippet index","attr":{"refreshMode":"allow-cached"}}
+{"t":{"$date":"2023-10-10T06:31:16.197Z"},"s":"I","c":"MONGOSH-SNIPPETS","id":1000000019,"ctx":"snippets","msg":"Loaded snippets","attr":{"installdir":"/home/ubuntu/.mongodb/mongosh/snippets"}}
+{"t":{"$date":"2023-10-10T06:31:16.198Z"},"s":"I","c":"MONGOSH-SNIPPETS","id":1000000028,"ctx":"snippets","msg":"Modifying snippets package.json failed","attr":{"error":"ENOENT: no such file or directory, open '/home/ubuntu/.mongodb/mongosh/snippets/package.json'"}}
+{"t":{"$date":"2023-10-10T06:31:16.220Z"},"s":"I","c":"MONGOSH","id":1000000002,"ctx":"repl","msg":"Started REPL","attr":{"version":"2.0.1"}}
+{"t":{"$date":"2023-10-10T06:31:16.779Z"},"s":"I","c":"MONGOSH","id":1000000053,"ctx":"startup","msg":"Fetching update metadata complete","attr":{"latest":"2.0.1"}}
+{"t":{"$date":"2023-10-10T06:31:26.766Z"},"s":"I","c":"MONGOSH-SNIPPETS","id":1000000027,"ctx":"snippets","msg":"Fetching snippet index done"}
+{"t":{"$date":"2023-10-10T06:33:09.101Z"},"s":"I","c":"MONGOSH","id":1000000007,"ctx":"repl","msg":"Evaluating input","attr":{"input":"db.runCommand( { ping: 1 } )"}}
+{"t":{"$date":"2023-10-10T06:33:09.208Z"},"s":"I","c":"MONGOSH","id":1000000011,"ctx":"shell-api","msg":"Performed API call","attr":{"method":"runCommand","class":"Database","db":"test","arguments":{"cmd":{"ping":1}}}}
+{"t":{"$date":"2023-10-10T06:34:08.756Z"},"s":"I","c":"MONGOSH","id":1000000007,"ctx":"repl","msg":"Evaluating input","attr":{"input":"db.version()"}}
+{"t":{"$date":"2023-10-10T06:34:08.770Z"},"s":"I","c":"MONGOSH","id":1000000011,"ctx":"shell-api","msg":"Performed API call","attr":{"method":"version","class":"Database","db":"test","arguments":{}}}
+{"t":{"$date":"2023-10-10T06:34:08.774Z"},"s":"I","c":"MONGOSH","id":1000000011,"ctx":"shell-api","msg":"Performed API call","attr":{"method":"getSiblingDB","class":"Database","db":"test","arguments":{"db":"admin"}}}
+{"t":{"$date":"2023-10-10T06:34:13.278Z"},"s":"I","c":"MONGOSH","id":1000000045,"ctx":"analytics","msg":"Flushed outstanding data","attr":{"flushError":null,"flushDuration":1018}}
+ubuntu@microk8s-vm:~$ cat .mongodb/mongosh/mongosh_repl_history
+exit
+db.version()
+db.runCommand( { ping: 1 } )ubuntu@microk8s-vm:~$
+ubuntu@microk8s-vm:~$ cat .mongodb/mongosh/snippets/package.json
+{}
+ubuntu@microk8s-vm:~$ exit
+logout
+usernameapple@Rajanis-MacBook-Pro MongoDB % 
+
+###########################################################################################################################
+
+
+
+
+# Connections made to local port
+###########################################################################################################################
+
+Last login: Tue Oct 10 11:31:08 on ttys000
+usernameapple@Rajanis-MacBook-Pro ~ % arch                                                                         
+arm64
+usernameapple@Rajanis-MacBook-Pro ~ % pwd                                                                          
+/Users/usernameapple
+usernameapple@Rajanis-MacBook-Pro ~ % cd /Users/usernameapple/Desktop/Technology/Kubernetes/Proof-of-Concept/MongoDB 
+usernameapple@Rajanis-MacBook-Pro MongoDB % pwd                                                                          
+/Users/usernameapple/Desktop/Technology/Kubernetes/Proof-of-Concept/MongoDB
+usernameapple@Rajanis-MacBook-Pro MongoDB % multipass --version                                                          
+multipass   1.12.2+mac
+multipassd  1.12.2+mac
+usernameapple@Rajanis-MacBook-Pro MongoDB % multipass shell microk8s-vm                                                  
+Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.0-84-generic aarch64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Tue Oct 10 04:48:32 UTC 2023
+
+  System load:             0.3076171875
+  Usage of /:              3.6% of 38.59GB
+  Memory usage:            4%
+  Swap usage:              0%
+  Processes:               95
+  Users logged in:         0
+  IPv4 address for enp0s1: 192.168.64.4
+  IPv6 address for enp0s1: fd1d:a80c:e456:91f0:5054:ff:fec2:ba42
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+22 updates can be applied immediately.
+21 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Tue Oct 10 11:31:30 2023 from 192.168.64.1
+ubuntu@microk8s-vm:~$ mongosh --version
+2.0.1
+ubuntu@microk8s-vm:~$ mongosh --port 28015
+Current Mongosh Log ID:	6524efb39afac5f689a1c65d
+Connecting to:		mongodb://127.0.0.1:28015/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.1
+Using MongoDB:		4.2.24
+Using Mongosh:		2.0.1
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+
+To help improve our products, anonymous usage data is collected and sent to MongoDB periodically (https://www.mongodb.com/legal/privacy-policy).
+You can opt-out by running the disableTelemetry() command.
+
+------
+   The server generated these startup warnings when booting
+   2023-10-10T06:07:13.317+0000: 
+   2023-10-10T06:07:13.317+0000: ** WARNING: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine
+   2023-10-10T06:07:13.317+0000: **          See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2023-10-10T06:07:13.365+0000: 
+   2023-10-10T06:07:13.365+0000: ** WARNING: Access control is not enabled for the database.
+   2023-10-10T06:07:13.365+0000: **          Read and write access to data and configuration is unrestricted.
+   2023-10-10T06:07:13.365+0000: 
+   2023-10-10T06:07:13.365+0000: 
+   2023-10-10T06:07:13.366+0000: ** WARNING: soft rlimits too low. rlimits set to 15362 processes, 65536 files. Number of processes should be at least 32768 : 0.5 times number of files.
+------
+
+test> db.runCommand( { ping: 1 } )
+{ ok: 1 }
+test> db.version()
+4.2.24
+test> exit
+ubuntu@microk8s-vm:~$ exit
+logout
+usernameapple@Rajanis-MacBook-Pro MongoDB % 
+
+###########################################################################################################################

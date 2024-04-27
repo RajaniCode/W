@@ -1,0 +1,66 @@
+% cat app/controllers/articles_controller.rb
+[
+class ArticlesController < ApplicationController
+  def index
+  end
+end
+]
+
+% nano app/controllers/articles_controller.rb
+[
+require "application_controller" # DON'T DO THIS.
+
+class ArticlesController < ApplicationController
+  def index
+  end
+end
+]
+# You only need require calls for two use cases:
+# To load files under the lib directory.
+# To load gem dependencies that have require: false in the Gemfile.
+
+
+% bin/rails generate model Article title:string body:text
+# This will create several files:
+invoke  active_record
+create    db/migrate/<timestamp>_create_articles.rb
+create    app/models/article.rb
+invoke    test_unit
+create      test/models/article_test.rb
+create      test/fixtures/articles.yml
+# The two files we'll focus on are the migration file (db/migrate/<timestamp>_create_articles.rb) and the model file (app/models/article.rb).
+
+
+
+6.2 Database Migrations
+
+# Let's take a look at the contents of our new migration file:
+% cat /Users/rajaniapple/rails-blog-app/blog/db/migrate/20231108232327_create_articles.rb
+
+The call to create_table specifies how the articles table should be constructed. By default, the create_table method adds an id column as an auto-incrementing primary key. So the first record in the table will have an id of 1, the next record will have an id of 2, and so on.
+
+Inside the block for create_table, two columns are defined: title and body. These were added by the generator because we included them in our generate command (bin/rails generate model Article title:string body:text).
+
+On the last line of the block is a call to t.timestamps. This method defines two additional columns named created_at and updated_at. As we will see, Rails will manage these for us, setting the values when we create or update a model object.
+
+# Let's run our migration with the following command:
+
+% bin/rails db:migrate
+# The command will display output indicating that the table was created:
+[
+class CreateArticles < ActiveRecord::Migration[7.1]
+  def change
+    create_table :articles do |t|
+      t.string :title
+      t.text :body
+
+      t.timestamps
+    end
+  end
+end
+rajaniapple@Rajanis-MacBook-Pro blog % bin/rails db:migrate
+== 20231108232327 CreateArticles: migrating ===================================
+-- create_table(:articles)
+   -> 0.0007s
+== 20231108232327 CreateArticles: migrated (0.0008s) ==========================
+]

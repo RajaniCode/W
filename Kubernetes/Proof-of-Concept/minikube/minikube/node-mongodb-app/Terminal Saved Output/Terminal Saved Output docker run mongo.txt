@@ -1,0 +1,257 @@
+Last login: Wed Nov  8 16:44:23 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % sw_vers
+ProductName:		macOS
+ProductVersion:		14.0
+BuildVersion:		23A344
+rajaniapple@Rajanis-MacBook-Pro ~ % arch
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % node -v
+v20.9.0
+rajaniapple@Rajanis-MacBook-Pro ~ % npm -v
+10.1.0
+rajaniapple@Rajanis-MacBook-Pro ~ % pwd
+/Users/rajaniapple
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app
+rajaniapple@Rajanis-MacBook-Pro node-mongodb-app % pwd
+/Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app
+rajaniapple@Rajanis-MacBook-Pro node-mongodb-app % mkdir -p Docker/Version1.0.0
+rajaniapple@Rajanis-MacBook-Pro node-mongodb-app % cp -r Version1.0.0/ Docker/Version1.0.0
+rajaniapple@Rajanis-MacBook-Pro node-mongodb-app % cd Docker/Version1.0.0
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % pwd
+/Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/Version1.0.0
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % ls public/uploads
+1369f657ddd11a9049c15dd1e3d7e253
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % rm -rf public/uploads
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % nano Dockerfile
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % cat Dockerfile
+FROM node:20.9-slim
+COPY . .
+RUN npm install
+CMD [ "node", "index.js" ]
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker version
+Cannot connect to the Docker daemon at unix:///Users/rajaniapple/.docker/run/docker.sock. Is the docker daemon running?
+Client:
+ Cloud integration: v1.0.35+desktop.5
+ Version:           24.0.6
+ API version:       1.43
+ Go version:        go1.20.7
+ Git commit:        ed223bc
+ Built:             Mon Sep  4 12:28:49 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % 
+  [Restored Nov 8, 2023 at 16:52:46]
+Last login: Wed Nov  8 16:49:40 on ttys000
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker version
+Client:
+ Cloud integration: v1.0.35+desktop.5
+ Version:           24.0.6
+ API version:       1.43
+ Go version:        go1.20.7
+ Git commit:        ed223bc
+ Built:             Mon Sep  4 12:28:49 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.25.0 (126437)
+ Engine:
+  Version:          24.0.6
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.7
+  Git commit:       1a79695
+  Built:            Mon Sep  4 12:31:36 2023
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.22
+  GitCommit:        8165feabfdfe38c65b599c4993d227328c231fca
+ runc:
+  Version:          1.1.8
+  GitCommit:        v1.1.8-0-g82f18fe
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker build -t node-mongodb-app .
+[+] Building 7.6s (9/9) FINISHED                                                                                                           docker:desktop-linux
+ => [internal] load .dockerignore                                                                                                                          0.0s
+ => => transferring context: 2B                                                                                                                            0.0s
+ => [internal] load build definition from Dockerfile                                                                                                       0.0s
+ => => transferring dockerfile: 109B                                                                                                                       0.0s
+ => [internal] load metadata for docker.io/library/node:20.9-slim                                                                                          6.0s
+ => [auth] library/node:pull token for registry-1.docker.io                                                                                                0.0s
+ => [internal] load build context                                                                                                                          0.3s
+ => => transferring context: 19.92MB                                                                                                                       0.3s
+ => CACHED [1/3] FROM docker.io/library/node:20.9-slim@sha256:da981564279232f7962576d79d01832cc12f8270e8ddd05bb3077af8061a50ca                             0.0s
+ => [2/3] COPY . .                                                                                                                                         0.2s
+ => [3/3] RUN npm install                                                                                                                                  1.0s
+ => exporting to image                                                                                                                                     0.1s
+ => => exporting layers                                                                                                                                    0.1s
+ => => writing image sha256:8b48cbb7042d5bd0cbe6c50f5406d9e1a937428657e67dbf07d6861c88b677f7                                                               0.0s
+ => => naming to docker.io/library/node-mongodb-app                                                                                                        0.0s
+
+What's Next?
+  View a summary of image vulnerabilities and recommendations → docker scout quickview
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker save node-mongodb-app > node-mongodb-app.tar
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % ls node-mongodb-app.tar
+node-mongodb-app.tar
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % tar -tf node-mongodb-app.tar
+1208fff6d0686c5c2b9c5984df7703c3c9988d7d6cf77fd80b30d119008d9d33/
+1208fff6d0686c5c2b9c5984df7703c3c9988d7d6cf77fd80b30d119008d9d33/VERSION
+1208fff6d0686c5c2b9c5984df7703c3c9988d7d6cf77fd80b30d119008d9d33/json
+1208fff6d0686c5c2b9c5984df7703c3c9988d7d6cf77fd80b30d119008d9d33/layer.tar
+30e4dea21cde276cc54657afb2fc0336045cef1315f67456f638b417a284f95c/
+30e4dea21cde276cc54657afb2fc0336045cef1315f67456f638b417a284f95c/VERSION
+30e4dea21cde276cc54657afb2fc0336045cef1315f67456f638b417a284f95c/json
+30e4dea21cde276cc54657afb2fc0336045cef1315f67456f638b417a284f95c/layer.tar
+645ea14e088e4745ec92fb16a05d7a42987032161f3ead0d53d362ee5424d47e/
+645ea14e088e4745ec92fb16a05d7a42987032161f3ead0d53d362ee5424d47e/VERSION
+645ea14e088e4745ec92fb16a05d7a42987032161f3ead0d53d362ee5424d47e/json
+645ea14e088e4745ec92fb16a05d7a42987032161f3ead0d53d362ee5424d47e/layer.tar
+815c76ae6edd52156d8cc822f00ea429a5f6210c7e8954b026d63a88b3963f98/
+815c76ae6edd52156d8cc822f00ea429a5f6210c7e8954b026d63a88b3963f98/VERSION
+815c76ae6edd52156d8cc822f00ea429a5f6210c7e8954b026d63a88b3963f98/json
+815c76ae6edd52156d8cc822f00ea429a5f6210c7e8954b026d63a88b3963f98/layer.tar
+8b48cbb7042d5bd0cbe6c50f5406d9e1a937428657e67dbf07d6861c88b677f7.json
+a5f091164a68c668e94592ec10b0ba560cd31027128dc77d5d582cd2fe2cde0d/
+a5f091164a68c668e94592ec10b0ba560cd31027128dc77d5d582cd2fe2cde0d/VERSION
+a5f091164a68c668e94592ec10b0ba560cd31027128dc77d5d582cd2fe2cde0d/json
+a5f091164a68c668e94592ec10b0ba560cd31027128dc77d5d582cd2fe2cde0d/layer.tar
+bc36b5eaf2c6239b808ba19fc0d49b108f1f36f7560012bdbb40a71878e77b1d/
+bc36b5eaf2c6239b808ba19fc0d49b108f1f36f7560012bdbb40a71878e77b1d/VERSION
+bc36b5eaf2c6239b808ba19fc0d49b108f1f36f7560012bdbb40a71878e77b1d/json
+bc36b5eaf2c6239b808ba19fc0d49b108f1f36f7560012bdbb40a71878e77b1d/layer.tar
+ebebd506bdbe6b2e088446fb43934c2ab77373638008f761dbb2f2c99a6f8ef2/
+ebebd506bdbe6b2e088446fb43934c2ab77373638008f761dbb2f2c99a6f8ef2/VERSION
+ebebd506bdbe6b2e088446fb43934c2ab77373638008f761dbb2f2c99a6f8ef2/json
+ebebd506bdbe6b2e088446fb43934c2ab77373638008f761dbb2f2c99a6f8ef2/layer.tar
+manifest.json
+repositories
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % mv node-mongodb-app.tar ..
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker image ls
+REPOSITORY         TAG       IMAGE ID       CREATED          SIZE
+node-mongodb-app   latest    8b48cbb7042d   46 seconds ago   291MB
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker images
+REPOSITORY         TAG       IMAGE ID       CREATED          SIZE
+node-mongodb-app   latest    8b48cbb7042d   53 seconds ago   291MB
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker image list
+REPOSITORY         TAG       IMAGE ID       CREATED              SIZE
+node-mongodb-app   latest    8b48cbb7042d   About a minute ago   291MB
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker network ls
+NETWORK ID     NAME       DRIVER    SCOPE
+d4237075a069   bridge     bridge    local
+e3e54052a426   host       host      local
+2496f887ac0c   minikube   bridge    local
+b550b9eb15d7   none       null      local
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker network create node-mongodb-network
+c0418ec70ae6c36f680822d9da4a3d2a2352726b5a73375a9b1638922d2ec39c
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker network ls                         
+NETWORK ID     NAME                   DRIVER    SCOPE
+d4237075a069   bridge                 bridge    local
+e3e54052a426   host                   host      local
+2496f887ac0c   minikube               bridge    local
+c0418ec70ae6   node-mongodb-network   bridge    local
+b550b9eb15d7   none                   null      local
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker network rm node-mongodb-network 
+node-mongodb-network
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker network create node-mongodb-app-network
+b97d44ce13fa6a06dd67dc3a2342e795ab60d0c865443fc06bccc014da3f223d
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker network ls
+NETWORK ID     NAME                       DRIVER    SCOPE
+d4237075a069   bridge                     bridge    local
+e3e54052a426   host                       host      local
+2496f887ac0c   minikube                   bridge    local
+b97d44ce13fa   node-mongodb-app-network   bridge    local
+b550b9eb15d7   none                       null      local
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker run \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-app-network \
+  mongo
+Unable to find image 'mongo:latest' locally
+latest: Pulling from library/mongo
+895d322e8e59: Pull complete 
+53942a81bbed: Pull complete 
+6c77c1ea6f8e: Pull complete 
+9269ffa19aee: Pull complete 
+1ae10bad0105: Pull complete 
+208482253dd3: Pull complete 
+0beb4a4f2118: Pull complete 
+26ec439e9d10: Downloading [=========================>                         ]  110.5MB/215.9MB
+6ec0210a426e: Download complete
+{"t":{"$date":"2023-11-08T11:33:18.440+00:00"},"s":"I",  "c":"NETWORK",  "id":4915701, "ctx":"main","msg":"Initialized wire specification","attr":{"spec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":21},"incomingInternalClient":{"minWireVersion":0,"maxWireVersion":21},"outgoing":{"minWireVersion":6,"maxWireVersion":21},"isInternalClient":true}}}
+{"t":{"$date":"2023-11-08T11:33:18.440+00:00"},"s":"I",  "c":"CONTROL",  "id":23285,   "ctx":"main","msg":"Automatically disabling TLS 1.0, to force-enable TLS 1.0 specify --sslDisabledProtocols 'none'"}
+{"t":{"$date":"2023-11-08T11:33:18.441+00:00"},"s":"I",  "c":"NETWORK",  "id":4648601, "ctx":"main","msg":"Implicit TCP FastOpen unavailable. If TCP FastOpen is required, set tcpFastOpenServer, tcpFastOpenClient, and tcpFastOpenQueueSize."}
+{"t":{"$date":"2023-11-08T11:33:18.441+00:00"},"s":"I",  "c":"REPL",     "id":5123008, "ctx":"main","msg":"Successfully registered PrimaryOnlyService","attr":{"service":"TenantMigrationDonorService","namespace":"config.tenantMigrationDonors"}}
+{"t":{"$date":"2023-11-08T11:33:18.441+00:00"},"s":"I",  "c":"REPL",     "id":5123008, "ctx":"main","msg":"Successfully registered PrimaryOnlyService","attr":{"service":"TenantMigrationRecipientService","namespace":"config.tenantMigrationRecipients"}}
+{"t":{"$date":"2023-11-08T11:33:18.441+00:00"},"s":"I",  "c":"CONTROL",  "id":5945603, "ctx":"main","msg":"Multi threading initialized"}
+{"t":{"$date":"2023-11-08T11:33:18.441+00:00"},"s":"I",  "c":"TENANT_M", "id":7091600, "ctx":"main","msg":"Starting TenantMigrationAccessBlockerRegistry"}
+{"t":{"$date":"2023-11-08T11:33:18.441+00:00"},"s":"I",  "c":"CONTROL",  "id":4615611, "ctx":"initandlisten","msg":"MongoDB starting","attr":{"pid":1,"port":27017,"dbPath":"/data/db","architecture":"64-bit","host":"ae5da5faa152"}}
+{"t":{"$date":"2023-11-08T11:33:18.441+00:00"},"s":"I",  "c":"CONTROL",  "id":23403,   "ctx":"initandlisten","msg":"Build Info","attr":{"buildInfo":{"version":"7.0.2","gitVersion":"02b3c655e1302209ef046da6ba3ef6749dd0b62a","openSSLVersion":"OpenSSL 3.0.2 15 Mar 2022","modules":[],"allocator":"tcmalloc","environment":{"distmod":"ubuntu2204","distarch":"aarch64","target_arch":"aarch64"}}}}
+{"t":{"$date":"2023-11-08T11:33:18.441+00:00"},"s":"I",  "c":"CONTROL",  "id":51765,   "ctx":"initandlisten","msg":"Operating System","attr":{"os":{"name":"Ubuntu","version":"22.04"}}}
+{"t":{"$date":"2023-11-08T11:33:18.441+00:00"},"s":"I",  "c":"CONTROL",  "id":21951,   "ctx":"initandlisten","msg":"Options set by command line","attr":{"options":{"net":{"bindIp":"*"}}}}
+{"t":{"$date":"2023-11-08T11:33:18.442+00:00"},"s":"I",  "c":"STORAGE",  "id":22297,   "ctx":"initandlisten","msg":"Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem","tags":["startupWarnings"]}
+{"t":{"$date":"2023-11-08T11:33:18.442+00:00"},"s":"I",  "c":"STORAGE",  "id":22315,   "ctx":"initandlisten","msg":"Opening WiredTiger","attr":{"config":"create,cache_size=3410M,session_max=33000,eviction=(threads_min=4,threads_max=4),config_base=false,statistics=(fast),log=(enabled=true,remove=true,path=journal,compressor=snappy),builtin_extension_config=(zstd=(compression_level=6)),file_manager=(close_idle_time=600,close_scan_interval=10,close_handle_minimum=2000),statistics_log=(wait=0),json_output=(error,message),verbose=[recovery_progress:1,checkpoint_progress:1,compact_progress:1,backup:0,checkpoint:0,compact:0,evict:0,history_store:0,recovery:0,rts:0,salvage:0,tiered:0,timestamp:0,transaction:0,verify:0,log:0],"}}
+{"t":{"$date":"2023-11-08T11:33:19.092+00:00"},"s":"I",  "c":"STORAGE",  "id":4795906, "ctx":"initandlisten","msg":"WiredTiger opened","attr":{"durationMillis":650}}
+{"t":{"$date":"2023-11-08T11:33:19.092+00:00"},"s":"I",  "c":"RECOVERY", "id":23987,   "ctx":"initandlisten","msg":"WiredTiger recoveryTimestamp","attr":{"recoveryTimestamp":{"$timestamp":{"t":0,"i":0}}}}
+{"t":{"$date":"2023-11-08T11:33:19.098+00:00"},"s":"W",  "c":"CONTROL",  "id":22120,   "ctx":"initandlisten","msg":"Access control is not enabled for the database. Read and write access to data and configuration is unrestricted","tags":["startupWarnings"]}
+{"t":{"$date":"2023-11-08T11:33:19.098+00:00"},"s":"W",  "c":"CONTROL",  "id":22178,   "ctx":"initandlisten","msg":"/sys/kernel/mm/transparent_hugepage/enabled is 'always'. We suggest setting it to 'never'","tags":["startupWarnings"]}
+{"t":{"$date":"2023-11-08T11:33:19.098+00:00"},"s":"W",  "c":"CONTROL",  "id":5123300, "ctx":"initandlisten","msg":"vm.max_map_count is too low","attr":{"currentValue":65530,"recommendedMinimum":1677720,"maxConns":838860},"tags":["startupWarnings"]}
+{"t":{"$date":"2023-11-08T11:33:19.098+00:00"},"s":"I",  "c":"STORAGE",  "id":20320,   "ctx":"initandlisten","msg":"createCollection","attr":{"namespace":"admin.system.version","uuidDisposition":"provided","uuid":{"uuid":{"$uuid":"c0251a9a-1404-49a6-b9cd-da5186c46ccf"}},"options":{"uuid":{"$uuid":"c0251a9a-1404-49a6-b9cd-da5186c46ccf"}}}}
+{"t":{"$date":"2023-11-08T11:33:19.102+00:00"},"s":"I",  "c":"INDEX",    "id":20345,   "ctx":"initandlisten","msg":"Index build: done building","attr":{"buildUUID":null,"collectionUUID":{"uuid":{"$uuid":"c0251a9a-1404-49a6-b9cd-da5186c46ccf"}},"namespace":"admin.system.version","index":"_id_","ident":"index-1-7818098278563510419","collectionIdent":"collection-0-7818098278563510419","commitTimestamp":null}}
+{"t":{"$date":"2023-11-08T11:33:19.102+00:00"},"s":"I",  "c":"REPL",     "id":20459,   "ctx":"initandlisten","msg":"Setting featureCompatibilityVersion","attr":{"newVersion":"7.0"}}
+{"t":{"$date":"2023-11-08T11:33:19.102+00:00"},"s":"I",  "c":"REPL",     "id":5853300, "ctx":"initandlisten","msg":"current featureCompatibilityVersion value","attr":{"featureCompatibilityVersion":"7.0","context":"setFCV"}}
+{"t":{"$date":"2023-11-08T11:33:19.102+00:00"},"s":"I",  "c":"NETWORK",  "id":4915702, "ctx":"initandlisten","msg":"Updated wire specification","attr":{"oldSpec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":21},"incomingInternalClient":{"minWireVersion":0,"maxWireVersion":21},"outgoing":{"minWireVersion":6,"maxWireVersion":21},"isInternalClient":true},"newSpec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":21},"incomingInternalClient":{"minWireVersion":21,"maxWireVersion":21},"outgoing":{"minWireVersion":21,"maxWireVersion":21},"isInternalClient":true}}}
+{"t":{"$date":"2023-11-08T11:33:19.102+00:00"},"s":"I",  "c":"NETWORK",  "id":4915702, "ctx":"initandlisten","msg":"Updated wire specification","attr":{"oldSpec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":21},"incomingInternalClient":{"minWireVersion":21,"maxWireVersion":21},"outgoing":{"minWireVersion":21,"maxWireVersion":21},"isInternalClient":true},"newSpec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":21},"incomingInternalClient":{"minWireVersion":21,"maxWireVersion":21},"outgoing":{"minWireVersion":21,"maxWireVersion":21},"isInternalClient":true}}}
+{"t":{"$date":"2023-11-08T11:33:19.102+00:00"},"s":"I",  "c":"REPL",     "id":5853300, "ctx":"initandlisten","msg":"current featureCompatibilityVersion value","attr":{"featureCompatibilityVersion":"7.0","context":"startup"}}
+{"t":{"$date":"2023-11-08T11:33:19.102+00:00"},"s":"I",  "c":"STORAGE",  "id":5071100, "ctx":"initandlisten","msg":"Clearing temp directory"}
+{"t":{"$date":"2023-11-08T11:33:19.102+00:00"},"s":"I",  "c":"CONTROL",  "id":6608200, "ctx":"initandlisten","msg":"Initializing cluster server parameters from disk"}
+{"t":{"$date":"2023-11-08T11:33:19.102+00:00"},"s":"I",  "c":"CONTROL",  "id":20536,   "ctx":"initandlisten","msg":"Flow Control is enabled on this deployment"}
+{"t":{"$date":"2023-11-08T11:33:19.102+00:00"},"s":"I",  "c":"FTDC",     "id":20625,   "ctx":"initandlisten","msg":"Initializing full-time diagnostic data capture","attr":{"dataDirectory":"/data/db/diagnostic.data"}}
+{"t":{"$date":"2023-11-08T11:33:19.103+00:00"},"s":"I",  "c":"STORAGE",  "id":20320,   "ctx":"initandlisten","msg":"createCollection","attr":{"namespace":"local.startup_log","uuidDisposition":"generated","uuid":{"uuid":{"$uuid":"afca678e-1e82-4386-9a4d-168dd93389d6"}},"options":{"capped":true,"size":10485760}}}
+{"t":{"$date":"2023-11-08T11:33:19.107+00:00"},"s":"I",  "c":"INDEX",    "id":20345,   "ctx":"initandlisten","msg":"Index build: done building","attr":{"buildUUID":null,"collectionUUID":{"uuid":{"$uuid":"afca678e-1e82-4386-9a4d-168dd93389d6"}},"namespace":"local.startup_log","index":"_id_","ident":"index-3-7818098278563510419","collectionIdent":"collection-2-7818098278563510419","commitTimestamp":null}}
+{"t":{"$date":"2023-11-08T11:33:19.107+00:00"},"s":"I",  "c":"REPL",     "id":6015317, "ctx":"initandlisten","msg":"Setting new configuration state","attr":{"newState":"ConfigReplicationDisabled","oldState":"ConfigPreStart"}}
+{"t":{"$date":"2023-11-08T11:33:19.107+00:00"},"s":"I",  "c":"STORAGE",  "id":22262,   "ctx":"initandlisten","msg":"Timestamp monitor starting"}
+{"t":{"$date":"2023-11-08T11:33:19.107+00:00"},"s":"I",  "c":"CONTROL",  "id":20712,   "ctx":"LogicalSessionCacheReap","msg":"Sessions collection is not set up; waiting until next sessions reap interval","attr":{"error":"NamespaceNotFound: config.system.sessions does not exist"}}
+{"t":{"$date":"2023-11-08T11:33:19.107+00:00"},"s":"I",  "c":"NETWORK",  "id":23015,   "ctx":"listener","msg":"Listening on","attr":{"address":"/tmp/mongodb-27017.sock"}}
+{"t":{"$date":"2023-11-08T11:33:19.107+00:00"},"s":"I",  "c":"NETWORK",  "id":23015,   "ctx":"listener","msg":"Listening on","attr":{"address":"0.0.0.0"}}
+{"t":{"$date":"2023-11-08T11:33:19.107+00:00"},"s":"I",  "c":"STORAGE",  "id":20320,   "ctx":"LogicalSessionCacheRefresh","msg":"createCollection","attr":{"namespace":"config.system.sessions","uuidDisposition":"generated","uuid":{"uuid":{"$uuid":"0d5c415b-f335-4e96-ab1f-fdec96d46a83"}},"options":{}}}
+{"t":{"$date":"2023-11-08T11:33:19.107+00:00"},"s":"I",  "c":"NETWORK",  "id":23016,   "ctx":"listener","msg":"Waiting for connections","attr":{"port":27017,"ssl":"off"}}
+{"t":{"$date":"2023-11-08T11:33:19.111+00:00"},"s":"I",  "c":"REPL",     "id":7360102, "ctx":"LogicalSessionCacheRefresh","msg":"Added oplog entry for create to transaction","attr":{"namespace":"config.$cmd","uuid":{"uuid":{"$uuid":"0d5c415b-f335-4e96-ab1f-fdec96d46a83"}},"object":{"create":"system.sessions","idIndex":{"v":2,"key":{"_id":1},"name":"_id_"}}}}
+{"t":{"$date":"2023-11-08T11:33:19.111+00:00"},"s":"I",  "c":"REPL",     "id":7360100, "ctx":"LogicalSessionCacheRefresh","msg":"Added oplog entry for createIndexes to transaction","attr":{"namespace":"config.$cmd","uuid":{"uuid":{"$uuid":"0d5c415b-f335-4e96-ab1f-fdec96d46a83"}},"object":{"createIndexes":"system.sessions","v":2,"key":{"lastUse":1},"name":"lsidTTLIndex","expireAfterSeconds":1800}}}
+{"t":{"$date":"2023-11-08T11:33:19.113+00:00"},"s":"I",  "c":"INDEX",    "id":20345,   "ctx":"LogicalSessionCacheRefresh","msg":"Index build: done building","attr":{"buildUUID":null,"collectionUUID":{"uuid":{"$uuid":"0d5c415b-f335-4e96-ab1f-fdec96d46a83"}},"namespace":"config.system.sessions","index":"_id_","ident":"index-5-7818098278563510419","collectionIdent":"collection-4-7818098278563510419","commitTimestamp":null}}
+{"t":{"$date":"2023-11-08T11:33:19.113+00:00"},"s":"I",  "c":"INDEX",    "id":20345,   "ctx":"LogicalSessionCacheRefresh","msg":"Index build: done building","attr":{"buildUUID":null,"collectionUUID":{"uuid":{"$uuid":"0d5c415b-f335-4e96-ab1f-fdec96d46a83"}},"namespace":"config.system.sessions","index":"lsidTTLIndex","ident":"index-6-7818098278563510419","collectionIdent":"collection-4-7818098278563510419","commitTimestamp":null}}
+{"t":{"$date":"2023-11-08T11:33:24.595+00:00"},"s":"I",  "c":"NETWORK",  "id":22943,   "ctx":"listener","msg":"Connection accepted","attr":{"remote":"172.19.0.3:50832","uuid":{"uuid":{"$uuid":"d1ca19cb-e96b-4a54-9e65-64985d081061"}},"connectionId":1,"connectionCount":1}}
+{"t":{"$date":"2023-11-08T11:33:24.599+00:00"},"s":"I",  "c":"NETWORK",  "id":51800,   "ctx":"conn1","msg":"client metadata","attr":{"remote":"172.19.0.3:50832","client":"conn1","doc":{"driver":{"name":"nodejs","version":"6.2.0"},"platform":"Node.js v20.9.0, LE","os":{"name":"linux","architecture":"arm64","version":"6.4.16-linuxkit","type":"Linux"}}}}
+{"t":{"$date":"2023-11-08T11:34:17.920+00:00"},"s":"I",  "c":"NETWORK",  "id":22943,   "ctx":"listener","msg":"Connection accepted","attr":{"remote":"127.0.0.1:47734","uuid":{"uuid":{"$uuid":"64ca4907-731d-4e1c-acb0-3272b47aff5d"}},"connectionId":2,"connectionCount":2}}
+{"t":{"$date":"2023-11-08T11:34:17.923+00:00"},"s":"I",  "c":"NETWORK",  "id":51800,   "ctx":"conn2","msg":"client metadata","attr":{"remote":"127.0.0.1:47734","client":"conn2","doc":{"application":{"name":"mongosh 2.0.1"},"driver":{"name":"nodejs|mongosh","version":"6.0.0|2.0.1"},"platform":"Node.js v20.6.1, LE","os":{"name":"linux","architecture":"arm64","version":"6.4.16-linuxkit","type":"Linux"}}}}
+{"t":{"$date":"2023-11-08T11:34:17.930+00:00"},"s":"I",  "c":"NETWORK",  "id":22943,   "ctx":"listener","msg":"Connection accepted","attr":{"remote":"127.0.0.1:47736","uuid":{"uuid":{"$uuid":"63328c7e-131e-4ec6-b4c9-16b8c2a11b90"}},"connectionId":3,"connectionCount":3}}
+{"t":{"$date":"2023-11-08T11:34:17.930+00:00"},"s":"I",  "c":"NETWORK",  "id":22943,   "ctx":"listener","msg":"Connection accepted","attr":{"remote":"127.0.0.1:47752","uuid":{"uuid":{"$uuid":"f211348e-7d6c-4aad-8ded-808212d94c56"}},"connectionId":4,"connectionCount":4}}
+{"t":{"$date":"2023-11-08T11:34:17.930+00:00"},"s":"I",  "c":"NETWORK",  "id":51800,   "ctx":"conn3","msg":"client metadata","attr":{"remote":"127.0.0.1:47736","client":"conn3","doc":{"application":{"name":"mongosh 2.0.1"},"driver":{"name":"nodejs|mongosh","version":"6.0.0|2.0.1"},"platform":"Node.js v20.6.1, LE","os":{"name":"linux","architecture":"arm64","version":"6.4.16-linuxkit","type":"Linux"}}}}
+{"t":{"$date":"2023-11-08T11:34:17.930+00:00"},"s":"I",  "c":"NETWORK",  "id":51800,   "ctx":"conn4","msg":"client metadata","attr":{"remote":"127.0.0.1:47752","client":"conn4","doc":{"application":{"name":"mongosh 2.0.1"},"driver":{"name":"nodejs|mongosh","version":"6.0.0|2.0.1"},"platform":"Node.js v20.6.1, LE","os":{"name":"linux","architecture":"arm64","version":"6.4.16-linuxkit","type":"Linux"}}}}
+{"t":{"$date":"2023-11-08T11:34:17.931+00:00"},"s":"I",  "c":"NETWORK",  "id":6788700, "ctx":"conn3","msg":"Received first command on ingress connection since session start or auth handshake","attr":{"elapsedMillis":1}}
+{"t":{"$date":"2023-11-08T11:34:17.931+00:00"},"s":"I",  "c":"NETWORK",  "id":22943,   "ctx":"listener","msg":"Connection accepted","attr":{"remote":"127.0.0.1:47756","uuid":{"uuid":{"$uuid":"ee649af1-b160-40ec-96e7-167078eb4eb9"}},"connectionId":5,"connectionCount":5}}
+{"t":{"$date":"2023-11-08T11:34:17.933+00:00"},"s":"I",  "c":"NETWORK",  "id":51800,   "ctx":"conn5","msg":"client metadata","attr":{"remote":"127.0.0.1:47756","client":"conn5","doc":{"application":{"name":"mongosh 2.0.1"},"driver":{"name":"nodejs|mongosh","version":"6.0.0|2.0.1"},"platform":"Node.js v20.6.1, LE","os":{"name":"linux","architecture":"arm64","version":"6.4.16-linuxkit","type":"Linux"}}}}
+{"t":{"$date":"2023-11-08T11:34:17.934+00:00"},"s":"I",  "c":"NETWORK",  "id":6788700, "ctx":"conn5","msg":"Received first command on ingress connection since session start or auth handshake","attr":{"elapsedMillis":0}}
+{"t":{"$date":"2023-11-08T11:34:17.975+00:00"},"s":"I",  "c":"NETWORK",  "id":6788700, "ctx":"conn4","msg":"Received first command on ingress connection since session start or auth handshake","attr":{"elapsedMillis":44}}
+{"t":{"$date":"2023-11-08T11:34:28.437+00:00"},"s":"I",  "c":"NETWORK",  "id":22943,   "ctx":"listener","msg":"Connection accepted","attr":{"remote":"127.0.0.1:44472","uuid":{"uuid":{"$uuid":"fa4beb39-12d8-46ae-84b3-71b94755cf9f"}},"connectionId":6,"connectionCount":6}}
+{"t":{"$date":"2023-11-08T11:34:28.440+00:00"},"s":"I",  "c":"NETWORK",  "id":51800,   "ctx":"conn6","msg":"client metadata","attr":{"remote":"127.0.0.1:44472","client":"conn6","doc":{"application":{"name":"mongosh 2.0.1"},"driver":{"name":"nodejs|mongosh","version":"6.0.0|2.0.1"},"platform":"Node.js v20.6.1, LE","os":{"name":"linux","architecture":"arm64","version":"6.4.16-linuxkit","type":"Linux"}}}}
+{"t":{"$date":"2023-11-08T11:34:31.774+00:00"},"s":"I",  "c":"NETWORK",  "id":22943,   "ctx":"listener","msg":"Connection accepted","attr":{"remote":"172.19.0.3:41536","uuid":{"uuid":{"$uuid":"6856da3e-0e82-49d8-b104-4590c656f6ce"}},"connectionId":7,"connectionCount":7}}
+{"t":{"$date":"2023-11-08T11:34:31.774+00:00"},"s":"I",  "c":"NETWORK",  "id":51800,   "ctx":"conn7","msg":"client metadata","attr":{"remote":"172.19.0.3:41536","client":"conn7","doc":{"driver":{"name":"nodejs","version":"6.2.0"},"platform":"Node.js v20.9.0, LE","os":{"name":"linux","architecture":"arm64","version":"6.4.16-linuxkit","type":"Linux"}}}}
+{"t":{"$date":"2023-11-08T11:34:31.775+00:00"},"s":"I",  "c":"NETWORK",  "id":6788700, "ctx":"conn7","msg":"Received first command on ingress connection since session start or auth handshake","attr":{"elapsedMillis":0}}
+{"t":{"$date":"2023-11-08T11:34:33.768+00:00"},"s":"I",  "c":"STORAGE",  "id":20320,   "ctx":"conn7","msg":"createCollection","attr":{"namespace":"dev.notes","uuidDisposition":"generated","uuid":{"uuid":{"$uuid":"d6d9d33b-8a3f-430a-912d-24b9fbc59047"}},"options":{}}}
+{"t":{"$date":"2023-11-08T11:34:33.783+00:00"},"s":"I",  "c":"REPL",     "id":7360102, "ctx":"conn7","msg":"Added oplog entry for create to transaction","attr":{"namespace":"dev.$cmd","uuid":{"uuid":{"$uuid":"d6d9d33b-8a3f-430a-912d-24b9fbc59047"}},"object":{"create":"notes","idIndex":{"v":2,"key":{"_id":1},"name":"_id_"}}}}
+{"t":{"$date":"2023-11-08T11:34:33.783+00:00"},"s":"I",  "c":"INDEX",    "id":20345,   "ctx":"conn7","msg":"Index build: done building","attr":{"buildUUID":null,"collectionUUID":{"uuid":{"$uuid":"d6d9d33b-8a3f-430a-912d-24b9fbc59047"}},"namespace":"dev.notes","index":"_id_","ident":"index-8-7818098278563510419","collectionIdent":"collection-7-7818098278563510419","commitTimestamp":null}}
+{"t":{"$date":"2023-11-08T11:34:44.880+00:00"},"s":"I",  "c":"NETWORK",  "id":22943,   "ctx":"listener","msg":"Connection accepted","attr":{"remote":"127.0.0.1:46416","uuid":{"uuid":{"$uuid":"0cc19124-d5b4-49f1-abb0-fe0e18e0b89c"}},"connectionId":8,"connectionCount":8}}
+{"t":{"$date":"2023-11-08T11:34:44.880+00:00"},"s":"I",  "c":"NETWORK",  "id":22943,   "ctx":"listener","msg":"Connection accepted","attr":{"remote":"127.0.0.1:46428","uuid":{"uuid":{"$uuid":"58a24a9d-aa5c-40aa-9cb5-fd5d8f899d89"}},"connectionId":9,"connectionCount":9}}
+{"t":{"$date":"2023-11-08T11:34:44.887+00:00"},"s":"I",  "c":"NETWORK",  "id":51800,   "ctx":"conn8","msg":"client metadata","attr":{"remote":"127.0.0.1:46416","client":"conn8","doc":{"application":{"name":"mongosh 2.0.1"},"driver":{"name":"nodejs|mongosh","version":"6.0.0|2.0.1"},"platform":"Node.js v20.6.1, LE","os":{"name":"linux","architecture":"arm64","version":"6.4.16-linuxkit","type":"Linux"}}}}
+{"t":{"$date":"2023-11-08T11:34:44.888+00:00"},"s":"I",  "c":"NETWORK",  "id":51800,   "ctx":"conn9","msg":"client metadata","attr":{"remote":"127.0.0.1:46428","client":"conn9","doc":{"application":{"name":"mongosh 2.0.1"},"driver":{"name":"nodejs|mongosh","version":"6.0.0|2.0.1"},"platform":"Node.js v20.6.1, LE","os":{"name":"linux","architecture":"arm64","version":"6.4.16-linuxkit","type":"Linux"}}}}
+{"t":{"$date":"2023-11-08T11:34:44.890+00:00"},"s":"I",  "c":"NETWORK",  "id":6788700, "ctx":"conn8","msg":"Received first command on ingress connection since session start or auth handshake","attr":{"elapsedMillis":3}}
+{"t":{"$date":"2023-11-08T11:34:44.891+00:00"},"s":"I",  "c":"NETWORK",  "id":6788700, "ctx":"conn9","msg":"Received first command on ingress connection since session start or auth handshake","attr":{"elapsedMillis":2}}
+{"t":{"$date":"2023-11-08T11:37:08.996+00:00"},"s":"I",  "c":"-",        "id":20883,   "ctx":"conn1","msg":"Interrupted operation as its client disconnected","attr":{"opId":2813}}
+{"t":{"$date":"2023-11-08T11:37:08.996+00:00"},"s":"I",  "c":"NETWORK",  "id":22944,   "ctx":"conn7","msg":"Connection ended","attr":{"remote":"172.19.0.3:41536","uuid":{"uuid":{"$uuid":"6856da3e-0e82-49d8-b104-4590c656f6ce"}},"connectionId":7,"connectionCount":8}}
+{"t":{"$date":"2023-11-08T11:37:08.996+00:00"},"s":"I",  "c":"NETWORK",  "id":22944,   "ctx":"conn1","msg":"Connection ended","attr":{"remote":"172.19.0.3:50832","uuid":{"uuid":{"$uuid":"d1ca19cb-e96b-4a54-9e65-64985d081061"}},"connectionId":1,"connectionCount":7}}
+{"t":{"$date":"2023-11-08T11:37:15.807+00:00"},"s":"I",  "c":"NETWORK",  "id":22943,   "ctx":"listener","msg":"Connection accepted","attr":{"remote":"172.19.0.3:38308","uuid":{"uuid":{"$uuid":"f4c3d517-796f-4d2c-8efd-bf3e27524d5f"}},"connectionId":10,"connectionCount":8}}
+{"t":{"$date":"2023-11-08T11:37:15.809+00:00"},"s":"I",  "c":"NETWORK",  "id":51800,   "ctx":"conn10","msg":"client metadata","attr":{"remote":"172.19.0.3:38308","client":"conn10","doc":{"driver":{"name":"nodejs","version":"6.2.0"},"platform":"Node.js v20.9.0, LE","os":{"name":"linux","architecture":"arm64","version":"6.4.16-linuxkit","type":"Linux"}}}}
+{"t":{"$date":"2023-11-08T11:37:26.329+00:00"},"s":"I",  "c":"NETWORK",  "id":22943,   "ctx":"listener","msg":"Connection accepted","attr":{"remote":"172.19.0.3:55374","uuid":{"uuid":{"$uuid":"2b0d4f4d-539b-491f-86e0-9548aea144aa"}},"connectionId":11,"connectionCount":9}}
+{"t":{"$date":"2023-11-08T11:37:26.335+00:00"},"s":"I",  "c":"NETWORK",  "id":51800,   "ctx":"conn11","msg":"client metadata","attr":{"remote":"172.19.0.3:55374","client":"conn11","doc":{"driver":{"name":"nodejs","version":"6.2.0"},"platform":"Node.js v20.9.0, LE","os":{"name":"linux","architecture":"arm64","version":"6.4.16-linuxkit","type":"Linux"}}}}
+

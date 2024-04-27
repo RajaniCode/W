@@ -1,0 +1,53 @@
+% host -t cname www.github.com
+
+% host -t cname www.abc.xyz
+
+% host -t cname www.aws.amazon.com
+
+% host -t cname www.azure.microsoft.com
+
+[
+Welcome to Cloud Shell! Type "help" to get started.
+To set your Cloud Platform project in this session use “gcloud config set project [PROJECT_ID]”
+rajani_cloud_computing@cloudshell:~$ host -t cname www.github.com
+www.github.com is an alias for github.com.
+rajani_cloud_computing@cloudshell:~$ host -t cname www.abc.xyz
+www.abc.xyz is an alias for www3.l.google.com.
+rajani_cloud_computing@cloudshell:~$ host -t cname www.aws.amazon.com
+www.aws.amazon.com is an alias for aws.amazon.com.
+rajani_cloud_computing@cloudshell:~$ host -t cname www.azure.microsoft.com
+www.azure.microsoft.com is an alias for acom-vanity-router-prod-glbl-01.trafficmanager.net.
+rajani_cloud_computing@cloudshell:~$ 
+]
+
+https://www.inmotionhosting.com/support/server/ssh/cname-lookup/
+
+https://www.nslookup.io/domains/google.com/dns-records/cname/
+
+# Find all canonical names for a domain name.
+[
+# CNAME record for www.github.com
+An authoritative DNS server (ns-520.awsdns-01.net.) responded with these DNS records when we queried it for the domain www.github.com.
+
+Canonical name
+github.com
+
+# CNAME record for www.abc.xyz
+An authoritative DNS server (ns4.google.com.) responded with these DNS records when we queried it for the domain www.abc.xyz.
+
+Canonical name
+www3.l.google.com.
+
+# CNAME record for www.aws.amazon.com
+An authoritative DNS server (ns-923.amazon.com.) responded with these DNS records when we queried it for the domain www.aws.amazon.com.
+
+Canonical name
+aws.amazon.com
+tp.8e49140c2-frontier.amazon.com
+
+# CNAME record for www.azure.microsoft.com
+An authoritative DNS server (ns4-39.azure-dns.info.) responded with these DNS records when we queried it for the domain www.azure.microsoft.com.
+
+Canonical name
+acom-vanity-router-prod-glbl-01.trafficmanager.net.
+]

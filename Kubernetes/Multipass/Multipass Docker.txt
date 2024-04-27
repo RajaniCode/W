@@ -1,0 +1,107 @@
+# Multipass # Docker
+
+% multipass --version  
+
+# VM named "multipass-docker"
+% multipass launch --name multipass-docker --memory 4G --disk 40G
+
+% multipass shell multipass-docker
+
+# Install Docker Engine on Ubuntu
+
+# Run the following command to uninstall all conflicting packages:
+$ for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
+# Set up Docker's apt repository
+# Add Docker's official GPG key
+$ sudo apt-get update
+$ sudo apt-get install ca-certificates curl gnupg
+$ sudo install -m 0755 -d /etc/apt/keyrings
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+$ sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Add the repository to Apt sources:
+$ echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+$ sudo apt-get update
+
+[
+# Linux Distribution Name and Version
+$ cat /etc/*-release
+# Or
+$ lsb_release -a
+# Or
+$ hostnamectl
+
+# Linux kernel version
+$ uname -a
+# Or
+$ uname -mrs
+
+# Linux kernel version and gcc versio
+$ cat /proc/version
+]
+
+
+# Install the Docker packages
+$ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Verify that the Docker Engine installation is successful by running the hello-world image.
+$ sudo docker run hello-world
+
+###########################################################################################################################
+
+# Add your user to the docker group, and activate the changes to be able to run docker commands without root access
+$ sudo usermod -aG docker $USER
+$ newgrp docker
+
+
+# Run Image from docker hub
+$ docker login
+
+$ sudo docker image list
+[
+REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+hello-world   latest    b038788ddb22   6 months ago   9.14kB
+]
+
+###########################################################################################################################
+
+# Uninstall Docker Engine
+
+# Uninstall the Docker Engine, CLI, containerd, and Docker Compose packages
+$ sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
+
+# Images, containers, volumes, or custom configuration files on your host aren't automatically removed. To delete all images, containers, and volumes:
+$ sudo ls /var/lib/docker
+$ sudo rm -rf /var/lib/docker
+$ sudo ls /var/lib/containerd
+$ sudo rm -rf /var/lib/containerd
+
+###########################################################################################################################
+
+# Remove the Multipass VM manager
+
+# Exit the VM
+
+$ exit 1
+
+# Stop the VM
+
+% multipass stop multipass-docker
+
+# Delete and purge the VM instance
+
+% multipass delete multipass-docker
+
+% multipass purge
+
+###########################################################################################################################
+
+[
+% brew uninstall multipass
+]
+
+###########################################################################################################################

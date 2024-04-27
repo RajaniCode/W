@@ -1,0 +1,81 @@
+Last login: Sun Nov 12 11:16:09 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % sw_vers
+ProductName:		macOS
+ProductVersion:		14.0
+BuildVersion:		23A344
+rajaniapple@Rajanis-MacBook-Pro ~ % arch
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % docker version
+Client:
+ Cloud integration: v1.0.35+desktop.5
+ Version:           24.0.6
+ API version:       1.43
+ Go version:        go1.20.7
+ Git commit:        ed223bc
+ Built:             Mon Sep  4 12:28:49 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.25.0 (126437)
+ Engine:
+  Version:          24.0.6
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.7
+  Git commit:       1a79695
+  Built:            Mon Sep  4 12:31:36 2023
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.22
+  GitCommit:        8165feabfdfe38c65b599c4993d227328c231fca
+ runc:
+  Version:          1.1.8
+  GitCommit:        v1.1.8-0-g82f18fe
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro ~ % docker pull node:20.9-slim
+20.9-slim: Pulling from library/node
+31ce7ceb6d44: Pull complete 
+23e20aafa273: Pull complete 
+3c4e071c3989: Pull complete 
+d30583691d5e: Pull complete 
+b5668e9c76f4: Pull complete 
+Digest: sha256:da981564279232f7962576d79d01832cc12f8270e8ddd05bb3077af8061a50ca
+Status: Downloaded newer image for node:20.9-slim
+docker.io/library/node:20.9-slim
+
+What's Next?
+  View a summary of image vulnerabilities and recommendations → docker scout quickview node:20.9-slim
+rajaniapple@Rajanis-MacBook-Pro ~ % docker image list
+REPOSITORY   TAG         IMAGE ID       CREATED       SIZE
+node         20.9-slim   5a06bc2d6e5c   11 days ago   269MB
+rajaniapple@Rajanis-MacBook-Pro ~ % docker tag node:20.9-slim dockerrajani/node:20.9-slim
+rajaniapple@Rajanis-MacBook-Pro ~ % docker image list
+REPOSITORY          TAG         IMAGE ID       CREATED       SIZE
+dockerrajani/node   20.9-slim   5a06bc2d6e5c   11 days ago   269MB
+node                20.9-slim   5a06bc2d6e5c   11 days ago   269MB
+rajaniapple@Rajanis-MacBook-Pro ~ % docker login
+Authenticating with existing credentials...
+Login Succeeded
+rajaniapple@Rajanis-MacBook-Pro ~ % docker-credential-$(
+  jq -r .credsStore ~/.docker/config.json
+) list | jq -r '
+  . |
+    to_entries[] |
+    select(
+      .key |
+      contains("docker.io")
+    ) |
+    last(.value)
+'
+dockerrajani
+rajaniapple@Rajanis-MacBook-Pro ~ % docker push dockerrajani/node:20.9-slim
+The push refers to repository [docker.io/dockerrajani/node]
+f7506b167c11: Mounted from dockerrajani/node-mongodb-app 
+ad747d0eb247: Mounted from dockerrajani/node-mongodb-app 
+5e78c21dfd38: Mounted from dockerrajani/node-mongodb-app 
+bcc2a717f034: Mounted from dockerrajani/node-mongodb-app 
+70e628269d9f: Mounted from dockerrajani/node-mongodb-app 
+20.9-slim: digest: sha256:8395b5fea57a1cb7bd95f0cd20c0cbbe7964e9b601484142aa98b86aa5f29755 size: 1367
+rajaniapple@Rajanis-MacBook-Pro ~ % 

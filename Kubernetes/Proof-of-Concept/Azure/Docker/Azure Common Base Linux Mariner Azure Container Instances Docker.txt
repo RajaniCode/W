@@ -1,0 +1,1954 @@
+###########################################################################################################################
+
+# Azure Common Base Linux Mariner
+
+###########################################################################################################################
+===========================================================================================================================
+
+# Linux Mariner
+
+===========================================================================================================================
+
+$ cat /etc/os-release
+$ cat /etc/*release
+
+$ cat /etc/issue
+$ more /etc/issue
+$ less /etc/issue
+
+$ cat /proc/version
+
+$ lsb_release --all
+$ lsb_release --description
+$ man lsb_release
+
+[
+$ hostnamectl
+]
+$ which hostnamectl
+$ type hostnamectl
+
+$ uname
+$ uname -r
+$ uname --release 
+$ uname -srm
+$ uname --kernel-name --kernel-release --kernel-version
+$ uname -amnoprsv
+$ uname --all
+$ man uname
+
+$ grep -E '^(VERSION|NAME)=' /etc/os-release
+$ grep '^VERSION' /etc/os-release
+
+$ yum --version
+
+$ rpm --version 
+$ rpm -qa 
+$ which rpm
+$ type rpm
+
+$ arch
+
+$ whoami
+$ echo `whoami`
+
+$ echo $USER
+
+$ echo $HOSTNAME
+$ echo `hostname`
+
+$ echo $HOME
+
+$ echo ~/
+
+$ echo $SHELL
+
+$ echo $PATH
+
+$ env
+
+$ env
+
+$ pwd
+
+$ date
+
+$ locale
+$ locale -a
+
+$ echo $LANG
+
+$ ls
+$ ls -a
+$ ls /usr/local/bin
+$ ls /usr/bin
+$ ls /bin
+$ ls /usr/sbin
+$ ls /sbin
+
+$ which compgen
+$ type compgen
+$ compgen -c 
+$ compgen -a 
+$ compgen -b
+$ compgen -k
+$ compgen -A function
+$ compgen -A function -abck
+
+===========================================================================================================================
+
+# Programming Languages
+
+===========================================================================================================================
+
+$ node --version
+
+$ python3 --version
+
+$ ruby --version
+
+$ gcc --version
+$ cc --version
+$ g++ --version
+$ c++ --version
+
+$ java --version
+$ mvn --version
+
+$ dotnet --version
+
+$ perl --version
+
+$ go version
+
+===========================================================================================================================
+
+# Network
+
+===========================================================================================================================
+
+$ netstat -tunpl
+$ netstat -nr
+$ netstat -ai
+$ netstat -ant
+
+$ ss -tunl
+$ ss -t
+$ ss -A tcp
+$ ss -ua
+$ ss -a -A udp
+$ ss -nt
+$ ss -ltn
+
+===========================================================================================================================
+***************************************************************************************************************************
+
+# Azure Container Instances # Docker
+
+***************************************************************************************************************************
+
+# az container : Manage Azure Container Instances.
+[
+Commands:
+    attach  : Attach local standard output and error streams to a container in a container group.
+              This command provides diagnostic information during container startup. Once the
+              container has started, it streams STDOUT and STDERR to your local console.
+    create  : Create a container group.
+    delete  : Delete a container group.
+    exec    : Execute a command from within a running container of a container group.
+    export  : Export a container group in yaml format.
+    list    : List container groups.
+    logs    : Examine the logs for a container in a container group.
+    restart : Restarts all containers in a container group.
+    show    : Get the details of a container group.
+    start   : Starts all containers in a container group.
+    stop    : Stops all containers in a container group.
+]
+
+
+# az container create : Create a container group.
+[
+Arguments
+    --resource-group -g   [Required] : Name of resource group. You can configure the default group
+                                       using `az configure --defaults group=<name>`.
+    --command-line                   : The command line to run when the container is started, e.g.
+                                       '/bin/bash -c myscript.sh'.
+    --cpu                            : The required number of CPU cores of the containers, accurate
+                                       to one decimal place.  Default: 1.
+    --dns-name-label                 : The dns name label for container group with public IP.
+    --environment-variables -e       : A list of environment variable for the container. Space-
+                                       separated values in 'key=value' format.
+    --file -f                        : The path to the input file.
+    --image                          : The container image name.
+    --ip-address                     : The IP address type of the container group.  Allowed values:
+                                       Private, Public.
+    --location -l                    : Location. Values from: `az account list-locations`. You can
+                                       configure the default location using `az configure --defaults
+                                       location=<location>`.
+    --memory                         : The required memory of the containers in GB, accurate to one
+                                       decimal place.  Default: 1.5.
+    --name -n                        : The name of the container group.
+    --no-wait                        : Do not wait for the long-running operation to finish.
+    --os-type                        : The OS type of the containers.  Allowed values: Linux,
+                                       Windows.  Default: Linux.
+    --ports                          : A list of ports to open. Space-separated list of ports.
+                                       Default: [80].
+    --priority                       : The priority of the container group.
+    --protocol                       : The network protocol to use.  Allowed values: TCP, UDP.
+    --restart-policy                 : Restart policy for all containers within the container group.
+                                       Allowed values: Always, Never, OnFailure.  Default: Always.
+    --secrets                        : Space-separated secrets in 'key=value' format.
+    --secrets-mount-path             : The path within the container where the secrets volume should
+                                       be mounted. Must not contain colon ':'.
+    --secure-environment-variables   : A list of secure environment variable for the container.
+                                       Space-separated values in 'key=value' format.
+    --sku                            : The SKU of the container group.
+    --zone                           : The zone to place the container group.
+
+Azure File Volume Arguments
+    --azure-file-volume-account-key  : The storage account access key used to access the Azure File
+                                       share.
+    --azure-file-volume-account-name : The name of the storage account that contains the Azure File
+                                       share.
+    --azure-file-volume-mount-path   : The path within the container where the azure file volume
+                                       should be mounted. Must not contain colon ':'.
+    --azure-file-volume-share-name   : The name of the Azure File share to be mounted as a volume.
+
+Confidential Container Group Arguments
+    --add-capabilities               : A List of security context capabilities to be added.
+    --allow-escalation               : Allow whether a process can gain more privileges than its
+                                       parent process.
+    --cce-policy                     : The CCE policy for the confidential container group.
+    --drop-capabilities              : A List of security context capabilities to be dropped.
+    --privileged                     : The flag to determine if the container permissions is
+                                       elevated to Privileged.
+    --run-as-group                   : Set the User UID for the container.
+    --run-as-user                    : Set the User GID for the container.
+    --seccomp-profile                : A base64 encoded string containing the contents of the JSON
+                                       in the seccomp profile.
+
+Git Repo Volume Arguments
+    --gitrepo-dir                    : The target directory path in the git repository. Must not
+                                       contain '..'.  Default: ..
+    --gitrepo-mount-path             : The path within the container where the git repo volume
+                                       should be mounted. Must not contain colon ':'.
+    --gitrepo-revision               : The commit hash for the specified revision.
+    --gitrepo-url                    : The URL of a git repository to be mounted as a volume.
+
+Image Registry Arguments
+    --acr-identity                   : The identity with access to the container registry.
+    --registry-login-server          : The container image registry login server.
+    --registry-password              : The password to log in container image registry server.
+    --registry-username              : The username to log in container image registry server.
+
+Log Analytics Arguments
+    --log-analytics-workspace        : The Log Analytics workspace name or id. Use the current
+                                       subscription or use --subscription flag to set the desired
+                                       subscription.
+    --log-analytics-workspace-key    : The Log Analytics workspace key.
+
+Managed Service Identity Arguments
+    --assign-identity                : Space-separated list of assigned identities. Assigned
+                                       identities are either user assigned identities (resource IDs)
+                                       and / or the system assigned identity ('[system]'). See
+                                       examples for more info.
+    --role                           : Role name or id the system assigned identity will have.
+                                       Default: Contributor.
+    --scope                          : Scope that the system assigned identity can access.
+
+Network Arguments
+    --subnet                         : The name of the subnet when creating a new VNET or
+                                       referencing an existing one. Can also reference an existing
+                                       subnet by ID.
+    --subnet-address-prefix          : The subnet IP address prefix to use when creating a new VNET
+                                       in CIDR format.  Default: 10.0.0.0/24.
+    --vnet                           : The name of the VNET when creating a new one or referencing
+                                       an existing one. Can also reference an existing vnet by ID.
+                                       This allows using vnets from other resource groups.
+    --vnet-address-prefix            : The IP address prefix to use when creating a new VNET in CIDR
+                                       format.  Default: 10.0.0.0/16.
+
+Global Arguments
+    --debug                          : Increase logging verbosity to show all debug logs.
+    --help -h                        : Show this help message and exit.
+    --only-show-errors               : Only show errors, suppressing warnings.
+    --output -o                      : Output format.  Allowed values: json, jsonc, none, table,
+                                       tsv, yaml, yamlc.  Default: json.
+    --query                          : JMESPath query string. See http://jmespath.org/ for more
+                                       information and examples.
+    --subscription                   : Name or ID of subscription. You can configure the default
+                                       subscription using `az account set -s NAME_OR_ID`.
+    --verbose                        : Increase logging verbosity. Use --debug for full debug logs.
+]
+
+***************************************************************************************************************************
+
+# Azure DNS # node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0
+
+***************************************************************************************************************************
+
+$ az group create --name nodeMongoAzureContainerInstancesDNS --location westus
+[
+$ az group delete --name nodeMongoAzureContainerInstancesDNS
+]
+
+==========================================================================================================================
+
+# MongoDB
+
+==========================================================================================================================
+
+$ export DNS_NAME_LABEL="mongo-$RANDOM"
+$ echo $DNS_NAME_LABEL
+
+
+$ az container create \
+  --resource-group nodeMongoAzureContainerInstancesDNS \
+  --name mongo \
+  --image dockerrajani/mongo-aws-linux-x86-64:version1.0.0 \
+  --ports 27017  \
+  --location westus \
+  --restart-policy Always \
+  --dns-name-label $DNS_NAME_LABEL 
+
+[
+$ az container list --resource-group nodeMongoAzureContainerInstancesDNS --output table
+$ az container delete --name mongo --resource-group nodeMongoAzureContainerInstancesDNS
+]
+
+$ az container logs --name mongo --resource-group nodeMongoAzureContainerInstancesDNS
+
+$ az container exec \
+  --resource-group nodeMongoAzureContainerInstancesDNS \
+  --name mongo  \
+  --exec-command /bin/sh
+[
+# mongosh
+test> db.version()
+7.0.3
+test> exit
+# exit
+]
+
+
+$ export MongoDB_IP=$(az container show \
+  --name mongo \
+  --resource-group nodeMongoAzureContainerInstancesDNS \
+  --query ipAddress.ip --output tsv)
+
+$ echo $MongoDB_IP
+
+$ curl $MongoDB_IP:27017
+
+==========================================================================================================================
+
+# Node.js # node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0
+
+==========================================================================================================================
+
+$ export DNS_NAME_LABEL="node-$RANDOM"
+$ echo $DNS_NAME_LABEL
+
+$ az container create \
+  --resource-group nodeMongoAzureContainerInstancesDNS \
+  --name node-mongodb-app-v1 \
+  --image dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0 \
+  --ports 8081 \
+  --environment-variables PORT=8081 MONGO_URL=mongodb://$MongoDB_IP:27017/dev \
+  --dns-name-label $DNS_NAME_LABEL \
+  --restart-policy Always
+
+[
+$ az container list --resource-group nodeMongoAzureContainerInstancesDNS --output table
+$ az container delete --name node-mongodb-app-v1 --resource-group nodeMongoAzureContainerInstancesDNS
+]
+
+$ az container logs --name node-mongodb-app-v1 --resource-group nodeMongoAzureContainerInstancesDNS
+[
+Initialising MongoDB...
+MongoDB initialised
+App listening on http://localhost:8081
+]
+
+$ az container exec \
+  --resource-group nodeMongoAzureContainerInstancesDNS \
+  --name node-mongodb-app-v1  \
+  --exec-command /bin/sh
+[
+# apt update
+# apt install curl
+# curl http://localhost:8081/
+[
+<html><head><title></title><link rel="stylesheet" href="tachyons.min.css"/></head><body class="ph3 pt0 pb4 mw7 center sans-serif"><h1 class="f2 mb0"><img src="/images/Node.png"/> <span class="green">N</span>ode.js <img src="/images/MongoDB.png"/> <span class="green">M</span>ongoDB </h1><!-- img(src="https://avatars.githubusercontent.com/u/9950313?s=48&v=4") --><!-- img(src='https://avatars.githubusercontent.com/u/45120?s=48&v=4')--><p class="f5 mt1 mb4 lh-copy">A Node.js-MongoDB image upload app.</p><form action="/note" method="POST" enctype="multipart/form-data"><ol class="list pl0"><li class="mv3"><label class="f6 b db mb2" for="image">Upload an image</label><input class="f6 link dim br1 ba b--black-20 ph3 pv2 mb2 dib black bg-white pointer" type="file" name="image"/><input class="f6 link dim br1 ba bw1 ph3 pv2 mb2 dib black bg-white pointer ml2" type="submit" value="Upload" name="upload"/></li><li class="mv3"><label class="f6 b db mb2" for="description">Write your content here</label><textarea class="f4 db border-box hover-black w-100 measure ba b--black-20 pa2 br2 mb2" rows="5" name="description"></textarea><input class="f6 link dim br1 ba bw1 ph3 pv2 mb2 dib black bg-white pointer" type="submit" value="Publish" name="publish"/></li></ol></form><p class="lh-copy f6">You don't have any notes yet.</p></body></html>
+# exit
+]
+
+$ export Node_MongoDB_IP=$(az container show \
+  --name node-mongodb-app-v1 \
+  --resource-group nodeMongoAzureContainerInstancesDNS \
+  --query ipAddress.ip --output tsv)
+
+
+$ echo $Node_MongoDB_IP
+[
+40.83.215.154
+]
+
+$ curl $Node_MongoDB_IP:8081/
+
+http://40.83.215.154:8081/
+
+==========================================================================================================================
+
+# Azure Container Instances # Delete
+
+==========================================================================================================================
+
+$ az container list --resource-group nodeMongoAzureContainerInstancesDNS --output table
+$ az container delete --name mongo --resource-group nodeMongoAzureContainerInstancesDNS
+$ az container delete --name node-mongodb-app-v1 --resource-group nodeMongoAzureContainerInstancesDNS
+$ az container list --resource-group nodeMongoAzureContainerInstancesDNS
+[]
+
+==========================================================================================================================
+
+# Azure Resource Group # Delete
+
+==========================================================================================================================
+
+$ az group list --output table
+$ az group delete --name nodeMongoAzureContainerInstancesDNS
+$ az group list
+[]
+
+==========================================================================================================================
+***************************************************************************************************************************
+
+# Azure DNS # node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+***************************************************************************************************************************
+
+$ az group create --name nodeMongoMinioAzureContainerInstancesDNS --location westus
+[
+$ az group list --output table
+$ az group delete --name nodeMongoMinioAzureContainerInstancesDNS
+]
+
+==========================================================================================================================
+
+# MinIO
+
+==========================================================================================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Azure Files # Azure file share 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Create the storage account
+$ az storage account create \
+    --resource-group nodeMongoMinioAzureContainerInstancesDNS \
+    --name miniostorageshareaccount \
+    --location westus \
+    --sku Standard_LRS
+[
+az storage account create: valid values for '--sku': Standard_LRS, Standard_GRS, Standard_RAGRS, Standard_ZRS, Premium_LRS, Premium_ZRS, Standard_GZRS, Standard_RAGZRS.
+]
+[
+The public access to all blobs or containers in the storage account will be disallowed by default in the future, which means default value for --allow-blob-public-access is still null but will be equivalent to false.
+]
+
+[
+$ az storage account delete --name miniostorageshareaccount --resource-group nodeMongoMinioAzureContainerInstancesDNS
+]
+
+
+# Create the file share
+$ az storage share create --name miniostorageshare --account-name miniostorageshareaccount
+[
+There are no credentials provided in your command and environment, we will query for account key for your storage account.
+It is recommended to provide --connection-string, --account-key or --sas-token in your command as credentials.
+
+In addition, setting the corresponding environment variables can avoid inputting credentials in your command. Please use --help to get more information about environment variable usage.
+]
+
+[
+$ az storage share delete --name miniostorageshare --account-name miniostorageshareaccount
+]
+
+
+$ export STORAGE_KEY=$(az storage account keys list \
+  --resource-group nodeMongoMinioAzureContainerInstancesDNS \
+  --account-name miniostorageshareaccount \
+  --query "[0].value" --output tsv)
+
+$ echo $STORAGE_KEY
+[
+mPbYOXwiDPorf3g1ykrYjBflcC79tB4DooIlEABOROjrXwrZiWe3pVb+7/Xv/E4eibW2gxvl+06T+AStKNwHIQ==
+]
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Azure Container Instances # MinIO
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+$ mkdir -p ~/minio/data
+$ ls ~/minio
+$ ls ~/minio/data
+[
+$ rm -rf ~/minio/data
+]
+
+[
+$ code deploy-aci.yaml
+]
+$ nano deploy-aci.yaml
+[
+apiVersion: '2021-10-01'
+location: westus
+name: minio
+properties:
+  containers:
+  - name: minio
+    properties:
+      image: dockerrajani/minio-aws-linux-x86-64:version1.0.0
+      command:
+       [
+         'minio',
+          'server',
+          '/data',
+          '--console-address',
+          ':80',
+       ]
+      ports:
+      - protocol: tcp
+        port: 80
+      - protocol: tcp
+        port: 443
+      - protocol: tcp
+        port: 8080
+      - protocol: tcp
+        port: 9000
+      - protocol: tcp
+        port: 9090
+      environmentVariables:
+      - name: "MINIO_ROOT_USER"
+        value: "minioadmin"
+      - name: "MINIO_ROOT_PASSWORD"
+        value: "minioadmin"
+      resources:
+        requests:
+          memoryInGB: 4
+          cpu: 1
+      volumeMounts:
+      - name: "data"
+        mountPath: "~/minio/data"
+        readOnly: false
+  ipAddress:
+    type: Public
+    ports:
+    - protocol: tcp
+      port: 80
+    - protocol: tcp
+      port: 443
+    - protocol: tcp
+      port: 8080
+    - protocol: tcp
+      port: 9000
+    - protocol: tcp
+      port: 9090
+    dnsNameLabel: "minio-dns"
+  osType: Linux
+  volumes:
+    - name: "data"
+      azureFile:
+        shareName: "miniostorageshare"
+        storageAccountName: "miniostorageshareaccount"
+        storageAccountKey: "mPbYOXwiDPorf3g1ykrYjBflcC79tB4DooIlEABOROjrXwrZiWe3pVb+7/Xv/E4eibW2gxvl+06T+AStKNwHIQ=="
+  ipAddress:
+    type: Public
+    ports:
+    - protocol: tcp
+      port: 80
+    - protocol: tcp
+      port: 443
+    - protocol: tcp
+      port: 8080
+    - protocol: tcp
+      port: 9000
+    - protocol: tcp
+      port: 9090
+]
+[
+$ rm -rf deploy-aci.yaml
+]
+
+$ cat deploy-aci.yaml
+
+
+$ az container create --resource-group nodeMongoMinioAzureContainerInstancesDNS --file deploy-aci.yaml
+
+[
+$ az container list --resource-group nodeMongoMinioAzureContainerInstancesDNS --output table
+$ az container delete --name minio --resource-group nodeMongoMinioAzureContainerInstancesDNS
+]
+
+$ az container logs --name minio --resource-group nodeMongoMinioAzureContainerInstancesDNS
+
+$ az container exec \
+  --resource-group nodeMongoMinioAzureContainerInstancesDNS \
+  --name minio  \
+  --exec-command /bin/sh
+[
+# mc --version
+# mc
+# esc
+# mc ls
+# mc ls data
+# mc ls data/image-storage/
+# mc ls data/image-storage/
+# exit
+]
+
+$ export MinIO_IP=$(az container show \
+  --name minio \
+  --resource-group nodeMongoMinioAzureContainerInstancesDNS \
+  --query ipAddress.ip --output tsv)
+
+$ echo $MinIO_IP
+[
+40.78.48.90
+]
+
+$ curl http://$MinIO_IP:80/
+
+http://40.78.48.90:80/
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+==========================================================================================================================
+
+# MongoDB
+
+==========================================================================================================================
+
+$ export DNS_NAME_LABEL="mongo-$RANDOM"
+$ echo $DNS_NAME_LABEL
+
+$ az container create \
+  --resource-group nodeMongoMinioAzureContainerInstancesDNS \
+  --name mongo \
+  --image dockerrajani/mongo-aws-linux-x86-64:version1.0.0 \
+  --ports 27017  \
+  --location westus \
+  --restart-policy Always \
+  --dns-name-label $DNS_NAME_LABEL 
+
+[
+$ az container list --resource-group nodeMongoMinioAzureContainerInstancesDNS --output table
+$ az container delete --name mongo --resource-group nodeMongoMinioAzureContainerInstancesDNS
+]
+
+$ az container logs --name mongo --resource-group nodeMongoMinioAzureContainerInstancesDNS
+
+$ az container exec \
+  --resource-group nodeMongoMinioAzureContainerInstancesDNS \
+  --name mongo  \
+  --exec-command /bin/sh
+[
+# mongosh
+test> db.version()
+7.0.3
+test> exit
+# exit
+]
+
+$ export MongoDB_IP=$(az container show \
+  --name mongo \
+  --resource-group nodeMongoMinioAzureContainerInstancesDNS \
+  --query ipAddress.ip --output tsv)
+
+$ echo $MongoDB_IP
+[
+104.209.41.125
+]
+
+$ curl http://104.209.41.125:27017/
+
+http://104.209.41.125:27017/
+
+mongosh mongodb://104.209.41.125:27017/
+
+==========================================================================================================================
+
+# Node.js # node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+==========================================================================================================================
+
+$ export DNS_NAME_LABEL="node-$RANDOM"
+$ echo $DNS_NAME_LABEL
+
+$ az container create \
+  --resource-group nodeMongoMinioAzureContainerInstancesDNS \
+  --name node-mongodb-app-v2 \
+  --image dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0 \
+  --ports 8082 \
+  --environment-variables PORT=8082 MONGO_URL=mongodb://$MongoDB_IP:27017/dev MINIO_ACCESS_KEY="minioadmin" MINIO_SECRET_KEY="minioadmin" MINIO_HOST=$MinIO_IP \
+  --dns-name-label $DNS_NAME_LABEL \
+  --restart-policy Always
+
+[
+$ az container list --resource-group nodeMongoMinioAzureContainerInstancesDNS --output table
+$ az container delete --name node-mongodb-app-v2 --resource-group nodeMongoMinioAzureContainerInstancesDNS
+]
+
+$ az container logs --name node-mongodb-app-v2 --resource-group nodeMongoMinioAzureContainerInstancesDNS
+[
+Initialising MongoDB...
+MongoDB initialised
+Initialising MinIO...
+MinIO initialised
+App listening on http://localhost:8082
+]
+
+
+$ az container exec \
+  --resource-group nodeMongoMinioAzureContainerInstancesDNS \
+  --name node-mongodb-app-v1  \
+  --exec-command /bin/sh
+[
+# apt update
+# apt install curl
+# curl http://localhost:8082/
+[
+# exit
+]
+
+
+$ export Node_MongoDB_MinIO_IP=$(az container show \
+  --name node-mongodb-app-v2 \
+  --resource-group nodeMongoMinioAzureContainerInstancesDNS \
+  --query ipAddress.ip --output tsv)
+
+
+$ echo $Node_MongoDB_MinIO_IP
+[
+20.189.162.79
+]
+
+$ curl http://$Node_MongoDB_MinIO_IP:8082/
+
+http://20.189.162.79:8082/
+
+==========================================================================================================================
+
+# MongoDB Shell # macOS # mongosh
+
+==========================================================================================================================
+
+% mongosh mongodb://104.209.41.125:27017/
+[
+Current Mongosh Log ID:	656cd6be6f95bff90c6a997f
+Connecting to:		mongodb://104.209.41.125:27017/?directConnection=true&appName=mongosh+2.1.0
+Using MongoDB:		7.0.3
+Using Mongosh:		2.1.0
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2023-12-03T18:08:27.968+00:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+   2023-12-03T18:08:27.969+00:00: /sys/kernel/mm/transparent_hugepage/enabled is 'always'. We suggest setting it to 'never'
+   2023-12-03T18:08:27.969+00:00: Soft rlimits for open file descriptors too low
+------
+
+test> (node:21919) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+db.version()
+7.0.3
+test> show dbs
+admin   40.00 KiB
+config  12.00 KiB
+dev     40.00 KiB
+local   40.00 KiB
+test> use dev
+switched to db dev
+dev> show collections
+notes
+dev> db.notes.find()
+[
+  {
+    _id: ObjectId('656cd6916df4217057a1a1dd'),
+    description: 'Node.js\r\n\r\n\r\n ![](/img/Node.png)'
+  }
+]
+dev> db.notes.find()
+[
+  {
+    _id: ObjectId('656cd6916df4217057a1a1dd'),
+    description: 'Node.js\r\n\r\n\r\n ![](/img/Node.png)'
+  },
+  {
+    _id: ObjectId('656cd72b6df4217057a1a1de'),
+    description: 'MongoDB\r\n\r\n\r\n ![](/img/MongoDB.png)'
+  }
+]
+dev> exit
+]
+
+==========================================================================================================================
+
+# Azure Files # Azure file share  # Delete
+
+==========================================================================================================================
+
+$ az storage share list --account-name miniostorageshareaccount  --output table
+[
+$ az storage share list --account-name miniostorageshareaccount --output table --account-key "mPbYOXwiDPorf3g1ykrYjBflcC79tB4DooIlEABOROjrXwrZiWe3pVb+7/Xv/E4eibW2gxvl+06T+AStKNwHIQ=="
+]
+
+$ az storage share delete --name miniostorageshare --account-name miniostorageshareaccount
+[
+$ az storage share delete --name miniostorageshare --account-name miniostorageshareaccount --account-key "mPbYOXwiDPorf3g1ykrYjBflcC79tB4DooIlEABOROjrXwrZiWe3pVb+7/Xv/
+]
+
+$ az storage share list --account-name miniostorageshareaccount 
+[]
+
+
+$ az storage account list --resource-group nodeMongoMinioAzureContainerInstancesDNS --output table
+
+$ az storage account delete --name miniostorageshareaccount --resource-group nodeMongoMinioAzureContainerInstancesDNS
+
+$ az storage account list --resource-group nodeMongoMinioAzureContainerInstancesDNS
+[]
+
+==========================================================================================================================
+
+# Azure Container Instances # Delete
+
+==========================================================================================================================
+
+$ az container list --resource-group nodeMongoMinioAzureContainerInstancesDNS --output table
+$ az container delete --name minio --resource-group nodeMongoMinioAzureContainerInstancesDNS
+$ az container delete --name mongo --resource-group nodeMongoMinioAzureContainerInstancesDNS
+$ az container delete --name node-mongodb-app-v2 --resource-group nodeMongoMinioAzureContainerInstancesDNS
+$ az container list --resource-group nodeMongoMinioAzureContainerInstancesDNS
+[]
+
+==========================================================================================================================
+
+# Azure Resource Group # Delete
+
+==========================================================================================================================
+
+$ az group list --output table
+$ az group delete --name nodeMongoMinioAzureContainerInstancesDNS
+$ az group list
+[]
+==========================================================================================================================
+***************************************************************************************************************************
+
+# Azure Virtual Network
+
+***************************************************************************************************************************
+
+$ az group create --name azureContainerInstancesVNetIngressEgress --location westus
+[
+$ az group delete --name azureContainerInstancesVNetIngressEgress
+]
+
+
+# Deploy ACI in a virtual network
+$ az container create \
+  --name mongo \
+  --image dockerrajani/mongo-aws-linux-x86-64:version1.0.0 \
+  --ports 27017  \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --vnet aci-vnet \
+  --vnet-address-prefix 10.0.0.0/16 \
+  --subnet aci-subnet \
+  --subnet-address-prefix 10.0.0.0/24
+
+[
+$ az container list --resource-group azureContainerInstancesVNetIngressEgress --output table
+$ az container delete --name mongo --resource-group azureContainerInstancesVNetIngressEgress
+]
+
+$ az container logs --name mongo --resource-group azureContainerInstancesVNetIngressEgress
+
+$ az container exec \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --name mongo  \
+  --exec-command /bin/sh
+[
+# mongosh
+test> db.version()
+7.0.3
+test> exit
+# exit
+]
+
+
+$ export MongoDB_IP=$(az container show \
+  --name mongo \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --query ipAddress.ip --output tsv)
+
+$ echo $MongoDB_IP
+
+
+$ az container create \
+  --name node-mongodb-app-v1 \
+  --image dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0 \
+  --ports 80 \
+  --environment-variables PORT=80 MONGO_URL=mongodb://$MongoDB_IP:27017/dev \
+  --restart-policy Always \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --vnet aci-vnet \
+  --vnet-address-prefix 10.0.0.0/16 \
+  --subnet aci-subnet \
+  --subnet-address-prefix 10.0.0.0/24
+
+[
+$ az container list --resource-group azureContainerInstancesVNetIngressEgress --output table
+$ az container delete --name node-mongodb-app-v1 --resource-group azureContainerInstancesVNetIngressEgress
+]
+
+$ az container logs --name node-mongodb-app-v1 --resource-group azureContainerInstancesVNetIngressEgress
+[
+Initialising MongoDB...
+MongoDB initialised
+App listening on http://localhost:80
+]
+
+$ az container exec \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --name node-mongodb-app-v1  \
+  --exec-command /bin/sh
+[
+# apt update
+# apt install curl
+# curl http://localhost:80/
+<html><head><title></title><link rel="stylesheet" href="tachyons.min.css"/></head><body class="ph3 pt0 pb4 mw7 center sans-serif"><h1 class="f2 mb0"><img src="/images/Node.png"/> <span class="green">N</span>ode.js <img src="/images/MongoDB.png"/> <span class="green">M</span>ongoDB </h1><!-- img(src="https://avatars.githubusercontent.com/u/9950313?s=48&v=4") --><!-- img(src='https://avatars.githubusercontent.com/u/45120?s=48&v=4')--><p class="f5 mt1 mb4 lh-copy">A Node.js-MongoDB image upload app.</p><form action="/note" method="POST" enctype="multipart/form-data"><ol class="list pl0"><li class="mv3"><label class="f6 b db mb2" for="image">Upload an image</label><input class="f6 link dim br1 ba b--black-20 ph3 pv2 mb2 dib black bg-white pointer" type="file" name="image"/><input class="f6 link dim br1 ba bw1 ph3 pv2 mb2 dib black bg-white pointer ml2" type="submit" value="Upload" name="upload"/></li><li class="mv3"><label class="f6 b db mb2" for="description">Write your content here</label><textarea class="f4 db border-box hover-black w-100 measure ba b--black-20 pa2 br2 mb2" rows="5" name="description"></textarea><input class="f6 link dim br1 ba bw1 ph3 pv2 mb2 dib black bg-white pointer" type="submit" value="Publish" name="publish"/></li></ol></form><p class="lh-copy f6">You don't have any notes yet.</p></body></html>
+# exit
+]
+
+
+# Get the private IP address of the container group
+$ aciPrivateIp="$(az container show --name node-mongodb-app-v1 \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --query ipAddress.ip --output tsv)"
+
+$ echo $aciPrivateIp
+[
+10.0.0.5
+]
+
+
+# Deploy Azure Firewall in network
+$ az network vnet subnet create \
+  --name AzureFirewallSubnet \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --vnet-name aci-vnet   \
+  --address-prefix 10.0.1.0/26
+
+
+# Add the firewall extension to the Azure CLI 
+$ az extension add --name azure-firewall
+
+
+# Create the firewall resources
+$ az network firewall create \
+  --name aciFirewall \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --location westus
+
+$ az network public-ip create \
+  --name fw-pip \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --location westus \
+  --allocation-method static \
+  --sku standard
+[
+...
+[Coming breaking change] In the coming release, the default behavior will be changed as follows when sku is Standard and zone is not provided: For zonal regions, you will get a zone-redundant IP indicated by zones:["1","2","3"]; For non-zonal regions, you will get a non zone-redundant IP indicated by zones:null.
+...
+]
+
+$ az network firewall ip-config create \
+  --firewall-name aciFirewall \
+  --name FW-config \
+  --public-ip-address fw-pip \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --vnet-name aci-vnet
+
+
+# Update the firewall configuration
+$ az network firewall update \
+  --name aciFirewall \
+  --resource-group azureContainerInstancesVNetIngressEgress
+
+
+# Get the firewall's private IP address 
+$ fwPrivateIp="$(az network firewall ip-config list \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --firewall-name aciFirewall \
+  --query "[].privateIpAddress" --output tsv)"
+
+$ echo $fwPrivateIp
+[
+10.0.1.4
+]
+
+
+# Get the firewall's public IP address 
+$ fwPublicIp="$(az network public-ip show \
+  --name fw-pip \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --query ipAddress --output tsv)"
+
+$ echo $fwPublicIp
+[
+20.253.139.19
+]
+
+
+# Define user-defined route on ACI subnet #
+
+# Create route table
+$ az network route-table create \
+  --name Firewall-rt-table \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --location westus \
+  --disable-bgp-route-propagation true
+
+# Create route
+$ az network route-table route create \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --name DG-Route \
+  --route-table-name Firewall-rt-table \
+  --address-prefix 0.0.0.0/0 \
+  --next-hop-type VirtualAppliance \
+  --next-hop-ip-address $fwPrivateIp
+
+# Associate route table to ACI subnet
+$ az network vnet subnet update \
+  --name aci-subnet \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --vnet-name aci-vnet \
+  --address-prefixes 10.0.0.0/24 \
+  --route-table Firewall-rt-table
+
+
+# Configure rules on firewall #
+
+# Configure NAT rule on firewall to ACI subnet
+$ az network firewall nat-rule create \
+  --firewall-name aciFirewall \
+  --collection-name aciNATCollection \
+  --action dnat \
+  --name aciRule \
+  --protocols TCP \
+  --source-addresses '*' \
+  --destination-addresses $fwPublicIp \
+  --destination-ports 80 \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --translated-address $aciPrivateIp \
+  --translated-port 80 \
+  --priority 200
+
+# Create outbound application rule on the firewall
+$ az network firewall application-rule create \
+  --collection-name aciAppCollection \
+  --firewall-name aciFirewall \
+  --name Allow-CheckIP \
+  --protocols Http=80 Https=443 \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --target-fqdns checkip.dyndns.org \
+  --source-addresses 10.0.0.0/24 \
+  --priority 200 \
+  --action Allow
+
+
+# Test container group access through the firewall #
+
+# Test ingress to a container group
+$ echo $fwPublicIp
+[
+20.253.139.19
+]
+
+http://20.253.139.19/
+
+$ curl http://20.253.139.19/
+[
+<html><head><title></title><link rel="stylesheet" href="tachyons.min.css"/></head><body class="ph3 pt0 pb4 mw7 center sans-serif"><h1 class="f2 mb0"><img src="/images/Node.png"/> <span class="green">N</span>ode.js <img src="/images/MongoDB.png"/> <span class="green">M</span>ongoDB </h1><!-- img(src="https://avatars.githubusercontent.com/u/9950313?s=48&v=4") --><!-- img(src='https://avatars.githubusercontent.com/u/45120?s=48&v=4')--><p class="f5 mt1 mb4 lh-copy">A Node.js-MongoDB image upload app.</p><form action="/note" method="POST" enctype="multipart/form-data"><ol class="list pl0"><li class="mv3"><label class="f6 b db mb2" for="image">Upload an image</label><input class="f6 link dim br1 ba b--black-20 ph3 pv2 mb2 dib black bg-white pointer" type="file" name="image"/><input class="f6 link dim br1 ba bw1 ph3 pv2 mb2 dib black bg-white pointer ml2" type="submit" value="Upload" name="upload"/></li><li class="mv3"><label class="f6 b db mb2" for="description">Write your content here</label><textarea class="f4 db border-box hover-black w-100 measure ba b--black-20 pa2 br2 mb2" rows="5" name="description"></textarea><input class="f6 link dim br1 ba bw1 ph3 pv2 mb2 dib black bg-white pointer" type="submit" value="Publish" name="publish"/></li></ol></form><ul class="list pl0"><p class="f6 b db mb2">Notes</p><li class="mv3 bb bw2 b--light-yellow bg-washed-yellow ph4 pv2"><p class="measure"><p>Microsoft Azure Overview.mp4</p>
+<p> <img src="/uploads/8c843d6c38a2ab706ece30253ee4eb1f" alt=""></p>
+</p></li><li class="mv3 bb bw2 b--light-yellow bg-washed-yellow ph4 pv2"><p class="measure"><p>RajaniLinkedIn</p>
+<p> <img src="/uploads/4e08bc581dd127b683094c785477bf69" alt=""></p>
+</p></li></ul></body></html>
+]
+
+
+# Test egress from a container group
+$ az container create \
+  --resource-group azureContainerInstancesVNetIngressEgress \
+  --name egress \
+  --image mcr.microsoft.com/azuredocs/aci-tutorial-sidecar \
+  --command-line "curl -s http://checkip.dyndns.org" \
+  --restart-policy OnFailure \
+  --vnet aci-vnet \
+  --subnet aci-subnet
+
+[
+$ az container list --resource-group azureContainerInstancesVNetIngressEgress --output table
+$ az container delete --name egress --resource-group azureContainerInstancesVNetIngressEgress
+]
+
+# View the container logs to confirm the IP address is the same as the public IP address of the firewall
+$ az container logs --name egress --resource-group azureContainerInstancesVNetIngressEgress
+
+
+# Azure Container Instances # Delete
+$ az container list --resource-group azureContainerInstancesVNetIngressEgress --output table
+$ az container delete --name mongo --resource-group azureContainerInstancesVNetIngressEgress
+$ az container delete --name node-mongodb-app-v1 --resource-group azureContainerInstancesVNetIngressEgress
+$ az container delete --name egress --resource-group azureContainerInstancesVNetIngressEgress
+$ az container list --resource-group azureContainerInstancesVNetIngressEgress
+[]
+
+
+# Azure Resource Group # Delete
+$ az group list --output table
+$ az group delete --name azureContainerInstancesVNetIngressEgress
+$ az group delete --name NetworkWatcherRG
+$ az group list
+[]
+
+***************************************************************************************************************************
+
+# Configure a single public IP address for outbound and inbound traffic to a container group
+
+***************************************************************************************************************************
+
+# Azure resource group
+
+$ resourceGroup=aciVNetIngressEgress$RANDOM
+
+$ az group create --name $resourceGroup --location westus
+[
+$ az group delete --name $resourceGroup
+]
+
+
+# Deploy ACI in a virtual network
+[
+$ az container create \
+  --name appcontainer \
+  --resource-group $resourceGroup \
+  --image mcr.microsoft.com/azuredocs/aci-helloworld \
+  --vnet aci-vnet \
+  --vnet-address-prefix 10.0.0.0/16 \
+  --subnet aci-subnet \
+  --subnet-address-prefix 10.0.0.0/24
+]
+
+$ az container create \
+  --name mongo \
+  --image dockerrajani/mongo-aws-linux-x86-64:version1.0.0 \
+  --ports 27017  \
+  --resource-group $resourceGroup \
+  --vnet aci-vnet \
+  --vnet-address-prefix 10.0.0.0/16 \
+  --subnet aci-subnet \
+  --subnet-address-prefix 10.0.0.0/24
+
+$ az container logs --name mongo --resource-group $resourceGroup
+
+[
+$ az container list --resource-group $resourceGroup --output table
+$ az container delete --name appcontainer --resource-group $resourceGroup
+]
+
+$ az container exec \
+  --resource-group $resourceGroup \
+  --name mongo  \
+  --exec-command /bin/sh
+[
+# mongosh
+test> db.version()
+7.0.3
+test> exit
+# exit
+]
+
+$ export MongoDB_IP=$(az container show \
+  --name mongo \
+  --resource-group $resourceGroup \
+  --query ipAddress.ip --output tsv)
+
+$ echo $MongoDB_IP
+
+$ az container create \
+  --name node-mongodb-app-v1 \
+  --image dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0 \
+  --ports 8081 \
+  --environment-variables PORT=8081 MONGO_URL=mongodb://$MongoDB_IP:27017/dev \
+  --restart-policy Always \
+  --resource-group $resourceGroup \
+  --vnet aci-vnet \
+  --vnet-address-prefix 10.0.0.0/16 \
+  --subnet aci-subnet \
+  --subnet-address-prefix 10.0.0.0/24
+
+
+$ az container logs --name node-mongodb-app-v1 --resource-group $resourceGroup
+[
+Initialising MongoDB...
+MongoDB initialised
+App listening on http://localhost:8081
+]
+
+$ az container exec \
+  --resource-group $resourceGroup \
+  --name node-mongodb-app-v1  \
+  --exec-command /bin/sh
+[
+# apt-get update
+# apt-get install curl
+# curl http://localhost:8081/
+<html><head><title></title><link rel="stylesheet" href="tachyons.min.css"/></head><body class="ph3 pt0 pb4 mw7 center sans-serif"><h1 class="f2 mb0"><img src="/images/Node.png"/> <span class="green">N</span>ode.js <img src="/images/MongoDB.png"/> <span class="green">M</span>ongoDB </h1><!-- img(src="https://avatars.githubusercontent.com/u/9950313?s=48&v=4") --><!-- img(src='https://avatars.githubusercontent.com/u/45120?s=48&v=4')--><p class="f5 mt1 mb4 lh-copy">A Node.js-MongoDB image upload app.</p><form action="/note" method="POST" enctype="multipart/form-data"><ol class="list pl0"><li class="mv3"><label class="f6 b db mb2" for="image">Upload an image</label><input class="f6 link dim br1 ba b--black-20 ph3 pv2 mb2 dib black bg-white pointer" type="file" name="image"/><input class="f6 link dim br1 ba bw1 ph3 pv2 mb2 dib black bg-white pointer ml2" type="submit" value="Upload" name="upload"/></li><li class="mv3"><label class="f6 b db mb2" for="description">Write your content here</label><textarea class="f4 db border-box hover-black w-100 measure ba b--black-20 pa2 br2 mb2" rows="5" name="description"></textarea><input class="f6 link dim br1 ba bw1 ph3 pv2 mb2 dib black bg-white pointer" type="submit" value="Publish" name="publish"/></li></ol></form><p class="lh-copy f6">You don't have any notes yet.</p></body></html>
+# exit
+]
+
+# Get the private IP address of the container group
+$ aciPrivateIp="$(az container show --name node-mongodb-app-v1 \
+  --resource-group $resourceGroup \
+  --query ipAddress.ip --output tsv)"
+
+$ echo $aciPrivateIp
+
+
+# Deploy Azure Firewall in network
+$ az network vnet subnet create \
+  --name AzureFirewallSubnet \
+  --resource-group $resourceGroup \
+  --vnet-name aci-vnet   \
+  --address-prefix 10.0.1.0/26
+
+
+# Add the firewall extension to the Azure CLI 
+$ az extension add --name azure-firewall
+
+
+# Create the firewall resources
+$
+az network firewall create \
+  --name aciFirewall \
+  --resource-group $resourceGroup \
+  --location westus
+
+az network public-ip create \
+  --name fw-pip \
+  --resource-group $resourceGroup \
+  --location westus \
+  --allocation-method static \
+  --sku standard
+    
+az network firewall ip-config create \
+  --firewall-name aciFirewall \
+  --name FW-config \
+  --public-ip-address fw-pip \
+  --resource-group $resourceGroup \
+  --vnet-name aci-vnet
+
+
+# Update the firewall configuration
+$ az network firewall update \
+  --name aciFirewall \
+  --resource-group $resourceGroup
+
+
+# Get the firewall's private IP address 
+$ fwPrivateIp="$(az network firewall ip-config list \
+  --resource-group $resourceGroup \
+  --firewall-name aciFirewall \
+  --query "[].privateIpAddress" --output tsv)"
+
+$ echo $fwPrivateIp
+
+
+# Get the firewall's public IP address 
+$ fwPublicIp="$(az network public-ip show \
+  --name fw-pip \
+  --resource-group $resourceGroup \
+  --query ipAddress --output tsv)"
+
+$ echo $fwPublicIp
+
+
+# Define user-defined route on ACI subnet #
+
+# Create route table
+$ az network route-table create \
+  --name Firewall-rt-table \
+  --resource-group $resourceGroup \
+  --location westus \
+  --disable-bgp-route-propagation true
+
+# Create route
+$ az network route-table route create \
+  --resource-group $resourceGroup \
+  --name DG-Route \
+  --route-table-name Firewall-rt-table \
+  --address-prefix 0.0.0.0/0 \
+  --next-hop-type VirtualAppliance \
+  --next-hop-ip-address $fwPrivateIp
+
+# Associate route table to ACI subnet
+$ az network vnet subnet update \
+  --name aci-subnet \
+  --resource-group $resourceGroup \
+  --vnet-name aci-vnet \
+  --address-prefixes 10.0.0.0/24 \
+  --route-table Firewall-rt-table
+
+
+# Configure rules on firewall #
+
+# Configure NAT rule on firewall to ACI subnet
+$ az network firewall nat-rule create \
+  --firewall-name aciFirewall \
+  --collection-name aciNATCollection \
+  --action dnat \
+  --name aciRule \
+  --protocols TCP \
+  --source-addresses '*' \
+  --destination-addresses $fwPublicIp \
+  --destination-ports 80 \
+  --resource-group $resourceGroup \
+  --translated-address $aciPrivateIp \
+  --translated-port 80 \
+  --priority 200
+
+# Create outbound application rule on the firewall
+$ az network firewall application-rule create \
+  --collection-name aciAppCollection \
+  --firewall-name aciFirewall \
+  --name Allow-CheckIP \
+  --protocols Http=80 Https=443 \
+  --resource-group $resourceGroup \
+  --target-fqdns checkip.dyndns.org \
+  --source-addresses 10.0.0.0/24 \
+  --priority 200 \
+  --action Allow
+
+
+# Test container group access through the firewall #
+
+# Test ingress to a container group
+$ echo $fwPublicIp
+
+# Output is similar to:
+52.142.18.133
+
+# Browse
+
+
+# Test egress from a container group
+$ az container create \
+  --resource-group $resourceGroup \
+  --name testegress \
+  --image mcr.microsoft.com/azuredocs/aci-tutorial-sidecar \
+  --command-line "curl -s http://checkip.dyndns.org" \
+  --restart-policy OnFailure \
+  --vnet aci-vnet \
+  --subnet aci-subnet
+
+# View the container logs to confirm the IP address is the same as the public IP address of the firewall.
+$ az container logs \
+  --resource-group $resourceGroup \
+  --name testegress 
+
+# Output is similar to:
+<html><head><title>Current IP Check</title></head><body>Current IP Address: 52.142.18.133</body></html>
+
+
+# Clean up resources
+$ az group delete --name $resourceGroup
+
+***************************************************************************************************************************
+###########################################################################################################################
+
+# Azure Virtual Machines # Docker
+
+###########################################################################################################################
+
+$ az group create --name dockerResourceGroup --location westus
+[
+$ az group delete --name dockerResourceGroup
+]
+
+$ az vm create --resource-group dockerResourceGroup --name DockerVM --image Ubuntu2204 --admin-username azureuser --generate-ssh-keys --custom-data cloud-init-docker.txt
+[
+SSH key files '/home/rajani/.ssh/id_rsa' and '/home/rajani/.ssh/id_rsa.pub' have been generated under ~/.ssh to allow SSH access to the VM. If using machines without permanent storage, back up your keys to a safe location.
+{
+  "fqdns": "",
+  "id": "/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/dockerResourceGroup/providers/Microsoft.Compute/virtualMachines/DockerVM",
+  "location": "westus",
+  "macAddress": "60-45-BD-06-10-32",
+  "powerState": "VM running",
+  "privateIpAddress": "10.0.0.4",
+  "publicIpAddress": "20.245.74.22",
+  "resourceGroup": "dockerResourceGroup",
+  "zones": ""
+}
+]
+
+
+$ az vm list-ip-addresses --name DockerVM --resource-group dockerResourceGroup --out table
+[
+VirtualMachine    PublicIPAddresses    PrivateIPAddresses
+----------------  -------------------  --------------------
+DockerVM          20.245.74.22         10.0.0.4
+]
+
+***************************************************************************************************************************
+
+# Azure Virtual Machine
+
+***************************************************************************************************************************
+
+https://portal.azure.com/#@rajanicloudnetoutlook.onmicrosoft.com/resource/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/dockerResourceGroup/providers/Microsoft.Compute/virtualMachines/DockerVM/connect
+
+[
+Requesting a Cloud Shell.Succeeded. 
+Connecting terminal...
+
+rajani [ ~ ]$ az ssh vm --resource-group dockerResourceGroup --vm-name DockerVM --subscription 50e273a7-4620-49f2-925b-c60ad94ef4d6
+OpenSSH_8.9p1, OpenSSL 1.1.1k  FIPS 25 Mar 2021
+The authenticity of host '20.245.74.22 (20.245.74.22)' can't be established.
+ED25519 key fingerprint is SHA256:PgFGXpxk2zIvlMAVQVwxZGCQpxWjl+G4ZHzkt+1zH9A.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '20.245.74.22' (ED25519) to the list of known hosts.
+Learned new hostkey: RSA SHA256:EOiALD836ygdeqcUNAfl5FKmgMPJ4xbHS3WFWLuzJ7s
+Learned new hostkey: ECDSA SHA256:7zWvfNzz4TKmsRieGg0HUxTVipBJtP4z+gtAwbnaIUI
+Adding new key for 20.245.74.22 to /home/rajani/.ssh/known_hosts: ecdsa-sha2-nistp256 SHA256:7zWvfNzz4TKmsRieGg0HUxTVipBJtP4z+gtAwbnaIUI
+Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 6.2.0-1016-azure x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Sat Dec  2 06:00:56 UTC 2023
+
+  System load:  0.3408203125      Processes:             104
+  Usage of /:   5.8% of 28.89GB   Users logged in:       0
+  Memory usage: 9%                IPv4 address for eth0: 10.0.0.4
+  Swap usage:   0%
+
+Expanded Security Maintenance for Applications is not enabled.
+
+45 updates can be applied immediately.
+33 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+***************************************************************************************************************************
+
+rajani.cloud.net@outlook.com@DockerVM:~$ 
+
+**************************************************************************************************************************
+
+# Ubuntu 22.04.3 LTS
+
+***************************************************************************************************************************
+
+$ sudo cat /etc/os-release
+$ sudo cat /etc/*release
+$ sudo cat /etc/*version
+
+
+$ sudo cat /etc/issue
+$ sudo more /etc/issue
+$ sudo less /etc/issue
+
+
+$ sudo cat /proc/version
+
+
+$ sudo lsb_release --all
+$ sudo lsb_release --description
+$ sudo man lsb_release
+
+
+$ sudo hostnamectl
+$ which hostnamectl
+$ type hostnamectl
+$ sudo man hostnamectl
+
+
+$ sudo uname -r
+$ sudo uname --release
+$ sudo uname -srm
+$ sudo uname --kernel-name --kernel-release --kernel-version
+$ sudo uname --all
+$ sudo man uname
+
+
+$ sudo grep -E '^(VERSION|NAME)=' /etc/os-release
+$ sudo grep '^VERSION' /etc/os-release
+
+
+$ sudo dpkg -l
+$ sudo which dpkg
+$ sudo man dpkg
+
+
+$ sudo arch
+
+
+$ sudo whoami
+
+
+$ whoami
+
+
+$ sudo echo $USER
+
+
+$ sudo echo $PATH
+
+
+$ sudo echo $HOME
+
+
+$ sudo echo ~/
+
+
+$ sudo echo $SHELL
+
+
+$ sudo env
+
+
+$ sudo pwd
+
+
+$ sudo ls
+
+
+$ sudo ls -a
+
+
+$ sudo date
+
+***************************************************************************************************************************
+
+# Network
+
+***************************************************************************************************************************
+
+$ sudo apt update
+$ sudo apt upgrade
+
+
+[
+$ sudo apt-get update
+$ sudo apt-get upgrade
+]
+
+
+$ sudo apt-get install net-tools
+$ sudo netstat -tunpl
+$ sudo netstat -nr
+$ sudo netstat -ai
+$ sudo netstat -ant
+[
+$ sudo apt-get remove net-tools
+$ sudo apt-get purge net-tools
+]
+
+
+$ sudo ss -tunl
+$ sudo ss -t
+$ sudo ss -A tcp
+$ sudo ss -ua
+$ sudo ss -a -A udp
+$ sudo ss -nt
+$ sudo ss -ltn
+
+
+$ sudo nc -l localhost 8080
+# control + C
+
+
+$ sudo apt-get install nmap
+$ sudo nmap -n -PN -sT -sU -p- localhost
+[
+$ sudo apt-get remove nmap
+$ sudo apt-get purge nmap
+# The following packages were automatically installed and are no longer required:
+# libblas3 liblinear4 liblua5.3-0 lua-lpeg nmap-common
+# Use 'sudo apt autoremove' to remove them.
+$ sudo apt autoremove
+] 
+
+***************************************************************************************************************************
+==========================================================================================================================
+
+# Docker install
+
+==========================================================================================================================
+
+$ sudo snap install docker 
+
+
+$ docker --version
+
+
+$ sudo docker version
+
+
+$ sudo docker info
+
+==========================================================================================================================
+
+# Docker
+
+==========================================================================================================================
+
+[
+$ sudo docker network list
+]
+$ sudo docker network create node-mongodb-app-network
+[
+$ sudo docker network rm node-mongodb-app-network 
+]
+
+==========================================================================================================================
+
+# Minio
+
+==========================================================================================================================
+
+[
+$ sudo mkdir -p $HOME/minio/data
+$ sudo ls
+$ sudo ls $HOME/minio
+$ sudo ls $HOME/minio/data
+[
+$ sudo rm -rf $HOME/minio/data
+]
+]
+$ sudo mkdir -p ~/minio/data
+$ sudo ls
+$ sudo ls ~/minio
+$ sudo ls ~/minio/data
+[
+$ sudo rm -rf ~/minio/data
+]
+
+[
+$ sudo  docker run \
+  -p 9000:9000 \
+  -p 9090:9090 \
+  --name minio \
+  --network=node-mongodb-app-network \
+  -v $HOME/minio/data:/data \
+  -e "MINIO_ACCESS_KEY=minioadmin" \
+  -e "MINIO_SECRET_KEY=minioadmin" \
+  dockerrajani/minio-aws-linux-x86-64:version1.0.0 server /data --console-address ":9090"
+]
+
+$ sudo docker network list
+
+$ sudo docker run \
+  -p 9000:9000 \
+  -p 9090:9090 \
+  --name minio \
+  --network=node-mongodb-app-network \
+  -v $HOME/minio/data:/data \
+  -e "MINIO_ROOT_USER=minioadmin" \
+  -e "MINIO_ROOT_PASSWORD=minioadmin" \
+  dockerrajani/minio-aws-linux-x86-64:version1.0.0 server /data --console-address ":9090"
+
+==========================================================================================================================
+
+# sudo docker exec -it minio bash # Open new session 
+
+==========================================================================================================================
+
+$ az ssh vm --resource-group dockerResourceGroup --vm-name DockerVM --subscription 50e273a7-4620-49f2-925b-c60ad94ef4d6
+
+==========================================================================================================================
+
+rajani.cloud.net@outlook.com@DockerVM:~$ 
+
+==========================================================================================================================
+
+$ sudo curl http://localhost:9090/
+$ sudo curl http://localhost:9000/
+
+$ sudo docker exec -it minio bash
+# mc --version
+# mc
+# esc
+# mc ls
+# mc ls data
+# mc ls data/image-storage/
+# mc rm data/image-storage/*
+[
+# exit
+]
+
+[
+$ sudo ls ~/minio/data/image-storage/
+$ sudo rm -rf ~/minio/data/image-storage/*
+]
+
+[
+$ sudo netstat -tunpl
+$ sudo ss -tunl
+
+$ sudo docker inspect minio
+]
+
+==========================================================================================================================
+
+# MongoDB # Open new session
+
+==========================================================================================================================
+
+$ az ssh vm --resource-group dockerResourceGroup --vm-name DockerVM --subscription 50e273a7-4620-49f2-925b-c60ad94ef4d6
+
+==========================================================================================================================
+
+rajani.cloud.net@outlook.com@DockerVM:~$ 
+
+==========================================================================================================================
+
+$ sudo docker network list
+
+$ sudo docker run \
+  -p 27017:27017 \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-app-network \
+  dockerrajani/mongo-aws-linux-x86-64:version1.0.0
+
+==========================================================================================================================
+
+# sudo docker exec -it mongo bash # Open new session 
+
+==========================================================================================================================
+
+$ az ssh vm --resource-group dockerResourceGroup --vm-name DockerVM --subscription 50e273a7-4620-49f2-925b-c60ad94ef4d6
+
+==========================================================================================================================
+
+rajani.cloud.net@outlook.com@DockerVM:~$ 
+
+==========================================================================================================================
+
+$ curl http://localhost:27017/
+
+$ sudo docker exec -it mongo bash
+# mongosh
+[
+# exit
+]
+
+[
+$ netstat -tunpl
+$ ss -tunl
+
+$ sudo docker inspect mongo
+]
+
+==========================================================================================================================
+
+# node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0 # Open new session
+
+==========================================================================================================================
+
+$ az ssh vm --resource-group dockerResourceGroup --vm-name DockerVM --subscription 50e273a7-4620-49f2-925b-c60ad94ef4d6
+
+==========================================================================================================================
+
+$ sudo docker run \
+  --name=node-mongodb-app-v1 \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 8081:8081 \
+  -e PORT=8081 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0
+
+==========================================================================================================================
+
+# sudo docker exec -it node-mongodb-app-v1 bash # Open new session
+
+==========================================================================================================================
+
+$ az ssh vm --resource-group dockerResourceGroup --vm-name DockerVM --subscription 50e273a7-4620-49f2-925b-c60ad94ef4d6
+
+==========================================================================================================================
+
+$ curl http://localhost:8081/
+
+$ sudo docker exec -it node-mongodb-app-v1 bash
+# apt-get update
+# apt-get install curl
+# curl http://localhost:8081/
+# exit
+
+[
+$ netstat -tunpl
+]
+
+$ ss -tunl
+
+$ sudo docker inspect node-mongodb-app-v1
+
+==========================================================================================================================
+
+# node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+==========================================================================================================================
+
+$ sudo docker run \
+  --name=node-mongodb-app-v2 \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 8082:8082 \
+  -e PORT=8082 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  -e "MINIO_ACCESS_KEY=minioadmin" \
+  -e "MINIO_SECRET_KEY=minioadmin" \
+  -e "MINIO_HOST=minio" \
+  dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+==========================================================================================================================
+
+# sudo docker exec -it node-mongodb-app-v2 bash # Open new session
+
+==========================================================================================================================
+
+$ az ssh vm --resource-group dockerResourceGroup --vm-name DockerVM --subscription 50e273a7-4620-49f2-925b-c60ad94ef4d6
+
+==========================================================================================================================
+
+$ curl http://localhost:8082/
+
+$ sudo docker exec -it node-mongodb-app-v2 bash
+# apt-get update
+# apt-get install curl
+# curl http://localhost:8082/
+# exit
+
+$ netstat -tunpl
+$ ss -tunl
+
+$ sudo docker inspect node-mongodb-app-v2
+
+==========================================================================================================================
+
+# Docker cleanup
+
+==========================================================================================================================
+
+[
+$ sudo docker ps --all --quiet
+$ sudo docker stop $(sudo docker ps -a -q)
+$ sudo docker rm $(sudo docker ps -a -q) --force
+]
+$ sudo docker container list --all --quiet
+$ sudo docker stop $(sudo docker container list -a -q)
+$ sudo docker rm $(sudo docker container list -a -q) --force
+$ sudo docker container prune
+
+$ sudo docker image list --all --quiet
+$ sudo docker rmi $(sudo docker image list -a -q) --force 
+$ sudo docker image prune --all
+
+$ sudo docker volume list --quiet
+$ sudo docker volume rm $(sudo docker volume list --quiet) --force
+$ sudo docker volume prune
+
+$ sudo docker network list --quiet --filter "type=custom"
+$ sudo docker network rm $(sudo docker network list --quiet --filter "type=custom")
+$ sudo docker network prune
+
+$ sudo docker system info
+$ sudo docker system prune --all --volumes
+
+==========================================================================================================================
+***************************************************************************************************************************
+
+# Azure Virtual Machine # Delete
+
+***************************************************************************************************************************
+==========================================================================================================================
+
+rajani.cloud.net@outlook.com@DockerVM:~$ exit
+[
+logout
+Connection to 20.245.74.22 closed.
+Transferred: sent 7032, received 20792 bytes, in 108.8 seconds
+Bytes per second: sent 64.6, received 191.1
+]
+
+==========================================================================================================================
+
+$ az vm delete --name DockerVM --resource-group dockerResourceGroup
+Are you sure you want to perform this operation? (y/n): y
+
+$ az vm list-ip-addresses --name DockerVM --resource-group dockerResourceGroup --out table
+[ ]
+
+==========================================================================================================================
+***************************************************************************************************************************
+
+# Azure Virtual Machine # Azure Resource Group # Delete
+
+***************************************************************************************************************************
+
+$ az group delete --name dockerResourceGroup
+
+***************************************************************************************************************************
+
+# Azure Resource Group # Delete
+
+***************************************************************************************************************************
+
+$ az group list --output table
+[
+Name                              Location      Status
+--------------------------------  ------------  ---------
+NetworkWatcherRG                  eastus        Succeeded
+]
+
+$ az group delete --name NetworkWatcherRG
+
+$ az group list
+[]
+
+***************************************************************************************************************************
+###########################################################################################################################

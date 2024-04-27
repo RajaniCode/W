@@ -1,0 +1,652 @@
+###########################################################################################################################
+
+# Amazon Linux [centos rhel fedora] # Docker
+
+###########################################################################################################################
+===========================================================================================================================
+
+# Linux centos rhel fedora
+
+===========================================================================================================================
+
+$ sudo cat /etc/os-release
+$ sudo cat /etc/*release
+
+$ sudo cat /etc/issue
+$ sudo more /etc/issue
+$ sudo less /etc/issue
+
+$ sudo cat /proc/version
+
+[
+$ sudo hostnamectl
+]
+$ sudo man hostnamectl
+
+$ sudo uname
+$ sudo uname -r
+$ sudo uname --release 
+$ sudo uname -srm
+$ sudo uname --kernel-name --kernel-release --kernel-version
+$ sudo uname --all
+$ sudo uname -amnoprsv
+$ sudo man uname
+
+$ sudo grep -E '^(VERSION|NAME)=' /etc/os-release
+$ sudo grep '^VERSION' /etc/os-release
+
+$ sudo yum --version
+
+$ sudo rpm --version 
+$ sudo rpm -qa 
+$ sudo which rpm
+$ sudo man rpm
+
+$ sudo arch
+
+$ id -un
+$ sudo id -un
+
+$ whoami
+$ sudo whoami
+$ echo `whoami`
+
+$ sudo echo $USER
+
+$ sudo echo $HOME
+
+$ sudo echo ~/
+
+$ sudo echo $SHELL
+
+$ sudo echo $PATH
+
+$ sudo env
+
+$ sudo pwd
+
+$ sudo date
+
+$ sudo locale
+$ sudo locale -a
+
+$ sudo echo $LC_ALL
+
+$ sudo ls
+$ sudo ls -a
+$ sudo ls /usr/local/bin
+$ sudo ls /usr/bin
+$ sudo ls /bin
+$ sudo ls /usr/sbin
+$ sudo ls /sbin
+
+$ which compgen
+$ type compgen
+$ man compgen
+$ compgen -c 
+$ compgen -a 
+$ compgen -b
+$ compgen -k
+$ compgen -A function
+$ compgen -A function -abck
+
+===========================================================================================================================
+
+# Programming Languages
+
+===========================================================================================================================
+
+$ node --version
+
+$ python3 --version
+
+$ perl --version
+
+$ go version
+
+===========================================================================================================================
+
+# Network
+
+===========================================================================================================================
+
+$ sudo yum update
+$ sudo yum upgrade
+
+[
+$ sudo yum install net-tools
+]
+$ sudo netstat -tunpl
+$ sudo netstat -nr
+$ sudo netstat -ai
+$ sudo netstat -ant
+[
+$ sudo yum remove net-tools
+]
+
+[
+$ sudo yum install iproute iproute-doc
+]
+$ sudo ss -tunl
+$ sudo ss -t
+$ sudo ss -A tcp
+$ sudo ss -ua
+$ sudo ss -a -A udp
+$ sudo ss -nt
+$ sudo ss -ltn
+[
+$ sudo yum remove iproute iproute-doc
+]
+
+$ sudo yum install nc
+# Ncat: bind to 127.0.0.1:36563: Address already in use. QUITTING.
+$ sudo nc -l localhost 36563
+# Not in use # 27017
+$ sudo nc -l localhost 27017
+# control + C
+[
+$ sudo yum remove nc
+$ sudo yum erase nc
+$ sudo yum autoremove
+]
+
+$ sudo yum install nmap
+$ sudo nmap -n -PN -sT -sU -p- localhost
+[
+$ sudo yum remove nmap
+$ sudo yum erase nmap
+$ sudo yum autoremove
+]
+
+===========================================================================================================================
+
+# Docker install
+
+===========================================================================================================================
+
+[
+$ sudo yum update
+$ sudo yum upgrade
+]
+
+[
+$ sudo yum install -y docker
+]
+$ sudo amazon-linux-extras install docker
+
+$ sudo docker version
+
+$ sudo dockerd
+]
+
+===========================================================================================================================
+
+# Docker
+
+===========================================================================================================================
+
+$ sudo docker --version
+
+$ sudo docker version
+
+$ sudo docker info
+
+===========================================================================================================================
+***************************************************************************************************************************
+
+# Minio
+
+***************************************************************************************************************************
+
+[
+$ sudo mkdir -p $HOME/minio/data
+$ sudo ls
+$ sudo ls $HOME/minio
+$ sudo ls $HOME/minio/data
+[
+$ sudo rm -rf $HOME/minio/data
+]
+]
+$ sudo mkdir -p ~/minio/data
+$ sudo ls
+$ sudo ls ~/minio
+$ sudo ls ~/minio/data
+[
+$ sudo rm -rf ~/minio/data
+]
+
+[
+$ sudo  docker run \
+  -p 9000:9000 \
+  -p 9090:9090 \
+  --name minio \
+  --network=node-mongodb-app-network \
+  -v $HOME/minio/data:/data \
+  -e "MINIO_ACCESS_KEY=minioadmin" \
+  -e "MINIO_SECRET_KEY=minioadmin" \
+  dockerrajani/minio-aws-linux-x86-64:version1.0.0 server /data --console-address ":9090"
+]
+
+$ sudo docker run \
+  -p 9000:9000 \
+  -p 9090:9090 \
+  --name minio \
+  --network=node-mongodb-app-network \
+  -v $HOME/minio/data:/data \
+  -e "MINIO_ROOT_USER=minioadmin" \
+  -e "MINIO_ROOT_PASSWORD=minioadmin" \
+  dockerrajani/minio-aws-linux-x86-64:version1.0.0 server /data --console-address ":9090"
+
+$ sudo curl http://localhost:9090/
+$ sudo curl http://localhost:9000/
+
+$ sudo docker exec -it minio bash
+# mc --version
+# mc
+# esc
+# mc ls
+# mc ls data
+# mc ls data/image-storage/
+# mc rm data/image-storage/*
+# exit
+
+[
+$ sudo ls ~/minio/data/image-storage/
+$ sudo rm -rf ~/minio/data/image-storage/*
+]
+
+
+$ sudo netstat -tunpl
+$ sudo ss -tunl
+
+$ sudo docker inspect minio
+
+***************************************************************************************************************************
+
+# MongoDB
+
+***************************************************************************************************************************
+
+$ sudo docker run \
+  -p 27017:27017 \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-app-network \
+  dockerrajani/mongo-aws-linux-x86-64:version1.0.0
+
+$ sudo curl http://localhost:27017/
+
+$ sudo docker exec -it mongo bash
+# apt-get update
+# apt-get install curl
+# curl http://localhost:27017/
+# mongosh
+# exit
+
+$ sudo netstat -tunpl
+$ sudo ss -tunl
+
+$ sudo docker inspect mongo
+
+***************************************************************************************************************************
+
+# node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0
+
+***************************************************************************************************************************
+
+[
+$ sudo docker run \
+  --name=node-mongodb-app-v1 \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 8081:8081 \
+  -e PORT=8081 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0
+
+$ sudo curl http://localhost:8081/
+]
+
+[
+Amazon Cloud9 can't get you to your requested environment. Here are
+some suggestions on how to figure out what's going on:
+Check that you have access to your environment and are signed into
+Amazon Cloud9 for the environment.
+Check that the server is successfully running on Amazon Cloud9:
+If the server hit an error, the output window will have a message
+telling you what it is.
+If you're in the middle of debugging code, your server might be
+paused right now.
+The server might be running on a different port; make sure it
+runs on port 8080.
+]
+
+$ sudo docker run \
+  --name=node-mongodb-app-v1 \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 8080:8080 \
+  -e PORT=8080 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0
+
+$ sudo curl http://localhost:8080/
+
+https://b7c761ffc7b743a1bbc5faeb0ab42f17.vfs.cloud9.eu-west-3.amazonaws.com/
+
+$ sudo docker exec -it node-mongodb-app-v1 bash
+# apt-get update
+# apt-get install curl
+# curl http://localhost:8081/
+# exit
+
+$ sudo netstat -tunpl
+$ sudo ss -tunl
+
+$ sudo docker inspect node-mongodb-app-v1
+
+***************************************************************************************************************************
+
+# node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+***************************************************************************************************************************
+
+[
+$ sudo  docker run \
+  --name=node-mongodb-app-v2 \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 8082:8082 \
+  -e PORT=8082 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  -e "MINIO_ACCESS_KEY=minioadmin" \
+  -e "MINIO_SECRET_KEY=minioadmin" \
+  -e "MINIO_HOST=minio" \
+  dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+$ sudo curl http://localhost:8082/
+]
+
+[
+Amazon Cloud9 can't get you to your requested environment. Here are
+some suggestions on how to figure out what's going on:
+Check that you have access to your environment and are signed into
+Amazon Cloud9 for the environment.
+Check that the server is successfully running on Amazon Cloud9:
+If the server hit an error, the output window will have a message
+telling you what it is.
+If you're in the middle of debugging code, your server might be
+paused right now.
+The server might be running on a different port; make sure it
+runs on port 8080.
+]
+
+$ sudo  docker run \
+  --name=node-mongodb-app-v2 \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 8080:8080 \
+  -e PORT=8080 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  -e "MINIO_ACCESS_KEY=minioadmin" \
+  -e "MINIO_SECRET_KEY=minioadmin" \
+  -e "MINIO_HOST=minio" \
+  dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+$ sudo curl http://localhost:8080/
+
+https://b7c761ffc7b743a1bbc5faeb0ab42f17.vfs.cloud9.eu-west-3.amazonaws.com/
+
+$ sudo docker exec -it node-mongodb-app-v2 bash
+# apt-get update
+# apt-get install curl
+# curl http://localhost:8082/
+# exit
+
+$ sudo netstat -tunpl
+$ sudo ss -tunl
+
+$ sudo docker inspect node-mongodb-app-v2
+
+***************************************************************************************************************************
+
+# Docker cleanup
+
+***************************************************************************************************************************
+
+[
+$ sudo docker ps --all --quiet
+$ sudo docker stop $(sudo docker ps -a -q)
+$ sudo docker rm $(sudo docker ps -a -q) --force
+]
+$ sudo docker container list --all --quiet
+$ sudo docker stop $(sudo docker container list -a -q)
+$ sudo docker rm $(sudo docker container list -a -q) --force
+$ sudo docker container prune
+
+$ sudo docker image list --all --quiet
+$ sudo docker rmi $(sudo docker image list -a -q) --force 
+$ sudo docker image prune --all
+
+$ sudo docker volume list --quiet
+$ sudo docker volume rm $(sudo docker volume list --quiet) --force
+$ sudo docker volume prune
+
+$ sudo docker network list --quiet --filter "type=custom"
+$ sudo docker network rm $(sudo docker network list --quiet --filter "type=custom")
+$ sudo docker network prune
+
+$ sudo docker system info
+$ sudo docker system prune --all --volumes
+
+***************************************************************************************************************************
+
+# Docker uninstall
+
+***************************************************************************************************************************
+
+[
+# sudo kill <>
+$ sudo ps aux | grep -v grep | grep docker | awk '{print $2}' 
+
+$ sudo ps aux | grep -v grep | grep dockerd | awk '{print $2}' 
+]
+
+[
+$ sudo ls /var/run/docker.pid
+$ sudo rm -rf /var/run/docker.pid
+]
+
+$ sudo yum remove docker
+[
+$ sudo yum erase docker
+]
+$ sudo yum autoremove
+
+$ sudo ls /var/lib/docker
+$ sudo rm -rf /var/lib/docker
+
+$ sudo ls /var/lib/containerd
+$ sudo rm -rf /var/lib/containerd
+
+***************************************************************************************************************************
+###########################################################################################################################
+
+# AWS Cloud9 Integrated Development Environment (IDE)
+
+# A Cloud IDE for Writing, Running, and Debugging Code
+
+###########################################################################################################################
+***************************************************************************************************************************
+
+https://console.aws.amazon.com/cloud9/
+
+Search for Cloud9 in the AWS Console and click on Cloud9 in the Services
+
+# Paris # eu-west-3 #
+
+***************************************************************************************************************************
+
+AWS Cloud9 > Environments > Create environment
+
+Details
+Name
+#**********#
+AWSDockerCloud9IDE
+#**********#
+
+Environment type
+Determines what the Cloud9 IDE will run on.
+New EC2 instance
+Cloud9 creates an EC2 instance in your account. The configuration of your EC2 instance cannot be changed by Cloud9 after creation.
+
+New EC2 instance
+Instance type
+The memory and CPU of the EC2 instance that will be created for Cloud9 to run on.
+t2.micro (1 GiB RAM + 1 vCPU)
+Free-tier eligible. Ideal for educational users and exploration.
+
+Platform
+This will be installed on your EC2 instance. We recommend Amazon Linux 2.
+Amazon Linux 2
+
+Timeout
+How long Cloud9 can be inactive (no user input) before auto-hibernating. This helps prevent unnecessary charges.
+30 minutes
+
+Network settings
+Connection
+How your environment is accessed.
+AWS Systems Manager (SSM)
+Accesses environment via SSM without opening inbound ports (no ingress).
+
+VPC settings
+Amazon Virtual Private Cloud (VPC)
+The VPC that your environment will access. To allow the AWS Cloud9 environment to connect to its EC2 instance, attach an internet gateway (IGW) to your VPC.
+vpc-0deec1cd79bc4594c
+Name -
+
+Subnet
+Used to setup your VPC configuration. To use a private subnet, select AWS Systems Manager (SSM) as the connection type. Create new subnet 
+No preference
+Uses default subnet in any Availability Zone
+
+Tags - optional
+
+The following IAM resources will be created in your account
+AWSServiceRoleForAWSCloud9 - AWS Cloud9 creates a service-linked role for you. This allows AWS Cloud9 to call other AWS services on your behalf. You can delete the role from the AWS IAM console once you no longer have any AWS Cloud9 environments.
+AWSCloud9SSMAccessRole and AWSCloud9SSMInstanceProfile - A service role and an instance profile are automatically created if Cloud9 accesses its EC2 instance through AWS Systems Manager. If your environments no longer require EC2 instances that block incoming traffic, you can delete these roles using the AWS IAM console.
+
+Create
+
+***************************************************************************************************************************
+
+AWS Cloud9 > Environments > AWSDockerCloud9IDE
+
+Details
+
+Name
+#**********#
+AWSDockerCloud9IDE
+#**********#
+
+Description
+-
+
+Environment type
+EC2 instance
+
+Owner ARN
+arn:aws:iam::<Account ID>:root
+
+Number of members
+1
+
+Status
+Ready
+
+Lifecycle status
+Created
+
+***************************************************************************************************************************
+
+EC2 > Instances > i-036456b629a5fbaf5
+
+Instance summary for i-036456b629a5fbaf5 (aws-cloud9-AWSDockerCloud9IDE-b7c761ffc7b743a1bbc5faeb0ab42f17) I
+
+Instance ID
+ i-036456b629a5fbaf5 (aws-cloud9-AWSDockerCloud9IDE-b7c761ffc7b743a1bbc5faeb0ab42f17)
+
+Public IPv4 address
+15.237.96.80 |open address
+
+Private IPv4 addresses
+172.31.6.177
+
+IPv6 address
+–
+
+Instance state
+Running
+
+Public IPv4 DNS
+ec2-15-237-96-80.eu-west-3.compute.amazonaws.com |open address 
+
+Hostname type
+IP name: ip-172-31-6-177.eu-west-3.compute.internal
+
+Private IP DNS name (IPv4 only)
+ip-172-31-6-177.eu-west-3.compute.internal
+
+Answer private resource DNS name
+–
+
+Instance type
+t2.micro
+
+Elastic IP addresses
+–
+
+Auto-assigned IP address
+15.237.96.80 [Public IP]
+
+VPC ID
+vpc-0deec1cd79bc4594c
+
+AWS Compute Optimizer finding
+Opt-in to AWS Compute Optimizer for recommendations.
+
+IAM Role
+AWSCloud9SSMAccessRole
+
+Subnet ID
+subnet-0823e7b24183acdd5 
+
+Auto Scaling Group name
+–
+
+IMDSv2
+Optional
+EC2 recommends setting IMDSv2 to required
+
+***************************************************************************************************************************
+
+# AWS Cloud9 Integrated Development Environment (IDE) # Cleanup # Verification
+
+***************************************************************************************************************************
+
+# EC2 
+Instances - Instance state: Terminated
+Security groups - default
+
+# VPC
+VPCs - default
+Network ACLs - default
+Security groups - default
+Subnets for default VPC
+Route tables are main route tables for default VPC
+Internet gateways attached to default VPC
+DHCP option set that is associated with default VPC
+
+***************************************************************************************************************************
+###########################################################################################################################

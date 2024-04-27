@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-21-express-app-private-service
+spec:
+  selector:
+    app: node-21-express-app-private
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-21-express-app-private-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: node-21-express-app-private
+  template:
+    metadata:
+      labels:
+        app: node-21-express-app-private
+    spec:
+      containers:
+      - name: node-21-express-app-private-container
+        image: 421076070177.dkr.ecr.us-west-2.amazonaws.com/node-21-express-app-amazon-linux-extras-x86-64-private-repository:latest
+        ports:
+          - containerPort: 3000

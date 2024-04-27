@@ -1,0 +1,72 @@
+Last login: Wed Nov  8 17:36:58 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % docker version
+Client:
+ Cloud integration: v1.0.35+desktop.5
+ Version:           24.0.6
+ API version:       1.43
+ Go version:        go1.20.7
+ Git commit:        ed223bc
+ Built:             Mon Sep  4 12:28:49 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.25.0 (126437)
+ Engine:
+  Version:          24.0.6
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.7
+  Git commit:       1a79695
+  Built:            Mon Sep  4 12:31:36 2023
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.22
+  GitCommit:        8165feabfdfe38c65b599c4993d227328c231fca
+ runc:
+  Version:          1.1.8
+  GitCommit:        v1.1.8-0-g82f18fe
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro ~ % docker login
+Authenticating with existing credentials...
+Login Succeeded
+rajaniapple@Rajanis-MacBook-Pro ~ % docker pull mongo
+Using default tag: latest
+latest: Pulling from library/mongo
+895d322e8e59: Pull complete 
+53942a81bbed: Pull complete 
+6c77c1ea6f8e: Pull complete 
+9269ffa19aee: Pull complete 
+1ae10bad0105: Pull complete 
+208482253dd3: Pull complete 
+0beb4a4f2118: Pull complete 
+26ec439e9d10: Pull complete 
+6ec0210a426e: Pull complete 
+Digest: sha256:d341a86584b96eb665345a8f5b35fba8695ee1d0618fd012ec4696223a3d6c62
+Status: Downloaded newer image for mongo:latest
+docker.io/library/mongo:latest
+
+What's Next?
+  View a summary of image vulnerabilities and recommendations → docker scout quickview mongo
+rajaniapple@Rajanis-MacBook-Pro ~ % docker image list
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+mongo        latest    8b10e7ef0208   3 weeks ago   712MB
+rajaniapple@Rajanis-MacBook-Pro ~ % docker tag mongo dockerrajani/mongo:version1.0.0
+rajaniapple@Rajanis-MacBook-Pro ~ % docker image list
+REPOSITORY           TAG            IMAGE ID       CREATED       SIZE
+dockerrajani/mongo   version1.0.0   8b10e7ef0208   3 weeks ago   712MB
+mongo                latest         8b10e7ef0208   3 weeks ago   712MB
+rajaniapple@Rajanis-MacBook-Pro ~ % docker push dockerrajani/mongo:version1.0.0
+The push refers to repository [docker.io/dockerrajani/mongo]
+bed2e59538eb: Mounted from library/mongo 
+209c4690c752: Mounted from library/mongo 
+eee430de3ecb: Mounted from library/mongo 
+2e15ea5fa6ce: Mounted from library/mongo 
+de6156ccd113: Mounted from library/mongo 
+7fb216849d2e: Mounted from library/mongo 
+3d68be502f14: Mounted from library/mongo 
+04b5105542a6: Mounted from library/mongo 
+d2d3127fc3d3: Mounted from library/mongo 
+version1.0.0: digest: sha256:73d8c0c50299e87651443b44c296827e30dee94af986f94571d85ca7eba1a839 size: 2202
+rajaniapple@Rajanis-MacBook-Pro ~ % 

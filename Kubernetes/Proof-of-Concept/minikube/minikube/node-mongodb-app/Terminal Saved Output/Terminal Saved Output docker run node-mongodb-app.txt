@@ -1,0 +1,22 @@
+Last login: Wed Nov  8 17:03:06 on ttys002
+rajaniapple@Rajanis-MacBook-Pro ~ % docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  node-mongodb-app
+Initialising MongoDB...
+MongoDB initialised
+App listening on http://localhost:3000
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,65 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: waldo-pod
+  labels:
+    app: waldo-app
+spec:
+  containers:
+    - name: waldo-app-container
+      image: 'kicbase/echo-server:1.0'
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: waldo-service
+spec:
+  selector:
+    app: waldo-app
+  ports:
+    - port: 8080
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: xyzzy-pod
+  labels:
+    app: xyzzy-app
+spec:
+  containers:
+    - name: xyzzy-pod-container
+      image: 'kicbase/echo-server:1.0'
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: xyzzy-service
+spec:
+  selector:
+    app: xyzzy-app
+  ports:
+    - port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-traffic-waldo-xyzzy
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /waldo
+            backend:
+              service:
+                name: waldo-service
+                port:
+                  number: 8080
+          - pathType: Prefix
+            path: /xyzzy
+            backend:
+              service:
+                name: xyzzy-service
+                port:
+                  number: 8080
+---

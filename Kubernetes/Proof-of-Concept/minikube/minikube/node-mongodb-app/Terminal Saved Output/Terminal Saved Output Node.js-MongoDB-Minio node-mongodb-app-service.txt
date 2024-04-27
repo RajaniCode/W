@@ -1,0 +1,24 @@
+Last login: Wed Nov  8 22:48:16 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % minikube service node-mongodb-app-service
+|-----------|--------------------------|-------------|---------------------------|
+| NAMESPACE |           NAME           | TARGET PORT |            URL            |
+|-----------|--------------------------|-------------|---------------------------|
+| default   | node-mongodb-app-service |          80 | http://192.168.49.2:31031 |
+|-----------|--------------------------|-------------|---------------------------|
+🏃  Starting tunnel for service node-mongodb-app-service.
+|-----------|--------------------------|-------------|------------------------|
+| NAMESPACE |           NAME           | TARGET PORT |          URL           |
+|-----------|--------------------------|-------------|------------------------|
+| default   | node-mongodb-app-service |             | http://127.0.0.1:52255 |
+|-----------|--------------------------|-------------|------------------------|
+🎉  Opening service default/node-mongodb-app-service in default browser...
+❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+
+
+
+
+
+
+
+
+

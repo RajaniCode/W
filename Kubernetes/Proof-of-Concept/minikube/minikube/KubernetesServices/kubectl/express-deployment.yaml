@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: express-deployment
+spec:
+  selector:
+    matchLabels:
+      app: express
+      api: restful 
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: express
+        api: restful
+    spec:
+      containers:
+      - name: express-4-container
+        image: "dockerrajani/node-21-express-app-macos-arm64:version1.0.0"
+        env:
+        - name: "PORT"
+          value: "50001"

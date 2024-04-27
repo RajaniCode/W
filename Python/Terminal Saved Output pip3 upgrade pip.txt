@@ -1,0 +1,19 @@
+Last login: Fri Jul 21 23:06:39 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % python3 --version        
+Python 3.11.4
+rajaniapple@Rajanis-MacBook-Pro ~ % pip3 --version           
+pip 23.1.2 from /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/pip (python 3.11)
+rajaniapple@Rajanis-MacBook-Pro ~ % pip3 install --upgrade pip
+Requirement already satisfied: pip in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (23.1.2)
+Collecting pip
+  Downloading pip-23.2-py3-none-any.whl (2.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 876.4 kB/s eta 0:00:00
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 23.1.2
+    Uninstalling pip-23.1.2:
+      Successfully uninstalled pip-23.1.2
+Successfully installed pip-23.2
+rajaniapple@Rajanis-MacBook-Pro ~ % pip3 --version            
+pip 23.2 from /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/pip (python 3.11)
+rajaniapple@Rajanis-MacBook-Pro ~ % 

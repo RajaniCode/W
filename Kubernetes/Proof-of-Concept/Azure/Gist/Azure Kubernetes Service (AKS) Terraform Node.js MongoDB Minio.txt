@@ -1,0 +1,1585 @@
+###########################################################################################################################
+
+Azure Kubernetes Service (AKS) # Terraform
+
+###########################################################################################################################
+===========================================================================================================================
+
+# Cleanup # $HOME
+
+===========================================================================================================================
+
+% ls ~/.terraform.d
+% rm -rf ~/.terraform.d
+
+
+% ls ~/.kube
+% rm -rf ~/.kube
+
+
+% ls ~/.azure
+% rm -rf ~/.azure
+
+===========================================================================================================================
+
+# Version
+
+===========================================================================================================================
+
+% terraform version
+
+
+% az -v
+
+
+% kubectl version
+
+[
+% kubelogin --version
+]
+
+===========================================================================================================================
+***************************************************************************************************************************
+
+# Azure Login
+
+***************************************************************************************************************************
+
+% az login
+[
+http://localhost:49594/?code=0.AXsAMe_N-B6jSkuT5F9XHpElWpV3sATbjRpGu-4C-eG_e0YBAAA.AgABAAIAAAAmoFfGtYxvRrNriQdPKIZ-AgDs_wUA9P9wJ_5H1-ihJTCGBM1Rq_COUS7NbpPs4H4tmMc-4duE-sc0ta_OEdin-48-_ghmNSjPY1M-q9cZ6AbVE2SogZlid5nNNZbzixgKdjiSyITf0zXZJrjYnNr9JPJRbtsRuex1Vy_hrHNXnpR6RKLuYJBrMyxg_lqQc1zkBSZqws1LHQhK4JVfVRHG79AqEHboBD7D3Zpb5E3RunhBfhkfzA_5Ley2acnKM0wuHZsxDb3sKAD1p0ZZmD4E1x92PX26Uv5x2e94WqlfuXQ7D5CBxIUuaxzmKlWUQtN7qElN3d3n04P1lLd5VNn_0I_SFXqn6r9JbyvOUhG0trMvI-z1Okd1AViYzRklm1m7ost9bHPKnpFSe1iQ05ovOg5AO_5_ijLz2yHrrJTLg2X8_Ny4fq7Sc9lfcQ_o_lYD-spStw-WXZYTtQCYuL9F2JEK-7dOxi1z_GQ3z7t7kqNwBvQsuWGQZ2wJ5Dt1CvLUJQLIr4qrb7RIoadYthw-GkvDxfmq-NcAyR2mgfryaWjOJKfiE3lhnAXO0gg0uJvf96xsAPoxT2nNrmpwNseZRHjOAf0_o4aGkXU-xl-1k0JTcvu-igi5XGieWcxDQH3rsqwhGTn-srruVflAchVUPICFa8jjD4WSV7pz-3l57Y6Sauk7lFLtQVkxjJy2h9Xr5auZLyneC4NZTtMkoDzuxikC9tHvxY_3mpq_Y3146IQGaMbPvTqg8tEailSdgkRGJUPYy0BJDjmEgZR3Puu4J4tzvt6Monv6guryGQwMxh-Mvw0oOMVUgAvw4amJUqm9YgV0NT7TeKnvSgvX4z0SBtuYkCjvE-BSn2N0Sg18wdnOxZ20MgZzKp2e37FVphLnduTMcEZc35PYGlflsYfwuK6Dz5B-FZ2RElUSX3zYzqbgAlfoQrdBSpghEDoG7ExUSwX7tNTFczOzFjxKk6r4SgGyRgJjPd4lIlMDMjHOPjhOj49ncYX-Gg4grsIZfCyaOuYfP2BKK-Xblh-E8cpM4af2mG8AbxweSnFTb7t-Dn7uSzKalZDiif5Dlee_H99ASqWDeNPiaYgY4BclESa4pZYY-qHnzr1KX4ketCxY4P9a8wwxuVIbS2qlwWi-pYtJTGVwkdVxGAYRVRDBzUzKcV_zR5FxaJtmBrjd2B8CdUnKRxZWFK7P0rN_FKcc38npZpdlFC6mEEIPXdB6pOz8f51tY9wetIw8x5EemJYMlLBUkyW-aLNdf1hBxEIEhRyQ0D2vAhGMZnM9FewHBkuhERcMoii1w-NnpZDZP94hpBqM1m8NcZDCtZ9hScHV6GgyxqNW&client_info=eyJ1aWQiOiIwMDAwMDAwMC0wMDAwLTAwMDAtOGNhNC0zMjA2YzZlMmUwNjMiLCJ1dGlkIjoiOTE4ODA0MGQtNmM2Ny00YzViLWIxMTItMzZhMzA0YjY2ZGFkIn0&state=JUHbroRfKnIDcGMe&session_state=3a764be8-d0fd-45cb-a87c-46fe63ffaf6b
+]
+[
+You have logged into Microsoft Azure!
+
+You can close this window, or we will redirect you to the Azure CLI documentation in 1 minute.
+
+Announcements
+
+[Windows only] Azure CLI is collecting feedback on using the Web Account Manager (WAM) broker for the login experience.
+
+You may opt-in to use WAM by running the following commands:
+
+az config set core.allow_broker=true
+az account clear
+az login
+]
+[
+A web browser has been opened at https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize. Please continue the login in the web browser. If no web browser is available or if the web browser fails to open, use device code flow with `az login --use-device-code`.
+[
+  {
+    "cloudName": "AzureCloud",
+    "homeTenantId": "e7142166-b9df-478f-bd88-8fccb8609b60",
+    "id": "<Subscription ID>",
+    "isDefault": false,
+    "managedByTenants": [],
+    "name": "Azure subscription AKS",
+    "state": "Warned",
+    "tenantId": "e7142166-b9df-478f-bd88-8fccb8609b60",
+    "user": {
+      "name": "<Azure>@outlook.com",
+      "type": "user"
+    }
+  },
+  {
+    "cloudName": "AzureCloud",
+    "homeTenantId": "e7142166-b9df-478f-bd88-8fccb8609b60",
+    "id": "50e273a7-4620-49f2-925b-c60ad94ef4d6",
+    "isDefault": true,
+    "managedByTenants": [],
+    "name": "Pay-As-You-Go",
+    "state": "Enabled",
+    "tenantId": "e7142166-b9df-478f-bd88-8fccb8609b60",
+    "user": {
+      "name": "<Azure>@outlook.com",
+      "type": "user"
+    }
+  }
+]
+]
+
+***************************************************************************************************************************
+
+# Set up and initialize the  Terraform workspace
+
+# In the terminal, clone the learn-terraform-provision-aks-cluster git repository.
+
+# It contains the example configuration.
+
+***************************************************************************************************************************
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/AKS/Terraform
+
+% git clone https://github.com/hashicorp/learn-terraform-provision-aks-cluster
+
+***************************************************************************************************************************
+
+# Explore this repository by changing directories or navigating in your UI.
+
+***************************************************************************************************************************
+
+% cd learn-terraform-provision-aks-cluster
+
+% tree
+[
+.
+├── LICENSE
+├── README.md
+├── aks-cluster.tf
+├── outputs.tf
+├── terraform.tfvars
+├── variables.tf
+└── versions.tf
+
+1 directory, 7 files
+]
+
+***************************************************************************************************************************
+
+# Find the files used to provision the AKS cluster.
+
+# 1. aks-cluster.tf provisions a resource group and an AKS cluster.
+
+# The default_node_pool defines the number of VMs and the VM type the cluster uses.
+
+resource "azurerm_kubernetes_cluster" "default" {
+  name                = "${random_pet.prefix.id}-aks"
+  location            = azurerm_resource_group.default.location
+  resource_group_name = azurerm_resource_group.default.name
+  dns_prefix          = "${random_pet.prefix.id}-k8s"
+  kubernetes_version  = "1.26.3"
+
+  default_node_pool {
+    name            = "default"
+    node_count      = 2
+    vm_size         = "Standard_D2_v2"
+    os_disk_size_gb = 30
+  }
+
+  service_principal {
+    client_id     = var.appId
+    client_secret = var.password
+  }
+
+  role_based_access_control_enabled = true
+
+  tags = {
+    environment = "Demo"
+  }
+}
+
+# 2. variables.tf declares the appID and password so Terraform can use reference its configuration
+
+# 3. terraform.tfvars defines the appId and password variables to authenticate to Azure
+
+# 4. outputs.tf declares values that can be useful to interact with the AKS cluster
+
+# 5. versions.tf sets the Terraform version to at least 0.14 and defines the required_provider block
+
+***************************************************************************************************************************
+
+# Create an Active Directory service principal account
+
+# There are many ways to authenticate to the Azure provider.
+
+# Terraform supports a number of different methods for authenticating to Azure:
+# Authenticating to Azure using the Azure CLI
+# Authenticating to Azure using Managed Service Identity
+# Authenticating to Azure using a Service Principal and a Client Certificate
+# Authenticating to Azure using a Service Principal and a Client Secret
+# Authenticating to Azure using OpenID Connect
+
+# Use an Active Directory service principal account.
+
+# Create an Active Directory service principal account using the Azure CLI.
+
+***************************************************************************************************************************
+
+% az ad sp create-for-rbac --skip-assignment
+[
+Option '--skip-assignment' has been deprecated and will be removed in a future release.
+The output includes credentials that you must protect. Be sure that you do not include these credentials in your code or check the credentials into your source control. For more information, see https://aka.ms/azadsp-cli
+{
+  "appId": "f54d811a-37c1-437b-ab20-be732aa97162",
+  "displayName": "azure-cli-2023-12-01-13-08-54",
+  "password": "O3D8Q~diGvM_bUEHYSS6ed9GxaNkSGgl25T8idzU",
+  "tenant": "e7142166-b9df-478f-bd88-8fccb8609b60"
+}
+]
+
+***************************************************************************************************************************
+
+# Update the terraform.tfvars file
+
+# Replace the values in the terraform.tfvars file with the appId and password.
+
+# Terraform will use these values to authenticate to Azure before provisioning your resources.
+
+# The terraform.tfvars file should look like the following.
+
+# terraform.tfvars
+appId    = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+password = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+
+***************************************************************************************************************************
+
+% cat terraform.tfvars
+[
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
+appId    = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+password = "********-****-****-****-************"
+]
+
+% nano terraform.tfvars
+
+% cat terraform.tfvars
+[
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
+appId    = "f54d811a-37c1-437b-ab20-be732aa97162"
+password = "O3D8Q~diGvM_bUEHYSS6ed9GxaNkSGgl25T8idzU"
+]
+
+***************************************************************************************************************************
+
+# Initialize Terraform
+
+# After saving the customized variables file, initialize the Terraform workspace, which will download the provider and initialize it with the values provided in the terraform.tfvars file.
+
+***************************************************************************************************************************
+
+% terraform init
+[
+Initializing the backend...
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/azurerm from the dependency lock file
+- Reusing previous version of hashicorp/random from the dependency lock file
+- Installing hashicorp/random v3.5.1...
+- Installed hashicorp/random v3.5.1 (signed by HashiCorp)
+- Installing hashicorp/azurerm v3.67.0...
+- Installed hashicorp/azurerm v3.67.0 (signed by HashiCorp)
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+]
+
+***************************************************************************************************************************
+
+# Provision the AKS cluster
+
+# In the initialized directory, run terraform apply and review the planned actions.
+
+# The terminal output should indicate the plan is running and what resources will be created.
+
+# Note
+
+# In case of an error that the VM size of Standard_D2_v2 is not allowed in the subscription, and may have reached a resource limit.
+
+# Refer to the AKS VM size restrictions and region availability documentation for more information.
+
+# The terraform apply will provision an Azure resource group and an AKS cluster.
+
+# Confirm the apply with a yes.
+
+# Upon successful application, the terminal prints the outputs defined in aks-cluster.tf.
+[
+Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+kubernetes_cluster_name = light-eagle-aks
+resource_group_name = light-eagle-rg
+]
+
+***************************************************************************************************************************
+
+% terraform apply
+[
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # azurerm_kubernetes_cluster.default will be created
+  + resource "azurerm_kubernetes_cluster" "default" {
+      + api_server_authorized_ip_ranges     = (known after apply)
+      + dns_prefix                          = (known after apply)
+      + fqdn                                = (known after apply)
+      + http_application_routing_zone_name  = (known after apply)
+      + id                                  = (known after apply)
+      + image_cleaner_enabled               = false
+      + image_cleaner_interval_hours        = 48
+      + kube_admin_config                   = (sensitive value)
+      + kube_admin_config_raw               = (sensitive value)
+      + kube_config                         = (sensitive value)
+      + kube_config_raw                     = (sensitive value)
+      + kubernetes_version                  = "1.26.3"
+      + location                            = "westus2"
+      + name                                = (known after apply)
+      + node_resource_group                 = (known after apply)
+      + node_resource_group_id              = (known after apply)
+      + oidc_issuer_url                     = (known after apply)
+      + portal_fqdn                         = (known after apply)
+      + private_cluster_enabled             = false
+      + private_cluster_public_fqdn_enabled = false
+      + private_dns_zone_id                 = (known after apply)
+      + private_fqdn                        = (known after apply)
+      + public_network_access_enabled       = true
+      + resource_group_name                 = (known after apply)
+      + role_based_access_control_enabled   = true
+      + run_command_enabled                 = true
+      + sku_tier                            = "Free"
+      + tags                                = {
+          + "environment" = "Demo"
+        }
+      + workload_identity_enabled           = false
+
+      + default_node_pool {
+          + kubelet_disk_type    = (known after apply)
+          + max_pods             = (known after apply)
+          + name                 = "default"
+          + node_count           = 2
+          + node_labels          = (known after apply)
+          + orchestrator_version = (known after apply)
+          + os_disk_size_gb      = 30
+          + os_disk_type         = "Managed"
+          + os_sku               = (known after apply)
+          + scale_down_mode      = "Delete"
+          + type                 = "VirtualMachineScaleSets"
+          + ultra_ssd_enabled    = false
+          + vm_size              = "Standard_D2_v2"
+          + workload_runtime     = (known after apply)
+        }
+
+      + service_principal {
+          + client_id     = "f54d811a-37c1-437b-ab20-be732aa97162"
+          + client_secret = (sensitive value)
+        }
+    }
+
+  # azurerm_resource_group.default will be created
+  + resource "azurerm_resource_group" "default" {
+      + id       = (known after apply)
+      + location = "westus2"
+      + name     = (known after apply)
+      + tags     = {
+          + "environment" = "Demo"
+        }
+    }
+
+  # random_pet.prefix will be created
+  + resource "random_pet" "prefix" {
+      + id        = (known after apply)
+      + length    = 2
+      + separator = "-"
+    }
+
+Plan: 3 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + kubernetes_cluster_name = (known after apply)
+  + resource_group_name     = (known after apply)
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+random_pet.prefix: Creating...
+random_pet.prefix: Creation complete after 0s [id=suitable-mink]
+azurerm_resource_group.default: Creating...
+azurerm_resource_group.default: Creation complete after 4s [id=/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/suitable-mink-rg]
+azurerm_kubernetes_cluster.default: Creating...
+╷
+│ Error: creating Kubernetes Cluster (Subscription: "50e273a7-4620-49f2-925b-c60ad94ef4d6"
+│ Resource Group Name: "suitable-mink-rg"
+│ Kubernetes Cluster Name: "suitable-mink-aks"): managedclusters.ManagedClustersClient#CreateOrUpdate: Failure sending request: StatusCode=0 -- Original Error: Code="AgentPoolK8sVersionNotSupported" Message="Version 1.26.3 is not supported in this region. Please use [az aks get-versions] command to get the supported version list in this region. For more information, please check https://aka.ms/supported-version-list"
+│ 
+│   with azurerm_kubernetes_cluster.default,
+│   on aks-cluster.tf line 19, in resource "azurerm_kubernetes_cluster" "default":
+│   19: resource "azurerm_kubernetes_cluster" "default" {
+│ 
+╵
+]
+
+===========================================================================================================================
+
+% az aks get-versions
+[
+the following arguments are required: --location/-l
+
+Examples from AI knowledge base:
+az aks get-versions --location westus2
+Get the versions available for creating a managed Kubernetes cluster
+
+az account list
+Get a list of subscriptions for the logged in account. (autogenerated)
+
+az account set --subscription mysubscription
+Set a subscription to be the current active subscription. (autogenerated)
+
+https://docs.microsoft.com/en-US/cli/azure/aks#az_aks_get_versions
+Read more about the command in reference docs
+]
+
+===========================================================================================================================
+
+% az aks get-versions --location westus2
+[
+{
+  "values": [
+    {
+      "capabilities": {
+        "supportPlan": [
+          "KubernetesOfficial"
+        ]
+      },
+      "isPreview": null,
+      "patchVersions": {
+        "1.26.10": {
+          "upgrades": [
+            "1.27.7",
+            "1.27.3"
+          ]
+        },
+        "1.26.6": {
+          "upgrades": [
+            "1.26.10",
+            "1.27.7",
+            "1.27.3"
+          ]
+        }
+      },
+      "version": "1.26"
+    },
+    {
+      "capabilities": {
+        "supportPlan": [
+          "KubernetesOfficial"
+        ]
+      },
+      "isPreview": null,
+      "patchVersions": {
+        "1.25.11": {
+          "upgrades": [
+            "1.26.10",
+            "1.26.6",
+            "1.25.15"
+          ]
+        },
+        "1.25.15": {
+          "upgrades": [
+            "1.26.10",
+            "1.26.6"
+          ]
+        }
+      },
+      "version": "1.25"
+    },
+    {
+      "capabilities": {
+        "supportPlan": [
+          "KubernetesOfficial"
+        ]
+      },
+      "isPreview": null,
+      "patchVersions": {
+        "1.28.0": {
+          "upgrades": [
+            "1.28.3"
+          ]
+        },
+        "1.28.3": {
+          "upgrades": []
+        }
+      },
+      "version": "1.28"
+    },
+    {
+      "capabilities": {
+        "supportPlan": [
+          "KubernetesOfficial",
+          "AKSLongTermSupport"
+        ]
+      },
+      "isDefault": true,
+      "isPreview": null,
+      "patchVersions": {
+        "1.27.3": {
+          "upgrades": [
+            "1.27.7",
+            "1.28.3",
+            "1.28.0"
+          ]
+        },
+        "1.27.7": {
+          "upgrades": [
+            "1.28.3",
+            "1.28.0"
+          ]
+        }
+      },
+      "version": "1.27"
+    }
+  ]
+}
+]
+
+===========================================================================================================================
+
+% cat aks-cluster.tf
+
+# Edit From
+kubernetes_version  = "1.26.3"
+# To 
+kubernetes_version  = "1.28.3"
+% nano aks-cluster.tf
+
+% cat aks-cluster.tf
+
+===========================================================================================================================
+
+% terraform apply                       
+random_pet.prefix: Refreshing state... [id=suitable-mink]
+azurerm_resource_group.default: Refreshing state... [id=/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/suitable-mink-rg]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # azurerm_kubernetes_cluster.default will be created
+  + resource "azurerm_kubernetes_cluster" "default" {
+      + api_server_authorized_ip_ranges     = (known after apply)
+      + dns_prefix                          = "suitable-mink-k8s"
+      + fqdn                                = (known after apply)
+      + http_application_routing_zone_name  = (known after apply)
+      + id                                  = (known after apply)
+      + image_cleaner_enabled               = false
+      + image_cleaner_interval_hours        = 48
+      + kube_admin_config                   = (sensitive value)
+      + kube_admin_config_raw               = (sensitive value)
+      + kube_config                         = (sensitive value)
+      + kube_config_raw                     = (sensitive value)
+      + kubernetes_version                  = "1.28.3"
+      + location                            = "westus2"
+      + name                                = "suitable-mink-aks"
+      + node_resource_group                 = (known after apply)
+      + node_resource_group_id              = (known after apply)
+      + oidc_issuer_url                     = (known after apply)
+      + portal_fqdn                         = (known after apply)
+      + private_cluster_enabled             = false
+      + private_cluster_public_fqdn_enabled = false
+      + private_dns_zone_id                 = (known after apply)
+      + private_fqdn                        = (known after apply)
+      + public_network_access_enabled       = true
+      + resource_group_name                 = "suitable-mink-rg"
+      + role_based_access_control_enabled   = true
+      + run_command_enabled                 = true
+      + sku_tier                            = "Free"
+      + tags                                = {
+          + "environment" = "Demo"
+        }
+      + workload_identity_enabled           = false
+
+      + default_node_pool {
+          + kubelet_disk_type    = (known after apply)
+          + max_pods             = (known after apply)
+          + name                 = "default"
+          + node_count           = 2
+          + node_labels          = (known after apply)
+          + orchestrator_version = (known after apply)
+          + os_disk_size_gb      = 30
+          + os_disk_type         = "Managed"
+          + os_sku               = (known after apply)
+          + scale_down_mode      = "Delete"
+          + type                 = "VirtualMachineScaleSets"
+          + ultra_ssd_enabled    = false
+          + vm_size              = "Standard_D2_v2"
+          + workload_runtime     = (known after apply)
+        }
+
+      + service_principal {
+          + client_id     = "f54d811a-37c1-437b-ab20-be732aa97162"
+          + client_secret = (sensitive value)
+        }
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + kubernetes_cluster_name = "suitable-mink-aks"
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+azurerm_kubernetes_cluster.default: Creating...
+azurerm_kubernetes_cluster.default: Still creating... [10s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [20s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [30s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [40s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [50s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [1m0s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [1m10s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [1m20s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [1m30s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [1m40s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [1m50s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [2m0s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [2m10s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [2m20s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [2m30s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [2m40s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [2m50s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [3m0s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [3m10s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [3m20s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [3m30s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [3m40s elapsed]
+azurerm_kubernetes_cluster.default: Still creating... [3m50s elapsed]
+azurerm_kubernetes_cluster.default: Creation complete after 3m57s [id=/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/suitable-mink-rg/providers/Microsoft.ContainerService/managedClusters/suitable-mink-aks]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+kubernetes_cluster_name = "suitable-mink-aks"
+resource_group_name = "suitable-mink-rg"
+
+===========================================================================================================================
+***************************************************************************************************************************
+
+# Configure kubectl
+
+# Now that the AKS cluster has been provisioned, configure kubectl.
+
+# Run the following command to retrieve the access credentials for the cluster and automatically configure kubectl.
+
+# The resource group name and Kubernetes Cluster name correspond to the output variables showed after the successful Terraform run.
+
+***************************************************************************************************************************
+
+% az aks get-credentials --resource-group $(terraform output -raw resource_group_name) --name $(terraform output -raw kubernetes_cluster_name)
+[
+Merged "suitable-mink-aks" as current context in ~/.kube/config
+]
+
+***************************************************************************************************************************
+
+# Access Kubernetes Dashboard
+
+# To verify that the cluster's configuration, visit the Azure Portal's Kubernetes resource view.
+
+# Azure recommends using this view over the default Kubernetes dashboard, since the AKS dashboard add-on is deprecated for Kubernetes versions 1.19+.
+
+# Run the following command to generate the Azure portal link.
+
+# Go to the URL in the browser to view the Kubernetes resource view.
+
+***************************************************************************************************************************
+
+% az aks browse --resource-group $(terraform output -raw resource_group_name) --name $(terraform output -raw kubernetes_cluster_name)
+[
+Kubernetes resources view on https://portal.azure.com/#resource/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/suitable-mink-rg/providers/Microsoft.ContainerService/managedClusters/suitable-mink-aks/workloads
+"Kubernetes resources view on https://portal.azure.com/#resource/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/suitable-mink-rg/providers/Microsoft.ContainerService/managedClusters/suitable-mink-aks/workloads"
+]
+
+***************************************************************************************************************************
+
+https://portal.azure.com/#@<Azure>outlook.onmicrosoft.com/resource/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/suitable-mink-rg/providers/Microsoft.ContainerService/managedClusters/suitable-mink-aks/workloads
+
+***************************************************************************************************************************
+###########################################################################################################################
+
+# Node.js MongoDB Minio
+
+# node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+###########################################################################################################################
+***************************************************************************************************************************
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/AKS/Terraform/learn-terraform-provision-aks-cluster
+
+
+% tree node-mongodb-app/kubectl-aws-linux-x86-64/
+[
+node-mongodb-app/kubectl-aws-linux-x86-64/
+├── cluster-ip-service-minio-aws-linux-x86-64.yaml
+├── cluster-ip-service-mongo-aws-linux-x86-64.yaml
+└── load-balancer-service-node-mongodb-app-v2-aws-linux-x86-64.yaml
+
+1 directory, 3 files
+]
+
+
+% cat node-mongodb-app/kubectl-aws-linux-x86-64/cluster-ip-service-minio-aws-linux-x86-64.yaml
+[
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-service
+spec:
+  selector:
+    app: minio
+  ports:
+    - port: 9090
+      name: console
+    - port: 9000
+      name: s3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-deployment
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio-container
+          image: dockerrajani/minio-aws-linux-x86-64:version1.0.0
+          imagePullPolicy: Always
+          args:
+            - server
+            - /storage
+          env:
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - name: storage
+              mountPath: /storage
+          command:
+            - /bin/bash
+            - -c
+          args:
+              - minio server /data --console-address :9090
+      restartPolicy: Always
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: minio-persistentvolumeclaim
+]
+
+
+% cat node-mongodb-app/kubectl-aws-linux-x86-64/cluster-ip-service-mongo-aws-linux-x86-64.yaml
+[
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo-container
+          image: dockerrajani/mongo-aws-linux-x86-64:version1.0.0
+          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mongo-persistentvolumeclaim
+]
+
+
+% cat node-mongodb-app/kubectl-aws-linux-x86-64/load-balancer-service-node-mongodb-app-v2-aws-linux-x86-64.yaml
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-mongodb-app-service
+spec:
+  selector:
+    app: node-mongodb-app
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-mongodb-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-mongodb-app
+  template:
+    metadata:
+      labels:
+        app: node-mongodb-app
+    spec:
+      containers:
+        - name: node-mongodb-app-container
+          image: dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo-service:27017/dev
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+            - name: MINIO_HOST
+              value: minio-service
+]
+
+
+% kubectl apply -f node-mongodb-app/kubectl-aws-linux-x86-64/
+[
+% kubectl delete -f node-mongodb-app/kubectl-aws-linux-x86-64/
+]
+
+
+% kubectl get pods --watch
+
+
+% kubectl get pods
+
+
+% kubectl get services
+
+***************************************************************************************************************************
+
+% kubectl apply -f node-mongodb-app/kubectl-aws-linux-x86-64/
+[
+persistentvolumeclaim/minio-persistentvolumeclaim created
+service/minio-service created
+deployment.apps/minio-deployment created
+persistentvolumeclaim/mongo-persistentvolumeclaim created
+service/mongo-service created
+deployment.apps/mongo-deployment created
+service/node-mongodb-app-service created
+deployment.apps/node-mongodb-app-deployment created
+]
+
+% kubectl get pods --watch
+[
+NAME                                           READY   STATUS              RESTARTS   AGE
+minio-deployment-6864fb4f94-sxxtf              0/1     ContainerCreating   0          9s
+mongo-deployment-b7d4b6844-m8b9k               0/1     ContainerCreating   0          8s
+node-mongodb-app-deployment-58d4c67f45-drgmr   0/1     ContainerCreating   0          7s
+node-mongodb-app-deployment-58d4c67f45-drgmr   1/1     Running             0          8s
+minio-deployment-6864fb4f94-sxxtf              1/1     Running             0          26s
+mongo-deployment-b7d4b6844-m8b9k               1/1     Running             0          75s
+^C%     
+]
+
+% kubectl get pods
+[
+NAME                                           READY   STATUS    RESTARTS   AGE
+minio-deployment-6864fb4f94-sxxtf              1/1     Running   0          87s
+mongo-deployment-b7d4b6844-m8b9k               1/1     Running   0          86s
+node-mongodb-app-deployment-58d4c67f45-drgmr   1/1     Running   0          85s
+]
+
+% kubectl get services
+[
+NAME                       TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)             AGE
+kubernetes                 ClusterIP      10.0.0.1       <none>          443/TCP             36m
+minio-service              ClusterIP      10.0.214.64    <none>          9090/TCP,9000/TCP   95s
+mongo-service              ClusterIP      10.0.6.76      <none>          27017/TCP           93s
+node-mongodb-app-service   LoadBalancer   10.0.153.146   20.109.130.93   80:31174/TCP        93s
+]
+
+***************************************************************************************************************************
+
+% open http://20.109.130.93/
+
+***************************************************************************************************************************
+
+% kubectl delete -f node-mongodb-app/kubectl-aws-linux-x86-64/
+[
+persistentvolumeclaim "minio-persistentvolumeclaim" deleted
+service "minio-service" deleted
+deployment.apps "minio-deployment" deleted
+persistentvolumeclaim "mongo-persistentvolumeclaim" deleted
+service "mongo-service" deleted
+deployment.apps "mongo-deployment" deleted
+service "node-mongodb-app-service" deleted
+deployment.apps "node-mongodb-app-deployment" deleted
+]
+
+***************************************************************************************************************************
+
+% tree node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/
+[
+├── load-balancer-service-minio-aws-linux-x86-64.yaml
+├── load-balancer-service-mongo-aws-linux-x86-64.yaml
+└── load-balancer-service-node-mongodb-app-v2-aws-linux-x86-64.yaml
+
+1 directory, 3 files
+]
+
+
+% cat node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/load-balancer-service-minio-aws-linux-x86-64.yaml
+[
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-service
+spec:
+  selector:
+    app: minio
+  ports:
+    - port: 9090
+      name: console
+    - port: 9000
+      name: s3
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-deployment
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio-container
+          image: dockerrajani/minio-aws-linux-x86-64:version1.0.0
+          imagePullPolicy: Always
+          args:
+            - server
+            - /storage
+          env:
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - name: storage
+              mountPath: /storage
+          command:
+            - /bin/bash
+            - -c
+          args:
+              - minio server /data --console-address :9090
+      restartPolicy: Always
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: minio-persistentvolumeclaim
+]
+
+
+% cat node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/load-balancer-service-mongo-aws-linux-x86-64.yaml
+[
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo-container
+          image: dockerrajani/mongo-aws-linux-x86-64:version1.0.0
+          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mongo-persistentvolumeclaim
+]
+
+
+% cat node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/load-balancer-service-node-mongodb-app-v2-aws-linux-x86-64.yaml
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-mongodb-app-service
+spec:
+  selector:
+    app: node-mongodb-app
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-mongodb-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-mongodb-app
+  template:
+    metadata:
+      labels:
+        app: node-mongodb-app
+    spec:
+      containers:
+        - name: node-mongodb-app-container
+          image: dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo-service:27017/dev
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+            - name: MINIO_HOST
+              value: minio-service
+]
+
+
+% kubectl apply -f node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/
+[
+% kubectl delete -f node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/
+]
+
+
+% kubectl get pods --watch
+
+
+% kubectl get pods
+
+
+% kubectl get services
+
+***************************************************************************************************************************
+
+% kubectl apply -f node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/
+[
+persistentvolumeclaim/minio-persistentvolumeclaim created
+service/minio-service created
+deployment.apps/minio-deployment created
+persistentvolumeclaim/mongo-persistentvolumeclaim created
+service/mongo-service created
+deployment.apps/mongo-deployment created
+service/node-mongodb-app-service created
+deployment.apps/node-mongodb-app-deployment created
+]
+
+% kubectl get pods --watch   
+[               
+NAME                                           READY   STATUS              RESTARTS   AGE
+minio-deployment-6864fb4f94-zqvkz              0/1     ContainerCreating   0          10s
+mongo-deployment-b7d4b6844-vb2g6               0/1     ContainerCreating   0          9s
+node-mongodb-app-deployment-58d4c67f45-4zhks   1/1     Running             0          8s
+minio-deployment-6864fb4f94-zqvkz              1/1     Running             0          20s
+mongo-deployment-b7d4b6844-vb2g6               1/1     Running             0          20s
+^C%
+]                                                                                                                                                         
+
+% kubectl get pods
+[                 
+NAME                                           READY   STATUS    RESTARTS   AGE
+minio-deployment-6864fb4f94-zqvkz              1/1     Running   0          32s
+mongo-deployment-b7d4b6844-vb2g6               1/1     Running   0          31s
+node-mongodb-app-deployment-58d4c67f45-4zhks   1/1     Running   0          30s
+]
+
+% kubectl get services
+[                    
+NAME                       TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                         AGE
+kubernetes                 ClusterIP      10.0.0.1       <none>          443/TCP                         63m
+minio-service              LoadBalancer   10.0.100.237   20.252.10.169   9090:30367/TCP,9000:31121/TCP   39s
+mongo-service              LoadBalancer   10.0.231.38    20.252.10.181   27017:31082/TCP                 38s
+node-mongodb-app-service   LoadBalancer   10.0.225.75    20.252.9.242    80:31415/TCP                    37s
+]
+
+***************************************************************************************************************************
+
+http://20.252.10.169:9090/
+
+http://20.252.10.181:27017/
+
+http://20.252.9.242/
+
+***************************************************************************************************************************
+
+# MongoDB Shell
+
+***************************************************************************************************************************
+
+% mongosh mongodb://20.252.10.181:27017/
+[
+Current Mongosh Log ID:	6569f250f600d27f19bf167e
+Connecting to:		mongodb://20.252.10.181:27017/?directConnection=true&appName=mongosh+2.1.0
+Using MongoDB:		7.0.3
+Using Mongosh:		2.1.0
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2023-12-01T14:42:42.737+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2023-12-01T14:42:43.570+00:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+   2023-12-01T14:42:43.570+00:00: /sys/kernel/mm/transparent_hugepage/enabled is 'always'. We suggest setting it to 'never'
+   2023-12-01T14:42:43.572+00:00: vm.max_map_count is too low
+------
+
+test> (node:5898) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+db.version()
+7.0.3
+test> show dbs
+admin   40.00 KiB
+config  60.00 KiB
+local   40.00 KiB
+test> show dbs
+admin   40.00 KiB
+config  60.00 KiB
+dev     40.00 KiB
+local   40.00 KiB
+test> use dev
+switched to db dev
+dev> show collections
+notes
+dev> db.notes.find()
+[
+  {
+    _id: ObjectId('6569f29d60a6bd87dacd2914'),
+    description: 'Apple\r\n\r\n\r\n ![](/img/Apple.png)'
+  }
+]
+dev> db.notes.find()
+[
+  {
+    _id: ObjectId('6569f29d60a6bd87dacd2914'),
+    description: 'Apple\r\n\r\n\r\n ![](/img/Apple.png)'
+  },
+  {
+    _id: ObjectId('6569f3d260a6bd87dacd2915'),
+    description: 'GitHub\r\n\r\n\r\n ![](/img/GitHub.png)'
+  }
+]
+dev> exit
+]
+
+***************************************************************************************************************************
+
+% kubectl delete -f node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/
+[
+persistentvolumeclaim "minio-persistentvolumeclaim" deleted
+service "minio-service" deleted
+deployment.apps "minio-deployment" deleted
+persistentvolumeclaim "mongo-persistentvolumeclaim" deleted
+service "mongo-service" deleted
+deployment.apps "mongo-deployment" deleted
+service "node-mongodb-app-service" deleted
+deployment.apps "node-mongodb-app-deployment" deleted
+]
+
+***************************************************************************************************************************
+
+# Clean up your workspace
+
+# AKS cluster has been provisioned, configured kubectl, and visited the Kubernetes dashboard.
+
+# Note
+
+# This directory is only used to provision a AKS cluster with Terraform.
+
+# By keeping the Terraform configuration for provisioning a Kubernetes cluster and managing a Kubernetes cluster resources separate, changes in one repository don't affect the other.
+
+# In addition, the modularity makes the configuration more readable and helps to scope different permissions to each workspace.
+
+# If not, remember to destroy any resources created.
+
+# Run the destroy command and confirm with yes in the terminal.
+
+***************************************************************************************************************************
+
+% terraform destroy
+[
+random_pet.prefix: Refreshing state... [id=suitable-mink]
+azurerm_resource_group.default: Refreshing state... [id=/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/suitable-mink-rg]
+azurerm_kubernetes_cluster.default: Refreshing state... [id=/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/suitable-mink-rg/providers/Microsoft.ContainerService/managedClusters/suitable-mink-aks]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # azurerm_kubernetes_cluster.default will be destroyed
+  - resource "azurerm_kubernetes_cluster" "default" {
+      - api_server_authorized_ip_ranges     = [] -> null
+      - custom_ca_trust_certificates_base64 = [] -> null
+      - dns_prefix                          = "suitable-mink-k8s" -> null
+      - enable_pod_security_policy          = false -> null
+      - fqdn                                = "suitable-mink-k8s-p9ml8nhm.hcp.westus2.azmk8s.io" -> null
+      - id                                  = "/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/suitable-mink-rg/providers/Microsoft.ContainerService/managedClusters/suitable-mink-aks" -> null
+      - image_cleaner_enabled               = false -> null
+      - image_cleaner_interval_hours        = 48 -> null
+      - kube_admin_config                   = (sensitive value) -> null
+      - kube_config                         = (sensitive value) -> null
+      - kube_config_raw                     = (sensitive value) -> null
+      - kubernetes_version                  = "1.28.3" -> null
+      - local_account_disabled              = false -> null
+      - location                            = "westus2" -> null
+      - name                                = "suitable-mink-aks" -> null
+      - node_resource_group                 = "MC_suitable-mink-rg_suitable-mink-aks_westus2" -> null
+      - node_resource_group_id              = "/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/MC_suitable-mink-rg_suitable-mink-aks_westus2" -> null
+      - oidc_issuer_enabled                 = false -> null
+      - portal_fqdn                         = "suitable-mink-k8s-p9ml8nhm.portal.hcp.westus2.azmk8s.io" -> null
+      - private_cluster_enabled             = false -> null
+      - private_cluster_public_fqdn_enabled = false -> null
+      - public_network_access_enabled       = true -> null
+      - resource_group_name                 = "suitable-mink-rg" -> null
+      - role_based_access_control_enabled   = true -> null
+      - run_command_enabled                 = true -> null
+      - sku_tier                            = "Free" -> null
+      - tags                                = {
+          - "environment" = "Demo"
+        } -> null
+      - workload_identity_enabled           = false -> null
+
+      - default_node_pool {
+          - custom_ca_trust_enabled      = false -> null
+          - enable_auto_scaling          = false -> null
+          - enable_host_encryption       = false -> null
+          - enable_node_public_ip        = false -> null
+          - fips_enabled                 = false -> null
+          - kubelet_disk_type            = "OS" -> null
+          - max_count                    = 0 -> null
+          - max_pods                     = 110 -> null
+          - min_count                    = 0 -> null
+          - name                         = "default" -> null
+          - node_count                   = 2 -> null
+          - node_labels                  = {} -> null
+          - node_taints                  = [] -> null
+          - only_critical_addons_enabled = false -> null
+          - orchestrator_version         = "1.28.3" -> null
+          - os_disk_size_gb              = 30 -> null
+          - os_disk_type                 = "Managed" -> null
+          - os_sku                       = "Ubuntu" -> null
+          - scale_down_mode              = "Delete" -> null
+          - tags                         = {} -> null
+          - type                         = "VirtualMachineScaleSets" -> null
+          - ultra_ssd_enabled            = false -> null
+          - vm_size                      = "Standard_D2_v2" -> null
+          - zones                        = [] -> null
+
+          - upgrade_settings {
+              - max_surge = "10%" -> null
+            }
+        }
+
+      - network_profile {
+          - dns_service_ip    = "10.0.0.10" -> null
+          - ip_versions       = [
+              - "IPv4",
+            ] -> null
+          - load_balancer_sku = "standard" -> null
+          - network_plugin    = "kubenet" -> null
+          - outbound_type     = "loadBalancer" -> null
+          - pod_cidr          = "10.244.0.0/16" -> null
+          - pod_cidrs         = [
+              - "10.244.0.0/16",
+            ] -> null
+          - service_cidr      = "10.0.0.0/16" -> null
+          - service_cidrs     = [
+              - "10.0.0.0/16",
+            ] -> null
+
+          - load_balancer_profile {
+              - effective_outbound_ips      = [
+                  - "/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/MC_suitable-mink-rg_suitable-mink-aks_westus2/providers/Microsoft.Network/publicIPAddresses/16d9494f-cf25-4c2b-aa6d-596cb92ea78e",
+                ] -> null
+              - idle_timeout_in_minutes     = 0 -> null
+              - managed_outbound_ip_count   = 1 -> null
+              - managed_outbound_ipv6_count = 0 -> null
+              - outbound_ip_address_ids     = [] -> null
+              - outbound_ip_prefix_ids      = [] -> null
+              - outbound_ports_allocated    = 0 -> null
+            }
+        }
+
+      - service_principal {
+          - client_id     = "f54d811a-37c1-437b-ab20-be732aa97162" -> null
+          - client_secret = (sensitive value) -> null
+        }
+    }
+
+  # azurerm_resource_group.default will be destroyed
+  - resource "azurerm_resource_group" "default" {
+      - id       = "/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/suitable-mink-rg" -> null
+      - location = "westus2" -> null
+      - name     = "suitable-mink-rg" -> null
+      - tags     = {
+          - "environment" = "Demo"
+        } -> null
+    }
+
+  # random_pet.prefix will be destroyed
+  - resource "random_pet" "prefix" {
+      - id        = "suitable-mink" -> null
+      - length    = 2 -> null
+      - separator = "-" -> null
+    }
+
+Plan: 0 to add, 0 to change, 3 to destroy.
+
+Changes to Outputs:
+  - kubernetes_cluster_name = "suitable-mink-aks" -> null
+  - resource_group_name     = "suitable-mink-rg" -> null
+
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+azurerm_kubernetes_cluster.default: Destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/suitable-mink-rg/providers/Microsoft.ContainerService/managedClusters/suitable-mink-aks]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 10s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 20s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 30s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 40s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 50s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 1m0s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 1m10s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 1m20s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 1m30s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 1m40s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 1m50s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 2m0s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 2m10s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 2m20s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 2m30s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 2m40s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 2m50s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 3m0s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 3m10s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 3m20s elapsed]
+azurerm_kubernetes_cluster.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...vice/managedClusters/suitable-mink-aks, 3m30s elapsed]
+azurerm_kubernetes_cluster.default: Destruction complete after 3m37s
+azurerm_resource_group.default: Destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/suitable-mink-rg]
+azurerm_resource_group.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...4ef4d6/resourceGroups/suitable-mink-rg, 10s elapsed]
+azurerm_resource_group.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...4ef4d6/resourceGroups/suitable-mink-rg, 20s elapsed]
+azurerm_resource_group.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...4ef4d6/resourceGroups/suitable-mink-rg, 30s elapsed]
+azurerm_resource_group.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...4ef4d6/resourceGroups/suitable-mink-rg, 40s elapsed]
+azurerm_resource_group.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...4ef4d6/resourceGroups/suitable-mink-rg, 50s elapsed]
+azurerm_resource_group.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...4ef4d6/resourceGroups/suitable-mink-rg, 1m0s elapsed]
+azurerm_resource_group.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...4ef4d6/resourceGroups/suitable-mink-rg, 1m10s elapsed]
+azurerm_resource_group.default: Still destroying... [id=/subscriptions/50e273a7-4620-49f2-925b-...4ef4d6/resourceGroups/suitable-mink-rg, 1m20s elapsed]
+azurerm_resource_group.default: Destruction complete after 1m24s
+random_pet.prefix: Destroying... [id=suitable-mink]
+random_pet.prefix: Destruction complete after 0s
+
+Destroy complete! Resources: 3 destroyed.
+]
+
+===========================================================================================================================
+
+# Cleanup # $HOME
+
+===========================================================================================================================
+
+% ls ~/.terraform.d
+% rm -rf ~/.terraform.d
+
+
+% ls ~/.kube
+% rm -rf ~/.kube
+
+
+% ls ~/.azure
+% rm -rf ~/.azure
+
+===========================================================================================================================
+***************************************************************************************************************************
+
+# Azure Portal # Cleanup # Verification
+
+***************************************************************************************************************************
+===========================================================================================================================
+
+# Resource groups
+
+===========================================================================================================================
+
+https://portal.azure.com/#@<Azure>outlook.onmicrosoft.com/resource/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/NetworkWatcherRG/overview
+
+# Default Directory (<Azure>outlook.onmicrosoft.com)
+
+Name 			Type 		Location
+NetworkWatcher_westus2 	Network Watcher West US 2
+
+===========================================================================================================================
+
+# Resource JSON
+[
+NetworkWatcherRG
+
+Resource ID
+/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/NetworkWatcherRG
+
+API Versions
+2020-06-01
+
+{
+    "id": "/subscriptions/50e273a7-4620-49f2-925b-c60ad94ef4d6/resourceGroups/NetworkWatcherRG",
+    "name": "NetworkWatcherRG",
+    "type": "Microsoft.Resources/resourceGroups",
+    "location": "westus2",
+    "properties": {
+        "provisioningState": "Deleting"
+    }
+}
+]
+
+===========================================================================================================================
+
+Delete resource group
+
+The following resource group and all its dependent resources will be permanently deleted.
+
+Resource group to be deleted
+NetworkWatcherRG
+
+Dependent resources to be deleted (1)
+
+All dependent resources, including hidden types, are shown
+
+Name			Resource Type
+NetworkWatcher_westus2	Network Watcher
+
+Enter resource group name to confirm deletion
+NetworkWatcherRG
+
+Delete
+
+===========================================================================================================================
+***************************************************************************************************************************
+###########################################################################################################################

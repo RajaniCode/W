@@ -1,0 +1,28 @@
+Last login: Thu Jul 20 08:06:44 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % nvm --version
+0.39.3
+rajaniapple@Rajanis-MacBook-Pro ~ % arch  
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % node --version
+v16.13.2
+rajaniapple@Rajanis-MacBook-Pro ~ % npm --version
+9.8.1
+rajaniapple@Rajanis-MacBook-Pro ~ % nvm ls
+
+->       system
+iojs -> N/A (default)
+node -> stable (-> N/A) (default)
+unstable -> N/A (default)
+rajaniapple@Rajanis-MacBook-Pro ~ % nvm install v18.17.0
+Downloading and installing node v18.17.0...
+Downloading https://nodejs.org/dist/v18.17.0/node-v18.17.0-darwin-arm64.tar.xz...
+######################################################################################################################################################### 100.0%
+Computing checksum with shasum -a 256
+Checksums matched!
+Now using node v18.17.0 (npm v9.6.7)
+Creating default alias: default -> v18.17.0
+rajaniapple@Rajanis-MacBook-Pro ~ % node --version
+v18.17.0
+rajaniapple@Rajanis-MacBook-Pro ~ % npm --version
+9.6.7
+rajaniapple@Rajanis-MacBook-Pro ~ % 

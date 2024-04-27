@@ -1,0 +1,127 @@
+Last login: Tue Oct 24 09:47:28 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % arch
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % docker version
+Client:
+ Cloud integration: v1.0.35+desktop.5
+ Version:           24.0.6
+ API version:       1.43
+ Go version:        go1.20.7
+ Git commit:        ed223bc
+ Built:             Mon Sep  4 12:28:49 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.24.0 (122432)
+ Engine:
+  Version:          24.0.6
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.7
+  Git commit:       1a79695
+  Built:            Mon Sep  4 12:31:36 2023
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.22
+  GitCommit:        8165feabfdfe38c65b599c4993d227328c231fca
+ runc:
+  Version:          1.1.8
+  GitCommit:        v1.1.8-0-g82f18fe
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro ~ % kubectl version --output=yaml
+clientVersion:
+  buildDate: "2023-09-13T09:29:06Z"
+  compiler: gc
+  gitCommit: 89a4ea3e1e4ddd7f7572286090359983e0387b2f
+  gitTreeState: clean
+  gitVersion: v1.28.2
+  goVersion: go1.20.8
+  major: "1"
+  minor: "28"
+  platform: darwin/arm64
+kustomizeVersion: v5.0.4-0.20230601165947-6ce0bf390ce3
+
+The connection to the server 127.0.0.1:50285 was refused - did you specify the right host or port?
+rajaniapple@Rajanis-MacBook-Pro ~ % kubectl config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /Users/rajaniapple/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Tue, 24 Oct 2023 09:44:20 IST
+        provider: minikube.sigs.k8s.io
+        version: v1.31.2
+      name: cluster_info
+    server: https://127.0.0.1:50285
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Tue, 24 Oct 2023 09:44:20 IST
+        provider: minikube.sigs.k8s.io
+        version: v1.31.2
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /Users/rajaniapple/.minikube/profiles/minikube/client.crt
+    client-key: /Users/rajaniapple/.minikube/profiles/minikube/client.key
+rajaniapple@Rajanis-MacBook-Pro ~ % minikube version
+minikube version: v1.31.2
+commit: fd7ecd9c4599bef9f04c0986c4a0187f98a4396e
+rajaniapple@Rajanis-MacBook-Pro ~ % minikube start
+😄  minikube v1.31.2 on Darwin 14.0 (arm64)
+✨  Using the docker driver based on existing profile
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+🤷  docker "minikube" container is missing, will recreate.
+🔥  Creating docker container (CPUs=2, Memory=3885MB) ...
+🐳  Preparing Kubernetes v1.27.4 on Docker 24.0.4 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image docker.io/kubernetesui/dashboard:v2.7.0
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+    ▪ Using image docker.io/kubernetesui/metrics-scraper:v1.0.8
+💡  Some dashboard features require the metrics-server addon. To enable all features please run:
+
+	minikube addons enable metrics-server	
+
+
+🌟  Enabled addons: storage-provisioner, default-storageclass, dashboard
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+rajaniapple@Rajanis-MacBook-Pro ~ % kubectl create deployment hello-minikube --image=kicbase/echo-server:1.0
+deployment.apps/hello-minikube created
+rajaniapple@Rajanis-MacBook-Pro ~ % kubectl expose deployment hello-minikube --type=NodePort --port=8080
+service/hello-minikube exposed
+rajaniapple@Rajanis-MacBook-Pro ~ % kubectl get services hello-minikube
+NAME             TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+hello-minikube   NodePort   10.102.222.144   <none>        8080:31631/TCP   10s
+rajaniapple@Rajanis-MacBook-Pro ~ % minikube service hello-minikube
+|-----------|----------------|-------------|---------------------------|
+| NAMESPACE |      NAME      | TARGET PORT |            URL            |
+|-----------|----------------|-------------|---------------------------|
+| default   | hello-minikube |        8080 | http://192.168.49.2:31631 |
+|-----------|----------------|-------------|---------------------------|
+🏃  Starting tunnel for service hello-minikube.
+|-----------|----------------|-------------|------------------------|
+| NAMESPACE |      NAME      | TARGET PORT |          URL           |
+|-----------|----------------|-------------|------------------------|
+| default   | hello-minikube |             | http://127.0.0.1:50470 |
+|-----------|----------------|-------------|------------------------|
+🎉  Opening service default/hello-minikube in default browser...
+❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+

@@ -1,0 +1,251 @@
+Last login: Wed Oct 11 16:20:43 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % arch                                                                          
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % pwd                          
+/Users/rajaniapple
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Technology/Kubernetes/Proof-of-Concept/minikube 
+rajaniapple@Rajanis-MacBook-Pro minikube % pwd                                                                           
+/Users/rajaniapple/Desktop/Technology/Kubernetes/Proof-of-Concept/minikube
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl version --output=yaml                                                 
+clientVersion:
+  buildDate: "2023-09-13T09:29:06Z"
+  compiler: gc
+  gitCommit: 89a4ea3e1e4ddd7f7572286090359983e0387b2f
+  gitTreeState: clean
+  gitVersion: v1.28.2
+  goVersion: go1.20.8
+  major: "1"
+  minor: "28"
+  platform: darwin/arm64
+kustomizeVersion: v5.0.4-0.20230601165947-6ce0bf390ce3
+serverVersion:
+  buildDate: "2023-07-19T12:14:49Z"
+  compiler: gc
+  gitCommit: fa3d7990104d7c1f16943a67f11b154b71f6a132
+  gitTreeState: clean
+  gitVersion: v1.27.4
+  goVersion: go1.20.6
+  major: "1"
+  minor: "27"
+  platform: linux/arm64
+
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube version                                                              
+minikube version: v1.31.2
+commit: fd7ecd9c4599bef9f04c0986c4a0187f98a4396e
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl create deployment hello-node --image=registry.k8s.io/e2e-test-images/agnhost:2.39 -- /agnhost netexec --http-port=8080
+deployment.apps/hello-node created
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get po -A
+NAMESPACE              NAME                                         READY   STATUS      RESTARTS        AGE
+default                hello-node-7579565d66-nnb2m                  1/1     Running     0               13s
+ingress-nginx          ingress-nginx-admission-create-gvvxt         0/1     Completed   0               8m2s
+ingress-nginx          ingress-nginx-admission-patch-9kcpz          0/1     Completed   0               8m2s
+ingress-nginx          ingress-nginx-controller-7799c6795f-4ckbr    1/1     Running     1 (4m44s ago)   8m1s
+kube-system            coredns-5d78c9869d-kt8v8                     1/1     Running     1 (4m49s ago)   8m1s
+kube-system            etcd-minikube                                1/1     Running     1 (4m54s ago)   8m14s
+kube-system            kube-apiserver-minikube                      1/1     Running     1 (4m44s ago)   8m14s
+kube-system            kube-controller-manager-minikube             1/1     Running     1 (4m54s ago)   8m14s
+kube-system            kube-proxy-l4252                             1/1     Running     1 (4m54s ago)   8m1s
+kube-system            kube-scheduler-minikube                      1/1     Running     1 (4m54s ago)   8m14s
+kube-system            storage-provisioner                          1/1     Running     3 (4m37s ago)   8m13s
+kubernetes-dashboard   dashboard-metrics-scraper-5dd9cbfd69-jkxpk   1/1     Running     0               2m47s
+kubernetes-dashboard   kubernetes-dashboard-5c5cfc8747-nkk2q        1/1     Running     0               2m47s
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube kubectl -- get po -A
+    > kubectl.sha256:  64 B / 64 B [-------------------------] 100.00% ? p/s 0s
+    > kubectl:  52.10 MiB / 52.10 MiB [--------------] 100.00% 1.23 MiB p/s 43s
+NAMESPACE              NAME                                         READY   STATUS      RESTARTS        AGE
+default                hello-node-7579565d66-nnb2m                  1/1     Running     0               91s
+ingress-nginx          ingress-nginx-admission-create-gvvxt         0/1     Completed   0               9m20s
+ingress-nginx          ingress-nginx-admission-patch-9kcpz          0/1     Completed   0               9m20s
+ingress-nginx          ingress-nginx-controller-7799c6795f-4ckbr    1/1     Running     1 (6m2s ago)    9m19s
+kube-system            coredns-5d78c9869d-kt8v8                     1/1     Running     1 (6m7s ago)    9m19s
+kube-system            etcd-minikube                                1/1     Running     1 (6m12s ago)   9m32s
+kube-system            kube-apiserver-minikube                      1/1     Running     1 (6m2s ago)    9m32s
+kube-system            kube-controller-manager-minikube             1/1     Running     1 (6m12s ago)   9m32s
+kube-system            kube-proxy-l4252                             1/1     Running     1 (6m12s ago)   9m19s
+kube-system            kube-scheduler-minikube                      1/1     Running     1 (6m12s ago)   9m32s
+kube-system            storage-provisioner                          1/1     Running     3 (5m55s ago)   9m31s
+kubernetes-dashboard   dashboard-metrics-scraper-5dd9cbfd69-jkxpk   1/1     Running     0               4m5s
+kubernetes-dashboard   kubernetes-dashboard-5c5cfc8747-nkk2q        1/1     Running     0               4m5s
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get deployments
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+hello-node   1/1     1            1           2m34s
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get pods
+NAME                          READY   STATUS    RESTARTS   AGE
+hello-node-7579565d66-nnb2m   1/1     Running   0          2m43s
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get events
+LAST SEEN   TYPE     REASON                    OBJECT                             MESSAGE
+11m         Normal   Scheduled                 pod/hello-node-7579565d66-nnb2m    Successfully assigned default/hello-node-7579565d66-nnb2m to minikube
+11m         Normal   Pulling                   pod/hello-node-7579565d66-nnb2m    Pulling image "registry.k8s.io/e2e-test-images/agnhost:2.39"
+11m         Normal   Pulled                    pod/hello-node-7579565d66-nnb2m    Successfully pulled image "registry.k8s.io/e2e-test-images/agnhost:2.39" in 11.572541338s (11.57255463s including waiting)
+11m         Normal   Created                   pod/hello-node-7579565d66-nnb2m    Created container agnhost
+11m         Normal   Started                   pod/hello-node-7579565d66-nnb2m    Started container agnhost
+11m         Normal   SuccessfulCreate          replicaset/hello-node-7579565d66   Created pod: hello-node-7579565d66-nnb2m
+11m         Normal   ScalingReplicaSet         deployment/hello-node              Scaled up replica set hello-node-7579565d66 to 1
+19m         Normal   NodeHasSufficientMemory   node/minikube                      Node minikube status is now: NodeHasSufficientMemory
+19m         Normal   NodeHasNoDiskPressure     node/minikube                      Node minikube status is now: NodeHasNoDiskPressure
+19m         Normal   NodeHasSufficientPID      node/minikube                      Node minikube status is now: NodeHasSufficientPID
+19m         Normal   NodeAllocatableEnforced   node/minikube                      Updated Node Allocatable limit across pods
+19m         Normal   Starting                  node/minikube                      Starting kubelet.
+19m         Normal   NodeAllocatableEnforced   node/minikube                      Updated Node Allocatable limit across pods
+19m         Normal   NodeHasSufficientMemory   node/minikube                      Node minikube status is now: NodeHasSufficientMemory
+19m         Normal   NodeHasNoDiskPressure     node/minikube                      Node minikube status is now: NodeHasNoDiskPressure
+19m         Normal   NodeHasSufficientPID      node/minikube                      Node minikube status is now: NodeHasSufficientPID
+19m         Normal   RegisteredNode            node/minikube                      Node minikube event: Registered Node minikube in Controller
+19m         Normal   Starting                  node/minikube                      
+15m         Normal   Starting                  node/minikube                      
+15m         Normal   RegisteredNode            node/minikube                      Node minikube event: Registered Node minikube in Controller
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get all
+NAME                              READY   STATUS    RESTARTS   AGE
+pod/hello-node-7579565d66-nnb2m   1/1     Running   0          11m
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   19m
+
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello-node   1/1     1            1           11m
+
+NAME                                    DESIRED   CURRENT   READY   AGE
+replicaset.apps/hello-node-7579565d66   1         1         1       11m
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /Users/rajaniapple/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Wed, 11 Oct 2023 16:21:43 IST
+        provider: minikube.sigs.k8s.io
+        version: v1.31.2
+      name: cluster_info
+    server: https://127.0.0.1:49997
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Wed, 11 Oct 2023 16:21:43 IST
+        provider: minikube.sigs.k8s.io
+        version: v1.31.2
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /Users/rajaniapple/.minikube/profiles/minikube/client.crt
+    client-key: /Users/rajaniapple/.minikube/profiles/minikube/client.key
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl logs hello-node-7579565d66-nnb2m
+I1011 10:56:15.486423       1 log.go:195] Started HTTP server on port 8080
+I1011 10:56:15.486533       1 log.go:195] Started UDP server on port  8081
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl cluster-info
+Kubernetes control plane is running at https://127.0.0.1:49997
+CoreDNS is running at https://127.0.0.1:49997/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get nodes -o wide
+NAME       STATUS   ROLES           AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION    CONTAINER-RUNTIME
+minikube   Ready    control-plane   57m   v1.27.4   192.168.49.2   <none>        Ubuntu 22.04.2 LTS   6.4.16-linuxkit   docker://24.0.4
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+service/hello-node exposed
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get services -o wide
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE   SELECTOR
+hello-node   LoadBalancer   10.111.115.77   <pending>     8080:32125/TCP   21m   app=hello-node
+kubernetes   ClusterIP      10.96.0.1       <none>        443/TCP          80m   <none>
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube service hello-node
+|-----------|------------|-------------|---------------------------|
+| NAMESPACE |    NAME    | TARGET PORT |            URL            |
+|-----------|------------|-------------|---------------------------|
+| default   | hello-node |        8080 | http://192.168.49.2:32125 |
+|-----------|------------|-------------|---------------------------|
+🏃  Starting tunnel for service hello-node.
+|-----------|------------|-------------|------------------------|
+| NAMESPACE |    NAME    | TARGET PORT |          URL           |
+|-----------|------------|-------------|------------------------|
+| default   | hello-node |             | http://127.0.0.1:50321 |
+|-----------|------------|-------------|------------------------|
+🎉  Opening service default/hello-node in default browser...
+❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+^C✋  Stopping tunnel for service hello-node.
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube addons list
+|-----------------------------|----------|--------------|--------------------------------|
+|         ADDON NAME          | PROFILE  |    STATUS    |           MAINTAINER           |
+|-----------------------------|----------|--------------|--------------------------------|
+| ambassador                  | minikube | disabled     | 3rd party (Ambassador)         |
+| auto-pause                  | minikube | disabled     | minikube                       |
+| cloud-spanner               | minikube | disabled     | Google                         |
+| csi-hostpath-driver         | minikube | disabled     | Kubernetes                     |
+| dashboard                   | minikube | enabled ✅   | Kubernetes                     |
+| default-storageclass        | minikube | enabled ✅   | Kubernetes                     |
+| efk                         | minikube | disabled     | 3rd party (Elastic)            |
+| freshpod                    | minikube | disabled     | Google                         |
+| gcp-auth                    | minikube | disabled     | Google                         |
+| gvisor                      | minikube | disabled     | minikube                       |
+| headlamp                    | minikube | disabled     | 3rd party (kinvolk.io)         |
+| helm-tiller                 | minikube | disabled     | 3rd party (Helm)               |
+| inaccel                     | minikube | disabled     | 3rd party (InAccel             |
+|                             |          |              | [info@inaccel.com])            |
+| ingress                     | minikube | enabled ✅   | Kubernetes                     |
+| ingress-dns                 | minikube | disabled     | minikube                       |
+| inspektor-gadget            | minikube | disabled     | 3rd party                      |
+|                             |          |              | (inspektor-gadget.io)          |
+| istio                       | minikube | disabled     | 3rd party (Istio)              |
+| istio-provisioner           | minikube | disabled     | 3rd party (Istio)              |
+| kong                        | minikube | disabled     | 3rd party (Kong HQ)            |
+| kubevirt                    | minikube | disabled     | 3rd party (KubeVirt)           |
+| logviewer                   | minikube | disabled     | 3rd party (unknown)            |
+| metallb                     | minikube | disabled     | 3rd party (MetalLB)            |
+| metrics-server              | minikube | disabled     | Kubernetes                     |
+| nvidia-driver-installer     | minikube | disabled     | 3rd party (Nvidia)             |
+| nvidia-gpu-device-plugin    | minikube | disabled     | 3rd party (Nvidia)             |
+| olm                         | minikube | disabled     | 3rd party (Operator Framework) |
+| pod-security-policy         | minikube | disabled     | 3rd party (unknown)            |
+| portainer                   | minikube | disabled     | 3rd party (Portainer.io)       |
+| registry                    | minikube | disabled     | minikube                       |
+| registry-aliases            | minikube | disabled     | 3rd party (unknown)            |
+| registry-creds              | minikube | disabled     | 3rd party (UPMC Enterprises)   |
+| storage-provisioner         | minikube | enabled ✅   | minikube                       |
+| storage-provisioner-gluster | minikube | disabled     | 3rd party (Gluster)            |
+| volumesnapshots             | minikube | disabled     | Kubernetes                     |
+|-----------------------------|----------|--------------|--------------------------------|
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube addons enable metrics-server
+💡  metrics-server is an addon maintained by Kubernetes. For any concerns contact minikube on GitHub.
+You can view the list of minikube maintainers at: https://github.com/kubernetes/minikube/blob/master/OWNERS
+    ▪ Using image registry.k8s.io/metrics-server/metrics-server:v0.6.4
+🌟  The 'metrics-server' addon is enabled
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get pod,svc -n kube-system   
+NAME                                   READY   STATUS    RESTARTS      AGE
+pod/coredns-5d78c9869d-kt8v8           1/1     Running   1 (97m ago)   100m
+pod/etcd-minikube                      1/1     Running   1 (97m ago)   100m
+pod/kube-apiserver-minikube            1/1     Running   1 (96m ago)   100m
+pod/kube-controller-manager-minikube   1/1     Running   1 (97m ago)   100m
+pod/kube-proxy-l4252                   1/1     Running   1 (97m ago)   100m
+pod/kube-scheduler-minikube            1/1     Running   1 (97m ago)   100m
+pod/metrics-server-7746886d4f-zkts7    1/1     Running   0             11m
+pod/storage-provisioner                1/1     Running   3 (96m ago)   100m
+
+NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                  AGE
+service/kube-dns         ClusterIP   10.96.0.10     <none>        53/UDP,53/TCP,9153/TCP   100m
+service/metrics-server   ClusterIP   10.103.2.220   <none>        443/TCP                  11m
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get events
+No resources found in default namespace.
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube addons disable metrics-server
+🌑  "The 'metrics-server' addon is disabled
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl delete service hello-node
+service "hello-node" deleted
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl delete deployment hello-node
+deployment.apps "hello-node" deleted
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube stop
+✋  Stopping node "minikube"  ...
+🛑  Powering off "minikube" via SSH ...
+🛑  1 node stopped.
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube delete
+🔥  Deleting "minikube" in docker ...
+🔥  Deleting container "minikube" ...
+🔥  Removing /Users/rajaniapple/.minikube/machines/minikube ...
+💀  Removed all traces of the "minikube" cluster.
+rajaniapple@Rajanis-MacBook-Pro minikube % 

@@ -1,0 +1,572 @@
+% docker --version
+
+% docker version
+
+% docker info
+
+
+# The connection to the server 127.0.0.1:49400 was refused - did you specify the right host or port? # % minikube start
+# % kubectl version --output=yaml
+# % kubectl version
+
+
+% minikube version
+
+
+
+
+## Create a minikube cluster
+% minikube start
+
+
+% minikube ip
+
+
+% minikube profile list
+
+
+# profile # minikube
+% minikube service list -p minikube
+
+
+% minikube addons list
+
+
+% kubectl version
+
+
+% kubectl config view
+
+
+# Open the Dashboard
+# Start a new terminal, and leave this running
+% minikube dashboard --url
+# http://127.0.0.1:49392/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/
+# Switch to the original terminal window
+
+
+# NB
+[
+% kubectl cluster-info
+
+
+# namespaces/namespace/ns
+% kubectl get namespaces -o wide
+
+
+# nodes/node
+% kubectl get nodes -o wide
+
+
+# services/service/svc
+% kubectl get services -o wide
+
+
+# endpoints/ep
+% kubectl get endpoints -o wide
+
+
+# events/event
+% kubectl get events -o wide
+# node
+% kubectl get events --field-selector involvedObject.kind=Node
+
+
+# pods # services # deployments # replicasets
+% kubectl get all -o wide
+]
+
+
+
+
+## Create Deployment
+% kubectl create deployment hello-node --image=registry.k8s.io/e2e-test-images/agnhost:2.39 -- /agnhost netexec --http-port=8080
+
+# NB
+[
+% kubectl cluster-info
+
+
+# namespaces/namespace/ns
+% kubectl get namespaces -o wide
+
+
+# nodes/node/no
+% kubectl get nodes -o wide
+
+
+# services/service/svc
+% kubectl get services -o wide
+
+
+# events/event/ev
+% kubectl get events -o wide
+# node
+% kubectl get events --field-selector involvedObject.kind=Node
+
+
+# endpoints/ep
+% kubectl get endpoints
+% kubectl get endpoints -o wide
+% kubectl get endpoints -n default
+% kubectl get endpoints --all-namespaces
+
+
+# pods # services # deployments # replicasets
+% kubectl get all -o wide
+
+
+# deployments/deployment/deploy
+% kubectl get deployments -o wide
+# deployment # rollout status # deployment.apps/hello-node
+% kubectl rollout status deployment.apps/hello-node
+
+
+# pods/pod/po
+% kubectl get pods -o wide
+% kubectl get pods --watch
+# pod # app=hello-node
+% kubectl get pods -l app=hello-node
+# containers
+% kubectl get pods hello-node-7579565d66-2ck97 -o jsonpath='{.spec.containers[*].name}'
+# app # hello-node
+% kubectl get pods -o jsonpath="{.items[*].spec.containers[*].image}" -l app=hello-node
+# STATUS # Running
+% kubectl get pods --field-selector status.phase=Running
+% kubectl get pods --field-selector status.phase!=Running
+
+
+# events/event/ev
+# Pod
+% kubectl get events --field-selector involvedObject.kind=Pod -o wide
+# Deployment
+% kubectl get events --field-selector involvedObject.kind=Deployment -o wide
+
+
+# log
+# pod # hello-node-7579565d66-2ck97
+# container # agnhost
+% kubectl logs hello-node-7579565d66-2ck97 -c agnhost
+
+
+# replicasets/replicaset/rs
+% kubectl get replicasets -o wide
+
+
+# storageclasses/storageclass/sc
+% kubectl get storageclasses -o wide
+
+
+# ingresses/ingress/ing
+% kubectl get ingresses -o wide
+
+
+% kubectl get nodes,services,deployments,pods,replicasets,storageclasses,ingresses -o wide
+]
+
+
+
+
+## Create Service 
+
+# NodePort #
+% kubectl expose deployment hello-node --type=NodePort --port=8080
+
+# get # service # hello-node # EXTERNAL-IP # <none> #
+% kubectl get services hello-node
+
+# access # service # hello-node
+% minikube service hello-node
+[
+Stop the tunnel for service hello-node (control + c)
+]
+
+# delete # service # hello-node
+% kubectl delete services hello-node
+[
+# get # service # hello-node
+% kubectl get services hello-node
+]
+
+# port forward
+% kubectl expose deployment hello-node --type=NodePort --port=8080
+% kubectl port-forward service/hello-node 7080:8080
+[
+# http://localhost:7080/
+]
+
+# delete # service # hello-node
+% kubectl delete services hello-node
+[
+# get # service # hello-node
+% kubectl get services hello-node
+]
+
+# LoadBalancer #
+% kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+
+# get # service # hello-node # EXTERNAL-IP # <pending> #
+% kubectl get services hello-node
+
+# access # service # hello-node
+% minikube service hello-node
+[
+Stop the tunnel for service hello-node (control + c)
+]
+
+# delete # service # hello-node
+% kubectl delete services hello-node
+[
+# get # service # hello-node
+% kubectl get services hello-node
+]
+
+
+# Ingress #
+% minikube addons list
+% minikube addons enable ingress
+[
+% minikube addons disable ingress
+]
+
+% curl -L https://storage.googleapis.com/minikube-site-examples/ingress-example.yaml
+% wget https://storage.googleapis.com/minikube-site-examples/ingress-example.yaml
+% cat ingress-example.yaml
+
+% kubectl apply -f ingress-example.yaml
+[
+% kubectl delete -f ingress-example.yaml
+]
+
+# Wait for ingress address
+# ingress # example-ingress # HOSTS # * # ADDRESS # 192.168.49.2 #
+% kubectl get ingresses example-ingress
+
+# In another terminal window, start the tunnel to create a routable IP
+% sudo minikube tunnel
+
+# Switch to the original terminal window
+% curl http://127.0.0.1:80/foo
+% open http://127.0.0.1:80/foo
+% curl http://127.0.0.1:80/bar
+% open http://127.0.0.1:80/bar
+
+[
+# get # service # foo-service # EXTERNAL-IP # <none> #
+% kubectl get services foo-service
+# get # service # bar-service # EXTERNAL-IP # <none> #
+% kubectl get services bar-service
+
+% minikube service foo-service
+% minikube service bar-service
+]
+
+
+
+# NB # options # -n/--namespace # -o/--output # -c/--container # -w/--watch
+[
+% kubectl cluster-info
+
+
+# namespaces/namespace/ns
+% kubectl get namespaces
+% kubectl get namespaces -o wide
+% kubectl describe namespaces 
+# namespace # default
+% kubectl describe namespaces default
+# kube-system
+% kubectl describe namespaces kube-system
+
+
+# nodes/node/no
+% kubectl get nodes
+% kubectl get nodes -o wide
+% kubectl get nodes -n default
+% kubectl get nodes --all-namespaces
+# node # minikube
+% kubectl get nodes minikube
+% kubectl describe nodes minikube
+# node # status # minikube
+% minikube status -p minikube
+
+
+# services/service/svc
+% kubectl get services
+% kubectl get services -o wide
+% kubectl get services -n default
+% kubectl get services --all-namespaces
+# service # kubernetes
+% kubectl get services kubernetes
+% kubectl describe services kubernetes
+
+
+# events/event/ev
+% kubectl get events
+% kubectl get events -o wide
+% kubectl get events -n default
+% kubectl get events --all-namespaces
+# node
+% kubectl get events --field-selector involvedObject.kind=Node
+# node # minikube
+% kubectl get events minikube
+% kubectl describe events minikube
+
+
+# endpoints/ep
+% kubectl get endpoints
+% kubectl get endpoints -o wide
+% kubectl get endpoints -n default
+% kubectl get endpoints --all-namespaces
+ 
+
+# pods # services # deployments # replicasets
+% kubectl get all 
+% kubectl get all -o wide
+% kubectl get all -n default
+% kubectl get all --all-namespaces
+
+
+# deployments/deployment/deploy
+% kubectl get deployments
+% kubectl get deployments -o wide
+% kubectl get deployments -n default
+% kubectl get deployments --all-namespaces
+# deployment # hello-node
+% kubectl get deployments hello-node
+% kubectl describe deployments hello-node
+# deployment # rollout status # deployment.apps/hello-node
+% kubectl rollout status deployment.apps/hello-node
+
+
+# pods/pod/po
+% kubectl get pods
+% kubectl get pods -o wide
+% kubectl get pods -n default
+% kubectl get pods --all-namespaces
+% kubectl get pods --watch
+% kubectl get po -A -o wide
+# minikube # kubectl
+% minikube kubectl -- get pods -A -o wide
+# pod # app=hello-node
+% kubectl get pods -l app=hello-node
+# pod # hello-node-7579565d66-2ck97
+% kubectl get pods hello-node-7579565d66-2ck97
+% kubectl describe pods hello-node-7579565d66-2ck97
+# containers
+% kubectl get pods hello-node-7579565d66-2ck97 -o jsonpath='{.spec.containers[*].name}'
+# app # hello-node
+% kubectl get pods -o jsonpath="{.items[*].spec.containers[*].image}" -l app=hello-node
+# STATUS # Running
+% kubectl get pods --field-selector status.phase=Running
+% kubectl get pods --field-selector status.phase!=Running
+
+
+# events/event/ev
+# Pod
+% kubectl get events --field-selector involvedObject.kind=Pod
+% kubectl get events --field-selector involvedObject.kind=Pod -o wide
+% kubectl get events --field-selector involvedObject.kind=Pod -n default
+% kubectl get events --field-selector involvedObject.kind=Pod --all-namespaces
+# Deployment
+% kubectl get events --field-selector involvedObject.kind=Deployment
+% kubectl get events --field-selector involvedObject.kind=Deployment -o wide
+% kubectl get events --field-selector involvedObject.kind=Deployment -n default
+% kubectl get events --field-selector involvedObject.kind=Deployment --all-namespaces
+
+
+# log
+# pod # hello-node-7579565d66-2ck97
+# container # agnhost
+% kubectl logs hello-node-7579565d66-2ck97 -c agnhost
+# all containers # true # default
+% kubectl logs hello-node-7579565d66-2ck97 --all-containers=true
+
+
+# replicasets/replicaset/rs
+% kubectl get replicasets
+% kubectl get replicasets -o wide
+% kubectl get replicasets -n default
+% kubectl get replicasets --all-namespaces
+# replicaset # hello-node-7579565d66
+% kubectl get replicasets hello-node-7579565d66
+% kubectl describe replicasets hello-node-7579565d66
+
+
+# persistentvolumeclaims/persistentvolumeclaim/pvc
+% kubectl get persistentvolumeclaims
+% kubectl get persistentvolumeclaims -o wide
+% kubectl get persistentvolumeclaims -n default
+% kubectl get persistentvolumeclaims --all-namespaces
+# VOLUME # mongo-pvc
+% kubectl get persistentvolumeclaims mongo-pvc
+% kubectl describe persistentvolumeclaims mongo-pvc
+
+
+# storageclasses/storageclass/sc
+% kubectl get storageclasses
+% kubectl get storageclasses -o wide
+% kubectl get storageclasses -n default
+% kubectl get storageclasses --all-namespaces
+# gp2
+% kubectl get storageclasses gp2
+% kubectl describe storageclasses gp2
+
+
+# ingresses/ingress/ing
+% kubectl get ingresses
+% kubectl get ingresses -o wide
+% kubectl get ingresses -n default
+% kubectl get ingresses --all-namespaces
+
+
+% kubectl get nodes,services,deployments,pods,replicasets,storageclasses,ingresses
+% kubectl get nodes,services,deployments,pods,replicasets,storageclasses,ingresses -o wide
+% kubectl get nodes,services,deployments,pods,replicasets,storageclasses,ingresses -n default
+% kubectl get nodes,services,deployments,pods,replicasets,storageclasses,ingresses --all-namespaces
+
+
+% minikube addons list
+# minikube addons # ingress # enable
+% minikube addons enable ingress
+# minikube addons # ingress # disable
+% minikube addons disable ingress
+
+
+# In another terminal window, start the tunnel to create a routable IP
+% sudo minikube tunnel
+]
+
+
+
+
+## Clean up
+% kubectl get all
+
+# delete # pod  # hello-node-7579565d66-tg9wt
+% kubectl delete pod hello-node-7579565d66-tg9wt
+
+# delete # service # hello-node
+% kubectl delete service hello-node
+
+# delete # deployment # hello-node
+% kubectl delete deployment hello-node
+
+
+% minikube image ls
+% minikube image ls --format table
+# image # <name>
+% minikube image rm <name>
+
+# Stop the Minikube cluster
+% minikube stop
+
+# Delete the Minikube VM
+% minikube delete
+[
+# minikube delete all profiles
+% minikube delete --all
+]
+
+
+% docker --version
+
+% docker version
+
+% docker info
+
+
+% docker context list
+
+% docker context show 
+
+% docker context inspect default
+
+# Remove # context
+# desktop-linux
+# % docker context rm desktop-linux --force
+# colima
+# % docker context rm colima
+
+
+% docker ps
+
+% docker ps --all
+
+% docker ps --all --format "table"
+
+% docker ps --all --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+
+% docker ps --all --quiet
+% docker stop $(sudo docker ps -a -q)
+% docker rm $(sudo docker ps -a -q) --force
+
+
+% docker container list
+
+# Remove # container
+# % docker rm <CONTAINER ID>
+
+% docker container list --all
+
+% docker container list --all --format "table"
+
+% docker container list --all --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+
+% docker container list -all --filter status=exited --filter status=created
+
+% docker container list --all --quiet
+% docker stop $(sudo docker container list -a -q)
+% docker rm $(sudo docker container list -a -q) --force
+
+% docker container prune
+
+
+% docker image list
+
+# Remove # image
+# % docker rmi <IMAGE ID>
+
+% sudo docker image list --all --quiet
+% sudo docker rmi $(sudo docker image list -a -q) --force 
+
+% docker image prune
+% docker image prune --all
+
+
+% docker volume list 
+
+% docker volume list --quiet
+% docker volume rm $(sudo docker volume list --quiet) --force
+
+% docker volume prune
+% docker volume prune --all
+
+
+% docker network list
+[
+# network # mongodb
+% docker network create mongodb
+% docker network rm mongodb
+]
+
+% docker network list --quiet --filter "type=custom"
+% docker network rm $(sudo docker network list --quiet --filter "type=custom")
+
+% docker network prune
+
+
+% docker system info
+
+% docker system prune
+% docker system prune --volumes
+% docker system prune --all
+% docker system prune --volumes --all
+
+
+# Remove folders # .docker # .minikube # .kube
+# % ls ~/.docker
+# % rm -rf ~/.docker
+% ls ~/.minikube
+% rm -rf ~/.minikube
+% ls ~/.kube
+% rm -rf ~/.kube

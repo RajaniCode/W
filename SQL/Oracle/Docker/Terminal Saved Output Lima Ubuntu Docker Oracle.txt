@@ -1,0 +1,781 @@
+Last login: Sat Nov 11 20:13:00 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % sw_vers       
+ProductName:		macOS
+ProductVersion:		14.0
+BuildVersion:		23A344
+rajaniapple@Rajanis-MacBook-Pro ~ % arch                            
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % lima --version
+limactl version 0.18.0
+rajaniapple@Rajanis-MacBook-Pro ~ % limactl --version
+limactl version 0.18.0
+rajaniapple@Rajanis-MacBook-Pro ~ % limactl start
+INFO[0000] Using the existing instance "default"        
+INFO[0000] Attempting to download the nerdctl archive    arch=x86_64 digest="sha256:37678f27ad341a7c568c5064f62bcbe90cddec56e65f5d684edf8ca955c3e6a4" location="https://github.com/containerd/nerdctl/releases/download/v1.6.2/nerdctl-full-1.6.2-linux-amd64.tar.gz"
+Downloading the nerdctl archive (nerdctl-full-1.6.2-linux-amd64.tar.gz)
+240.74 MiB / 240.74 MiB [-----------------------------------] 100.00% 2.33 MiB/s
+INFO[0106] Downloaded the nerdctl archive from "https://github.com/containerd/nerdctl/releases/download/v1.6.2/nerdctl-full-1.6.2-linux-amd64.tar.gz" 
+INFO[0107] [hostagent] hostagent socket created at /Users/rajaniapple/.lima/default/ha.sock 
+INFO[0107] [hostagent] Starting QEMU (hint: to watch the boot progress, see "/Users/rajaniapple/.lima/default/serial*.log") 
+INFO[0107] SSH Local Port: 60022                        
+INFO[0107] [hostagent] Waiting for the essential requirement 1 of 5: "ssh" 
+INFO[0117] [hostagent] Waiting for the essential requirement 1 of 5: "ssh" 
+INFO[0145] [hostagent] Waiting for the essential requirement 1 of 5: "ssh" 
+INFO[0155] [hostagent] Waiting for the essential requirement 1 of 5: "ssh" 
+INFO[0165] [hostagent] Waiting for the essential requirement 1 of 5: "ssh" 
+INFO[0176] [hostagent] Waiting for the essential requirement 1 of 5: "ssh" 
+INFO[0186] [hostagent] Waiting for the essential requirement 1 of 5: "ssh" 
+INFO[0196] [hostagent] Waiting for the essential requirement 1 of 5: "ssh" 
+INFO[0206] [hostagent] Waiting for the essential requirement 1 of 5: "ssh" 
+INFO[0217] [hostagent] Waiting for the essential requirement 1 of 5: "ssh" 
+INFO[0227] [hostagent] Waiting for the essential requirement 1 of 5: "ssh" 
+INFO[0239] [hostagent] The essential requirement 1 of 5 is satisfied 
+INFO[0239] [hostagent] Waiting for the essential requirement 2 of 5: "user session is ready for ssh" 
+INFO[0239] [hostagent] The essential requirement 2 of 5 is satisfied 
+INFO[0239] [hostagent] Waiting for the essential requirement 3 of 5: "sshfs binary to be installed" 
+INFO[0279] [hostagent] Waiting for the essential requirement 3 of 5: "sshfs binary to be installed" 
+INFO[0279] [hostagent] The essential requirement 3 of 5 is satisfied 
+INFO[0279] [hostagent] Waiting for the essential requirement 4 of 5: "/etc/fuse.conf (/etc/fuse3.conf) to contain \"user_allow_other\"" 
+INFO[0279] [hostagent] The essential requirement 4 of 5 is satisfied 
+INFO[0279] [hostagent] Waiting for the essential requirement 5 of 5: "the guest agent to be running" 
+INFO[0279] [hostagent] The essential requirement 5 of 5 is satisfied 
+INFO[0279] [hostagent] Mounting "/Users/rajaniapple" on "/Users/rajaniapple" 
+INFO[0280] [hostagent] Mounting "/tmp/lima" on "/tmp/lima" 
+INFO[0280] [hostagent] Waiting for the optional requirement 1 of 2: "systemd must be available" 
+INFO[0280] [hostagent] Forwarding "/run/lima-guestagent.sock" (guest) to "/Users/rajaniapple/.lima/default/ga.sock" (host) 
+INFO[0280] [hostagent] The optional requirement 1 of 2 is satisfied 
+INFO[0280] [hostagent] Waiting for the optional requirement 2 of 2: "containerd binaries to be installed" 
+INFO[0280] [hostagent] Not forwarding TCP 127.0.0.53:53 
+INFO[0280] [hostagent] Not forwarding TCP 127.0.0.54:53 
+INFO[0280] [hostagent] Not forwarding TCP [::]:22       
+INFO[0301] [hostagent] The optional requirement 2 of 2 is satisfied 
+INFO[0301] [hostagent] Waiting for the final requirement 1 of 1: "boot scripts must have finished" 
+INFO[0326] [hostagent] The final requirement 1 of 1 is satisfied 
+INFO[0326] READY. Run `lima` to open the shell.         
+rajaniapple@Rajanis-MacBook-Pro ~ % lima
+rajaniapple@lima-default:/Users/rajaniapple$ ls
+Applications  Desktop  Documents  Downloads  Library  Movies  Music  Pictures  Projects  Public  eclipse  oradiag_rajaniapple  pgadmin4  rails-blog-app
+rajaniapple@lima-default:/Users/rajaniapple$ for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Package 'docker.io' is not installed, so not removed
+0 upgraded, 0 newly installed, 0 to remove and 20 not upgraded.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Package 'docker-doc' is not installed, so not removed
+0 upgraded, 0 newly installed, 0 to remove and 20 not upgraded.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Package 'docker-compose' is not installed, so not removed
+0 upgraded, 0 newly installed, 0 to remove and 20 not upgraded.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Package 'docker-compose-v2' is not installed, so not removed
+0 upgraded, 0 newly installed, 0 to remove and 20 not upgraded.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Package 'podman-docker' is not installed, so not removed
+0 upgraded, 0 newly installed, 0 to remove and 20 not upgraded.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Package 'containerd' is not installed, so not removed
+0 upgraded, 0 newly installed, 0 to remove and 20 not upgraded.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Package 'runc' is not installed, so not removed
+0 upgraded, 0 newly installed, 0 to remove and 20 not upgraded.
+rajaniapple@lima-default:/Users/rajaniapple$ sudo apt-get update
+Hit:1 http://security.ubuntu.com/ubuntu mantic-security InRelease        
+Hit:2 http://archive.ubuntu.com/ubuntu mantic InRelease    
+Hit:3 http://archive.ubuntu.com/ubuntu mantic-updates InRelease
+Hit:4 http://archive.ubuntu.com/ubuntu mantic-backports InRelease
+Reading package lists... Done
+rajaniapple@lima-default:/Users/rajaniapple$ sudo apt-get install ca-certificates curl gnupg
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+ca-certificates is already the newest version (20230311ubuntu1).
+ca-certificates set to manually installed.
+gnupg is already the newest version (2.2.40-1.1ubuntu1).
+gnupg set to manually installed.
+The following packages will be upgraded:
+  curl libcurl3-gnutls libcurl4
+3 upgraded, 0 newly installed, 0 to remove and 17 not upgraded.
+Need to get 847 kB of archives.
+After this operation, 0 B of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu mantic-updates/main amd64 curl amd64 8.2.1-1ubuntu3.1 [216 kB]
+Get:2 http://archive.ubuntu.com/ubuntu mantic-updates/main amd64 libcurl4 amd64 8.2.1-1ubuntu3.1 [319 kB]                                                      
+Get:3 http://archive.ubuntu.com/ubuntu mantic-updates/main amd64 libcurl3-gnutls amd64 8.2.1-1ubuntu3.1 [312 kB]                                               
+Fetched 847 kB in 8s (109 kB/s)                                                                                                                                
+(Reading database ... 65560 files and directories currently installed.)
+Preparing to unpack .../curl_8.2.1-1ubuntu3.1_amd64.deb ...
+Unpacking curl (8.2.1-1ubuntu3.1) over (8.2.1-1ubuntu3) ...
+Preparing to unpack .../libcurl4_8.2.1-1ubuntu3.1_amd64.deb ...
+Unpacking libcurl4:amd64 (8.2.1-1ubuntu3.1) over (8.2.1-1ubuntu3) ...
+Preparing to unpack .../libcurl3-gnutls_8.2.1-1ubuntu3.1_amd64.deb ...
+Unpacking libcurl3-gnutls:amd64 (8.2.1-1ubuntu3.1) over (8.2.1-1ubuntu3) ...
+Setting up libcurl3-gnutls:amd64 (8.2.1-1ubuntu3.1) ...
+Setting up libcurl4:amd64 (8.2.1-1ubuntu3.1) ...
+Setting up curl (8.2.1-1ubuntu3.1) ...
+Processing triggers for man-db (2.11.2-3) ...
+Processing triggers for libc-bin (2.38-1ubuntu6) ...
+Scanning processes...                                                                                                                                           
+Scanning candidates...                                                                                                                                          
+Scanning linux images...                                                                                                                                        
+
+Running kernel seems to be up-to-date.
+
+Restarting services...
+ systemctl restart packagekit.service
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+rajaniapple@lima-default:/Users/rajaniapple$ sudo install -m 0755 -d /etc/apt/keyrings
+rajaniapple@lima-default:/Users/rajaniapple$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+rajaniapple@lima-default:/Users/rajaniapple$ sudo chmod a+r /etc/apt/keyrings/docker.gpg
+rajaniapple@lima-default:/Users/rajaniapple$ echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+rajaniapple@lima-default:/Users/rajaniapple$ sudo apt-get update
+Hit:1 http://security.ubuntu.com/ubuntu mantic-security InRelease                                            
+Get:2 https://download.docker.com/linux/ubuntu mantic InRelease [48.8 kB]        
+Hit:3 http://archive.ubuntu.com/ubuntu mantic InRelease                                                                                                        
+Get:4 https://download.docker.com/linux/ubuntu mantic/stable amd64 Packages [2713 B]                                                                           
+Hit:5 http://archive.ubuntu.com/ubuntu mantic-updates InRelease                                                                                                
+Hit:6 http://archive.ubuntu.com/ubuntu mantic-backports InRelease                                                                                              
+Fetched 51.6 kB in 8s (6146 B/s)                                                                                                                               
+Reading package lists... Done
+rajaniapple@lima-default:/Users/rajaniapple$ cat /etc/*-release
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=23.10
+DISTRIB_CODENAME=mantic
+DISTRIB_DESCRIPTION="Ubuntu 23.10"
+PRETTY_NAME="Ubuntu 23.10"
+NAME="Ubuntu"
+VERSION_ID="23.10"
+VERSION="23.10 (Mantic Minotaur)"
+VERSION_CODENAME=mantic
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=mantic
+LOGO=ubuntu-logo
+rajaniapple@lima-default:/Users/rajaniapple$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Ubuntu
+Description:	Ubuntu 23.10
+Release:	23.10
+Codename:	mantic
+rajaniapple@lima-default:/Users/rajaniapple$ hostnamectl
+ Static hostname: lima-default
+       Icon name: computer-vm
+         Chassis: vm 🖴
+      Machine ID: bff5b432e19c493a91026f2966a9a7be
+         Boot ID: f263f7b617c7423396fe0f153e6a58c2
+  Virtualization: qemu
+Operating System: Ubuntu 23.10                    
+          Kernel: Linux 6.5.0-9-generic
+    Architecture: x86-64
+ Hardware Vendor: QEMU
+  Hardware Model: Standard PC _Q35 + ICH9, 2009_
+Firmware Version: edk2-stable202302-for-qemu
+   Firmware Date: Wed 2023-03-01
+rajaniapple@lima-default:/Users/rajaniapple$ uname -a
+Linux lima-default 6.5.0-9-generic #9-Ubuntu SMP PREEMPT_DYNAMIC Sat Oct  7 01:35:40 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+rajaniapple@lima-default:/Users/rajaniapple$ uname -mrs
+Linux 6.5.0-9-generic x86_64
+rajaniapple@lima-default:/Users/rajaniapple$ cat /proc/version
+Linux version 6.5.0-9-generic (buildd@bos03-amd64-043) (x86_64-linux-gnu-gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0, GNU ld (GNU Binutils for Ubuntu) 2.41) #9-Ubuntu SMP PREEMPT_DYNAMIC Sat Oct  7 01:35:40 UTC 2023
+rajaniapple@lima-default:/Users/rajaniapple$ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  docker-ce-rootless-extras libltdl7 libslirp0 pigz slirp4netns
+Suggested packages:
+  aufs-tools cgroupfs-mount | cgroup-lite
+The following NEW packages will be installed:
+  containerd.io docker-buildx-plugin docker-ce docker-ce-cli docker-ce-rootless-extras docker-compose-plugin libltdl7 libslirp0 pigz slirp4netns
+0 upgraded, 10 newly installed, 0 to remove and 17 not upgraded.
+Need to get 114 MB of archives.
+After this operation, 409 MB of additional disk space will be used.
+Do you want to continue? [Y/n] Y
+Get:1 https://download.docker.com/linux/ubuntu mantic/stable amd64 containerd.io amd64 1.6.24-1 [28.6 MB]
+Get:2 http://archive.ubuntu.com/ubuntu mantic/universe amd64 pigz amd64 2.6-1 [63.6 kB]                                                                        
+Get:3 http://archive.ubuntu.com/ubuntu mantic/main amd64 libltdl7 amd64 2.4.7-7 [40.5 kB]                                                                      
+Get:4 http://archive.ubuntu.com/ubuntu mantic/main amd64 libslirp0 amd64 4.7.0-1ubuntu1 [63.2 kB]                                                              
+Get:5 http://archive.ubuntu.com/ubuntu mantic/universe amd64 slirp4netns amd64 1.2.0-1 [33.5 kB]                                                               
+Get:6 https://download.docker.com/linux/ubuntu mantic/stable amd64 docker-buildx-plugin amd64 0.11.2-1~ubuntu.23.10~mantic [28.2 MB]                           
+Get:7 https://download.docker.com/linux/ubuntu mantic/stable amd64 docker-ce-cli amd64 5:24.0.7-1~ubuntu.23.10~mantic [13.3 MB]                                
+Get:8 https://download.docker.com/linux/ubuntu mantic/stable amd64 docker-ce amd64 5:24.0.7-1~ubuntu.23.10~mantic [22.6 MB]                                    
+Get:9 https://download.docker.com/linux/ubuntu mantic/stable amd64 docker-ce-rootless-extras amd64 5:24.0.7-1~ubuntu.23.10~mantic [9034 kB]                    
+Get:10 https://download.docker.com/linux/ubuntu mantic/stable amd64 docker-compose-plugin amd64 2.21.0-1~ubuntu.23.10~mantic [11.9 MB]                         
+Fetched 114 MB in 27s (4218 kB/s)                                                                                                                              
+Selecting previously unselected package pigz.
+(Reading database ... 65560 files and directories currently installed.)
+Preparing to unpack .../0-pigz_2.6-1_amd64.deb ...
+Unpacking pigz (2.6-1) ...
+Selecting previously unselected package containerd.io.
+Preparing to unpack .../1-containerd.io_1.6.24-1_amd64.deb ...
+Unpacking containerd.io (1.6.24-1) ...
+Selecting previously unselected package docker-buildx-plugin.
+Preparing to unpack .../2-docker-buildx-plugin_0.11.2-1~ubuntu.23.10~mantic_amd64.deb ...
+Unpacking docker-buildx-plugin (0.11.2-1~ubuntu.23.10~mantic) ...
+Selecting previously unselected package docker-ce-cli.
+Preparing to unpack .../3-docker-ce-cli_5%3a24.0.7-1~ubuntu.23.10~mantic_amd64.deb ...
+Unpacking docker-ce-cli (5:24.0.7-1~ubuntu.23.10~mantic) ...
+Selecting previously unselected package docker-ce.
+Preparing to unpack .../4-docker-ce_5%3a24.0.7-1~ubuntu.23.10~mantic_amd64.deb ...
+Unpacking docker-ce (5:24.0.7-1~ubuntu.23.10~mantic) ...
+Selecting previously unselected package docker-ce-rootless-extras.
+Preparing to unpack .../5-docker-ce-rootless-extras_5%3a24.0.7-1~ubuntu.23.10~mantic_amd64.deb ...
+Unpacking docker-ce-rootless-extras (5:24.0.7-1~ubuntu.23.10~mantic) ...
+Selecting previously unselected package docker-compose-plugin.
+Preparing to unpack .../6-docker-compose-plugin_2.21.0-1~ubuntu.23.10~mantic_amd64.deb ...
+Unpacking docker-compose-plugin (2.21.0-1~ubuntu.23.10~mantic) ...
+Selecting previously unselected package libltdl7:amd64.
+Preparing to unpack .../7-libltdl7_2.4.7-7_amd64.deb ...
+Unpacking libltdl7:amd64 (2.4.7-7) ...
+Selecting previously unselected package libslirp0:amd64.
+Preparing to unpack .../8-libslirp0_4.7.0-1ubuntu1_amd64.deb ...
+Unpacking libslirp0:amd64 (4.7.0-1ubuntu1) ...
+Selecting previously unselected package slirp4netns.
+Preparing to unpack .../9-slirp4netns_1.2.0-1_amd64.deb ...
+Unpacking slirp4netns (1.2.0-1) ...
+Setting up docker-buildx-plugin (0.11.2-1~ubuntu.23.10~mantic) ...
+Setting up containerd.io (1.6.24-1) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/containerd.service → /usr/local/lib/systemd/system/containerd.service.
+Setting up docker-compose-plugin (2.21.0-1~ubuntu.23.10~mantic) ...
+Setting up libltdl7:amd64 (2.4.7-7) ...
+Setting up docker-ce-cli (5:24.0.7-1~ubuntu.23.10~mantic) ...
+Setting up libslirp0:amd64 (4.7.0-1ubuntu1) ...
+Setting up pigz (2.6-1) ...
+Setting up docker-ce-rootless-extras (5:24.0.7-1~ubuntu.23.10~mantic) ...
+Setting up slirp4netns (1.2.0-1) ...
+Setting up docker-ce (5:24.0.7-1~ubuntu.23.10~mantic) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /lib/systemd/system/docker.service.
+Created symlink /etc/systemd/system/sockets.target.wants/docker.socket → /lib/systemd/system/docker.socket.
+Processing triggers for man-db (2.11.2-3) ...
+Processing triggers for libc-bin (2.38-1ubuntu6) ...
+Scanning processes...                                                                                                                                           
+Scanning linux images...                                                                                                                                        
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+rajaniapple@lima-default:/Users/rajaniapple$ sudo docker run hello-world
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+719385e32844: Pull complete 
+Digest: sha256:88ec0acaa3ec199d3b7eaf73588f4518c25f9d34f58ce9a0df68429c5af48e8d
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+
+rajaniapple@lima-default:/Users/rajaniapple$ sudo usermod -aG docker $USER
+rajaniapple@lima-default:/Users/rajaniapple$ newgrp docker
+rajaniapple@lima-default:/Users/rajaniapple$ docker login
+Log in with your Docker ID or email address to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com/ to create one.
+You can log in with your password or a Personal Access Token (PAT). Using a limited-scope PAT grants better security and is required for organizations using SSO. Learn more at https://docs.docker.com/go/access-tokens/
+
+Username: dockerrajani
+Password: 
+WARNING! Your password will be stored unencrypted in /home/rajaniapple.linux/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+rajaniapple@lima-default:/Users/rajaniapple$ docker pull container-registry.oracle.com/database/free:latest
+latest: Pulling from database/free
+089fdfcd47b7: Pull complete 
+43c899d88edc: Pull complete 
+47aa6f1886a1: Pull complete 
+f8d07bb55995: Pull complete 
+c31c8c658c1e: Pull complete 
+b7d28faa08b4: Pull complete 
+1d0d5c628f6f: Pull complete 
+db82a695dad3: Pull complete 
+25a185515793: Pull complete 
+Digest: sha256:5ac0efa9896962f6e0e91c54e23c03ae8f140cf6ed43ca09ef4354268a942882
+Status: Downloaded newer image for container-registry.oracle.com/database/free:latest
+container-registry.oracle.com/database/free:latest
+rajaniapple@lima-default:/Users/rajaniapple$ docker image list
+REPOSITORY                                    TAG       IMAGE ID       CREATED        SIZE
+container-registry.oracle.com/database/free   latest    39cabc8e6db0   2 months ago   9.16GB
+hello-world                                   latest    9c7a54a9a43c   6 months ago   13.3kB
+rajaniapple@lima-default:/Users/rajaniapple$ docker run -d -p 1521:1521 -e ORACLE_PASSWORD=Oracle_23c container-registry.oracle.com/database/free:latest
+a2162156edd5b7d4728fe7434075b9a3ce88902c501271231cd0d6831eca0d85
+rajaniapple@lima-default:/Users/rajaniapple$ docker container list --all --format "table"
+CONTAINER ID   IMAGE                                                COMMAND                  CREATED              STATUS                                 PORTS                                       NAMES
+a2162156edd5   container-registry.oracle.com/database/free:latest   "/bin/bash -c $ORACL…"   About a minute ago   Up About a minute (health: starting)   0.0.0.0:1521->1521/tcp, :::1521->1521/tcp   angry_wing
+d39603b235cb   hello-world                                          "/hello"                 25 minutes ago       Exited (0) 25 minutes ago                                                          charming_wilson
+rajaniapple@lima-default:/Users/rajaniapple$ docker exec -it a2162156edd5 bash
+bash-4.4$ ls
+setPassword.sh
+bash-4.4$ cat setPassword.sh
+#!/bin/bash
+# LICENSE UPL 1.0
+#
+# Copyright (c) 1982-2023 Oracle and/or its affiliates. All rights reserved.
+# 
+# Since: November, 2016
+# Author: gerald.venzl@oracle.com
+# Description: Sets the password for sys, system and pdb_admin
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+# 
+
+if [ -e "${ORACLE_BASE}/oradata/${ORACLE_SID}/.prebuiltdb" ] && [ -n "${ORACLE_PWD}" ] && [ "${ORACLE_PWD}" != "$1" ]; then
+      echo "WARNING: The database password can not be changed for this container having a prebuilt database. The original password exists in the container environment. Your new password has been ignored!"
+      exit 1
+fi
+
+ORACLE_PWD=$1
+ORACLE_SID="$(grep "$ORACLE_HOME" /etc/oratab | cut -d: -f1)"
+ORACLE_PDB="$(ls -dl "$ORACLE_BASE"/oradata/"$ORACLE_SID"/*/ | grep -v -e pdbseed -e "${ARCHIVELOG_DIR_NAME:-archive_logs}"| awk '{print $9}' | cut -d/ -f6)"
+ORAENV_ASK=NO
+source oraenv
+
+sqlplus / as sysdba << EOF
+      ALTER USER SYS IDENTIFIED BY "$ORACLE_PWD";
+      ALTER USER SYSTEM IDENTIFIED BY "$ORACLE_PWD";
+      ALTER SESSION SET CONTAINER=$ORACLE_PDB;
+      ALTER USER PDBADMIN IDENTIFIED BY "$ORACLE_PWD";
+      exit;
+EOF
+
+bash-4.4$ ./setPassword.sh Oracle_23c
+The Oracle base remains unchanged with value /opt/oracle
+
+SQL*Plus: Release 23.0.0.0.0 - Production on Sat Nov 11 15:48:29 2023
+Version 23.3.0.23.09
+
+Copyright (c) 1982, 2023, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+
+SQL> 
+User altered.
+
+SQL> 
+User altered.
+
+SQL> 
+Session altered.
+
+SQL> 
+User altered.
+
+SQL> Disconnected from Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+bash-4.4$ sqlplus PDBADMIN/Oracle_23c@//localhost:1521/FREEPDB1
+
+SQL*Plus: Release 23.0.0.0.0 - Production on Sat Nov 11 15:50:12 2023
+Version 23.3.0.23.09
+
+Copyright (c) 1982, 2023, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+
+SQL> SELECT * FROM v$version;
+
+BANNER
+--------------------------------------------------------------------------------
+BANNER_FULL
+--------------------------------------------------------------------------------
+BANNER_LEGACY
+--------------------------------------------------------------------------------
+    CON_ID
+----------
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+	 0
+
+BANNER
+--------------------------------------------------------------------------------
+BANNER_FULL
+--------------------------------------------------------------------------------
+BANNER_LEGACY
+--------------------------------------------------------------------------------
+    CON_ID
+----------
+
+
+SQL> SELECT user FROM DUAL;
+
+USER
+--------------------------------------------------------------------------------
+PDBADMIN
+
+SQL> SELECT sys_context('USERENV','INSTANCE_NAME') FROM DUAL;
+
+SYS_CONTEXT('USERENV','INSTANCE_NAME')
+--------------------------------------------------------------------------------
+FREE
+
+SQL> SELECT sys_context('USERENV', 'SID') FROM DUAL;
+
+SYS_CONTEXT('USERENV','SID')
+--------------------------------------------------------------------------------
+53
+
+SQL> SELECT sys_context('USERENV', 'SID') FROM DUAL;
+
+SYS_CONTEXT('USERENV','SID')
+--------------------------------------------------------------------------------
+53
+
+SQL> SELECT sys_context('USERENV','DB_NAME') FROM DUAL;
+
+SYS_CONTEXT('USERENV','DB_NAME')
+--------------------------------------------------------------------------------
+FREEPDB1
+
+SQL> SELECT sys_context('USERENV','SERVICE_NAME') FROM DUAL;
+
+SYS_CONTEXT('USERENV','SERVICE_NAME')
+--------------------------------------------------------------------------------
+freepdb1
+
+SQL> SELECT ora_database_name FROM DUAL;
+
+ORA_DATABASE_NAME
+--------------------------------------------------------------------------------
+FREEPDB1
+
+SQL> SELECT * from global_name;
+
+GLOBAL_NAME
+--------------------------------------------------------------------------------
+FREEPDB1
+
+SQL> SELECT table_name FROM user_tables;
+
+no rows selected
+
+SQL> EXIT
+Disconnected from Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+bash-4.4$ export APP_USER="Oracle_23c_Free_User"
+bash-4.4$ export APP_USER_PASSWORD="Oracle_23c_Free"
+bash-4.4$ export TARGET_PDB="FREEPDB1"
+bash-4.4$ echo $APP_USER
+Oracle_23c_Free_User
+bash-4.4$ echo $APP_USER_PASSWORD
+Oracle_23c_Free
+bash-4.4$ echo $TARGET_PDB
+FREEPDB1
+bash-4.4$ ALTER_SESSION_CMD="ALTER SESSION SET CONTAINER=${TARGET_PDB};"
+bash-4.4$ sqlplus -s / as sysdba << EOF
+>    -- Exit on any errors
+>    WHENEVER SQLERROR EXIT SQL.SQLCODE
+> 
+>    ${ALTER_SESSION_CMD}
+> 
+>    CREATE USER ${APP_USER} IDENTIFIED BY "${APP_USER_PASSWORD}" QUOTA UNLIMITED ON USERS;
+>    GRANT CONNECT, RESOURCE, CREATE VIEW, CREATE MATERIALIZED VIEW, CREATE SYNONYM TO ${APP_USER};
+>    exit;
+> EOF
+
+Session altered.
+
+
+User created.
+
+
+Grant succeeded.
+
+bash-4.4$ sqlplus Oracle_23c_Free_User/Oracle_23c_Free@//localhost:1521/FREEPDB1
+
+SQL*Plus: Release 23.0.0.0.0 - Production on Sat Nov 11 15:57:01 2023
+Version 23.3.0.23.09
+
+Copyright (c) 1982, 2023, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+
+SQL> SELECT * FROM v$version;
+
+BANNER
+--------------------------------------------------------------------------------
+BANNER_FULL
+--------------------------------------------------------------------------------
+BANNER_LEGACY
+--------------------------------------------------------------------------------
+    CON_ID
+----------
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+	 0
+
+BANNER
+--------------------------------------------------------------------------------
+BANNER_FULL
+--------------------------------------------------------------------------------
+BANNER_LEGACY
+--------------------------------------------------------------------------------
+    CON_ID
+----------
+
+
+SQL> SELECT user FROM DUAL;
+
+USER
+--------------------------------------------------------------------------------
+ORACLE_23C_FREE_USER
+
+SQL> SELECT sys_context('USERENV','INSTANCE_NAME') FROM DUAL;
+
+SYS_CONTEXT('USERENV','INSTANCE_NAME')
+--------------------------------------------------------------------------------
+FREE
+
+SQL> SELECT sys_context('USERENV', 'SID') FROM DUAL;
+
+SYS_CONTEXT('USERENV','SID')
+--------------------------------------------------------------------------------
+286
+
+SQL> SELECT sys_context('USERENV','DB_NAME') FROM DUAL;
+
+SYS_CONTEXT('USERENV','DB_NAME')
+--------------------------------------------------------------------------------
+FREEPDB1
+
+SQL> SELECT sys_context('USERENV','SERVICE_NAME') FROM DUAL;
+
+SYS_CONTEXT('USERENV','SERVICE_NAME')
+--------------------------------------------------------------------------------
+freepdb1
+
+SQL> SELECT ora_database_name FROM DUAL;
+
+ORA_DATABASE_NAME
+--------------------------------------------------------------------------------
+FREEPDB1
+
+SQL> SELECT * from global_name;
+
+GLOBAL_NAME
+--------------------------------------------------------------------------------
+FREEPDB1
+
+SQL> SELECT table_name FROM user_tables;
+
+no rows selected
+
+SQL> CREATE SEQUENCE seq_id
+MINVALUE 1
+START WITH 1
+INCREMENT BY 1
+CACHE 10;  2    3    4    5  
+
+Sequence created.
+
+SQL> CREATE TABLE users
+(
+    id INT NOT NULL,
+    username VARCHAR(50) NOT NULL, 
+    login_date DATE NOT NULL,
+    login_time VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,    
+    CONSTRAINT pk_id PRIMARY KEY(id),
+    CONSTRAINT idx_username UNIQUE(username)    
+);  2    3    4    5    6    7    8    9   10   11  
+
+Table created.
+
+SQL> COMMIT;
+
+SQL> INSERT INTO users(id, username, login_date, login_time, created_at, updated_at)
+VALUES
+(
+seq_id.nextval,
+'Foo', 
+TO_DATE('2016-11-06', 'YYYY-MM-DD'), 
+'10:49:35', 
+TO_TIMESTAMP('2016-11-06 10:49:35.0', 'YYYY-MM-DD HH:MI:SS.FF'), 
+TO_TIMESTAMP('2016-11-06 10:49:35.0', 'YYYY-MM-DD HH:MI:SS.FF')
+);  2    3    4    5    6    7    8    9   10  
+
+1 row created.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT * FROM users;
+
+	ID USERNAME					      LOGIN_DAT
+---------- -------------------------------------------------- ---------
+LOGIN_TIME
+----------
+CREATED_AT
+---------------------------------------------------------------------------
+UPDATED_AT
+---------------------------------------------------------------------------
+	 1 Foo						      06-NOV-16
+10:49:35
+06-NOV-16 10.49.35.000000 AM
+06-NOV-16 10.49.35.000000 AM
+
+
+SQL> SELECT table_name FROM user_tables;
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+USERS
+
+SQL> EXIT
+Disconnected from Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+bash-4.4$ sqlplus Oracle_23c_Free_User/Oracle_23c_Free@//localhost:1521/FREEPDB1
+
+SQL*Plus: Release 23.0.0.0.0 - Production on Sat Nov 11 16:02:59 2023
+Version 23.3.0.23.09
+
+Copyright (c) 1982, 2023, Oracle.  All rights reserved.
+
+Last Successful login time: Sat Nov 11 2023 16:00:45 +00:00
+
+Connected to:
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+
+SQL> INSERT INTO users(id, username, login_date, login_time, created_at, updated_at)
+VALUES
+(
+seq_id.nextval,
+'Bar', 
+TO_DATE('2016-11-06', 'YYYY-MM-DD'), 
+'10:49:35', 
+TO_TIMESTAMP('2016-11-06 10:49:35.0', 'YYYY-MM-DD HH:MI:SS.FF'), 
+TO_TIMESTAMP('2016-11-06 10:49:35.0', 'YYYY-MM-DD HH:MI:SS.FF')
+);  2    3    4    5    6    7    8    9   10  
+
+1 row created.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT * FROM users;
+
+	ID USERNAME					      LOGIN_DAT
+---------- -------------------------------------------------- ---------
+LOGIN_TIME
+----------
+CREATED_AT
+---------------------------------------------------------------------------
+UPDATED_AT
+---------------------------------------------------------------------------
+	 1 Foo						      06-NOV-16
+10:49:35
+06-NOV-16 10.49.35.000000 AM
+06-NOV-16 10.49.35.000000 AM
+
+
+	ID USERNAME					      LOGIN_DAT
+---------- -------------------------------------------------- ---------
+LOGIN_TIME
+----------
+CREATED_AT
+---------------------------------------------------------------------------
+UPDATED_AT
+---------------------------------------------------------------------------
+	 2 Bar						      06-NOV-16
+10:49:35
+06-NOV-16 10.49.35.000000 AM
+06-NOV-16 10.49.35.000000 AM
+
+
+SQL> exit
+Disconnected from Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+bash-4.4$ exit
+exit
+rajaniapple@lima-default:/Users/rajaniapple$ exit
+logout
+rajaniapple@Rajanis-MacBook-Pro ~ % limactl shell default uname -a
+Linux lima-default 6.5.0-9-generic #9-Ubuntu SMP PREEMPT_DYNAMIC Sat Oct  7 01:35:40 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+rajaniapple@Rajanis-MacBook-Pro ~ % lima uname -a
+Linux lima-default 6.5.0-9-generic #9-Ubuntu SMP PREEMPT_DYNAMIC Sat Oct  7 01:35:40 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+rajaniapple@Rajanis-MacBook-Pro ~ % limactl stop 
+INFO[0000] Sending SIGINT to hostagent process 1697     
+INFO[0000] Waiting for the host agent and the driver processes to shut down 
+INFO[0000] [hostagent] Received SIGINT, shutting down the host agent 
+INFO[0000] [hostagent] Shutting down the host agent     
+INFO[0000] [hostagent] Stopping forwarding "/run/lima-guestagent.sock" (guest) to "/Users/rajaniapple/.lima/default/ga.sock" (host) 
+INFO[0000] [hostagent] Unmounting "/Users/rajaniapple"  
+INFO[0000] [hostagent] Unmounting "/tmp/lima"           
+INFO[0000] [hostagent] Shutting down QEMU with ACPI     
+INFO[0000] [hostagent] Sending QMP system_powerdown command 
+INFO[0014] [hostagent] QEMU has exited                      
+rajaniapple@Rajanis-MacBook-Pro ~ % limactl list
+NAME       STATUS     SSH            VMTYPE    ARCH      CPUS    MEMORY    DISK      DIR
+default    Stopped    127.0.0.1:0    qemu      x86_64    4       4GiB      100GiB    ~/.lima/default
+rajaniapple@Rajanis-MacBook-Pro ~ % limactl list         
+NAME       STATUS     SSH            VMTYPE    ARCH      CPUS    MEMORY    DISK      DIR
+default    Stopped    127.0.0.1:0    qemu      x86_64    4       4GiB      100GiB    ~/.lima/default
+rajaniapple@Rajanis-MacBook-Pro ~ % limactl delete default 
+INFO[0000] The qemu driver process seems already stopped 
+INFO[0000] The host agent process seems already stopped 
+INFO[0000] Removing /Users/rajaniapple/.lima/default under "*.pid *.sock *.tmp" 
+INFO[0000] Removing "/Users/rajaniapple/.lima/default/ha.sock" 
+INFO[0001] Deleted "default" ("/Users/rajaniapple/.lima/default") 
+rajaniapple@Rajanis-MacBook-Pro ~ % limactl list          
+WARN[0000] No instance found. Run `limactl create` to create an instance. 
+rajaniapple@Rajanis-MacBook-Pro ~ % 

@@ -1,0 +1,519 @@
+Last login: Mon Oct  9 12:08:30 on console
+rajaniapple@Rajanis-MacBook-Pro ~ % sw_vers
+ProductName:		macOS
+ProductVersion:		14.0
+BuildVersion:		23A344
+rajaniapple@Rajanis-MacBook-Pro ~ % arch
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % pwd
+/Users/rajaniapple
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Technology/Kubernetes/Exercise 
+rajaniapple@Rajanis-MacBook-Pro Exercise % pwd
+/Users/rajaniapple/Desktop/Technology/Kubernetes/Exercise
+rajaniapple@Rajanis-MacBook-Pro Exercise % brew --version
+Homebrew 4.1.0
+rajaniapple@Rajanis-MacBook-Pro Exercise % brew install --cask multipass
+Running `brew update --auto-update`...
+==> Auto-updated Homebrew!
+Updated 4 taps (homebrew/services, mongodb/brew, homebrew/core and homebrew/cask).
+==> New Formulae
+aerleon                                 eza                                     meson-python                            python-setuptools
+apify-cli                               falco                                   mfem                                    python-tk@3.12
+apprise                                 falcoctl                                mgis                                    python@3.12
+arm-none-eabi-binutils                  feishu2md                               mjml                                    qalculate-qt
+arm-none-eabi-gcc                       fwupd                                   modsecurity                             recoverpy
+arm-none-eabi-gdb                       ggshield                                mongodb/brew/mongodb-community@6.0      riscv64-elf-binutils
+asn                                     ghc@9.4                                 mongodb/brew/mongodb-enterprise@6.0     riscv64-elf-gcc
+asnmap                                  gickup                                  mongodb/brew/mongodb-mongocryptd@6.0    riscv64-elf-gdb
+bandicoot                               gismo                                   mtbl                                    risor
+bashunit                                gitea                                   mvfst                                   roadrunner
+bazel-diff                              go@1.20                                 mysql-client@8.0                        rpmspectool
+bazel-remote                            goread                                  mysql@8.0                               s3scanner
+biome                                   gotestwaf                               netlistsvg                              sbom-tool
+blake3                                  helidon                                 notation                                scoutsuite
+bozohttpd                               hyfetch                                 numbat                                  shuffledns
+build2                                  img2pdf                                 ollama                                  smlfmt
+caracal                                 imgdiet                                 onionprobe                              spacer
+cargo-all-features                      imgdiff                                 orbiton                                 sqlsmith
+cargo-auditable                         incus                                   orcania                                 squiid
+cargo-binutils                          iocextract                              orogene                                 surelog
+cargo-deps                              jr                                      plog                                    tailwindcss
+cargo-docset                            json2ts                                 postgresql@16                           talhelper
+cdi                                     katana                                  powerlevel10k                           terraform-graph-beautifier
+cdxgen                                  killport                                prettierd                               terragrunt-atlantis-config
+chaoskube                               kor                                     proxify                                 tf-profile
+checkdmarc                              kosli-cli                               pter                                    toxiproxy
+cloud-sql-proxy                         ldeep                                   pwned                                   tpm
+cloudfox                                ldid-procursus                          pyspelling                              trafilatura
+cloudlist                               legitify                                pystring                                udp2raw-multiplatform
+codelimit                               libgit2@1.6                             python-argcomplete                      uffizzi
+coder                                   libimobiledevice-glue                   python-certifi                          uhdm
+colmap                                  libjcat                                 python-click                            uncover
+counts                                  libmapper                               python-cryptography                     urlfinder
+cryptopp                                libpanel                                python-flit-core                        vulkan-utility-libraries
+ctpv                                    libshumate                              python-gdbm@3.12                        vunnel
+cyclonedx-gomod                         libxmlb                                 python-lxml                             web-ext
+cyclonedx-python                        llm                                     python-markupsafe                       woodpecker-cli
+czkawka                                 llvm@16                                 python-mutagen                          wtfis
+dezoomify-rs                            lune                                    python-packaging                        xlsxio
+dnsrobocert                             lxi-tools                               python-pycurl                           yazi
+dolphie                                 mariadb@11.0                            python-pyparsing                        yder
+dovi_tool                               massdriver                              python-pyproject-hooks
+ebook2cw                                medusa                                  python-pytz
+==> New Casks
+4k-video-downloaderplus    cloudnet                   git-credential-manager     modrinth                   ripx                       updf
+aifun                      crystalfetch               herd                       monotype                   routine                    viso
+akuity                     devtunnel                  hhkb                       mutedeck                   rustrover                  voicepeak
+apidog                     dockx                      hovrly                     muyu                       sf                         wetype
+applite                    draw-things                hp-easy-admin              paulxstretch               sfm                        wiso-steuer-2022
+ava                        dropbox-dash               hypercal                   pieces                     shattered-pixel-dungeon    wiso-steuer-2023
+batteryboi                 dropshelf                  iem-plugin-suite           pieces-os                  simple-web-server          xiaomi-cloud
+bepo                       ecodms-client              json-viewer                piphero                    space-capsule              zspace
+browser-deputy             elektron-transfer          jukebox                    playdate-mirror            sparkplate                 zui
+chainner                   energiza                   keyclu                     proxy-audio-device         spundle
+cilicon                    expo-orbit                 kreya                      recipeui                   stash
+clickhouse                 finbar                     lm-studio                  replay                     telegram-a
+clinq                      floorp                     luniistore                 reqable                    to-audio-converter
+clop                       font-finagler              meld-studio                rippling                   twelite-stage
+
+You have 11 outdated formulae installed.
+
+==> Downloading https://raw.githubusercontent.com/Homebrew/homebrew-cask/ab42dcfce67dfcbcc97bc4d4428f238ad881fd6f/Casks/m/multipass.rb
+######################################################################################################################################################### 100.0%
+==> Downloading https://github.com/canonical/multipass/releases/download/v1.12.2/multipass-1.12.2+mac-Darwin.pkg
+==> Downloading from https://objects.githubusercontent.com/github-production-release-asset-2e65be/114128199/f558434a-3d96-4210-8a69-a65d7917d83f?X-Amz-Algorithm
+######################################################################################################################################################### 100.0%
+==> Installing Cask multipass
+==> Running installer for multipass with sudo; the password may be necessary.
+Password:
+installer: Package name is multipass
+installer: Installing at base path /
+installer: The install was successful.
+🍺  multipass was successfully installed!
+rajaniapple@Rajanis-MacBook-Pro Exercise % multipass launch --name microk8s-vm --memory 4G --disk 40G
+Launched: microk8s-vm
+rajaniapple@Rajanis-MacBook-Pro Exercise % multipass shell microk8s-vm
+Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.0-84-generic aarch64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Mon Oct  9 14:34:41 IST 2023
+
+  System load:             0.07177734375
+  Usage of /:              3.6% of 38.59GB
+  Memory usage:            4%
+  Swap usage:              0%
+  Processes:               89
+  Users logged in:         0
+  IPv4 address for enp0s1: 192.168.64.2
+  IPv6 address for enp0s1: fd1d:a80c:e456:91f0:5054:ff:fe7a:b7c5
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+ubuntu@microk8s-vm:~$ sudo snap install microk8s --classic
+Download snap "microk8s" (5896) from channel "1.27/stable"	60% 3.09MB/s 20.0
+Download snap "microk8s" (5896) from channel "1.27/stable"	60% 3.08MB/
+Download snap "microk8s" (5896) from channel "1.27/stable"	61% 3.07MB/s 2
+Download snap "microk8s" (5896) from channel "1.27/stable"	61% 3.06MB/s 2
+Download snap "microk8s" (5896) from channel "1.27/stable"	61% 3.05MB/s                                         
+Download snap "microk8s" (5896) from channel "1.27/stable"	76% 
+Download snap "microk8s" (5896) from channel "1.27/stable"	88%
+Download Run install hook oRun instaRun instamicrok8s (1.27/stable) v1.27.5 from Canonical✓ installed
+ubuntu@microk8s-vm:~$ sudo microk8s.status --wait-ready
+microk8s is running
+high-availability: no
+  datastore master nodes: 127.0.0.1:19001
+  datastore standby nodes: none
+addons:
+  enabled:
+    dns                  # (core) CoreDNS
+    ha-cluster           # (core) Configure high availability on the current node
+    helm                 # (core) Helm - the package manager for Kubernetes
+    helm3                # (core) Helm 3 - the package manager for Kubernetes
+  disabled:
+    cert-manager         # (core) Cloud native certificate management
+    community            # (core) The community addons repository
+    dashboard            # (core) The Kubernetes dashboard
+    host-access          # (core) Allow Pods connecting to Host services smoothly
+    hostpath-storage     # (core) Storage class; allocates storage from host directory
+    ingress              # (core) Ingress controller for external access
+    kube-ovn             # (core) An advanced network fabric for Kubernetes
+    mayastor             # (core) OpenEBS MayaStor
+    metallb              # (core) Loadbalancer for your Kubernetes cluster
+    metrics-server       # (core) K8s Metrics Server for API access to service metrics
+    minio                # (core) MinIO object storage
+    observability        # (core) A lightweight observability stack for logs, traces and metrics
+    prometheus           # (core) Prometheus operator for monitoring and logging
+    rbac                 # (core) Role-Based Access Control for authorisation
+    registry             # (core) Private image registry exposed on localhost:32000
+    storage              # (core) Alias to hostpath-storage add-on, deprecated
+ubuntu@microk8s-vm:~$ sudo microk8s.enable dns dashboard registry
+Infer repository core for addon dns
+Infer repository core for addon dashboard
+Infer repository core for addon registry
+WARNING: Do not enable or disable multiple addons in one command.
+         This form of chained operations on addons will be DEPRECATED in the future.
+         Please, enable one addon at a time: 'microk8s enable <addon>'
+Addon core/dns is already enabled
+Enabling Kubernetes Dashboard
+Infer repository core for addon metrics-server
+Enabling Metrics-Server
+serviceaccount/metrics-server created
+clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/system:metrics-server created
+rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
+clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
+clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+service/metrics-server created
+deployment.apps/metrics-server created
+apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
+clusterrolebinding.rbac.authorization.k8s.io/microk8s-admin created
+Metrics-Server is enabled
+Applying manifest
+serviceaccount/kubernetes-dashboard created
+service/kubernetes-dashboard created
+secret/kubernetes-dashboard-certs created
+secret/kubernetes-dashboard-csrf created
+secret/kubernetes-dashboard-key-holder created
+configmap/kubernetes-dashboard-settings created
+role.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrole.rbac.authorization.k8s.io/kubernetes-dashboard created
+rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+deployment.apps/kubernetes-dashboard created
+service/dashboard-metrics-scraper created
+deployment.apps/dashboard-metrics-scraper created
+secret/microk8s-dashboard-token created
+
+If RBAC is not enabled access the dashboard using the token retrieved with:
+
+microk8s kubectl describe secret -n kube-system microk8s-dashboard-token
+
+Use this token in the https login UI of the kubernetes-dashboard service.
+
+In an RBAC enabled setup (microk8s enable RBAC) you need to create a user with restricted
+permissions as shown in:
+https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
+
+Infer repository core for addon hostpath-storage
+Enabling default storage class.
+WARNING: Hostpath storage is not suitable for production environments.
+         A hostpath volume can grow beyond the size limit set in the volume claim manifest.
+
+deployment.apps/hostpath-provisioner created
+storageclass.storage.k8s.io/microk8s-hostpath created
+serviceaccount/microk8s-hostpath created
+clusterrole.rbac.authorization.k8s.io/microk8s-hostpath created
+clusterrolebinding.rbac.authorization.k8s.io/microk8s-hostpath created
+Storage will be available soon.
+The registry will be created with the size of 20Gi.
+Default storage class will be used.
+namespace/container-registry created
+persistentvolumeclaim/registry-claim created
+deployment.apps/registry created
+service/registry created
+configmap/local-registry-hosting configured
+ubuntu@microk8s-vm:~$ sudo snap alias microk8s.kubectl kubectl
+Added:
+  - microk8s.kubectl as kubectl
+ubuntu@microk8s-vm:~$ sudo kubectl get nodes
+NAME          STATUS   ROLES    AGE   VERSION
+microk8s-vm   Ready    <none>   10m   v1.27.5
+ubuntu@microk8s-vm:~$ sudo kubectl get nodes -o wide
+NAME          STATUS   ROLES    AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+microk8s-vm   Ready    <none>   12m   v1.27.5   192.168.64.2   <none>        Ubuntu 22.04.3 LTS   5.15.0-84-generic   containerd://1.6.15
+ubuntu@microk8s-vm:~$ sudo kubectl get services -o wide
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+kubernetes   ClusterIP   10.152.183.1   <none>        443/TCP   13m   <none>
+ubuntu@microk8s-vm:~$ sudo kubectl get services -o wide --all-namespaces
+NAMESPACE            NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                  AGE     SELECTOR
+default              kubernetes                  ClusterIP   10.152.183.1     <none>        443/TCP                  15m     <none>
+kube-system          kube-dns                    ClusterIP   10.152.183.10    <none>        53/UDP,53/TCP,9153/TCP   15m     k8s-app=kube-dns
+kube-system          metrics-server              ClusterIP   10.152.183.136   <none>        443/TCP                  8m36s   k8s-app=metrics-server
+kube-system          kubernetes-dashboard        ClusterIP   10.152.183.227   <none>        443/TCP                  8m35s   k8s-app=kubernetes-dashboard
+kube-system          dashboard-metrics-scraper   ClusterIP   10.152.183.145   <none>        8000/TCP                 8m35s   k8s-app=dashboard-metrics-scraper
+container-registry   registry                    NodePort    10.152.183.28    <none>        5000:32000/TCP           8m33s   app=registry
+ubuntu@microk8s-vm:~$ sudo kubectl create deployment nginx --image=nginx
+deployment.apps/nginx created
+ubuntu@microk8s-vm:~$ sudo kubectl get deployments
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+nginx   0/1     1            0           18s
+ubuntu@microk8s-vm:~$ sudo kubectl get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+nginx-77b4fdf86c-j6r6s   1/1     Running   0          5m12s
+ubuntu@microk8s-vm:~$ sudo kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE    IP            NODE          NOMINATED NODE   READINESS GATES
+nginx-77b4fdf86c-j6r6s   1/1     Running   0          6m5s   10.1.254.73   microk8s-vm   <none>           <none>
+ubuntu@microk8s-vm:~$ wget 10.1.254.73
+--2023-10-09 15:11:15--  http://10.1.254.73/
+Connecting to 10.1.254.73:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 615 [text/html]
+Saving to: ‘index.html’
+
+index.html                              100%[===============================================================================>]     615  --.-KB/s    in 0s      
+
+2023-10-09 15:11:15 (31.6 MB/s) - ‘index.html’ saved [615/615]
+
+ubuntu@microk8s-vm:~$ sudo kubectl scale --replicas=3 deployments/nginx
+deployment.apps/nginx scaled
+ubuntu@microk8s-vm:~$ sudo kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE   IP            NODE          NOMINATED NODE   READINESS GATES
+nginx-77b4fdf86c-j6r6s   1/1     Running   0          13m   10.1.254.73   microk8s-vm   <none>           <none>
+nginx-77b4fdf86c-nffx8   1/1     Running   0          36s   10.1.254.74   microk8s-vm   <none>           <none>
+nginx-77b4fdf86c-d8jjr   1/1     Running   0          36s   10.1.254.75   microk8s-vm   <none>           <none>
+ubuntu@microk8s-vm:~$ arch
+aarch64
+ubuntu@microk8s-vm:~$ pwd
+/home/ubuntu
+ubuntu@microk8s-vm:~$ ls -a
+.  ..  .bash_logout  .bashrc  .cache  .profile  .ssh  .sudo_as_admin_successful  index.html
+ubuntu@microk8s-vm:~$ cat index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+ubuntu@microk8s-vm:~$ sudo microk8s.disable dashboard dns registry
+Infer repository core for addon dashboard
+Infer repository core for addon dns
+Infer repository core for addon registry
+WARNING: Do not enable or disable multiple addons in one command.
+         This form of chained operations on addons will be DEPRECATED in the future.
+         Please, disable one addon at a time: 'microk8s disable <addon>'
+Disabling Dashboard
+serviceaccount "kubernetes-dashboard" deleted
+service "kubernetes-dashboard" deleted
+secret "kubernetes-dashboard-certs" deleted
+secret "kubernetes-dashboard-csrf" deleted
+secret "kubernetes-dashboard-key-holder" deleted
+configmap "kubernetes-dashboard-settings" deleted
+role.rbac.authorization.k8s.io "kubernetes-dashboard" deleted
+clusterrole.rbac.authorization.k8s.io "kubernetes-dashboard" deleted
+rolebinding.rbac.authorization.k8s.io "kubernetes-dashboard" deleted
+clusterrolebinding.rbac.authorization.k8s.io "kubernetes-dashboard" deleted
+deployment.apps "kubernetes-dashboard" deleted
+service "dashboard-metrics-scraper" deleted
+deployment.apps "dashboard-metrics-scraper" deleted
+Dashboard is disabled
+Disabling DNS
+Reconfiguring kubelet
+Removing DNS manifest
+deployment.apps "coredns" deleted
+pod/coredns-7745f9f87f-dprgt condition met
+serviceaccount "coredns" deleted
+configmap "coredns" deleted
+service "kube-dns" deleted
+clusterrole.rbac.authorization.k8s.io "coredns" deleted
+clusterrolebinding.rbac.authorization.k8s.io "coredns" deleted
+DNS is disabled
+Disabling the private registry
+namespace "container-registry" deleted
+persistentvolumeclaim "registry-claim" deleted
+deployment.apps "registry" deleted
+service "registry" deleted
+configmap "local-registry-hosting" deleted
+configmap/local-registry-hosting created
+The registry is disabled. Use 'microk8s disable hostpath-storage:destroy-storage' to free the storage space.
+ubuntu@microk8s-vm:~$ sudo snap remove microk8s
+microk8s removed
+ubuntu@microk8s-vm:~$ ls -a
+.  ..  .bash_logout  .bashrc  .cache  .profile  .ssh  .sudo_as_admin_successful  index.html
+ubuntu@microk8s-vm:~$ cat .profile
+# ~/.profile: executed by the command interpreter for login shells.
+# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
+# exists.
+# see /usr/share/doc/bash/examples/startup-files for examples.
+# the files are located in the bash-doc package.
+
+# the default umask is set in /etc/profile; for setting the umask
+# for ssh logins, install and configure the libpam-umask package.
+#umask 022
+
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+	. "$HOME/.bashrc"
+    fi
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+ubuntu@microk8s-vm:~$ ls -a
+.  ..  .bash_logout  .bashrc  .cache  .profile  .ssh  .sudo_as_admin_successful  index.html
+ubuntu@microk8s-vm:~$ cat .bashrc
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# colored GCC warnings and errors
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+ubuntu@microk8s-vm:~$ ls -a
+.  ..  .bash_logout  .bashrc  .cache  .profile  .ssh  .sudo_as_admin_successful  index.html
+ubuntu@microk8s-vm:~$ cat .sudo_as_admin_successful
+ubuntu@microk8s-vm:~$ cat .bash_logout
+# ~/.bash_logout: executed by bash(1) when login shell exits.
+
+# when leaving the console clear the screen to increase privacy
+
+if [ "$SHLVL" = 1 ]; then
+    [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
+fi
+ubuntu@microk8s-vm:~$ exit
+logout
+rajaniapple@Rajanis-MacBook-Pro Exercise % multipass stop microk8s-vm
+rajaniapple@Rajanis-MacBook-Pro Exercise % multipass delete microk8s-vm
+rajaniapple@Rajanis-MacBook-Pro Exercise % multipass purge
+rajaniapple@Rajanis-MacBook-Pro Exercise % 

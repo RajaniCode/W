@@ -1,0 +1,3 @@
+% java -Djava.library.path=.
+
+% javac -Djava.library.path=.

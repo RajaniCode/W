@@ -1,0 +1,545 @@
+## Kubernetes Local Image
+
+% sw_vers
+[
+ProductName:		macOS
+ProductVersion:		14.0
+BuildVersion:		23A344
+]
+
+% arch
+[
+arm64
+]
+
+% node -v
+[
+v20.9.0
+]
+
+% npm -v
+[
+10.1.0
+]
+
+
+% cd /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-app
+
+
+% nano index.js
+[
+const express = require('express');
+const app = express();
+const  port = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Kubernetes Local Image');
+});
+
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
+});
+]
+% cat index.js
+
+
+% nano Dockerfile
+[
+FROM node:20.9-slim
+WORKDIR /usr/src/app
+COPY . .
+RUN npm install
+CMD [ "node", "index.js" ]
+]
+
+
+% cat Dockerfile
+
+
+% echo node_modules > .dockerignore
+
+
+% cat .dockerignore
+
+
+% npm init  
+[
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help init` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (app) 
+version: (1.0.0) 
+description: 
+entry point: (index.js) 
+test command: 
+git repository: 
+keywords: 
+author: 
+license: (ISC) 
+About to write to /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-app/package.json:
+
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
+
+Is this OK? (yes)
+]
+
+
+% cat package.json
+
+
+% npm install express
+
+
+% cat package.json
+
+
+% cat package-lock.json
+
+
+% docker version
+
+
+% docker build -t node-app .
+
+
+% docker run -it -p 3000:3000 node-app
+
+
+# In another terminal window
+% open http://localhost:3000/
+[
+http://localhost:3000/
+Kubernetes Local Image
+]
+
+
+% docker ps
+[
+CONTAINER ID   IMAGE      COMMAND                  CREATED          STATUS          PORTS                    NAMES
+01b4b5dad574   node-app   "docker-entrypoint.s…"   23 seconds ago   Up 22 seconds   0.0.0.0:3000->3000/tcp   funny_pike
+]
+% docker stop 01b4b5dad574
+[
+01b4b5dad574
+]
+
+
+# Switch to the original terminal window
+% minikube start
+
+
+% nano k8s-imagepullpolicy-never.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app-deployment
+  labels:
+    app: node-app-label
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: node-app-label  
+  template:
+    metadata:
+      labels:
+        app: node-app-label  
+    spec:
+      containers:
+      - name: node-app
+        image: node-app 
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-app-service 
+spec:
+  selector:
+    app: node-app-label 
+  type: LoadBalancer     
+  ports:
+  - protocol: TCP        
+    port: 5000           
+    targetPort: 3000    
+    nodePort: 31110
+]
+% cat k8s-imagepullpolicy-never.yaml
+% kubectl apply -f k8s-imagepullpolicy-never.yaml
+[
+% kubectl delete -f k8s-imagepullpolicy-never.yaml
+]
+
+
+[
+% kubectl get pods
+NAME                                   READY   STATUS              RESTARTS   AGE
+node-app-deployment-54db5577dc-nqzp2   0/1     ErrImageNeverPull   0          8s
+
+% kubectl get pods --watch
+NAME                                   READY   STATUS              RESTARTS   AGE
+node-app-deployment-54db5577dc-nqzp2   0/1     ErrImageNeverPull   0          23s
+
+# control + c
+]
+
+
+% kubectl get all 
+
+
+# minikube environment variables # % env # % docker-env # 1 #
+% eval $(minikube docker-env)
+[
+% env
+]
+[
+% echo $(minikube docker-env)
+export DOCKER_TLS_VERIFY="1" export DOCKER_HOST="tcp://127.0.0.1:49551" export DOCKER_CERT_PATH="/Users/rajaniapple/.minikube/certs" export MINIKUBE_ACTIVE_DOCKERD="minikube" # To point your shell to minikube's docker-daemon, run: # eval $(minikube -p minikube docker-env)
+]
+
+% echo $DOCKER_TLS_VERIFY
+% echo $DOCKER_HOST
+% echo $DOCKER_CERT_PATH
+% echo $MINIKUBE_ACTIVE_DOCKERD
+
+
+# Re-run docker build
+% docker build -t node-app .
+
+
+[
+% minikube image ls
+]
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| docker.io/library/node-app              | latest  | c82ea86b468f2 | 172MB  |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+
+% kubectl rollout restart deployment node-app-deployment
+
+
+% kubectl get pods
+[
+NAME                                   READY   STATUS        RESTARTS   AGE
+node-app-deployment-54db5577dc-nqzp2   1/1     Terminating   0          2m22s
+node-app-deployment-5f89d4898c-9hz25   1/1     Running       0          8s
+]
+
+
+% kubectl get pods --watch
+[
+NAME                                   READY   STATUS        RESTARTS   AGE
+node-app-deployment-54db5577dc-nqzp2   1/1     Terminating   0          2m37s
+node-app-deployment-5f89d4898c-9hz25   1/1     Running       0          23s
+]
+# control + c
+
+
+% kubectl get all 
+
+
+% minikube service node-app-service
+[
+http://localhost:3000/
+Kubernetes Local Image
+]
+# control + c
+
+
+# minikube image load # 2 #
+# delete # deployment # node-app-deployment
+% kubectl delete -n default deployment node-app-deployment
+
+# delete # service # node-app-service
+% kubectl delete -n default service node-app-service
+
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| docker.io/library/node-app              | latest  | c82ea86b468f2 | 172MB  |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+# delete # image # node-app
+[
+% minikube image rm node-app
+]
+% minikube image rm docker.io/library/node-app:latest
+
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+# minikube environment variables unset # % env # % docker-env -u
+% eval $(minikube docker-env -u)
+[
+% env
+]
+[
+% echo $(minikube docker-env -u)
+unset DOCKER_TLS_VERIFY; unset DOCKER_HOST; unset DOCKER_CERT_PATH; unset MINIKUBE_ACTIVE_DOCKERD; unset SSH_AUTH_SOCK; unset SSH_AGENT_PID;
+]
+
+% echo $DOCKER_TLS_VERIFY
+% echo $DOCKER_HOST
+% echo $DOCKER_CERT_PATH
+% echo $MINIKUBE_ACTIVE_DOCKERD
+
+# Re-run docker build
+% docker build -t node-app .
+
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+# minikube image load
+% minikube image load node-app
+
+
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| docker.io/library/node-app              | latest  | b98d543180189 | 172MB  |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+
+% kubectl apply -f k8s-imagepullpolicy-never.yaml
+
+
+% kubectl get pods
+[
+NAME                                   READY   STATUS    RESTARTS   AGE
+node-app-deployment-54db5577dc-q29rv   1/1     Running   0          7s
+]
+
+
+% kubectl get pods --watch
+[
+NAME                                   READY   STATUS    RESTARTS   AGE
+node-app-deployment-54db5577dc-q29rv   1/1     Running   0          28s
+]
+
+
+% kubectl get all
+
+
+% minikube service node-app-service
+[
+http://localhost:3000/
+Kubernetes Local Image
+]
+# control + c
+
+
+# minikube image build # 3 #
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| docker.io/library/node-app              | latest  | b98d543180189 | 172MB  |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+[
+% minikube image rm node-app
+]
+% minikube image rm docker.io/library/node-app:latest
+[
+❗  Failed to remove images for profile minikube error removing images: remove image docker: docker rmi docker.io/library/node-app:latest: Process exited with status 1
+stdout:
+
+stderr:
+Error response from daemon: conflict: unable to remove repository reference "docker.io/library/node-app:latest" (must force) - container aa12a1c75b41 is using its referenced image b98d54318018
+]
+
+% docker ps
+[
+CONTAINER ID   IMAGE                                 COMMAND                  CREATED          STATUS          PORTS							NAMES
+0e75e90a7c7c   gcr.io/k8s-minikube/kicbase:v0.0.40   "/usr/local/bin/entr…"   12 minutes ago   Up 12 minutes   127.0.0.1:49631->22/tcp, 127.0.0.1:49632->2376/tcp, 127.0.0.1:49634->5000/tcp, 127.0.0.1:49635->8443/tcp, 127.0.0.1:49633->32443/tcp   											minikube
+]
+% docker stop 0e75e90a7c7c
+[
+0e75e90a7c7c
+]
+
+% minikube image ls --format table
+[
+|-------|-----|----------|------|
+| Image | Tag | Image ID | Size |
+|-------|-----|----------|------|
+|-------|-----|----------|------|
+]
+
+# Docker Desktop
+[
+Delete All Containers
+Delete All Images
+Delete All Volumes
+% docker network prune
+% minikube profile list
+% minikube delete # Removing /Users/rajaniapple/.minikube/machines/minikube ...
+[
+% minikube delete --all
+]
+% ls /Users/rajaniapple/.minikube
+% rm -rf /Users/rajaniapple/.minikube
+% ls /Users/rajaniapple/.kube
+% rm -rf /Users/rajaniapple/.kube
+]
+
+% docker version
+
+% minikube start
+
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+% minikube image build -t node-app .
+
+
+% minikube image ls --format table
+[
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| docker.io/library/node-app              | latest  | d380982aa4d7c | 172MB  |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+|-----------------------------------------|---------|---------------|--------|
+]
+
+
+% kubectl apply -f k8s-imagepullpolicy-never.yaml
+
+
+% kubectl get pods
+[
+NAME                                   READY   STATUS    RESTARTS   AGE
+node-app-deployment-54db5577dc-gqtd6   1/1     Running   0          7s
+]
+
+
+% kubectl get pods --watch
+[
+NAME                                   READY   STATUS    RESTARTS   AGE
+node-app-deployment-54db5577dc-gqtd6   1/1     Running   0          19s
+]
+# control + c
+
+
+% kubectl get all 
+
+
+% minikube service node-app-service
+[
+http://localhost:3000/
+Kubernetes Local Image
+]
+# control + c

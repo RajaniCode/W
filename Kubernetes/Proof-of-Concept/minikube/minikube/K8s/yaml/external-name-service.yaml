@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-name-service
+  namespace: prod
+spec:
+  type: ExternalName
+  externalName: external.name.service.com

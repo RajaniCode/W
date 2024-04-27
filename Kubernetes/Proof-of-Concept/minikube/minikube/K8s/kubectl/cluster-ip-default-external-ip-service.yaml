@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-ip-default-external-ip-service-app-deployment
+  labels:
+    app: cluster-ip-default-external-ip-service-app
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: cluster-ip-default-external-ip-service-app 
+  template:
+    metadata:
+      labels:
+        app: cluster-ip-default-external-ip-service-app
+    spec:
+      containers:
+      - name: cluster-ip-default-external-ip-service-app-container
+        image: dockerrajani/node-21-express-app-macos-arm64:version1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-ip-default-external-ip-service
+spec:
+  selector:
+    app.kubernetes.io/name: cluster-ip-default-external-ip-service-app
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 49152
+  externalIPs:
+    - 198.51.100.32

@@ -1,0 +1,456 @@
+# Lima # Ubuntu # Docker # Oracle
+
+% brew install lima
+
+% lima --version
+
+% limactl --version
+
+% limactl start
+
+# Select
+Open an editor to review or modify the current configuration
+
+# Using the default editor (vi) modify the arch field to the following (i to enter insert mode, make the change, ESC to enter command mode, :wq to exit and save)
+arch: "x86_64"
+
+# Run the newly created default Lima VM, and change directories to the new VM's home directory. (All commands past this should be run in the newly started shell unless specified otherwise)
+% lima
+rajaniapple@lima-default:/Users/rajaniapple$
+
+
+# Install Docker for Ubuntu in the Lima VM
+###########################################################################################################################
+
+# rajaniapple@lima-default:/Users/rajaniapple$
+
+$ arch
+
+$ pwd
+
+$ ls
+
+# Install Docker Engine on Ubuntu
+
+# Run the following command to uninstall all conflicting packages:
+$ for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+  
+# Set up Docker's apt repository.
+
+# Add Docker's official GPG key:
+$ sudo apt-get update
+$ sudo apt-get install ca-certificates curl gnupg
+[
+Package configuration
+                                                        ┌────┤ Daemons using outdated libraries ├─────┐
+                                                        │                                             │ 
+                                                        │                                             │ 
+                                                        │ Which services should be restarted?         │ 
+                                                        │                                             │ 
+                                                        │  [*] packagekit.service                     │ 
+                                                        │                                             │ 
+                                                        │                                             │ 
+                                                        │          <Ok>              <Cancel>         │ 
+                                                        │                                             │ 
+                                                        └─────────────────────────────────────────────┘ 
+]
+
+<ok>
+
+$ sudo install -m 0755 -d /etc/apt/keyrings
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+$ sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+
+# Add the repository to Apt sources:
+$ echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+$ sudo apt-get update
+
+[
+# Linux Distribution Name and Version
+$ cat /etc/*-release
+# Or
+$ lsb_release -a
+# Or
+$ hostnamectl
+
+# Linux kernel version
+$ uname -a
+# Or
+$ uname -mrs
+
+# Linux kernel version and gcc versio
+$ cat /proc/version
+
+% arch
+
+% pwd
+]
+
+# Install the Docker packages
+$ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Verify that the Docker Engine installation is successful by running the hello-world image.
+$ sudo docker run hello-world
+
+###########################################################################################################################
+
+# Add your user to the docker group, and activate the changes to be able to run docker commands without root access
+$ sudo usermod -aG docker $USER
+$ newgrp docker
+
+
+# Run Image from docker hub
+$ docker login
+
+$ docker pull container-registry.oracle.com/database/free:latest
+
+$ docker image list
+[
+REPOSITORY                                    TAG       IMAGE ID       CREATED        SIZE
+container-registry.oracle.com/database/free   latest    39cabc8e6db0   2 months ago   9.16GB
+hello-world                                   latest    9c7a54a9a43c   6 months ago   13.3kB
+]
+
+$ docker run -d -p 1521:1521 -e ORACLE_PASSWORD=Oracle_23c container-registry.oracle.com/database/free:latest
+
+$ docker container list --all --format "table"
+[
+CONTAINER ID   IMAGE                                                COMMAND                  CREATED              STATUS                                 PORTS                                       NAMES
+a2162156edd5   container-registry.oracle.com/database/free:latest   "/bin/bash -c $ORACL…"   About a minute ago   Up About a minute (health: starting)   0.0.0.0:1521->1521/tcp, :::1521->1521/tcp   angry_wing
+d39603b235cb   hello-world                                          "/hello"                 25 minutes ago       Exited (0) 25 minutes ago                                                          charming_wilson
+]
+
+$ docker exec -it a2162156edd5 bash
+###########################################################################################################################
+
+bash-4.4$ ls
+setPassword.sh
+bash-4.4$ cat setPassword.sh
+#!/bin/bash
+# LICENSE UPL 1.0
+#
+# Copyright (c) 1982-2023 Oracle and/or its affiliates. All rights reserved.
+# 
+# Since: November, 2016
+# Author: gerald.venzl@oracle.com
+# Description: Sets the password for sys, system and pdb_admin
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+# 
+
+if [ -e "${ORACLE_BASE}/oradata/${ORACLE_SID}/.prebuiltdb" ] && [ -n "${ORACLE_PWD}" ] && [ "${ORACLE_PWD}" != "$1" ]; then
+      echo "WARNING: The database password can not be changed for this container having a prebuilt database. The original password exists in the container environment. Your new password has been ignored!"
+      exit 1
+fi
+
+ORACLE_PWD=$1
+ORACLE_SID="$(grep "$ORACLE_HOME" /etc/oratab | cut -d: -f1)"
+ORACLE_PDB="$(ls -dl "$ORACLE_BASE"/oradata/"$ORACLE_SID"/*/ | grep -v -e pdbseed -e "${ARCHIVELOG_DIR_NAME:-archive_logs}"| awk '{print $9}' | cut -d/ -f6)"
+ORAENV_ASK=NO
+source oraenv
+
+sqlplus / as sysdba << EOF
+      ALTER USER SYS IDENTIFIED BY "$ORACLE_PWD";
+      ALTER USER SYSTEM IDENTIFIED BY "$ORACLE_PWD";
+      ALTER SESSION SET CONTAINER=$ORACLE_PDB;
+      ALTER USER PDBADMIN IDENTIFIED BY "$ORACLE_PWD";
+      exit;
+EOF
+
+###########################################################################################################################
+
+bash-4.4$ ./setPassword.sh Oracle_23c
+The Oracle base remains unchanged with value /opt/oracle
+
+SQL*Plus: Release 23.0.0.0.0 - Production on Sat Nov 11 15:48:29 2023
+Version 23.3.0.23.09
+
+Copyright (c) 1982, 2023, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+
+SQL> 
+User altered.
+
+SQL> 
+User altered.
+
+SQL> 
+Session altered.
+
+SQL> 
+User altered.
+
+SQL> Disconnected from Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+bash-4.4$ sqlplus PDBADMIN/Oracle_23c@//localhost:1521/FREEPDB1
+
+SQL> 
+***************************************************************************************************************************
+
+-- Version
+SELECT * FROM v$version;
+
+-- USER
+SELECT user FROM DUAL;
+
+-- INSTANCE_NAME
+SELECT sys_context('USERENV','INSTANCE_NAME') FROM DUAL;
+-- SID
+SELECT sys_context('USERENV', 'SID') FROM DUAL;
+-- DB_NAME
+SELECT sys_context('USERENV','DB_NAME') FROM DUAL;
+-- SERVICE_NAME
+SELECT sys_context('USERENV','SERVICE_NAME') FROM DUAL;
+
+-- ORA_DATABASE_NAME
+SELECT ora_database_name FROM DUAL;
+
+-- GLOBAL_NAME
+SELECT * from global_name;
+
+-- Tables in USER
+SELECT table_name FROM user_tables;
+
+EXIT
+
+***************************************************************************************************************************
+
+########################################################################################################################### 
+
+export APP_USER="Oracle_23c_Free_User"
+export APP_USER_PASSWORD="Oracle_23c_Free"
+export TARGET_PDB="FREEPDB1"
+
+echo $APP_USER
+echo $APP_USER_PASSWORD
+echo $TARGET_PDB
+
+ALTER_SESSION_CMD="ALTER SESSION SET CONTAINER=${TARGET_PDB};"
+
+sqlplus -s / as sysdba << EOF
+   -- Exit on any errors
+   WHENEVER SQLERROR EXIT SQL.SQLCODE
+
+   ${ALTER_SESSION_CMD}
+
+   CREATE USER ${APP_USER} IDENTIFIED BY "${APP_USER_PASSWORD}" QUOTA UNLIMITED ON USERS;
+   GRANT CONNECT, RESOURCE, CREATE VIEW, CREATE MATERIALIZED VIEW, CREATE SYNONYM TO ${APP_USER};
+   exit;
+EOF
+
+###########################################################################################################################
+
+bash-4.4$ sqlplus Oracle_23c_Free_User/Oracle_23c_Free@//localhost:1521/FREEPDB1
+
+SQL> 
+***************************************************************************************************************************
+
+-- Version
+SELECT * FROM v$version;
+
+-- USER
+SELECT user FROM DUAL;
+
+-- INSTANCE_NAME
+SELECT sys_context('USERENV','INSTANCE_NAME') FROM DUAL;
+-- SID
+SELECT sys_context('USERENV', 'SID') FROM DUAL;
+-- DB_NAME
+SELECT sys_context('USERENV','DB_NAME') FROM DUAL;
+-- SERVICE_NAME
+SELECT sys_context('USERENV','SERVICE_NAME') FROM DUAL;
+
+-- ORA_DATABASE_NAME
+SELECT ora_database_name FROM DUAL;
+
+-- GLOBAL_NAME
+SELECT * from global_name;
+
+-- Tables in USER
+SELECT table_name FROM user_tables;
+
+-- DROP SEQUENCE seq_id;
+
+CREATE SEQUENCE seq_id
+MINVALUE 1
+START WITH 1
+INCREMENT BY 1
+CACHE 10;
+
+-- DROP TABLE users;
+
+CREATE TABLE users
+(
+    id INT NOT NULL,
+    username VARCHAR(50) NOT NULL, 
+    login_date DATE NOT NULL,
+    login_time VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,    
+    CONSTRAINT pk_id PRIMARY KEY(id),
+    CONSTRAINT idx_username UNIQUE(username)    
+);
+
+COMMIT;
+
+INSERT INTO users(id, username, login_date, login_time, created_at, updated_at)
+VALUES
+(
+seq_id.nextval,
+'Foo', 
+TO_DATE('2016-11-06', 'YYYY-MM-DD'), 
+'10:49:35', 
+TO_TIMESTAMP('2016-11-06 10:49:35.0', 'YYYY-MM-DD HH:MI:SS.FF'), 
+TO_TIMESTAMP('2016-11-06 10:49:35.0', 'YYYY-MM-DD HH:MI:SS.FF')
+);
+
+COMMIT;
+
+INSERT INTO users(id, username, login_date, login_time, created_at, updated_at)
+VALUES
+(
+seq_id.nextval,
+'Bar', 
+TO_DATE('2016-11-06', 'YYYY-MM-DD'), 
+'10:49:35', 
+TO_TIMESTAMP('2016-11-06 10:49:35.0', 'YYYY-MM-DD HH:MI:SS.FF'), 
+TO_TIMESTAMP('2016-11-06 10:49:35.0', 'YYYY-MM-DD HH:MI:SS.FF')
+);
+
+COMMIT;
+
+SELECT * FROM users;
+
+-- Tables in USER
+SELECT table_name FROM user_tables;
+
+EXIT
+
+***************************************************************************************************************************
+
+###########################################################################################################################
+
+-- SQL Developer --
+Name:
+Oracle_23c_Free_Docker
+
+Database Type:
+Oracle
+
+User Info
+
+Authentication Type:
+Default
+
+Username:
+Oracle_23c_Free_User
+Password:
+Oracle_23c_Free
+
+Role: Default
+
+Connection Type:
+Basic
+
+Hostname:
+localhost
+Port:
+1521
+Service name:
+FREEPDB1
+
+###########################################################################################################################
+
+rajaniapple@Rajanis-MacBook-Pro ~ % sqlplus Oracle_23c_Free_User/Oracle_23c_Free@//localhost:1521/FREEPDB1
+
+SQL> 
+
+-- Version
+SELECT * FROM v$version;
+
+-- USER
+SELECT user FROM DUAL;
+
+-- INSTANCE_NAME
+SELECT sys_context('USERENV','INSTANCE_NAME') FROM DUAL;
+-- SID
+SELECT sys_context('USERENV', 'SID') FROM DUAL;
+-- DB_NAME
+SELECT sys_context('USERENV','DB_NAME') FROM DUAL;
+-- SERVICE_NAME
+SELECT sys_context('USERENV','SERVICE_NAME') FROM DUAL;
+
+-- ORA_DATABASE_NAME
+SELECT ora_database_name FROM DUAL;
+
+-- GLOBAL_NAME
+SELECT * from global_name;
+
+-- Tables in USER
+SELECT table_name FROM user_tables;
+
+SELECT * FROM users;
+
+EXIT
+
+###########################################################################################################################
+
+bash-4.4$ exit
+
+###########################################################################################################################
+
+rajaniapple@lima-default:/Users/rajaniapple$ exit
+logout
+
+[
+# Lima Shell # logout # exit
+% lima
+rajaniapple@lima-default:/Users/rajaniapple$ exit
+logout
+]
+
+% limactl shell default uname -a
+% lima uname -a
+[
+Linux lima-default 6.5.0-9-generic #9-Ubuntu SMP PREEMPT_DYNAMIC Sat Oct  7 01:35:40 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+]
+
+# List instance(s)
+% limactl list
+[
+NAME       STATUS     SSH                VMTYPE    ARCH      CPUS    MEMORY    DISK      DIR
+default    Running    127.0.0.1:60022    qemu      x86_64    4       4GiB      100GiB    ~/.lima/default
+]
+
+# Stop instance
+[
+% limactl stop default
+]
+% limactl stop
+
+# List instance(s)
+% limactl list
+[
+NAME       STATUS     SSH            VMTYPE    ARCH      CPUS    MEMORY    DISK      DIR
+default    Stopped    127.0.0.1:0    qemu      x86_64    4       4GiB      100GiB    ~/.lima/default
+]
+
+# Delete instance # default
+% limactl delete default 
+
+[
+% brew uninstall lima
+
+% ls /Users/rajaniapple/.lima
+% rm -rf /Users/rajaniapple/.lima
+]
+
+###########################################################################################################################

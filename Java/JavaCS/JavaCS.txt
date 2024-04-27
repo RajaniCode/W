@@ -1,0 +1,422 @@
+// Java Generics Wildcards, Java record, enum, interface, Java nested types, and Java class, interface, record, enum, sealed, non-sealed, final, permitted subclasses, primitive, public, static
+// Java Generics Wildcards 
+/*
+class Program {
+    public static void main(String args[]) {
+       Program pro = new Program();
+       pro.print();
+    }
+
+    public void print()
+    {
+        java.util.List<Integer> numbers = new java.util.ArrayList<Integer>();
+        // error: illegal start of expression
+        // <Integer>methodList(numbers);
+        this.<Integer>methodList(numbers);
+        // Or
+        // methodList(numbers);
+        
+        // error: illegal start of expression
+        // <Sample>methodClass(Sample.class);
+        this.<Sample>methodClass(Sample.class);
+        // Or
+        // methodClass(Sample.class);
+    }
+    
+    // public <T> void methodList(java.util.List<T> numbers) {}
+    // Or
+    public void methodList(java.util.List<?> numbers) {}
+    
+    public <T> void methodClass(Class<T> wildcard) {}
+    // Or
+    // public void methodClass(Class<?> wildcard) {}
+}
+
+class Sample {}
+*/
+
+
+
+
+
+// Java Class<?> vs. C# System.Type
+// Java Class<?>
+/*
+public class Program {
+    public static void main(String args[]) {
+      System.out.println(String.format("Java Version: %s\n", System.getProperty("java.version")));
+       Program pro = new Program();
+       pro.print();
+    }
+
+    public void print()
+    {
+        java.util.List<Integer> numbers = new java.util.ArrayList<Integer>();
+        
+        // methodList(numbers);
+        // Or
+        this.<Integer>methodList(numbers);
+      
+        /*
+        // castMethodClass(Base.class);
+        // Or
+        this.<Class<Base>>castMethodClass(Base.class);
+        */
+        
+        // methodClass(Base.class);
+        // Or
+        this.<Base>methodClass(Base.class);
+    }
+    
+    // public <T> void methodList(java.util.List<T> numbers) {}
+    // Or
+    public void methodList(java.util.List<?> numbers) {}
+
+    /*
+    public <T> void castMethodClass(T t) {
+        
+        // Class<?> castToClassTypeLocal = (Class<?>)t;
+        // Or
+        // Class<?> castToClassTypeLocal = (Class<T>)t;
+        // Or
+        Class<T> castToClassTypeLocal = (Class<T>)t;
+        
+        // Class<?> wildcardLocal = new Standalone().getClass();
+        Class<?> wildcardLocal = new Derived().getClass();
+        
+        boolean isTrue = castToClassTypeLocal.isAssignableFrom(wildcardLocal);
+        
+        System.out.println(String.format("%s isAssignableFrom %s: %b", castToClassTypeLocal, wildcardLocal, isTrue));
+        
+        boolean isFalse = wildcardLocal.isAssignableFrom(castToClassTypeLocal);
+        
+        System.out.println(String.format("%s isAssignableFrom %s: %b", wildcardLocal, castToClassTypeLocal, isFalse));
+    }
+    */
+    
+    /*
+    public <T> void methodClass(Class<T> classTypePassed) {
+        
+        // Class<?> wildcardLocal = new Standalone().getClass();
+        Class<?> wildcardLocal = new Derived().getClass();
+        
+        boolean isTrue = classTypePassed.isAssignableFrom(wildcardLocal);
+        
+        System.out.println(String.format("%s isAssignableFrom %s: %b", classTypePassed, wildcardLocal, isTrue));
+        
+        boolean isFalse = wildcardLocal.isAssignableFrom(classTypePassed);
+        
+        System.out.println(String.format("%s isAssignableFrom %s: %b", wildcardLocal, classTypePassed, isFalse));
+    }
+    */
+    // Or
+    public void methodClass(Class<?> wildcardPassed) {
+        
+        // Class<?> wildcardLocal = new Standalone().getClass();
+        Class<?> wildcardLocal = new Derived().getClass();
+        
+        boolean isTrue = wildcardPassed.isAssignableFrom(wildcardLocal);
+        
+        System.out.println(String.format("%s isAssignableFrom %s: %b", wildcardPassed, wildcardLocal, isTrue));
+        
+        boolean isFalse = wildcardLocal.isAssignableFrom(wildcardPassed);
+        
+        System.out.println(String.format("%s isAssignableFrom %s: %b", wildcardLocal, wildcardPassed, isFalse));
+    }
+}
+
+class Base {}
+
+class Derived extends Base {}
+
+class Standalone {}
+*/
+// Output
+/*
+Java Version: 17.0.1
+
+class Base isAssignableFrom class Derived: true
+class Derived isAssignableFrom class Base: false
+*/
+
+// C# System.Type
+/*
+class Program
+{
+    static void Main() 
+    {
+        System.Console.WriteLine("System.Environment.Version: {0}\n", System.Environment.Version);
+        Program pro = new Program();
+        pro.Print();
+    }
+    
+    public void Print()
+    {
+        System.Collections.Generic.List<int> numbers = new System.Collections.Generic.List<int>();
+        // MethodList(numbers);
+        // Or
+        // this.MethodList<int>(numbers);
+        // Or
+        MethodList<int>(numbers);
+
+        /*
+        // CastMethodClass<System.Type>(typeof(Base));
+        // Or
+        // this.CastMethodClass(typeof(Base));
+        // Or
+        CastMethodClass<System.Type>(typeof(Base));
+        */
+        
+        // this.MethodClass(typeof(Base));
+        // Or
+        MethodClass(typeof(Base));
+    }
+    
+    public void MethodList<T>(System.Collections.Generic.List<T> numbers) {}
+    
+    /*
+    public void CastMethodClass<T>(T t)
+    {
+        System.Type castToSystemTypeLocal = t as System.Type;
+        
+        // System.Type systemTypeLocal = new Standalone().GetType();
+        System.Type systemTypeLocal = new Derived().GetType();
+        
+        bool isTrue = castToSystemTypeLocal.IsAssignableFrom(systemTypeLocal);
+        
+        System.Console.WriteLine("{0} IsAssignableFrom {1}: {2}", castToSystemTypeLocal, systemTypeLocal, isTrue);
+    
+        bool isFalse = systemTypeLocal.IsAssignableFrom(castToSystemTypeLocal);
+        
+        System.Console.WriteLine("{0} IsAssignableFrom {1}: {2}", systemTypeLocal, castToSystemTypeLocal, isFalse);
+    }
+    */
+    
+    public void MethodClass(System.Type systemTypePassed)
+    {
+        // System.Type systemTypeLocal = new Standalone().GetType();
+        System.Type systemTypeLocal = new Derived().GetType();
+        
+        bool isTrue = systemTypePassed.IsAssignableFrom(systemTypeLocal);
+        
+        System.Console.WriteLine("{0} IsAssignableFrom {1}: {2}", systemTypePassed, systemTypeLocal, isTrue);
+    
+        bool isFalse = systemTypeLocal.IsAssignableFrom(systemTypePassed);
+        
+        System.Console.WriteLine("{0} IsAssignableFrom {1}: {2}", systemTypeLocal, systemTypePassed, isFalse);
+    }
+}
+
+class Base {}
+
+class Derived : Base {}
+
+class Standalone {}
+*/
+// Output
+/*
+System.Environment.Version: 4.0.30319.42000
+
+Base IsAssignableFrom Derived: True
+Derived IsAssignableFrom Base: False
+*/
+
+// Java Nested Types vs. C# Nested Types
+// Java Nested Types
+/*
+class OuterClass {
+    void outerClassMethod() {
+        System.out.println("Outer class method");
+        class InnerClassInOuterClassMethod {
+            void innerClassMethod() {
+                System.out.println("Inner class method, in inner class, in outer class method");
+            }
+        }
+        InnerClassInOuterClassMethod classInner = new InnerClassInOuterClassMethod();
+        classInner.innerClassMethod();
+    }
+}
+
+public class Program {
+     public static void main(String[] args) {
+        OuterClass classOuter = new OuterClass();
+        classOuter.outerClassMethod();
+    }
+}
+
+class OC {
+// interface OI {
+// record OR() {
+// enum OE { Etcetera;
+    static class SC extends Object implements II, SI {}
+    static class StaticC extends SC implements II, SI {}
+    // static class can extend non-static class only when not in the same scope
+    static class ScopeSC extends OC implements II, SI {}
+    class NonStaticC extends SC implements II,SI {}
+    class IC extends Object implements II, SI {}
+    class ScopeC extends IC implements II, SI {}
+    interface II {}
+    interface ScopeI extends II {}
+    static interface SI extends II {}
+    static interface ScopeSI extends SI {}
+    interface NonStaticI extends SI {}
+    record IR() implements II, SI {}
+    static record SR() implements II, SI {}
+    enum IE implements II, SI {}
+    static enum SE implements II, SI {}
+}
+// }}}
+*/
+
+// CS Nested Types
+/*
+class OuterClass 
+{
+    class InnerClass 
+    {
+             public void innerClassMethod() 
+             {
+                System.Console.WriteLine("Inner class method");
+              }
+     }
+    public void outerClassMethod()
+    {
+        System.Console.WriteLine("Outer class method");
+        InnerClass classInner = new InnerClass();
+        classInner.innerClassMethod();
+     }
+}
+
+class Program
+{
+    static void Main() 
+    {
+        OuterClass classOuter = new OuterClass();
+        classOuter.outerClassMethod();
+     }
+}
+*/
+
+
+// Java vs. C# subtleties
+// Java isPrimitive() 
+/*
+int i = 0;
+// i.getClass().isPrimitive()
+// error: int cannot be dereferenced
+int.class.isPrimitive() is true
+Integer n = 0;
+n.getClass().isPrimitive() is false
+E.class.isPrimitive() is false
+E.Alpha.getClass().isPrimitive() is false
+enum E { Alpha, Beta, Gamma }
+*/
+// CS IsValueType
+/*
+int i = 0;
+i.GetType().IsValueType is True
+typeof(E).IsValueType is True
+E.Alpha.GetType().IsValueType is True
+enum E { Alpha, Beta, Gamma }
+*/
+
+// Java static class
+/*
+// Can only be nested
+// Can have static and/or instance members 
+// Can have non-static and/or static nested classes
+// Can extend Object/static class/non-static class (other than non-static class in the same scope), and implement interface
+// Can be extended by static/non-static class 
+*/
+
+// CS static class 
+/*
+// Need not be nested
+// Can have only static members
+// Can have non-static and/or static nested classes
+// Can extend only object, cannot implement interface, and cannot be extended 
+// NB
+// CS struct cannot be extended nor extend object, however struct other than ref struct can implement interface(s) 
+
+// Java record  // Reference Type 
+/*
+// record expects header ()
+// record are final and can be explicitly declared final, hence cannot extend 
+// record can implement interface(s)
+*/
+
+// Java enum // Reference Type 
+/*
+// enum is final although can't be explicitly declared, hence cannot extend 
+// enum can implement interface(s)
+*/
+
+// Java final
+/*
+// final can be method parameter and/or local unlike C# local const
+*/
+
+// Java Unbounded Wildcards
+/*
+// Wildcard character (?)
+// E.g. List<?>, Class<?>, etc
+// Two scenarios:
+// 1. List<Object> (using functionality provided in the Object class): Only a list of Object instances and not List<Integer>, List<String>, List<Double>, etc.
+// 2. List<?> (using methods in the generic class that don't depend on the type parameter): A list of any type List<Integer>, List<String>, List<Double>, etc. And for Class<?>, most of the methods in Class<T> do not depend on T.
+*/
+// Java Upper Bounded Wildcards
+/*
+// Wildcard character ('?'), followed by the extends/implements keyword, followed by its upper bound: <? extends/implements X>.
+/// E.g., List<Number> is more restrictive than List<? extends Number> because the former matches a list of type Number only, whereas the latter matches a list of type Number or any of its subclasses.
+*/
+// Java Lower Bounded Wildcards
+/*
+// Wildcard character ('?'), following by the super keyword, followed by its lower bound: <? super X>.
+// E.g., List<Integer> is more restrictive than List<? super Integer> because the former matches a list of type Integer only, whereas the latter matches a list of any type that is a supertype of Integer.
+*/
+// Note: Java Bounded Wildcards
+/*
+// You can specify an upper bound for a wildcard, or you can specify a lower bound, but you cannot specify both.
+*/
+
+//
+
+// Java System Properties
+/*
+public class Program {
+    public static void main(String args[]) {
+         Program pro = new Program();
+         pro.printSystemProperties();
+    }
+    
+    public void printSystemProperties() {
+      System.out.println(String.format("OS Name: %s", System.getProperty("os.name")));
+      System.out.println(String.format("OS Version: %s", System.getProperty("os.version")));
+      System.out.println(String.format("OS Architecture: %s", System.getProperty("os.arch")));
+      System.out.println(String.format("Java Version: %s", System.getProperty("java.version")));
+      System.out.println(String.format("Java Home: %s", System.getProperty("java.home")));
+      System.out.println(String.format("User Name: %s", System.getProperty("user.name")));
+      System.getProperties().list(System.out);
+    }
+}
+*/
+
+// Java Arrays.toString(),  Arrays.deepToString()
+/*
+int[] intArray = new int[]{1, 2, 3, 4, 5, 6};
+String[] objArray = new String[]{"Java", "Python", "JavaScript"};
+
+// If using Stream.of(), primitive types need to be flatmapped
+Stream.of(intArray).flatMapToInt(Arrays::stream).forEach(System.out::print);
+IntStream.of(intArray).forEach(System.out::print);
+// Stream.of() with objects
+Stream.of(objArray).forEach(System.out::print);
+
+// Arrays.stream() works with both primitive types and objects
+Arrays.stream(intArray).forEach(System.out::print);
+Arrays.stream(objArray).forEach(System.out::print);
+
+// If using asList(), primitive types need to be flatMapped
+Arrays.asList(intArray).stream().flatMapToInt(Arrays::stream).forEach(System.out::print);
+Arrays.asList(objArray).stream().forEach(System.out::print);
+*/

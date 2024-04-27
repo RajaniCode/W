@@ -1,0 +1,232 @@
+Last login: Tue Feb  6 15:43:41 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % sw_vers                                                              
+ProductName:		macOS
+ProductVersion:		14.1.1
+BuildVersion:		23B81
+rajaniapple@Rajanis-MacBook-Pro ~ % arch                                                                 
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % php --version                                                   
+PHP 8.3.2 (cli) (built: Jan 16 2024 13:46:41) (NTS)
+Copyright (c) The PHP Group
+Zend Engine v4.3.2, Copyright (c) Zend Technologies
+    with Zend OPcache v8.3.2, Copyright (c), by Zend Technologies
+rajaniapple@Rajanis-MacBook-Pro ~ % composer --version                                                   
+Composer version 2.6.6 2023-12-08 18:32:26
+rajaniapple@Rajanis-MacBook-Pro ~ % pwd                                                                  
+/Users/rajaniapple
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Working/PHP/Laminas                    
+rajaniapple@Rajanis-MacBook-Pro Laminas % pwd                                               
+/Users/rajaniapple/Desktop/Working/PHP/Laminas
+rajaniapple@Rajanis-MacBook-Pro Laminas % composer create-project -s dev laminas/laminas-mvc-skeleton my-application
+Creating a "laminas/laminas-mvc-skeleton" project at "./my-application"
+Installing laminas/laminas-mvc-skeleton (2.4.x-dev 27be3a7cc27726f79ca3d5edbe27b0cc1c8a46ac)
+  - Installing laminas/laminas-mvc-skeleton (2.4.x-dev 27be3a7): Extracting archive
+Created project in /Users/rajaniapple/Desktop/Working/PHP/Laminas/my-application
+Loading composer repositories with package information
+Updating dependencies
+Lock file operations: 82 installs, 0 updates, 0 removals
+  - Locking amphp/amp (v2.6.2)
+  - Locking amphp/byte-stream (v1.8.1)
+  - Locking brick/varexporter (0.4.0)
+  - Locking composer/package-versions-deprecated (1.11.99.5)
+  - Locking composer/pcre (3.1.1)
+  - Locking composer/semver (3.4.0)
+  - Locking composer/xdebug-handler (3.0.3)
+  - Locking dealerdirect/phpcodesniffer-composer-installer (v1.0.0)
+  - Locking dnoegel/php-xdg-base-dir (v0.1.1)
+  - Locking doctrine/deprecations (1.1.3)
+  - Locking felixfbecker/advanced-json-rpc (v3.2.1)
+  - Locking felixfbecker/language-server-protocol (v1.5.2)
+  - Locking fidry/cpu-core-counter (1.0.0)
+  - Locking laminas/laminas-component-installer (3.4.0)
+  - Locking laminas/laminas-config (3.9.0)
+  - Locking laminas/laminas-development-mode (3.12.0)
+  - Locking laminas/laminas-escaper (2.13.0)
+  - Locking laminas/laminas-eventmanager (3.13.0)
+  - Locking laminas/laminas-http (2.19.0)
+  - Locking laminas/laminas-json (3.6.0)
+  - Locking laminas/laminas-loader (2.10.0)
+  - Locking laminas/laminas-modulemanager (2.15.0)
+  - Locking laminas/laminas-mvc (3.7.0)
+  - Locking laminas/laminas-router (3.12.0)
+  - Locking laminas/laminas-servicemanager (3.22.1)
+  - Locking laminas/laminas-skeleton-installer (1.3.0)
+  - Locking laminas/laminas-stdlib (3.19.0)
+  - Locking laminas/laminas-test (4.10.0)
+  - Locking laminas/laminas-uri (2.11.0)
+  - Locking laminas/laminas-validator (2.47.0)
+  - Locking laminas/laminas-view (2.34.0)
+  - Locking masterminds/html5 (2.8.1)
+  - Locking myclabs/deep-copy (1.11.1)
+  - Locking netresearch/jsonmapper (v4.4.1)
+  - Locking nikic/php-parser (v4.18.0)
+  - Locking phar-io/manifest (2.0.3)
+  - Locking phar-io/version (3.2.1)
+  - Locking phpdocumentor/reflection-common (2.2.0)
+  - Locking phpdocumentor/reflection-docblock (5.3.0)
+  - Locking phpdocumentor/type-resolver (1.8.0)
+  - Locking phpstan/phpdoc-parser (1.25.0)
+  - Locking phpunit/php-code-coverage (10.1.11)
+  - Locking phpunit/php-file-iterator (4.1.0)
+  - Locking phpunit/php-invoker (4.0.0)
+  - Locking phpunit/php-text-template (3.0.1)
+  - Locking phpunit/php-timer (6.0.0)
+  - Locking phpunit/phpunit (10.5.10)
+  - Locking psalm/plugin-phpunit (0.18.4)
+  - Locking psr/container (1.1.2)
+  - Locking psr/http-message (2.0)
+  - Locking psr/log (3.0.0)
+  - Locking sebastian/cli-parser (2.0.0)
+  - Locking sebastian/code-unit (2.0.0)
+  - Locking sebastian/code-unit-reverse-lookup (3.0.0)
+  - Locking sebastian/comparator (5.0.1)
+  - Locking sebastian/complexity (3.2.0)
+  - Locking sebastian/diff (5.1.0)
+  - Locking sebastian/environment (6.0.1)
+  - Locking sebastian/exporter (5.1.1)
+  - Locking sebastian/global-state (6.0.1)
+  - Locking sebastian/lines-of-code (2.0.2)
+  - Locking sebastian/object-enumerator (5.0.0)
+  - Locking sebastian/object-reflector (3.0.0)
+  - Locking sebastian/recursion-context (5.0.0)
+  - Locking sebastian/type (4.0.0)
+  - Locking sebastian/version (4.0.1)
+  - Locking spatie/array-to-xml (3.2.2)
+  - Locking squizlabs/php_codesniffer (3.8.1)
+  - Locking symfony/console (v7.0.3)
+  - Locking symfony/css-selector (v7.0.3)
+  - Locking symfony/dom-crawler (v7.0.3)
+  - Locking symfony/filesystem (v7.0.3)
+  - Locking symfony/polyfill-ctype (v1.29.0)
+  - Locking symfony/polyfill-intl-grapheme (v1.29.0)
+  - Locking symfony/polyfill-intl-normalizer (v1.29.0)
+  - Locking symfony/polyfill-mbstring (v1.29.0)
+  - Locking symfony/service-contracts (v3.4.1)
+  - Locking symfony/string (v7.0.3)
+  - Locking theseer/tokenizer (1.2.2)
+  - Locking vimeo/psalm (5.21.1)
+  - Locking webimpress/safe-writer (2.2.0)
+  - Locking webmozart/assert (1.11.0)
+Writing lock file
+Installing dependencies from lock file (including require-dev)
+Package operations: 82 installs, 0 updates, 0 removals
+  - Installing laminas/laminas-component-installer (3.4.0): Extracting archive
+  - Installing composer/package-versions-deprecated (1.11.99.5): Extracting archive
+  - Installing squizlabs/php_codesniffer (3.8.1): Extracting archive
+  - Installing dealerdirect/phpcodesniffer-composer-installer (v1.0.0): Extracting archive
+  - Installing laminas/laminas-skeleton-installer (1.3.0): Extracting archive
+  - Installing composer/pcre (3.1.1): Extracting archive
+  - Installing laminas/laminas-development-mode (3.12.0): Extracting archive
+  - Installing laminas/laminas-loader (2.10.0): Extracting archive
+  - Installing webimpress/safe-writer (2.2.0): Extracting archive
+  - Installing laminas/laminas-stdlib (3.19.0): Extracting archive
+  - Installing laminas/laminas-eventmanager (3.13.0): Extracting archive
+  - Installing psr/container (1.1.2): Extracting archive
+  - Installing laminas/laminas-config (3.9.0): Extracting archive
+  - Installing nikic/php-parser (v4.18.0): Extracting archive
+  - Installing brick/varexporter (0.4.0): Extracting archive
+  - Installing laminas/laminas-modulemanager (2.15.0): Extracting archive
+  - Installing laminas/laminas-servicemanager (3.22.1): Extracting archive
+  - Installing psr/http-message (2.0): Extracting archive
+  - Installing laminas/laminas-validator (2.47.0): Extracting archive
+  - Installing symfony/polyfill-mbstring (v1.29.0): Extracting archive
+  - Installing symfony/polyfill-ctype (v1.29.0): Extracting archive
+  - Installing laminas/laminas-escaper (2.13.0): Extracting archive
+  - Installing laminas/laminas-uri (2.11.0): Extracting archive
+  - Installing laminas/laminas-http (2.19.0): Extracting archive
+  - Installing laminas/laminas-router (3.12.0): Extracting archive
+  - Installing masterminds/html5 (2.8.1): Extracting archive
+  - Installing symfony/dom-crawler (v7.0.3): Extracting archive
+  - Installing symfony/css-selector (v7.0.3): Extracting archive
+  - Installing sebastian/version (4.0.1): Extracting archive
+  - Installing sebastian/type (4.0.0): Extracting archive
+  - Installing sebastian/recursion-context (5.0.0): Extracting archive
+  - Installing sebastian/object-reflector (3.0.0): Extracting archive
+  - Installing sebastian/object-enumerator (5.0.0): Extracting archive
+  - Installing sebastian/global-state (6.0.1): Extracting archive
+  - Installing sebastian/exporter (5.1.1): Extracting archive
+  - Installing sebastian/environment (6.0.1): Extracting archive
+  - Installing sebastian/diff (5.1.0): Extracting archive
+  - Installing sebastian/comparator (5.0.1): Extracting archive
+  - Installing sebastian/code-unit (2.0.0): Extracting archive
+  - Installing sebastian/cli-parser (2.0.0): Extracting archive
+  - Installing phpunit/php-timer (6.0.0): Extracting archive
+  - Installing phpunit/php-text-template (3.0.1): Extracting archive
+  - Installing phpunit/php-invoker (4.0.0): Extracting archive
+  - Installing phpunit/php-file-iterator (4.1.0): Extracting archive
+  - Installing theseer/tokenizer (1.2.2): Extracting archive
+  - Installing sebastian/lines-of-code (2.0.2): Extracting archive
+  - Installing sebastian/complexity (3.2.0): Extracting archive
+  - Installing sebastian/code-unit-reverse-lookup (3.0.0): Extracting archive
+  - Installing phpunit/php-code-coverage (10.1.11): Extracting archive
+  - Installing phar-io/version (3.2.1): Extracting archive
+  - Installing phar-io/manifest (2.0.3): Extracting archive
+  - Installing myclabs/deep-copy (1.11.1): Extracting archive
+  - Installing phpunit/phpunit (10.5.10): Extracting archive
+  - Installing laminas/laminas-json (3.6.0): Extracting archive
+  - Installing laminas/laminas-view (2.34.0): Extracting archive
+  - Installing laminas/laminas-mvc (3.7.0): Extracting archive
+  - Installing laminas/laminas-test (4.10.0): Extracting archive
+  - Installing webmozart/assert (1.11.0): Extracting archive
+  - Installing phpstan/phpdoc-parser (1.25.0): Extracting archive
+  - Installing phpdocumentor/reflection-common (2.2.0): Extracting archive
+  - Installing doctrine/deprecations (1.1.3): Extracting archive
+  - Installing phpdocumentor/type-resolver (1.8.0): Extracting archive
+  - Installing phpdocumentor/reflection-docblock (5.3.0): Extracting archive
+  - Installing symfony/filesystem (v7.0.3): Extracting archive
+  - Installing symfony/polyfill-intl-normalizer (v1.29.0): Extracting archive
+  - Installing symfony/polyfill-intl-grapheme (v1.29.0): Extracting archive
+  - Installing symfony/string (v7.0.3): Extracting archive
+  - Installing symfony/service-contracts (v3.4.1): Extracting archive
+  - Installing symfony/console (v7.0.3): Extracting archive
+  - Installing spatie/array-to-xml (3.2.2): Extracting archive
+  - Installing netresearch/jsonmapper (v4.4.1): Extracting archive
+  - Installing fidry/cpu-core-counter (1.0.0): Extracting archive
+  - Installing felixfbecker/language-server-protocol (v1.5.2): Extracting archive
+  - Installing felixfbecker/advanced-json-rpc (v3.2.1): Extracting archive
+  - Installing dnoegel/php-xdg-base-dir (v0.1.1): Extracting archive
+  - Installing psr/log (3.0.0): Extracting archive
+  - Installing composer/xdebug-handler (3.0.3): Extracting archive
+  - Installing composer/semver (3.4.0): Extracting archive
+  - Installing amphp/amp (v2.6.2): Extracting archive
+  - Installing amphp/byte-stream (v1.8.1): Extracting archive
+  - Installing vimeo/psalm (5.21.1): Extracting archive
+  - Installing psalm/plugin-phpunit (0.18.4): Extracting archive
+34 package suggestions were added by new dependencies, use `composer suggest` to see details.
+Generating autoload files
+62 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+
+        Do you want a minimal install (no optional packages)? Y/n
+Y
+    Removing optional packages from composer.json
+    Updating composer.json
+> php bin/clear-config-cache.php
+Configured config cache file 'data/cache/module-config-cache.application.config.cache.php' not found
+No security vulnerability advisories found.
+> laminas-development-mode enable
+You are now in development mode.
+> php bin/update-gitignore.php
+> php -r 'if (file_exists("bin/remove-package-artifacts.php")) include "bin/remove-package-artifacts.php";'
+rajaniapple@Rajanis-MacBook-Pro Laminas % cd my-application
+rajaniapple@Rajanis-MacBook-Pro my-application % php -S 0.0.0.0:8080 -t public
+[Tue Feb  6 15:57:47 2024] PHP 8.3.2 Development Server (http://0.0.0.0:8080) started
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50084 Accepted
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50084 [200]: GET /
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50084 Closing
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50085 Accepted
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50086 Accepted
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50085 [200]: GET /css/bootstrap.min.css
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50087 Accepted
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50086 [200]: GET /css/style.css
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50088 Accepted
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50087 [200]: GET /img/laminas-logo.svg
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50088 [200]: GET /js/bootstrap.min.js
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50085 Closing
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50086 Closing
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50087 Closing
+[Tue Feb  6 15:57:58 2024] 127.0.0.1:50088 Closing
+[Tue Feb  6 15:57:59 2024] 127.0.0.1:50089 Accepted
+[Tue Feb  6 15:57:59 2024] 127.0.0.1:50089 [200]: GET /img/favicon.ico
+[Tue Feb  6 15:57:59 2024] 127.0.0.1:50089 Closing
+^C%                                                                                                                                                             rajaniapple@Rajanis-MacBook-Pro my-application % 

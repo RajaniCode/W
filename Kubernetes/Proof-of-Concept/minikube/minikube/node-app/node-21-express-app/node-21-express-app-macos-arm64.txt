@@ -1,0 +1,295 @@
+***************************************************************************************************************************
+
+# Node.js
+
+***************************************************************************************************************************
+                                                                                       
+% node --version                                                                                                 
+
+% pnpm --version          
+
+% pnpm update --global
+
+% pnpm upgrade --global
+
+[
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-app/node-21-express-app
+]
+% mkdir -p node-app
+
+% cd node-app
+
+% nano index.js
+[
+const express = require('express')
+
+const app = express()
+const port = process.env.PORT || 3000
+const utc = new Date().toUTCString()
+
+app.get('/', (req, res) => {
+  res.send("Node.js Version: " + process.version + " - " + "Coordinated Universal Time (UTC): " + utc + "\n")
+});
+
+app.listen(port, () => {
+  console.log(`App listening on http://localhost:${port}`)
+});
+]
+
+% cat index.js
+
+% pnpm init
+
+% pnpm install express                                                                                        
+
+% node index.js                                                                                                    
+
+# Terminal New Window
+% curl http://localhost:3000/
+[
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Wed, 06 Dec 2023 19:50:02 GMT
+]
+
+# Terminal New Window
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-app/node-app
+% PORT=5000 node index.js 
+
+# Terminal New Window 
+% curl http://localhost:5000/
+[
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Wed, 06 Dec 2023 19:50:02 GMT
+]
+
+***************************************************************************************************************************
+
+# Docker # docker compose up --build
+
+***************************************************************************************************************************
+
+% docker --version
+
+% docker version
+
+% docker info
+
+% docker init
+
+% cat Dockerfile
+
+% cat .dockerignore
+
+% cat compose.yaml
+[
+#
+services:
+  server:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+#
+]
+
+% nano compose.yaml
+
+% cat compose.yaml
+[
+#
+services:
+  service:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+#
+]
+
+% docker compose up --build
+
+% docker container list --all
+
+% docker image list --all
+
+% docker run \
+  --name=node-app \
+  --rm \
+  -p 3000:3000 \
+  -e PORT=3000 \
+  node-app-service
+
+# Terminal New Window 
+% curl http://localhost:3000/
+[
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Wed, 06 Dec 2023 19:50:02 GMT
+]
+
+# Terminal New Window 
+% docker run \
+  --name=node-app5000 \
+  --rm \
+  -p 5000:5000 \
+  -e PORT=5000 \
+  node-app-service
+
+# Terminal New Window 
+% curl http://localhost:5000/
+[
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Wed, 06 Dec 2023 19:50:02 GMT
+]
+
+# Terminal New Window 
+% docker stop $(docker container list -a -q)
+
+***************************************************************************************************************************
+
+# Docker # https://hub.docker.com/ # docker push
+
+***************************************************************************************************************************
+
+% docker tag node-app-service dockerrajani/node-21-express-app-macos-arm64:version1.0.0
+
+% docker login
+
+% docker push dockerrajani/node-21-express-app-macos-arm64:version1.0.0
+
+https://hub.docker.com/repository/docker/dockerrajani/node-21-express-app-macos-arm64
+
+% open https://hub.docker.com/repository/docker/dockerrajani/node-21-express-app-macos-arm64
+
+***************************************************************************************************************************
+
+# minikube # kubectl
+
+***************************************************************************************************************************
+
+% minikube version
+
+% minikube start
+
+% minikube ip
+
+% minikube profile list
+
+% minikube service list -p minikube
+
+% kubectl version
+
+% kubectl config view
+
+% kubectl cluster-info
+
+[
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-app/node-21-express-app
+]
+% mkdir -p kubectl
+
+[
+% rm -rf kubectl/node-21-express-app-load-balancer-service.yaml
+]
+% nano kubectl/node-21-express-app-load-balancer-service.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-21-express-app-deployment
+  labels:
+    app: node-21-express-app-label
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: node-21-express-app-label  
+  template:
+    metadata:
+      labels:
+        app: node-21-express-app-label  
+    spec:
+      containers:
+      - name: node-21-express-app-container
+        image: "dockerrajani/node-21-express-app-macos-arm64:version1.0.0"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-21-express-app-load-balancer-service 
+spec:
+  selector:
+    app: node-21-express-app-label 
+  type: LoadBalancer     
+  ports:
+  - protocol: TCP        
+    port: 5000           
+    targetPort: 3000    
+    nodePort: 31110
+]
+% cat kubectl/node-21-express-app-load-balancer-service.yaml
+% kubectl apply -f kubectl/node-21-express-app-load-balancer-service.yaml
+[
+% kubectl delete -f kubectl/node-21-express-app-load-balancer-service.yaml
+]
+
+% kubectl get pods --watch
+
+% kubectl get pods
+
+# Terminal New Window 
+% sudo minikube tunnel
+
+# Original Terminal Window 
+% kubectl get services
+
+% minikube service node-21-express-app-load-balancer-service
+
+***************************************************************************************************************************
+
+# Docker cleanup
+
+***************************************************************************************************************************
+
+[
+% docker ps --all --quiet
+% docker stop $(docker ps -a -q)
+% docker rm $(docker ps -a -q) --force
+]
+% docker container list --all --quiet
+% docker stop $(docker container list -a -q)
+% docker rm $(docker container list -a -q) --force
+% docker container prune
+
+% docker image list --all --quiet
+% docker rmi $(docker image list -a -q) --force 
+% docker image prune --all
+
+% docker volume list --quiet
+% docker volume rm $(docker volume list --quiet) --force
+% docker volume prune
+
+% docker network list --quiet --filter "type=custom"
+% docker network rm $(docker network list --quiet --filter "type=custom")
+% docker network prune
+
+% docker system info
+% docker system prune --all --volumes
+
+***************************************************************************************************************************
+
+# minikube # kubectl # cleanup
+
+***************************************************************************************************************************
+
+% minikube stop
+% minikube delete
+
+% ls ~/.minikube
+% rm -rf ~/.minikube
+% ls ~/.kube
+% rm -rf ~/.kube
+
+***************************************************************************************************************************

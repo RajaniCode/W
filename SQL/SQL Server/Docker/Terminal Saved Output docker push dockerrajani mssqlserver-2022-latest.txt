@@ -1,0 +1,77 @@
+Last login: Sun Nov 12 11:01:13 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % sw_vers       
+ProductName:		macOS
+ProductVersion:		14.0
+BuildVersion:		23A344
+rajaniapple@Rajanis-MacBook-Pro ~ % arch          
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % docker version
+Client:
+ Cloud integration: v1.0.35+desktop.5
+ Version:           24.0.6
+ API version:       1.43
+ Go version:        go1.20.7
+ Git commit:        ed223bc
+ Built:             Mon Sep  4 12:28:49 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.25.0 (126437)
+ Engine:
+  Version:          24.0.6
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.7
+  Git commit:       1a79695
+  Built:            Mon Sep  4 12:31:36 2023
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.22
+  GitCommit:        8165feabfdfe38c65b599c4993d227328c231fca
+ runc:
+  Version:          1.1.8
+  GitCommit:        v1.1.8-0-g82f18fe
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro ~ % docker pull mcr.microsoft.com/mssql/server:2022-latest
+2022-latest: Pulling from mssql/server
+e481c36a257f: Pull complete 
+167fcf789ae3: Pull complete 
+de849cbae9b1: Pull complete 
+Digest: sha256:3adc70cba564b18190340eb4b82d11dd1c99dbca5fc490b20290f8f6a138069f
+Status: Downloaded newer image for mcr.microsoft.com/mssql/server:2022-latest
+mcr.microsoft.com/mssql/server:2022-latest
+
+What's Next?
+  View a summary of image vulnerabilities and recommendations → docker scout quickview mcr.microsoft.com/mssql/server:2022-latest
+rajaniapple@Rajanis-MacBook-Pro ~ % docker image list
+REPOSITORY                       TAG           IMAGE ID       CREATED       SIZE
+mcr.microsoft.com/mssql/server   2022-latest   3c17532d9acc   6 weeks ago   1.58GB
+rajaniapple@Rajanis-MacBook-Pro ~ % docker login
+Authenticating with existing credentials...
+Login Succeeded
+rajaniapple@Rajanis-MacBook-Pro ~ % docker-credential-$(
+  jq -r .credsStore ~/.docker/config.json
+) list | jq -r '
+  . |
+    to_entries[] |
+    select(
+      .key |
+      contains("docker.io")
+    ) |
+    last(.value)
+'
+dockerrajani
+rajaniapple@Rajanis-MacBook-Pro ~ % docker tag mcr.microsoft.com/mssql/server:2022-latest dockerrajani/mssqlserver:2022-latest
+rajaniapple@Rajanis-MacBook-Pro ~ % docker image list
+REPOSITORY                       TAG           IMAGE ID       CREATED       SIZE
+dockerrajani/mssqlserver         2022-latest   3c17532d9acc   6 weeks ago   1.58GB
+mcr.microsoft.com/mssql/server   2022-latest   3c17532d9acc   6 weeks ago   1.58GB
+rajaniapple@Rajanis-MacBook-Pro ~ % docker push dockerrajani/mssqlserver:2022-latest
+The push refers to repository [docker.io/dockerrajani/mssqlserver]
+06362986dd92: Pushed 
+f03a25b1a594: Pushed 
+954c82bdeb5f: Pushed 
+2022-latest: digest: sha256:29d2315e92b2f6cb4438e67ff314c06c1e5ae9da9d884c0423a7271155a6fc0f size: 954
+rajaniapple@Rajanis-MacBook-Pro ~ % 

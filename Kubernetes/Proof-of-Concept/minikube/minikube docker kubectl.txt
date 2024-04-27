@@ -1,0 +1,366 @@
+% docker version
+
+
+# The connection to the server 127.0.0.1:49400 was refused - did you specify the right host or port? # % minikube start
+% kubectl version --output=yaml
+% kubectl version
+
+
+% minikube version
+
+
+# NB
+[
+% kubectl get po -A -o wide
+
+% kubectl cluster-info
+
+% kubectl get nodes -o wide
+
+% kubectl get services -o wide
+
+% kubectl get events -o wide
+
+% kubectl get all
+
+% kubectl get deployments -o wide
+
+% kubectl get pods -o wide
+
+% kubectl get replicasets -o wide
+]
+
+
+
+
+## Create a minikube cluster
+% minikube start
+
+
+% kubectl version
+
+
+% kubectl config view
+
+
+# NB
+[
+% kubectl get po -A -o wide
+
+% kubectl cluster-info
+
+% kubectl get nodes -o wide
+
+% kubectl get services -o wide
+
+% kubectl get events -o wide
+
+% kubectl get all
+]
+
+
+# Open the Dashboard
+# Start a new terminal, and leave this running
+minikube dashboard --url
+# [http://127.0.0.1:50137/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/#/workloads?namespace=default]
+# Now, switch back to the terminal where you ran minikube start
+
+
+# If you already have kubectl installed, you can now use it to access your shiny new cluster
+% kubectl get po -A
+
+
+# Alternatively, minikube can download the appropriate version of kubectl and you should be able to use it like this
+% minikube kubectl -- get po -A
+
+
+
+
+## Create a Deployment
+# Run a test container image that includes a webserver
+% kubectl create deployment hello-node --image=registry.k8s.io/e2e-test-images/agnhost:2.39 -- /agnhost netexec --http-port=8080
+
+# NB
+[
+% kubectl get po -A -o wide
+
+% kubectl cluster-info
+
+% kubectl get nodes -o wide
+
+% kubectl get services -o wide
+
+% kubectl get events -o wide
+
+% kubectl get all
+
+% kubectl get deployments -o wide
+
+% kubectl get pods -o wide
+
+% kubectl get replicasets -o wide
+]
+&
+# agnhost 
+# pod # hello-node-7579565d66-tg9wt
+% kubectl logs hello-node-7579565d66-tg9wt -c agnhost
+
+
+# View the Deployment
+% kubectl get deployments
+
+
+# View the Pod
+% kubectl get pods
+
+
+# View cluster events
+% kubectl get events
+
+
+# View all (pods, services, deployments, replicasets)
+% kubectl get all
+
+
+# View the kubectl configuration
+% kubectl config view
+
+
+# View application logs for a container in a pod
+# hello-node-7579565d66-tg9wt
+% kubectl logs hello-node-7579565d66-tg9wt
+% kubectl logs hello-node-7579565d66-tg9wt --all-containers=true
+% kubectl logs -l app=hello-node --all-containers=true
+
+
+# View cluster-info
+% kubectl cluster-info
+
+
+# View nodes
+% kubectl get nodes -o wide
+
+
+
+
+## Create a Service
+# By default, the Pod is only accessible by its internal IP address within the Kubernetes cluster
+# To make the hello-node Container accessible from outside the Kubernetes virtual network, you have to expose the Pod as a Kubernetes Service
+# Expose the Pod to the public internet using the kubectl expose command
+% kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+# The --type=LoadBalancer flag indicates that you want to expose your Service outside of the cluster
+
+
+# View the Service you created # Check for LoadBalancer
+% kubectl get services -o wide
+
+# On cloud providers that support load balancers, an external IP address would be provisioned to access the Service
+# On minikube, the LoadBalancer type makes the Service accessible through the minikube service command
+% minikube service hello-node
+# This opens up a browser window that serves your app and shows the app's response
+# [http://127.0.0.1:50100/]
+# NOW: 2023-10-11 12:08:34.09442151 +0000 UTC m=+4338.569927064
+
+
+Stop the tunnel for service hello-node (control + c)
+
+
+
+
+## Enable addons # Note # ingress: enabled # during  # minikube start # Enabled addons: storage-provisioner, default-storageclass, ingress 
+# List the currently supported addons
+% minikube addons list
+
+
+# Enable an addon, for example, metrics-server
+% minikube addons enable metrics-server
+
+
+# View the Pod and Service you created by installing that addon
+# Check for pod/metrics-server service/metrics-server # Also refer to previous output for no metrics-server # kubectl get events
+% kubectl get pod,svc -n kube-system
+
+
+# Disable metrics-server
+% minikube addons disable metrics-server
+
+
+
+
+## Clean up
+# Clean up the resources you created in your cluster
+
+
+# delete service
+# hello-node
+% kubectl delete service hello-node
+
+
+# delete deployment
+# hello-node
+% kubectl delete deployment hello-node
+
+
+# Stop the Minikube cluster
+% minikube stop
+# [http://127.0.0.1:50137/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/]
+# dial tcp 127.0.0.1:49997: connect: connection refused
+
+
+# Delete the Minikube VM:
+% minikube delete
+
+
+
+
+# NB
+[
+% kubectl get po -A
+% kubectl get po -A -o wide
+
+
+% kubectl cluster-info
+
+
+# nodes/node
+% kubectl get nodes
+% kubectl get nodes -o wide
+# minikube
+% kubectl get nodes minikube
+% kubectl describe nodes minikube
+
+
+# services/service/svc
+% kubectl get services
+% kubectl get services -o wide
+# kubernetes
+% kubectl get services kubernetes
+% kubectl describe services kubernetes
+
+
+# events/event
+% kubectl get events
+% kubectl get events -o wide
+# minikube.1790ed47c71cb5ae
+% kubectl get events minikube.1790ed47c71cb5ae
+% kubectl describe events minikube.1790ed47c71cb5ae
+% kubectl get events --namespace kube-system
+% kubectl get events --namespace kube-system -o wide
+
+
+# pods # services # deployments # replicasets
+% kubectl get all
+
+
+# deployments/deployment
+% kubectl get deployments
+% kubectl get deployments -o wide
+# hello-node
+% kubectl get deployments hello-node
+% kubectl describe deployments hello-node
+
+
+# pods/pod
+% kubectl get pods
+% kubectl get pods -o wide
+# hello-node-7579565d66-tg9wt
+% kubectl get pods -l app=hello-node
+# hello-node-7579565d66-tg9wt
+% kubectl get pods hello-node-7579565d66-tg9wt
+% kubectl describe pods hello-node-7579565d66-tg9wt
+
+
+# log
+# POD or TYPE/NAME is a required argument for the logs command
+% kubectl logs [-f] [-p] (POD | TYPE/NAME) [-c CONTAINER] [options]
+# hello-node-7579565d66-xcpk9
+% kubectl get pods hello-node-7579565d66-xcpk9 -o jsonpath='{.spec.containers[*].name}'
+# agnhost
+% kubectl logs hello-node-7579565d66-xcpk9 -c agnhost
+% kubectl logs hello-node-7579565d66-xcpk9 --all-containers=true
+% kubectl get pods --all-namespaces -o jsonpath="{.items[*].spec.containers[*].image}" -l app=hello-node
+
+
+# replicasets/replicaset
+% kubectl get replicasets
+% kubectl get replicasets -o wide
+# hello-node-7579565d66
+% kubectl get replicasets hello-node-7579565d66
+% kubectl describe replicasets hello-node-7579565d66
+
+
+% kubectl get pod,svc -n kube-system
+
+
+% kubectl get ns
+% kubectl -n kube-system get pods
+% kubectl -n default get pods
+
+
+% kubectl -n kube-system get ingress
+% kubectl get ingress
+% kubectl -n default get ingress
+
+
+# In another window # minikube tunnel
+% sudo minikube tunnel
+
+
+% minikube ip
+
+
+% minikube addons list
+]
+&
+[
+% minikube profile list
+
+# status of node # multinode-demo
+% minikube status -p multinode-demo
+
+# service # multinode-demo
+% minikube service list -p multinode-demo
+
+
+# deployment rollout status
+% kubectl rollout status deployment/hello
+]
+
+
+
+
+## Clean up
+% kubectl get all
+
+
+# delete pod  # hello-node-7579565d66-tg9wt
+% kubectl delete pod hello-node-7579565d66-tg9wt
+
+
+# delete service # hello-node
+% kubectl delete service hello-node
+
+
+# delete deployment # hello-node
+% kubectl delete deployment hello-node
+
+
+# Stop the Minikube cluster
+% minikube stop
+
+
+# Delete the Minikube VM:
+% minikube delete
+
+
+# minikube delete all profiles
+% minikube delete --all
+
+
+# remove folder # .docker # .minikube # .kube
+# % ls /Users/rajaniapple/.docker
+# % rm -rf /Users/rajaniapple/.docker
+% ls /Users/rajaniapple/.minikube
+% rm -rf /Users/rajaniapple/.minikube
+% ls /Users/rajaniapple/.kube
+% rm -rf /Users/rajaniapple/.kube

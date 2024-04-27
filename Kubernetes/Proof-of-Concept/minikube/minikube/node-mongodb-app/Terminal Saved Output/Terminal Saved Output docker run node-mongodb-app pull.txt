@@ -1,0 +1,24 @@
+Last login: Wed Nov  8 19:17:28 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  dockerrajani/node-mongodb-app:version1.0.0
+Unable to find image 'dockerrajani/node-mongodb-app:version1.0.0' locally
+version1.0.0: Pulling from dockerrajani/node-mongodb-app
+31ce7ceb6d44: Pull complete 
+23e20aafa273: Pull complete 
+3c4e071c3989: Pull complete 
+d30583691d5e: Pull complete 
+b5668e9c76f4: Pull complete 
+4004b1130cb8: Pull complete 
+2559388155c5: Pull complete 
+Digest: sha256:656639d32fdd2ba0f7a87e7541bebbfa23f74cca5453311dd8095675e9e5c53e
+Status: Downloaded newer image for dockerrajani/node-mongodb-app:version1.0.0
+Initialising MongoDB...
+MongoDB initialised
+App listening on http://localhost:3000
+
+

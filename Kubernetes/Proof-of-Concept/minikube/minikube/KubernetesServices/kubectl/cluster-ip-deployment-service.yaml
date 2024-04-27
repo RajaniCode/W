@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-ip-deployment
+spec:
+  selector:
+    matchLabels:
+      app: openjs
+      engine: v8
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: openjs
+        engine: v8
+    spec:
+      containers:
+      - name: openjs-2019-container
+        image: "dockerrajani/node-21-express-app-macos-arm64:version1.0.0"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-ip-service
+spec:
+  type: ClusterIP
+  # Uncomment the below line to create a Headless Service
+  # clusterIP: None
+  selector:
+    app: openjs
+    engine: v8
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080

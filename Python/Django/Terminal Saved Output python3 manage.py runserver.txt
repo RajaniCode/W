@@ -1,0 +1,46 @@
+Last login: Tue Nov 21 20:11:16 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % sw_vers
+ProductName:		macOS
+ProductVersion:		14.0
+BuildVersion:		23A344
+rajaniapple@Rajanis-MacBook-Pro ~ % arch
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % pwd
+/Users/rajaniapple
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Working/Python/Django 
+rajaniapple@Rajanis-MacBook-Pro Django % pwd
+/Users/rajaniapple/Desktop/Working/Python/Django
+rajaniapple@Rajanis-MacBook-Pro Django % python3 -m django --version                 
+4.2.7
+rajaniapple@Rajanis-MacBook-Pro Django % django-admin --version                 
+4.2.7
+rajaniapple@Rajanis-MacBook-Pro Django % django-admin startproject mysite
+rajaniapple@Rajanis-MacBook-Pro Django % tree mysite/
+mysite/
+├── manage.py
+└── mysite
+    ├── __init__.py
+    ├── asgi.py
+    ├── settings.py
+    ├── urls.py
+    └── wsgi.py
+
+2 directories, 6 files
+rajaniapple@Rajanis-MacBook-Pro Django % cd mysite
+rajaniapple@Rajanis-MacBook-Pro mysite % python3 manage.py runserver
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.
+November 21, 2023 - 14:46:55
+Django version 4.2.7, using settings 'mysite.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+[21/Nov/2023 14:47:02] "GET / HTTP/1.1" 200 10664
+Not Found: /favicon.ico
+[21/Nov/2023 14:47:02] "GET /favicon.ico HTTP/1.1" 404 2110
+

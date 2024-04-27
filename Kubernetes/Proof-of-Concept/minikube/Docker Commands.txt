@@ -1,0 +1,83 @@
+% docker --version
+
+
+# List of container(s) by invoking the docker container list command with the --all option
+docker container list --all
+
+
+# Remove all stopped containers, dangling images, and unused networks
+docker system prune
+
+
+# Remove all unused images not just the dangling ones, add the -a or --all option to the command
+docker system prune --all
+# By default, the aforementioned command doesn’t remove unused volumes to prevent losing important data
+# Remove all unused volumes, pass the --volumes option
+docker system prune --volumes
+
+
+# Delete container(s)
+docker container rm <Container_ID 1> <Container_ID 2> . . .
+
+
+# Remove all stopped containers, invoke the docker container prune command:
+docker container prune
+
+
+# Run the following commands to remove docker container
+docker stop <Container_ID>
+docker rm <Container_ID>
+# Run the following command to remove the docker container forcibly
+docker rm -f <Container_ID>
+# Run the following command to remove the docker image forcibly
+docker rmi -f <Image_name>
+
+
+# List of all non-running (stopped) containers that will be removed with docker container prune
+docker container list --all --filter status=exited --filter status=created
+
+
+# Remove container(s) using filter [For example, remove container(s)  created more than more than 12 hours ago]
+docker container prune --filter "until=12h"
+
+
+# List docker image(s)
+docker image list
+# Remove docker image(s)   
+docker image rm <IMAGE ID 1> <IMAGE ID 2> . . .
+
+
+# Remove dangling docker image(s)
+docker image prune
+
+
+# Removing unused docker image(s)
+docker image prune --all
+
+
+# Remove docker image(s) using filter [For example, remove image(s) created more than seven days (168 hours) ago]
+docker image prune --all --filter "until=168h"
+
+
+# List docker volume(s)
+docker volume list
+# Remove docker volume(s)
+docker volume rm <VOLUME NAME 1> <VOLUME NAME 2> . . .
+
+
+# Remove all unused docker volumes
+docker volume prune
+
+
+# List docker network(s)
+docker network list
+# Remove docker network(s)
+docker network rm <NETWORK ID 1> <NETWORK ID 2> ...
+
+
+# Remove all unused docker networks
+docker network prune
+
+
+# Remove docker network(s) using filter [For example, remove volume(s) created more than 12 hours ago]
+docker network prune -filter "until=12h"

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: l-app-deployment
+  labels:
+    app: l-app-label
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: l-app-label  
+  template:
+    metadata:
+      labels:
+        app: l-app-label  
+    spec:
+      containers:
+      - name: l-app
+        image: dockerrajani/node-21-express-app-macos-arm64:version1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: load-balancer-service
+spec:
+  selector:
+    app: l-app-label 
+  ports:
+    - protocol: TCP
+      port: 3200
+      targetPort: 3000
+      # You can configure a load balanced Service to omit assigning a node port, provided that the cloud provider implementation supports this.
+      # nodePort: 30010
+  clusterIP: 10.96.0.11
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 192.0.2.127

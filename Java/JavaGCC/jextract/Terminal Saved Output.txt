@@ -1,0 +1,44 @@
+Last login: Thu Sep 21 11:23:06 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % java --version
+openjdk 20.0.2 2023-07-18
+OpenJDK Runtime Environment (build 20.0.2+9-78)
+OpenJDK 64-Bit Server VM (build 20.0.2+9-78, mixed mode, sharing)
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Working/Java/Java-GCC/jextract 
+rajaniapple@Rajanis-MacBook-Pro jextract % cc -shared -o libhelloworld.dylib helloworld.c
+rajaniapple@Rajanis-MacBook-Pro jextract % /Users/rajaniapple/Desktop/Working/Java/Java-GCC/jextract/jextract-20/bin/jextract --source -t org.hello -lhelloworld helloworld.h
+/Users/rajaniapple/Desktop/Working/Java/Java-GCC/jextract/jextract-20/bin/jextract: line 4:  3491 Killed: 9               $DIR/java $JLINK_VM_OPTIONS -m org.openjdk.jextract/org.openjdk.jextract.JextractTool "$@"
+rajaniapple@Rajanis-MacBook-Pro jextract % /Users/rajaniapple/Desktop/Working/Java/Java-GCC/jextract/jextract-20/bin/jextract --source -t org.hello -lhelloworld helloworld.h
+WARNING: A restricted method in java.lang.foreign.Linker has been called
+WARNING: java.lang.foreign.Linker::nativeLinker has been called by module org.openjdk.jextract
+WARNING: Use --enable-native-access=org.openjdk.jextract to avoid a warning for this module
+
+Exception in thread "main" java.lang.UnsatisfiedLinkError: /Users/rajaniapple/Desktop/Working/Java/Java-GCC/jextract/jextract-20/lib/libclang.dylib: dlopen(/Users/rajaniapple/Desktop/Working/Java/Java-GCC/jextract/jextract-20/lib/libclang.dylib, 0x0001): tried: '/Users/rajaniapple/Desktop/Working/Java/Java-GCC/jextract/jextract-20/lib/libclang.dylib' (code signature in <598B8E7E-C219-3BED-8CD0-9BCABE76932E> '/Users/rajaniapple/Desktop/Working/Java/Java-GCC/jextract/jextract-20/lib/libclang.dylib' not valid for use in process: library load disallowed by system policy), '/System/Volumes/Preboot/Cryptexes/OS/Users/rajaniapple/Desktop/Working/Java/Java-GCC/jextract/jextract-20/lib/libclang.dylib' (no such file), '/Users/rajaniapple/Desktop/Working/Java/Java-GCC/jextract/jextract-20/lib/libclang.dylib' (code signature in <598B8E7E-C219-3BED-8CD0-9BCABE76932E> '/Users/rajaniapple/Desktop/Working/Java/Java-GCC/jextract/jextract-20/lib/libclang.dylib' not valid for use in process: library load disallowed by system policy)
+	at java.base/jdk.internal.loader.NativeLibraries.load(Native Method)
+	at java.base/jdk.internal.loader.NativeLibraries$NativeLibraryImpl.open(NativeLibraries.java:331)
+	at java.base/jdk.internal.loader.NativeLibraries.loadLibrary(NativeLibraries.java:197)
+	at java.base/jdk.internal.loader.NativeLibraries.loadLibrary(NativeLibraries.java:139)
+	at java.base/jdk.internal.loader.NativeLibraries.findFromPaths(NativeLibraries.java:259)
+	at java.base/jdk.internal.loader.NativeLibraries.loadLibrary(NativeLibraries.java:249)
+	at java.base/java.lang.ClassLoader.loadLibrary(ClassLoader.java:2437)
+	at java.base/java.lang.Runtime.loadLibrary0(Runtime.java:880)
+	at java.base/java.lang.System.loadLibrary(System.java:2051)
+	at org.openjdk.jextract@20/org.openjdk.jextract.clang.libclang.RuntimeHelper.<clinit>(RuntimeHelper.java:65)
+	at org.openjdk.jextract@20/org.openjdk.jextract.clang.libclang.constants$0.<clinit>(constants$0.java:46)
+	at org.openjdk.jextract@20/org.openjdk.jextract.clang.libclang.Index_h.clang_createIndex$MH(Index_h.java:210)
+	at org.openjdk.jextract@20/org.openjdk.jextract.clang.libclang.Index_h.clang_createIndex(Index_h.java:218)
+	at org.openjdk.jextract@20/org.openjdk.jextract.clang.LibClang.createIndex(LibClang.java:69)
+	at org.openjdk.jextract@20/org.openjdk.jextract.impl.Parser.parse(Parser.java:52)
+	at org.openjdk.jextract@20/org.openjdk.jextract.JextractTool.parse(JextractTool.java:116)
+	at org.openjdk.jextract@20/org.openjdk.jextract.JextractTool.run(JextractTool.java:466)
+	at org.openjdk.jextract@20/org.openjdk.jextract.JextractTool.main(JextractTool.java:174)
+rajaniapple@Rajanis-MacBook-Pro jextract % /Users/rajaniapple/Desktop/Working/Java/Java-GCC/jextract/jextract-20/bin/jextract --source -t org.hello -lhelloworld helloworld.h
+WARNING: A restricted method in java.lang.foreign.Linker has been called
+WARNING: java.lang.foreign.Linker::nativeLinker has been called by module org.openjdk.jextract
+WARNING: Use --enable-native-access=org.openjdk.jextract to avoid a warning for this module
+
+rajaniapple@Rajanis-MacBook-Pro jextract %  javac --enable-preview --source=20 org/hello/*.java
+Note: Some input files use preview features of Java SE 20.
+Note: Recompile with -Xlint:preview for details.
+rajaniapple@Rajanis-MacBook-Pro jextract % java --enable-native-access=ALL-UNNAMED --enable-preview --source=20 HelloWorld.java
+Hello World!
+rajaniapple@Rajanis-MacBook-Pro jextract % 

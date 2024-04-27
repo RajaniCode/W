@@ -1,0 +1,233 @@
+Last login: Thu May 26 23:58:41 on ttys000
+autopoint		git			msgattrib		msgexec			msgunfmt		recode-sr-latin
+brew			git-cvsserver		msgcat			msgfilter		msguniq			xgettext
+envsubst		git-receive-pack	msgcmp			msgfmt			ngettext
+gettext			git-shell		msgcomm			msggrep			pcre2-config
+gettext.sh		git-upload-archive	msgconv			msginit			pcre2grep
+gettextize		git-upload-pack		msgen			msgmerge		pcre2test
+rajaniapple@Rajanis-MacBook-Pro ~ % git --version
+git version 2.35.1
+rajaniapple@Rajanis-MacBook-Pro Example % java --version
+openjdk 17.0.2 2022-01-18
+OpenJDK Runtime Environment (build 17.0.2+8-86)
+OpenJDK 64-Bit Server VM (build 17.0.2+8-86, mixed mode, sharing)
+rajaniapple@Rajanis-MacBook-Pro Example % mvn --version
+Apache Maven 3.8.4 (9b656c72d54e5bacbed989b64718c159fe39b537)
+Maven home: /Users/rajaniapple/Downloads/Software/ApacheMaven/apache-maven-3.8.4
+Java version: 17.0.2, vendor: Oracle Corporation, runtime: /Users/rajaniapple/Downloads/Software/OpenJDK/JDK17.0.2/jdk-17.0.2.jdk/Contents/Home
+Default locale: en_US, platform encoding: UTF-8
+OS name: "mac os x", version: "12.4", arch: "aarch64", family: "mac"
+rajaniapple@Rajanis-MacBook-Pro ~ % pwd
+/Users/rajaniapple
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven 
+rajaniapple@Rajanis-MacBook-Pro Maven % pwd
+/Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven
+rajaniapple@Rajanis-MacBook-Pro Maven % mkdir Exercise
+rajaniapple@Rajanis-MacBook-Pro Maven % cd Exercise
+rajaniapple@Rajanis-MacBook-Pro Exercise % mvn archetype:generate -DgroupId=com.sample -DartifactId=Example -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< org.apache.maven:standalone-pom >-------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] >>> maven-archetype-plugin:3.2.1:generate (default-cli) > generate-sources @ standalone-pom >>>
+[INFO] 
+[INFO] <<< maven-archetype-plugin:3.2.1:generate (default-cli) < generate-sources @ standalone-pom <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-archetype-plugin:3.2.1:generate (default-cli) @ standalone-pom ---
+[INFO] Generating project in Batch mode
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Old (1.x) Archetype: maven-archetype-quickstart:1.0
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: basedir, Value: /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise
+[INFO] Parameter: package, Value: com.sample
+[INFO] Parameter: groupId, Value: com.sample
+[INFO] Parameter: artifactId, Value: Example
+[INFO] Parameter: packageName, Value: com.sample
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] project created from Old (1.x) Archetype in dir: /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.186 s
+[INFO] Finished at: 2022-05-27T02:06:09+05:30
+[INFO] ------------------------------------------------------------------------
+rajaniapple@Rajanis-MacBook-Pro Exercise % cd Example
+rajaniapple@Rajanis-MacBook-Pro Example % mvn package
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< com.sample:Example >-------------------------
+[INFO] Building Example 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ Example ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ Example ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 1 source file to /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ Example ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ Example ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 1 source file to /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/target/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ Example ---
+[INFO] Surefire report directory: /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.sample.AppTest
+Hola!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.013 sec
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ Example ---
+[INFO] Building jar: /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/target/Example-1.0-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.774 s
+[INFO] Finished at: 2022-05-27T02:08:33+05:30
+[INFO] ------------------------------------------------------------------------
+rajaniapple@Rajanis-MacBook-Pro Example % java -cp target/Example-1.0-SNAPSHOT.jar com.sample.App
+Hello, World!
+Unique ID : 123e4567-e89b-12d3-a456-556642440000
+rajaniapple@Rajanis-MacBook-Pro Example % mvn test
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< com.sample:Example >-------------------------
+[INFO] Building Example 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ Example ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ Example ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ Example ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ Example ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ Example ---
+[INFO] Surefire report directory: /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.sample.AppTest
+Hola!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.013 sec
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.424 s
+[INFO] Finished at: 2022-05-27T02:09:11+05:30
+[INFO] ------------------------------------------------------------------------
+rajaniapple@Rajanis-MacBook-Pro Example % mvn -Dtest=AppTest test
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< com.sample:Example >-------------------------
+[INFO] Building Example 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ Example ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ Example ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ Example ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ Example ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ Example ---
+[INFO] Surefire report directory: /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.sample.AppTest
+Hola!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.012 sec
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.427 s
+[INFO] Finished at: 2022-05-27T02:09:18+05:30
+[INFO] ------------------------------------------------------------------------
+rajaniapple@Rajanis-MacBook-Pro Example % mvn -Dtest=AppTest#testApp test
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< com.sample:Example >-------------------------
+[INFO] Building Example 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ Example ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ Example ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ Example ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ Example ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ Example ---
+[INFO] Surefire report directory: /Users/rajaniapple/Desktop/GitHub/JavaUpdate/OpenJDK/Maven/Exercise/Example/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.sample.AppTest
+Hola!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 sec
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.406 s
+[INFO] Finished at: 2022-05-27T02:09:25+05:30
+[INFO] ------------------------------------------------------------------------
+
+rajaniapple@Rajanis-MacBook-Pro Example %

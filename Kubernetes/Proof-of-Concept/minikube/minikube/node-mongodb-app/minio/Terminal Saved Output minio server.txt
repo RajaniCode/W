@@ -1,0 +1,74 @@
+Last login: Mon Nov  6 22:35:46 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % nano /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio/minio
+rajaniapple@Rajanis-MacBook-Pro ~ % ls /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio 
+data
+rajaniapple@Rajanis-MacBook-Pro ~ % export MINIO_CONFIG_ENV_FILE=/Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio/minio
+rajaniapple@Rajanis-MacBook-Pro ~ % minio server --console-address :9090
+NAME:
+  minio server - start object storage server
+
+USAGE:
+  minio server [FLAGS] DIR1 [DIR2..]
+  minio server [FLAGS] DIR{1...64}
+  minio server [FLAGS] DIR{1...64} DIR{65...128}
+
+DIR:
+  DIR points to a directory on a filesystem. When you want to combine
+  multiple drives into a single large system, pass one directory per
+  filesystem separated by space. You may also use a '...' convention
+  to abbreviate the directory arguments. Remote directories in a
+  distributed setup are encoded as HTTP(s) URIs.
+
+FLAGS:
+  --address value              bind to a specific ADDRESS:PORT, ADDRESS can be an IP or hostname (default: ":9000") [$MINIO_ADDRESS]
+  --console-address value      bind to a specific ADDRESS:PORT for embedded Console UI, ADDRESS can be an IP or hostname [$MINIO_CONSOLE_ADDRESS]
+  --ftp value                  enable and configure an FTP(Secure) server
+  --sftp value                 enable and configure an SFTP server
+  --certs-dir value, -S value  path to certs directory (default: "/Users/rajaniapple/.minio/certs")
+  --quiet                      disable startup and info messages
+  --anonymous                  hide sensitive information from logging
+  --json                       output logs in JSON format
+  --help, -h                   show help
+  
+EXAMPLES:
+  1. Start MinIO server on "/home/shared" directory.
+     $ minio server /home/shared
+
+  2. Start single node server with 64 local drives "/mnt/data1" to "/mnt/data64".
+     $ minio server /mnt/data{1...64}
+
+  3. Start distributed MinIO server on an 32 node setup with 32 drives each, run following command on all the nodes
+     $ minio server http://node{1...32}.example.com/mnt/export{1...32}
+
+  4. Start distributed MinIO server in an expanded setup, run the following command on all the nodes
+     $ minio server http://node{1...16}.example.com/mnt/export{1...32} \
+            http://node{17...64}.example.com/mnt/export{1...64}
+
+  5. Start distributed MinIO server, with FTP and SFTP servers on all interfaces via port 8021, 8022 respectively
+     $ minio server http://node{1...4}.example.com/mnt/export{1...4} \
+           --ftp="address=:8021" --ftp="passive-port-range=30000-40000" \
+           --sftp="address=:8022" --sftp="ssh-private-key=${HOME}/.ssh/id_rsa"
+rajaniapple@Rajanis-MacBook-Pro ~ % minio server /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio --console-address :9090
+Formatting 1st pool, 1 set(s), 1 drives per set.
+WARNING: Host local has more than 0 drives of set. A host failure will result in data becoming unavailable.
+WARNING: Detected default credentials 'minioadmin:minioadmin', we recommend that you change these values with 'MINIO_ROOT_USER' and 'MINIO_ROOT_PASSWORD' environment variables
+MinIO Object Storage Server
+Copyright: 2015-2023 MinIO, Inc.
+License: GNU AGPLv3 <https://www.gnu.org/licenses/agpl-3.0.html>
+Version: RELEASE.2023-11-01T18-37-25Z (go1.21.3 darwin/arm64)
+
+Status:         1 Online, 0 Offline. 
+S3-API: http://192.168.191.31:9000  http://192.168.64.1:9000  http://127.0.0.1:9000                           
+RootUser: minioadmin 
+RootPass: minioadmin 
+
+Console: http://192.168.191.31:9090 http://192.168.64.1:9090 http://127.0.0.1:9090              
+RootUser: minioadmin 
+RootPass: minioadmin 
+
+Command-line: https://min.io/docs/minio/linux/reference/minio-mc.html#quickstart
+   $ mc alias set 'myminio' 'http://192.168.191.31:9000' 'minioadmin' 'minioadmin'
+
+Documentation: https://min.io/docs/minio/linux/index.html
+Warning: The standard parity is set to 0. This can lead to data loss.
+

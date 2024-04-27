@@ -1,0 +1,19 @@
+Last login: Thu Nov  9 00:05:07 on ttys000
+rajaniapple@Rajanis-MacBook-Pro Docker % minikube service minio-service
+|-----------|---------------|-------------|--------------|
+| NAMESPACE |     NAME      | TARGET PORT |     URL      |
+|-----------|---------------|-------------|--------------|
+| default   | minio-service |             | No node port |
+|-----------|---------------|-------------|--------------|
+😿  service default/minio-service has no node port
+🏃  Starting tunnel for service minio-service.
+|-----------|---------------|-------------|------------------------|
+| NAMESPACE |     NAME      | TARGET PORT |          URL           |
+|-----------|---------------|-------------|------------------------|
+| default   | minio-service |             | http://127.0.0.1:52723 |
+|           |               |             | http://127.0.0.1:52724 |
+|-----------|---------------|-------------|------------------------|
+[default minio-service  http://127.0.0.1:52723
+http://127.0.0.1:52724]
+❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+

@@ -1,0 +1,394 @@
+###########################################################################################################################
+
+# Google Cloud Debian GNU/Linux # Docker
+
+###########################################################################################################################
+===========================================================================================================================
+
+# Debian GNU/Linux
+
+===========================================================================================================================
+
+$ sudo cat /etc/os-release
+$ sudo cat /etc/*release
+$ sudo cat /etc/*version
+
+$ sudo cat /etc/issue
+$ sudo more /etc/issue
+$ sudo less /etc/issue
+
+$ sudo cat /proc/version
+
+$ sudo lsb_release --all
+$ sudo lsb_release --description
+$ sudo man lsb_release
+
+[
+$ sudo hostnamectl
+]
+$ sudo man hostnamectl
+
+$ sudo uname
+$ sudo uname -r
+$ sudo uname --release
+$ sudo uname -srm
+$ sudo uname --kernel-name --kernel-release --kernel-version
+$ sudo uname -amnoprsv
+$ sudo uname --all
+$ sudo man uname
+
+$ sudo grep -E '^(VERSION|NAME)=' /etc/os-release
+$ sudo grep '^VERSION' /etc/os-release
+
+$ sudo apt --version
+
+$ sudo apt-get --version 
+
+$ sudo dpkg --version 
+$ sudo dpkg -l
+$ sudo which dpkg
+$ sudo man dpkg
+
+$ sudo arch
+
+$ id -un
+$ sudo id -un
+
+$ whoami
+$ sudo whoami
+$ echo `whoami`
+
+$ sudo echo $USER
+
+$ sudo echo $HOSTNAME
+$ sudo echo `hostname`
+
+$ sudo echo $HOME
+
+$ sudo echo ~/
+
+$ sudo echo $SHELL
+
+$ sudo echo $PATH
+
+$ sudo env
+
+$ sudo pwd
+
+$ sudo date
+
+$ sudo locale
+$ sudo locale -a
+
+$ sudo echo $LANG
+
+$ sudo ls
+$ sudo ls -a
+$ sudo ls /usr/local/bin
+$ sudo ls /usr/bin
+$ sudo ls /bin
+$ sudo ls /usr/sbin
+$ sudo ls /sbin
+
+$ type compgen
+$ compgen -c 
+$ compgen -a 
+$ compgen -b
+$ compgen -k
+$ compgen -A function
+$ compgen -A function -abck
+
+$ www-browser
+
+===========================================================================================================================
+
+# Programming Languages
+
+===========================================================================================================================
+
+$ node --version
+
+$ python3 --version
+
+$ ruby --version
+
+$ gcc --version
+$ cc --version
+$ g++ --version
+$ c++ --version
+
+$ java --version
+$ gradle --version
+$ mvn --version
+
+$ dotnet --version
+
+$ perl --version
+
+$ php --version
+
+$ go version
+
+===========================================================================================================================
+
+# Network
+
+===========================================================================================================================
+
+$ sudo apt update
+$ sudo apt upgrade
+
+[
+$ sudo apt-get update
+$ sudo apt-get upgrade
+]
+
+$ sudo netstat -tunpl
+$ sudo netstat -nr
+$ sudo netstat -ai
+$ sudo netstat -ant
+
+
+$ sudo ss -tunl
+$ sudo ss -t
+$ sudo ss -A tcp
+$ sudo ss -ua
+$ sudo ss -a -A udp
+$ sudo ss -nt
+$ sudo ss -ltn
+
+
+$ sudo apt-get install netcat
+# Address already in use # nc: Cannot assign requested address # 36523
+$ sudo nc -l localhost 36523
+# Not in use # 27017
+$ sudo nc -l localhost 27017
+# control + C
+[
+$ sudo apt-get remove netcat 
+$ sudo apt-get purge netcat
+# The following packages were automatically installed and are no longer required:
+# libpcre2-posix2 netcat-openbsd
+# Use 'sudo apt autoremove' to remove them.
+$ sudo apt autoremove
+]
+
+
+$ sudo apt-get install nmap
+$ sudo nmap -n -PN -sT -sU -p- localhost
+[
+$ sudo apt-get remove nmap
+$ sudo apt-get purge nmap
+# The following packages were automatically installed and are no longer required:
+# libblas3 liblinear4 liblua5.3-0 libpcap0.8 lua-lpeg nmap-common
+# Use 'sudo apt autoremove' to remove them.
+$ sudo apt autoremove
+]
+
+===========================================================================================================================
+
+# Docker
+
+===========================================================================================================================
+
+$ sudo docker --version
+
+$ sudo docker version
+
+$ sudo docker info
+
+===========================================================================================================================
+***************************************************************************************************************************
+
+# Minio
+
+***************************************************************************************************************************
+
+[
+$ sudo mkdir -p $HOME/minio/data
+$ sudo ls
+$ sudo ls $HOME/minio
+$ sudo ls $HOME/minio/data
+[
+$ sudo rm -rf $HOME/minio/data
+]
+]
+$ sudo mkdir -p ~/minio/data
+$ sudo ls
+$ sudo ls ~/minio
+$ sudo ls ~/minio/data
+[
+$ sudo rm -rf ~/minio/data
+]
+
+[
+$ sudo  docker run \
+  -p 9000:9000 \
+  -p 9090:9090 \
+  --name minio \
+  --network=node-mongodb-app-network \
+  -v $HOME/minio/data:/data \
+  -e "MINIO_ACCESS_KEY=minioadmin" \
+  -e "MINIO_SECRET_KEY=minioadmin" \
+  dockerrajani/minio-aws-linux-x86-64:version1.0.0 server /data --console-address ":9090"
+]
+
+$ sudo docker run \
+  -p 9000:9000 \
+  -p 9090:9090 \
+  --name minio \
+  --network=node-mongodb-app-network \
+  -v $HOME/minio/data:/data \
+  -e "MINIO_ROOT_USER=minioadmin" \
+  -e "MINIO_ROOT_PASSWORD=minioadmin" \
+  dockerrajani/minio-aws-linux-x86-64:version1.0.0 server /data --console-address ":9090"
+
+$ sudo curl http://localhost:9090/
+$ sudo curl http://localhost:9000/
+
+https://9090-cs-540451849422-default.cs-asia-southeast1-yelo.cloudshell.dev/login
+https://9000-cs-540451849422-default.cs-asia-southeast1-yelo.cloudshell.dev/
+
+$ sudo docker exec -it minio bash
+# mc --version
+# mc
+# esc
+# mc ls
+# mc ls data
+# mc ls data/image-storage/
+# exit
+
+$ sudo netstat -tunpl
+$ sudo ss -tunl
+
+$ sudo docker inspect minio
+
+***************************************************************************************************************************
+
+# MongoDB
+
+***************************************************************************************************************************
+
+$ sudo docker run \
+  -p 27017:27017 \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-app-network \
+  dockerrajani/mongo-aws-linux-x86-64:version1.0.0
+
+$ sudo curl http://localhost:27017/
+
+https://27017-cs-540451849422-default.cs-asia-southeast1-yelo.cloudshell.dev/
+https://27017-cs-540451849422-default.cs-asia-southeast1-yelo.cloudshell.dev/?authuser=5&redirectedPreviously=true
+
+$ sudo docker exec -it mongo bash
+# apt-get update
+# apt-get install curl
+# curl http://localhost:27017/
+# mongosh
+# exit
+# exit
+
+$ sudo netstat -tunpl
+$ sudo ss -tunl
+
+$ sudo docker inspect mongo
+
+***************************************************************************************************************************
+
+# node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0
+
+***************************************************************************************************************************
+
+$ sudo docker run \
+  --name=node-mongodb-app-v1 \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 3001:3001 \
+  -e PORT=3001 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version1.0.0
+
+$ sudo curl http://localhost:3001/
+
+https://3001-cs-540451849422-default.cs-asia-southeast1-yelo.cloudshell.dev/
+https://3001-cs-540451849422-default.cs-asia-southeast1-yelo.cloudshell.dev/?authuser=5&redirectedPreviously=true
+
+$ sudo docker exec -it node-mongodb-app-v1 bash
+# apt-get update
+# apt-get install curl
+# curl http://localhost:3001/
+# exit
+
+$ sudo netstat -tunpl
+$ sudo ss -tunl
+
+$ sudo docker inspect node-mongodb-app-v1
+
+***************************************************************************************************************************
+
+# node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+***************************************************************************************************************************
+
+$ sudo docker run \
+  --name=node-mongodb-app-v2 \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 3002:3002 \
+  -e PORT=3002 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  -e "MINIO_ACCESS_KEY=minioadmin" \
+  -e "MINIO_SECRET_KEY=minioadmin" \
+  -e "MINIO_HOST=minio" \
+  dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+$ sudo curl http://localhost:3002/# curl
+
+https://3002-cs-540451849422-default.cs-asia-southeast1-yelo.cloudshell.dev/
+https://3002-cs-540451849422-default.cs-asia-southeast1-yelo.cloudshell.dev/?authuser=5&redirectedPreviously=true
+
+$ sudo docker exec -it node-mongodb-app-v2 bash
+# apt-get update
+# apt-get install curl
+# curl http://localhost:3002/
+# exit
+
+$ sudo netstat -tunpl
+$ sudo ss -tunl
+
+$ sudo docker inspect node-mongodb-app-v2
+
+***************************************************************************************************************************
+
+# Docker cleanup
+
+***************************************************************************************************************************
+
+[
+$ sudo docker ps --all --quiet
+$ sudo docker stop $(sudo docker ps -a -q)
+$ sudo docker rm $(sudo docker ps -a -q) --force
+]
+$ sudo docker container list --all --quiet
+$ sudo docker stop $(sudo docker container list -a -q)
+$ sudo docker rm $(sudo docker container list -a -q) --force
+$ sudo docker container prune
+
+$ sudo docker image list --all --quiet
+$ sudo docker rmi $(sudo docker image list -a -q) --force 
+$ sudo docker image prune --all
+
+$ sudo docker volume list --quiet
+$ sudo docker volume rm $(sudo docker volume list --quiet) --force
+$ sudo docker volume prune
+
+$ sudo docker network list --quiet --filter "type=custom"
+$ sudo docker network rm $(sudo docker network list --quiet --filter "type=custom")
+$ sudo docker network prune
+
+$ sudo docker system info
+$ sudo docker system prune --all --volumes
+
+***************************************************************************************************************************
+###########################################################################################################################

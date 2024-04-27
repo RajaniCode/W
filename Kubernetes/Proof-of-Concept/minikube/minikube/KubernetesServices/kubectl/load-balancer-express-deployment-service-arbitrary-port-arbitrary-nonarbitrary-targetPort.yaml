@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-balancer-express-deployment
+spec:
+  selector:
+    matchLabels:
+      app: load-balancer-express-app
+      features: robust
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: load-balancer-express-app
+        features: robust
+    spec:
+      containers:
+      - name: load-balancer-express-app-container
+        image: "dockerrajani/node-21-express-app-macos-arm64:version1.0.0"
+        env:
+        - name: "PORT"
+          value: "40000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: load-balancer-express-service
+spec:
+  clusterIP: 10.96.0.12
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: load-balancer-express-first-service-port
+    nodePort: 31233
+    port: 60000
+    protocol: TCP
+    targetPort: 40000
+  - name: load-balancer-express--second-service-port
+    nodePort: 31081
+    port: 60001
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: load-balancer-express-app
+    features: robust
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 203.0.113.201
+

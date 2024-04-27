@@ -1,0 +1,207 @@
+# Kubernetes
+• Container management platform
+• Kubernetes supports container orchestration 
+
+
+# What is container management?
+• Container management is the process of organizing, adding, removing, or updating a significant number of containers.
+• Containers are an excellent choice when developing software based on microservice architectures.
+
+
+# What is container orchestration?
+• A container orchestrator is a system that automatically deploys and manages containerized apps. 
+• Dynamically adjust number of container instances.
+• Automatically update running instances.
+
+
+# Define Kubernetes
+• Kubernetes is a portable, extensible open-source platform for managing and orchestrating containerized workloads. 
+
+
+# Kubernetes benefits
+• Self-healing
+• Dynamic scaling
+• Automating rolling updates
+• Managing storage
+• Managing network traffic
+• Storing and managing sensitive information such as usernames and passwords
+
+
+# Kubernetes considerations
+• Monitoring
+• Microservices
+• Databases
+• Runtime
+
+
+# What is a computer cluster?
+• A cluster is a set of computers that you configure to work together and view as a single system. 
+
+
+# Kubernetes architecture [Kubernetes cluster: At least one main plane and one or more nodes]
+• Kubernetes control plane: The Kubernetes control plane in a Kubernetes cluster runs a collection of services that [manage the orchestration] functionality in Kubernetes.
+1. API server
+You can think of the API server as the [front end] to your Kubernetes cluster's control plane. All the communication between the components in Kubernetes is done through this API.
+The component that provides this API is called [kube-apiserver].
+2. Backing store
+The backing store is a persistence store that your Kubernetes cluster uses to save the [complete configuration] of a Kubernetes cluster. 
+Kubernetes uses a high-availability, distributed, and reliable key-value store called [etcd].
+This key-value store stores the [current state and the desired state] of all objects within your cluster.
+3. Scheduler
+The scheduler is the component that's responsible for the [assignment of workloads] across all nodes. 
+The scheduler [monitors the cluster] [for newly created containers] and assigns them to nodes.
+4. Controller manager
+The controller manager [launches and monitors the controllers] [configured for a cluster] through the API server.
+5. Cloud controller manager
+The cloud controller manager [integrates with the underlying cloud technologies] in your cluster when the cluster is running in a cloud environment.
+
+• Kubernetes node: A node in a Kubernetes cluster is where your [compute workloads run]. 
+1. Kubelet
+The kubelet is the [agent that runs on each node] in the cluster and [monitors work] requests from the API server.
+The kubelet [monitors the nodes] and makes sure that the [containers scheduled on each node run] as expected.
+2. Kube-proxy
+The kube-proxy component is responsible for [local cluster networking[, and runs on each node. 
+It ensures that each node has a [unique IP address].
+3. Container runtime
+The container runtime is the [underlying software] that runs containers on a Kubernetes cluster. 
+The runtime is responsible for [fetching, starting, and stopping] container images. 
+Kubernetes supports several container runtimes, including but not limited to [Docker, containerd, rkt, CRI-O, and frakti[.
+
+
+# kubectl
+• Uses a configuration file that includes the following configuration information
+1. Cluster configuration specifies a [cluster name, certificate information, and the service API endpoint] associated with the cluster.
+2. User configuration specifies the [users and their permission levels] when they're accessing the configured clusters.
+3. Context configuration [groups clusters and users] by using a friendly name.
+
+
+# Kubernetes pods
+• A pod represents a [single instance of an app] running in Kubernetes. 
+• The [workloads] that you run on Kubernetes are [containerized apps]. 
+• Unlike in a Docker environment, you [can't run containers directly] on Kubernetes.
+• You [package the container] into a Kubernetes object called a pod. 
+• A pod is the [smallest object] that you can create in Kubernetes.
+&
+• A single pod can hold a [group of one or more containers]. 
+• However, a pod typically doesn't contain multiples of the same app.
+&
+• A pod includes information about the [shared storage and network configuration and a specification] about how to run its packaged containers.
+• You use [pod templates] to define the information about the pods that run in your cluster. 
+• Pod templates are [YAML-coded files] that you reuse and include in other objects to manage pod deployments.
+
+
+# Lifecycle of a Kubernetes pod
+Scheduled
+|
+ `->Pending<-------------------------------<------------<--------.
+  |                                                              |
+  |`------->Running->----.                                     	 |
+  |                      |                                       |
+  |                      |                                       |
+  |                      `-----------,----->Succeeded--->Result  |
+  |                       `|        |                            |
+  |                        |        |                            |
+  |                        |         `-----<------------<--------|
+  |                        |                                     |
+  |                         `----,---,----->Failed------>Result  |
+  |                             |   |                            |
+  |`------->-------->-----------'   |                            |
+  |                                 |                            |  
+   `------->Unknown->---------------------->------------>--------'
+
+
+# Phases in a pod's lifecycle
+• Pending
+The pod has been accepted by the cluster, but [one or more of the containers isn't set up] or ready to run. 
+• Running
+The pod transitions to a running state after all of the [resources] within the pod are [ready].
+• Succeeded
+The pod transitions to a succeeded state after the [pod completes its intended task] and runs successfully.
+• Failed
+Pods can transition to a failed state [from Pending/Running/Unknown state].
+• Unknown
+If the [state] of the pod [can't be determined], the pod is an Unknown state.
+&
+• Pods are kept on a cluster until a controller, the control plane, or a user explicitly removes them. 
+• When a pod is deleted and is replaced by a new pod, the new pod is an entirely new instance of the pod based on the pod manifest.
+
+
+# Container states
+• Waiting
+[Default state] of a container and the state that the container is in when it's [not running or terminated].
+• Running
+The container is running [as expected] without any problems.
+• Terminated
+The container is no longer running, either all [tasks finished or the container failed] for some reason.
+
+
+# Pod deployment options using kubectl
+• Pod templates
+1 A pod template enables you to define the [configuration of the pod] you want to deploy.
+2 The template contains information such as the [name of container image] and which [container registry] to use to fetch the images.
+3 The template may also include [runtime configuration information], such as ports to use. 
+4 Templates are [defined by using YAML] in the same way as when you create Docker files.
+
+• Replication controllers
+1. A replication controller uses pod templates and [defines a specified number of pods] that must run.
+2. The controller helps you [run multiple instances of the same pod], and ensures pods are always running on one or more nodes in the cluster. 
+3. The controller [replaces running pods] in this way with new pods if they fail, are deleted, or are terminated.
+
+• Replica sets
+1. A replica set replaces the replication controller as the [preferred way] to deploy replicas.
+2. A replica set includes the same functionality as a replication controller, but it has an [extra configuration option] to include a [selector value].
+3. A selector enables the replica set to [identify all the pods] running underneath it. 
+4. Using this feature, you can [manage pods labeled with the same value] as the selector value, [but not created] with the replicated set.
+
+• Deployments
+1. A deployment creates a [management object one level higher than a replica set], and allows you to deploy and manage updates for pods in a cluster.
+2. Deployments, by default, provide a [rolling update strategy] for updating pods. You can also use a [re-create strategy]. 
+3. Deployments also provide you with a [rollback strategy], which you can execute by using [kubectl].
+4. Deployments make use of [YAML-based definition files] and make it easy to manage deployments. Keep in mind that deployments allow you to [apply any changes] to your cluster.
+
+&
+These files make use of YAML to describe the intended state of the pod or pods to be deployed.
+
+
+# Deployment considerations (specific about configuring networking and storage for a cluster)
+• Kubernetes networking
+1. By default, the pods and nodes [can't communicate] with each other by using [different IP address ranges].
+2. The pod's IP address is [temporary], and [can't be used to reconnect] to a newly created pod. 
+3. Kubernetes expects you to configure networking in such a way that:
+- Pods can communicate with one another [across nodes] [without Network Address Translation (NAT)].
+- Nodes can communicate ]with all pods], and vice versa, [without NAT].
+- Agents on a node can communicate with all [nodes and pods].
+
+• Kubernetes services
+1. Provides [stable networking for pods], enables communication between [nodes, pods, and users] of your app, both internal and external, to the cluster.
+2. Kubernetes [assigns a service an IP address] on creation, just like a node or pod.
+3. These addresses get assigned [from a service cluster's IP range]; for example, 10.96.0.0/12.
+4. A service is also [assigned a Domain Name System (DNS)] name based on the service name, and an IP port.
+5. Three types of services to expose your app's components.
+- ClusterIP: The [address] assigned to a service that makes the service available to a set of services [inside the cluster]. E.g. communication between the app front-end and app back-end.
+- NodePort: The [node port] between 30000 and 32767 that the Kubernetes [control plane assigns] to the service. E.g. access the app front end through a node IP and port address.
+- LoadBalancer: The load balancer that allows for the [distribution of load between nodes] running your app, and [exposing the pod to public network access]. E.g. configure load balancers when you use cloud providers.
+
+• How to group pods
+1. Managing pods [by IP address isn't practical]. Pod IP addresses [change] as controllers re-create them, and you might have any number of pods running.
+2. A service object allows you to target and manage specific pods in your cluster [by using selector labels]. 
+3. You set the selector label in a service definition to [match the pod label] defined in the pod's definition file.
+
+• Kubernetes storage (Pod volumes, Persistent volumes)
+1. Kubernetes uses the [same storage volume concept] that you find when using [Docker]. 
+2. [Docker] volumes are [less managed] than the Kubernetes volumes, because Docker volume [lifetimes aren't managed]. 
+3. The [Kubernetes] volume's lifetime is an [explicit lifetime] that [matches] the [pod's lifetime].
+4. This lifetime match means a volume [outlives the containers] that run in the pod. However, if the pod is removed, so is the volume.
+5. Kubernetes provides options to provision [persistent storage[ with the use of [PersistentVolumes].
+6. You can also [request specific storage] for pods by using [PersistentVolumeClaims].
+
+
+# NB
+Ingress > Cluster > Nodes > Pods > Containers > App/DB
+
+# Kubernetes v1.28 supports clusters with up to 5,000 nodes.
+# More specifically, Kubernetes is designed to accommodate configurations that meet all of the following criteria:
+• No more than 110 pods per node
+• No more than 5,000 nodes
+• No more than 150,000 total pods
+• No more than 300,000 total containers

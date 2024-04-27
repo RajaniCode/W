@@ -1,0 +1,68 @@
+Last login: Wed Nov  8 17:48:32 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % docker version
+Client:
+ Cloud integration: v1.0.35+desktop.5
+ Version:           24.0.6
+ API version:       1.43
+ Go version:        go1.20.7
+ Git commit:        ed223bc
+ Built:             Mon Sep  4 12:28:49 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.25.0 (126437)
+ Engine:
+  Version:          24.0.6
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.7
+  Git commit:       1a79695
+  Built:            Mon Sep  4 12:31:36 2023
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.22
+  GitCommit:        8165feabfdfe38c65b599c4993d227328c231fca
+ runc:
+  Version:          1.1.8
+  GitCommit:        v1.1.8-0-g82f18fe
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro ~ % docker login
+Authenticating with existing credentials...
+Login Succeeded
+rajaniapple@Rajanis-MacBook-Pro ~ % docker pull quay.io/minio/minio:latest
+
+latest: Pulling from minio/minio
+17c533a5f88f: Pull complete 
+5c6005aab3fb: Pull complete 
+a66094b69dc5: Pull complete 
+e97d55fdfff0: Pull complete 
+55260ad2dea9: Pull complete 
+9f1a9362609e: Pull complete 
+53632b6ac6c0: Pull complete 
+Digest: sha256:35a58029963f2896e9a7af18a4b09020657418b7a8672e7ec034dcb09ae6e24f
+Status: Downloaded newer image for quay.io/minio/minio:latest
+quay.io/minio/minio:latest
+
+What's Next?
+  View a summary of image vulnerabilities and recommendations → docker scout quickview quay.io/minio/minio:latest
+rajaniapple@Rajanis-MacBook-Pro ~ % docker image list
+REPOSITORY            TAG       IMAGE ID       CREATED       SIZE
+quay.io/minio/minio   latest    8c6e49e2e9c7   3 hours ago   143MB
+rajaniapple@Rajanis-MacBook-Pro ~ % docker tag quay.io/minio/minio dockerrajani/minio:version1.0.0
+rajaniapple@Rajanis-MacBook-Pro ~ % docker image list
+REPOSITORY            TAG            IMAGE ID       CREATED       SIZE
+dockerrajani/minio    version1.0.0   8c6e49e2e9c7   3 hours ago   143MB
+quay.io/minio/minio   latest         8c6e49e2e9c7   3 hours ago   143MB
+rajaniapple@Rajanis-MacBook-Pro ~ % docker push dockerrajani/minio:version1.0.0
+The push refers to repository [docker.io/dockerrajani/minio]
+fb7e20666a29: Pushed 
+7abe1c7da2a2: Pushed 
+9f814a6bbbea: Pushed 
+bf1af288c51d: Pushed 
+c1dd00a5e768: Pushed 
+7ce65e04b2f8: Pushed 
+29ede5ae9112: Pushed 
+version1.0.0: digest: sha256:49127c0c71c71fb542e7b5ce8edd7cb7d6a4d759e0b4635cf7ab5d9145019907 size: 1787
+rajaniapple@Rajanis-MacBook-Pro ~ % 

@@ -1,0 +1,41 @@
+Last login: Wed Nov  8 16:58:39 on ttys001
+rajaniapple@Rajanis-MacBook-Pro ~ % docker exec -it mongo bash
+root@ae5da5faa152:/# mongosh
+Current Mongosh Log ID:	654b72394b4e70aa39c741c8
+Connecting to:		mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.1
+Using MongoDB:		7.0.2
+Using Mongosh:		2.0.1
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+
+To help improve our products, anonymous usage data is collected and sent to MongoDB periodically (https://www.mongodb.com/legal/privacy-policy).
+You can opt-out by running the disableTelemetry() command.
+
+------
+   The server generated these startup warnings when booting
+   2023-11-08T11:33:18.442+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2023-11-08T11:33:19.098+00:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+   2023-11-08T11:33:19.098+00:00: /sys/kernel/mm/transparent_hugepage/enabled is 'always'. We suggest setting it to 'never'
+   2023-11-08T11:33:19.098+00:00: vm.max_map_count is too low
+------
+
+test> show dbs
+admin   40.00 KiB
+config  12.00 KiB
+local   40.00 KiB
+test> show dbs
+admin   40.00 KiB
+config  12.00 KiB
+dev      8.00 KiB
+local   40.00 KiB
+test> use dev
+switched to db dev
+dev> db.notes.find()
+[
+  {
+    _id: ObjectId("654b7249ae351808f1b75d75"),
+    description: 'Apache Hadoop Stack\r\n ![](/uploads/c0d122f01876e9a15ce09ffebe1cb1a2)'
+  }
+]
+dev> %                                                                                                                                                          rajaniapple@Rajanis-MacBook-Pro ~ % 

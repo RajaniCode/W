@@ -1,0 +1,744 @@
+Last login: Wed Feb  7 19:21:55 on console
+rajaniapple@Rajanis-MacBook-Pro ~ % host -t cname www.github.com
+www.github.com is an alias for github.com.
+rajaniapple@Rajanis-MacBook-Pro ~ % host -t cname www.abc.xyz
+www.abc.xyz is an alias for www3.l.google.com.
+rajaniapple@Rajanis-MacBook-Pro ~ % host -t cname www.aws.amazon.com
+www.aws.amazon.com is an alias for www.cname-proxy.amazon.com.
+rajaniapple@Rajanis-MacBook-Pro ~ % host -t cname www.azure.microsoft.com
+www.azure.microsoft.com is an alias for acom-vanity-router-prod-glbl-01.trafficmanager.net.
+rajaniapple@Rajanis-MacBook-Pro ~ % sw_vers        
+ProductName:		macOS
+ProductVersion:		14.3
+BuildVersion:		23D56
+rajaniapple@Rajanis-MacBook-Pro ~ % arch
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % pwd
+/Users/rajaniapple
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices/node-dns-app
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % pwd
+/Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices/node-dns-app
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % node --version 
+v21.6.1
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % pnpm --version
+8.15.1
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % pnpm update --global
+Already up to date
+Progress: resolved 1, reused 0, downloaded 0, added 0, done
+Done in 586ms
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % pnpm upgrade --global
+Already up to date
+Progress: resolved 1, reused 0, downloaded 0, added 0, done
+Done in 496ms
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % pnpm outdated --global
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % mkdir -p node-dns-app
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % cd node-dns-app
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % nano index.js
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % cat index.js
+const express = require('express')
+const dns = require('node:dns');
+
+const app = express()
+const port = process.env.PORT || 3000
+const utc = new Date().toUTCString()
+const domain = process.env.DOMAIN || 'www.github.com'
+
+async function start() {
+
+  let records = []
+
+  const getCnames = (enodata, result) => {
+    if (enodata) {
+      return records;
+    } else {
+      const cname = result[0];
+      records.push(cname);
+      return dns.resolveCname(cname, getCnames);
+    }
+  }
+
+  dns.resolveCname(`${domain}`, getCnames);
+
+  app.get('/', async (req, res) => {
+    console.log(records);
+    res.send("Node.js Version: " + process.version + " - " + "Coordinated Universal Time (UTC): " + utc + "\n" + "<br/><br/>" + "\n" + `${records}` + "\n")
+  });
+
+  app.listen(port, () => {
+    console.log(`App listening on http://localhost:${port}`)
+  })
+}
+
+start()
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % pnpm init
+Wrote to /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices/node-dns-app/node-dns-app/package.json
+
+{
+  "name": "node-dns-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % pnpm install express 
+Packages: +63
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 63, reused 63, downloaded 0, added 63, done
+
+dependencies:
++ express 4.18.2
+
+Done in 995ms
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % node index.js  
+App listening on http://localhost:3000
+[ 'github.com' ]
+^C
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % DOMAIN="www.abc.xyz" node index.js
+App listening on http://localhost:3000
+[ 'www3.l.google.com' ]
+^C
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % PORT=5000 DOMAIN="svc.cluster.local" node index.js
+App listening on http://localhost:5000
+[]
+^C
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker --version
+Docker version 25.0.2, build 29cf629
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker version
+Client:
+ Cloud integration: v1.0.35+desktop.10
+ Version:           25.0.2
+ API version:       1.44
+ Go version:        go1.21.6
+ Git commit:        29cf629
+ Built:             Thu Feb  1 00:18:45 2024
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.27.1 (136059)
+ Engine:
+  Version:          25.0.2
+  API version:      1.44 (minimum version 1.24)
+  Go version:       go1.21.6
+  Git commit:       fce6e0c
+  Built:            Thu Feb  1 00:23:21 2024
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.28
+  GitCommit:        ae07eda36dd25f8a1b98dfbf587313b99c0190bb
+ runc:
+  Version:          1.1.12
+  GitCommit:        v1.1.12-0-g51d5e94
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker info
+Client:
+ Version:    25.0.2
+ Context:    desktop-linux
+ Debug Mode: false
+ Plugins:
+  buildx: Docker Buildx (Docker Inc.)
+    Version:  v0.12.1-desktop.4
+    Path:     /Users/rajaniapple/.docker/cli-plugins/docker-buildx
+  compose: Docker Compose (Docker Inc.)
+    Version:  v2.24.3-desktop.1
+    Path:     /Users/rajaniapple/.docker/cli-plugins/docker-compose
+  debug: Get a shell into any image or container. (Docker Inc.)
+    Version:  0.0.22
+    Path:     /Users/rajaniapple/.docker/cli-plugins/docker-debug
+  dev: Docker Dev Environments (Docker Inc.)
+    Version:  v0.1.0
+    Path:     /Users/rajaniapple/.docker/cli-plugins/docker-dev
+  extension: Manages Docker extensions (Docker Inc.)
+    Version:  v0.2.21
+    Path:     /Users/rajaniapple/.docker/cli-plugins/docker-extension
+  feedback: Provide feedback, right in your terminal! (Docker Inc.)
+    Version:  v1.0.4
+    Path:     /Users/rajaniapple/.docker/cli-plugins/docker-feedback
+  init: Creates Docker-related starter files for your project (Docker Inc.)
+    Version:  v1.0.0
+    Path:     /Users/rajaniapple/.docker/cli-plugins/docker-init
+  sbom: View the packaged-based Software Bill Of Materials (SBOM) for an image (Anchore Inc.)
+    Version:  0.6.0
+    Path:     /Users/rajaniapple/.docker/cli-plugins/docker-sbom
+  scout: Docker Scout (Docker Inc.)
+    Version:  v1.3.0
+    Path:     /Users/rajaniapple/.docker/cli-plugins/docker-scout
+
+Server:
+ Containers: 0
+  Running: 0
+  Paused: 0
+  Stopped: 0
+ Images: 0
+ Server Version: 25.0.2
+ Storage Driver: overlay2
+  Backing Filesystem: extfs
+  Supports d_type: true
+  Using metacopy: false
+  Native Overlay Diff: true
+  userxattr: false
+ Logging Driver: json-file
+ Cgroup Driver: cgroupfs
+ Cgroup Version: 2
+ Plugins:
+  Volume: local
+  Network: bridge host ipvlan macvlan null overlay
+  Log: awslogs fluentd gcplogs gelf journald json-file local splunk syslog
+ Swarm: inactive
+ Runtimes: io.containerd.runc.v2 runc
+ Default Runtime: runc
+ Init Binary: docker-init
+ containerd version: ae07eda36dd25f8a1b98dfbf587313b99c0190bb
+ runc version: v1.1.12-0-g51d5e94
+ init version: de40ad0
+ Security Options:
+  seccomp
+   Profile: unconfined
+  cgroupns
+ Kernel Version: 6.6.12-linuxkit
+ Operating System: Docker Desktop
+ OSType: linux
+ Architecture: aarch64
+ CPUs: 8
+ Total Memory: 7.658GiB
+ Name: docker-desktop
+ ID: a54ccb6e-4130-495b-a99b-1bcd8b208a56
+ Docker Root Dir: /var/lib/docker
+ Debug Mode: false
+ HTTP Proxy: http.docker.internal:3128
+ HTTPS Proxy: http.docker.internal:3128
+ No Proxy: hubproxy.docker.internal
+ Experimental: false
+ Insecure Registries:
+  hubproxy.docker.internal:5555
+  127.0.0.0/8
+ Live Restore Enabled: false
+
+WARNING: daemon is not using the default seccomp profile
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker init
+
+Welcome to the Docker Init CLI!
+
+This utility will walk you through creating the following files with sensible defaults for your project:
+  - .dockerignore
+  - Dockerfile
+  - compose.yaml
+  - README.Docker.md
+
+Let's get started!
+
+? What application platform does your project use? Node
+? What version of Node do you want to use? 21.6.1
+? Which package manager do you want to use? pnpm
+? What version of pnpm do you want to use? 8.15.1
+? What command do you want to use to start the app? node index.js
+X Sorry, your reply was invalid: Value is required
+? What port does your server listen on? 3000
+
+CREATED: .dockerignore
+CREATED: Dockerfile
+CREATED: compose.yaml
+CREATED: README.Docker.md
+
+✔ Your Docker files are ready!
+
+Take a moment to review them and tailor them to your application.
+
+When you're ready, start your application by running: docker compose up --build
+
+Your application will be available at http://localhost:3000
+
+Consult README.Docker.md for more information about using the generated files.
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % cat Dockerfile
+# syntax=docker/dockerfile:1
+
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Dockerfile reference guide at
+# https://docs.docker.com/go/dockerfile-reference/
+
+# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
+
+ARG NODE_VERSION=21.6.1
+ARG PNPM_VERSION=8.15.1
+
+FROM node:${NODE_VERSION}-alpine
+
+# Use production node environment by default.
+ENV NODE_ENV production
+
+# Install pnpm.
+RUN --mount=type=cache,target=/root/.npm \
+    npm install -g pnpm@${PNPM_VERSION}
+
+WORKDIR /usr/src/app
+
+# Download dependencies as a separate step to take advantage of Docker's caching.
+# Leverage a cache mount to /root/.local/share/pnpm/store to speed up subsequent builds.
+# Leverage a bind mounts to package.json and pnpm-lock.yaml to avoid having to copy them into
+# into this layer.
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
+    --mount=type=cache,target=/root/.local/share/pnpm/store \
+    pnpm install --prod --frozen-lockfile
+
+# Run the application as a non-root user.
+USER node
+
+# Copy the rest of the source files into the image.
+COPY . .
+
+# Expose the port that the application listens on.
+EXPOSE 3000
+
+# Run the application.
+CMD node index.js
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % cat .dockerignore
+# Include any files or directories that you don't want to be copied to your
+# container here (e.g., local build artifacts, temporary files, etc.).
+#
+# For more help, visit the .dockerignore file reference guide at
+# https://docs.docker.com/go/build-context-dockerignore/
+
+**/.classpath
+**/.dockerignore
+**/.env
+**/.git
+**/.gitignore
+**/.project
+**/.settings
+**/.toolstarget
+**/.vs
+**/.vscode
+**/.next
+**/.cache
+**/*.*proj.user
+**/*.dbmdl
+**/*.jfm
+**/charts
+**/docker-compose*
+**/compose*
+**/Dockerfile*
+**/node_modules
+**/npm-debug.log
+**/obj
+**/secrets.dev.yaml
+**/values.dev.yaml
+**/build
+**/dist
+LICENSE
+README.md
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % cat compose.yaml
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+services:
+  server:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+
+# The commented out section below is an example of how to define a PostgreSQL
+# database that your application can use. `depends_on` tells Docker Compose to
+# start the database before your application. The `db-data` volume persists the
+# database data between container restarts. The `db-password` secret is used
+# to set the database password. You must create `db/password.txt` and add
+# a password of your choosing to it before running `docker-compose up`.
+#     depends_on:
+#       db:
+#         condition: service_healthy
+#   db:
+#     image: postgres
+#     restart: always
+#     user: postgres
+#     secrets:
+#       - db-password
+#     volumes:
+#       - db-data:/var/lib/postgresql/data
+#     environment:
+#       - POSTGRES_DB=example
+#       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+#     expose:
+#       - 5432
+#     healthcheck:
+#       test: [ "CMD", "pg_isready" ]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+# volumes:
+#   db-data:
+# secrets:
+#   db-password:
+#     file: db/password.txt
+
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % nano compose.yaml
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % cat compose.yaml
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+services:
+  service:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+
+# The commented out section below is an example of how to define a PostgreSQL
+# database that your application can use. `depends_on` tells Docker Compose to
+# start the database before your application. The `db-data` volume persists the
+# database data between container restarts. The `db-password` secret is used
+# to set the database password. You must create `db/password.txt` and add
+# a password of your choosing to it before running `docker-compose up`.
+#     depends_on:
+#       db:
+#         condition: service_healthy
+#   db:
+#     image: postgres
+#     restart: always
+#     user: postgres
+#     secrets:
+#       - db-password
+#     volumes:
+#       - db-data:/var/lib/postgresql/data
+#     environment:
+#       - POSTGRES_DB=example
+#       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+#     expose:
+#       - 5432
+#     healthcheck:
+#       test: [ "CMD", "pg_isready" ]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+# volumes:
+#   db-data:
+# secrets:
+#   db-password:
+#     file: db/password.txt
+
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker compose up --build
+[+] Building 21.3s (14/14) FINISHED                                                                                                        docker:desktop-linux
+ => [service internal] load build definition from Dockerfile                                                                                               0.0s
+ => => transferring dockerfile: 1.38kB                                                                                                                     0.0s
+ => [service] resolve image config for docker.io/docker/dockerfile:1                                                                                       3.1s
+ => [service auth] docker/dockerfile:pull token for registry-1.docker.io                                                                                   0.0s
+ => [service] docker-image://docker.io/docker/dockerfile:1@sha256:ac85f380a63b13dfcefa89046420e1781752bab202122f8f50032edf31be0021                         1.4s
+ => => resolve docker.io/docker/dockerfile:1@sha256:ac85f380a63b13dfcefa89046420e1781752bab202122f8f50032edf31be0021                                       0.0s
+ => => sha256:ac85f380a63b13dfcefa89046420e1781752bab202122f8f50032edf31be0021 8.40kB / 8.40kB                                                             0.0s
+ => => sha256:e929b0d024894103bb3a8577aad825a7df006a8f6767747bffd373d804c3ee67 482B / 482B                                                                 0.0s
+ => => sha256:19c37871da0fa7da4b2a871455ccea62d3b08eb94a7f6f0cf310fe02f14f5089 1.27kB / 1.27kB                                                             0.0s
+ => => sha256:cf80d9b4bd1c75ee551ce5ff6f950a178fbb62e661c02e42d41b8c772d1efc1d 11.02MB / 11.02MB                                                           1.3s
+ => => extracting sha256:cf80d9b4bd1c75ee551ce5ff6f950a178fbb62e661c02e42d41b8c772d1efc1d                                                                  0.1s
+ => [service internal] load metadata for docker.io/library/node:21.6.1-alpine                                                                              2.9s
+ => [service auth] library/node:pull token for registry-1.docker.io                                                                                        0.0s
+ => [service internal] load .dockerignore                                                                                                                  0.0s
+ => => transferring context: 659B                                                                                                                          0.0s
+ => [service stage-0 1/5] FROM docker.io/library/node:21.6.1-alpine@sha256:4cc2d9f365691fc6f8fe227321d32d9a2691216a71f51c21c7f02224515dea48               10.4s
+ => => resolve docker.io/library/node:21.6.1-alpine@sha256:4cc2d9f365691fc6f8fe227321d32d9a2691216a71f51c21c7f02224515dea48                                0.0s
+ => => sha256:dddddb4633e05f8632b192ae0a260d44d97fcdfd0d78b8ce04d1d466e6a44ff7 1.16kB / 1.16kB                                                             0.0s
+ => => sha256:9f6e9ed23f8bf88b7e6d436b454c9023576fdd8363d24f39de39c2e649a711af 7.15kB / 7.15kB                                                             0.0s
+ => => sha256:bca4290a96390d7a6fc6f2f9929370d06f8dfcacba591c76e3d5c5044e7f420c 3.35MB / 3.35MB                                                             0.6s
+ => => sha256:2685ca0674b359ea438457efa61ea6523b943fba95a2b1bb05b439409f2d9534 43.23MB / 43.23MB                                                           9.4s
+ => => sha256:20d4320a57895f808c3e4ece1cb0439ec6f1fcac2bf4c8e02e4a7f1503a0c405 2.37MB / 2.37MB                                                             2.8s
+ => => sha256:4cc2d9f365691fc6f8fe227321d32d9a2691216a71f51c21c7f02224515dea48 1.43kB / 1.43kB                                                             0.0s
+ => => extracting sha256:bca4290a96390d7a6fc6f2f9929370d06f8dfcacba591c76e3d5c5044e7f420c                                                                  0.1s
+ => => sha256:e42c4e9efb859f9be0c180a84037193dc21e218dda7e51d97dfbe25890bce31d 446B / 446B                                                                 1.8s
+ => => extracting sha256:2685ca0674b359ea438457efa61ea6523b943fba95a2b1bb05b439409f2d9534                                                                  0.9s
+ => => extracting sha256:20d4320a57895f808c3e4ece1cb0439ec6f1fcac2bf4c8e02e4a7f1503a0c405                                                                  0.0s
+ => => extracting sha256:e42c4e9efb859f9be0c180a84037193dc21e218dda7e51d97dfbe25890bce31d                                                                  0.0s
+ => [service internal] load build context                                                                                                                  0.0s
+ => => transferring context: 17.47kB                                                                                                                       0.0s
+ => [service stage-0 2/5] RUN --mount=type=cache,target=/root/.npm     npm install -g pnpm@${PNPM_VERSION}                                                 1.3s
+ => [service stage-0 3/5] WORKDIR /usr/src/app                                                                                                             0.0s
+ => [service stage-0 4/5] RUN --mount=type=bind,source=package.json,target=package.json     --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml  2.0s
+ => [service stage-0 5/5] COPY . .                                                                                                                         0.0s
+ => [service] exporting to image                                                                                                                           0.1s
+ => => exporting layers                                                                                                                                    0.1s
+ => => writing image sha256:c1d4a418af7f5fe210e9f09e07fbb5fbd7e5cd907d656a6a3fe53d74b23dea17                                                               0.0s
+ => => naming to docker.io/library/node-dns-app-service                                                                                                    0.0s
+[+] Running 2/2
+ ✔ Network node-dns-app_default      Created                                                                                                               0.0s 
+ ✔ Container node-dns-app-service-1  Created                                                                                                               0.0s 
+Attaching to service-1
+service-1  | App listening on http://localhost:3000
+service-1  | [ 'github.com' ]
+^CGracefully stopping... (press Ctrl+C again to force)
+[+] Stopping 1/1
+ ✔ Container node-dns-app-service-1  Stopped                                                                                                              10.1s 
+canceled
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker container list --all
+CONTAINER ID   IMAGE                  COMMAND                  CREATED         STATUS                            PORTS     NAMES
+84a589b6b847   node-dns-app-service   "docker-entrypoint.s…"   2 minutes ago   Exited (137) About a minute ago             node-dns-app-service-1
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker image list --all
+REPOSITORY             TAG       IMAGE ID       CREATED         SIZE
+node-dns-app-service   latest    c1d4a418af7f   2 minutes ago   158MB
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker run \
+  --name=node-dns-app \
+  --rm \
+  -p 3000:3000 \
+  -e PORT=3000 \
+  -e DOMAIN="www.aws.amazon.com" \
+  node-dns-app-service
+App listening on http://localhost:3000
+[
+  'www.cname-proxy.amazon.com',
+  'aws.amazon.com',
+  'tp.8e49140c2-frontier.amazon.com',
+  'dr49lng3n1n2s.cloudfront.net'
+]
+rajaniapple@Rajanis-MacBook-Pro ~ % docker run \
+  --name=node-dns-app5000 \
+  --rm \
+  -p 5000:5000 \
+  -e PORT=5000 \
+  -e DOMAIN="www.azure.microsoft.com" \
+  node-dns-app-service
+App listening on http://localhost:5000
+[
+  'acom-vanity-router-prod-glbl-01.trafficmanager.net',
+  'acom-vanity-router-prod-seas-01.azurewebsites.net',
+  'waws-prod-sg1-059.sip.azurewebsites.windows.net',
+  'waws-prod-sg1-059-2424.southeastasia.cloudapp.azure.com'
+]
+rajaniapple@Rajanis-MacBook-Pro ~ % docker run \
+  --name=node-dns-app7000 \
+  --rm \
+  -p 7000:7000 \
+  -e PORT=7000 \
+  -e DOMAIN="svc.cluster.local" \
+  node-dns-app-service
+App listening on http://localhost:7000
+[]
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker tag node-dns-app-service dockerrajani/node-21-express-dns-app-macos-arm64:version1.0.0
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker login
+Authenticating with existing credentials...
+Login Succeeded
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker push dockerrajani/node-21-express-dns-app-macos-arm64:version1.0.0
+The push refers to repository [docker.io/dockerrajani/node-21-express-dns-app-macos-arm64]
+58e685ae920c: Pushed 
+5500e900b3bb: Pushed 
+b3c4de98adf7: Pushed 
+c404428c0f70: Pushed 
+a436f0cd8739: Mounted from library/node 
+58410cb0cdab: Mounted from library/node 
+8303e099d863: Mounted from library/node 
+b09314aec293: Mounted from library/node 
+version1.0.0: digest: sha256:080cf9f3d4b63fe1fe0b06cf5580bd70d493d4977b5fdfb7879cf40fc0eae28f size: 1995
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % open https://hub.docker.com/repository/docker/dockerrajani/node-21-express-dns-app-macos-arm64
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % minikube version
+minikube version: v1.32.0
+commit: 8220a6eb95f0a4d75f7f2d7b14cef975f050512d
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % minikube start
+😄  minikube v1.32.0 on Darwin 14.3 (arm64)
+✨  Automatically selected the docker driver. Other choices: qemu2, ssh
+📌  Using Docker Desktop driver with root privileges
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+💾  Downloading Kubernetes v1.28.3 preload ...
+    > preloaded-images-k8s-v18-v1...:  341.16 MiB / 341.16 MiB  100.00% 2.49 Mi
+    > gcr.io/k8s-minikube/kicbase...:  410.58 MiB / 410.58 MiB  100.00% 2.58 Mi
+🔥  Creating docker container (CPUs=2, Memory=4000MB) ...
+🐳  Preparing Kubernetes v1.28.3 on Docker 24.0.7 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % minikube ip
+192.168.49.2
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % minikube profile list
+|----------|-----------|---------|--------------|------|---------|---------|-------|--------|
+| Profile  | VM Driver | Runtime |      IP      | Port | Version | Status  | Nodes | Active |
+|----------|-----------|---------|--------------|------|---------|---------|-------|--------|
+| minikube | docker    | docker  | 192.168.49.2 | 8443 | v1.28.3 | Running |     1 | *      |
+|----------|-----------|---------|--------------|------|---------|---------|-------|--------|
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % minikube service list -p minikube
+|-------------|------------|--------------|-----|
+|  NAMESPACE  |    NAME    | TARGET PORT  | URL |
+|-------------|------------|--------------|-----|
+| default     | kubernetes | No node port |     |
+| kube-system | kube-dns   | No node port |     |
+|-------------|------------|--------------|-----|
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % kubectl version
+Client Version: v1.29.1
+Kustomize Version: v5.0.4-0.20230601165947-6ce0bf390ce3
+Server Version: v1.28.3
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % kubectl config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /Users/rajaniapple/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Wed, 07 Feb 2024 20:18:51 IST
+        provider: minikube.sigs.k8s.io
+        version: v1.32.0
+      name: cluster_info
+    server: https://127.0.0.1:49886
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Wed, 07 Feb 2024 20:18:51 IST
+        provider: minikube.sigs.k8s.io
+        version: v1.32.0
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /Users/rajaniapple/.minikube/profiles/minikube/client.crt
+    client-key: /Users/rajaniapple/.minikube/profiles/minikube/client.key
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % kubectl cluster-info
+Kubernetes control plane is running at https://127.0.0.1:49886
+CoreDNS is running at https://127.0.0.1:49886/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices/node-dns-app
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % mkdir -p kubectl
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % nano kubectl/node-21-express-dns-app-load-balancer-service.yaml
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % cat kubectl/node-21-express-dns-app-load-balancer-service.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-21-express-dns-app-deployment
+  labels:
+    app: node-21-express-dns-app-label
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: node-21-express-dns-app-label  
+  template:
+    metadata:
+      labels:
+        app: node-21-express-dns-app-label  
+    spec:
+      containers:
+      - name: node-21-express-dns-app-container
+        image: "dockerrajani/node-21-express-dns-app-macos-arm64:version1.0.0"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-21-express-dns-app-load-balancer-service 
+spec:
+  selector:
+    app: node-21-express-dns-app-label 
+  type: LoadBalancer     
+  ports:
+  - protocol: TCP        
+    port: 5000           
+    targetPort: 3000    
+    nodePort: 31110
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % kubectl apply -f kubectl/node-21-express-dns-app-load-balancer-service.yaml
+deployment.apps/node-21-express-dns-app-deployment created
+service/node-21-express-dns-app-load-balancer-service created
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % kubectl get pods --watch
+NAME                                                  READY   STATUS              RESTARTS   AGE
+node-21-express-dns-app-deployment-784c599489-drgp5   0/1     ContainerCreating   0          6s
+node-21-express-dns-app-deployment-784c599489-drgp5   1/1     Running             0          16s
+^C%                                                                                                                                                             rajaniapple@Rajanis-MacBook-Pro node-dns-app % kubectl get pods
+NAME                                                  READY   STATUS    RESTARTS   AGE
+node-21-express-dns-app-deployment-784c599489-drgp5   1/1     Running   0          21s
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % kubectl get services
+NAME                                            TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
+kubernetes                                      ClusterIP      10.96.0.1     <none>        443/TCP          3m7s
+node-21-express-dns-app-load-balancer-service   LoadBalancer   10.97.7.242   127.0.0.1     5000:31110/TCP   52s
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % minikube service node-21-express-dns-app-load-balancer-service
+|-----------|-----------------------------------------------|-------------|---------------------------|
+| NAMESPACE |                     NAME                      | TARGET PORT |            URL            |
+|-----------|-----------------------------------------------|-------------|---------------------------|
+| default   | node-21-express-dns-app-load-balancer-service |        5000 | http://192.168.49.2:31110 |
+|-----------|-----------------------------------------------|-------------|---------------------------|
+🏃  Starting tunnel for service node-21-express-dns-app-load-balancer-service.
+|-----------|-----------------------------------------------|-------------|------------------------|
+| NAMESPACE |                     NAME                      | TARGET PORT |          URL           |
+|-----------|-----------------------------------------------|-------------|------------------------|
+| default   | node-21-express-dns-app-load-balancer-service |             | http://127.0.0.1:49964 |
+|-----------|-----------------------------------------------|-------------|------------------------|
+🎉  Opening service default/node-21-express-dns-app-load-balancer-service in default browser...
+❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+^C✋  Stopping tunnel for service node-21-express-dns-app-load-balancer-service.
+rajaniapple@Rajanis-MacBook-Pro ~ % cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices/node-dns-app
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker rm $(docker container list -a -q) --force
+123eddaa5c05
+84a589b6b847
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker rmi $(docker image list -a -q) --force 
+Untagged: dockerrajani/node-21-express-dns-app-macos-arm64:version1.0.0
+Untagged: dockerrajani/node-21-express-dns-app-macos-arm64@sha256:080cf9f3d4b63fe1fe0b06cf5580bd70d493d4977b5fdfb7879cf40fc0eae28f
+Untagged: node-dns-app-service:latest
+Deleted: sha256:c1d4a418af7f5fe210e9f09e07fbb5fbd7e5cd907d656a6a3fe53d74b23dea17
+Untagged: gcr.io/k8s-minikube/kicbase:v0.0.42
+Untagged: gcr.io/k8s-minikube/kicbase@sha256:d35ac07dfda971cabee05e0deca8aeac772f885a5348e1a0c0b0a36db20fcfc0
+Deleted: sha256:62753ecb37c4e3c5bf7b6c8d02fe88b543f553e92492fca245cded98b0d364dd
+Deleted: sha256:5abf36ef772d71585d6f0f437e0fca034290f30e5acfaad77643bba6ba9fc877
+Error response from daemon: No such image: c1d4a418af7f:latest
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker volume rm $(docker volume list --quiet) --force
+minikube
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker network rm $(docker network list --quiet --filter "type=custom")
+fdd373031c9c
+d31cf30864ba
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % docker system prune --all --volumes
+WARNING! This will remove:
+  - all stopped containers
+  - all networks not used by at least one container
+  - all anonymous volumes not used by at least one container
+  - all images without at least one container associated to them
+  - all build cache
+
+Are you sure you want to continue? [y/N] y
+Deleted build cache objects:
+0ds7v53izu3y9qoi93a0391tf
+juvrhewihax487elueno719l5
+0kv5lre2d6o02v3u553j2uedz
+xvsmej5cgtvbnvzkfijgb4fid
+loopo31xvwpjqboi8ptc1tl68
+qpebvvtykakyfgsugtldah8xf
+02m4e3xs6uzearqmgk91glgnk
+2082ntmj5tq33sdqwlpi1npob
+cpj8jxmblkxt847yaeiuvqsfx
+z8osvdl7y8nw5vzis1ifq3nvj
+cixcgtvxwfotdrgwmi7j96lih
+4k72fvzyqdc8muzqnq32k1mje
+wqxatziq7rnlyqh94shrwncn9
+gs3kqz65hbjcrpp52zoxdp1jl
+
+Total reclaimed space: 28.69MB
+rajaniapple@Rajanis-MacBook-Pro node-dns-app % 

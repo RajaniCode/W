@@ -1,0 +1,29 @@
+Last login: Mon Oct  9 17:09:48 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % arch                                                                   
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % pwd                                                                    
+/Users/rajaniapple
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Technology/Kubernetes/Proof\ of\ Concept 
+rajaniapple@Rajanis-MacBook-Pro Proof of Concept % pwd                                                                    
+/Users/rajaniapple/Desktop/Technology/Kubernetes/Proof of Concept
+rajaniapple@Rajanis-MacBook-Pro Proof of Concept % brew --version                                                    
+Homebrew 4.1.14
+rajaniapple@Rajanis-MacBook-Pro Proof of Concept % multipass --version                                                    
+multipass   1.12.2+mac
+rajaniapple@Rajanis-MacBook-Pro Proof of Concept % brew uninstall multipass
+==> Uninstalling Cask multipass
+==> Removing launchctl service com.canonical.multipassd
+Password:
+==> Uninstalling packages with sudo; the password may be necessary:
+com.canonical.multipass.multipassd
+com.canonical.multipass.multipass
+com.canonical.multipass.multipass_gui
+==> Removing files:
+/opt/homebrew/etc/bash_completion.d/multipass
+/Applications/Multipass.app
+/Library/Application Support/com.canonical.multipass
+/Library/Logs/Multipass
+/usr/local/bin/multipass
+/usr/local/etc/bash_completion.d/multipass
+==> Purging files for version 1.12.2 of Cask multipass
+rajaniapple@Rajanis-MacBook-Pro Proof of Concept % 

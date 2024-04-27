@@ -1,0 +1,24 @@
+Last login: Wed Sep 20 17:56:32 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % arch                                                                                               
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % java --version                                                                                          
+openjdk 20.0.2 2023-07-18
+OpenJDK Runtime Environment (build 20.0.2+9-78)
+OpenJDK 64-Bit Server VM (build 20.0.2+9-78, mixed mode, sharing)
+rajaniapple@Rajanis-MacBook-Pro ~ % export JAVA_HOME="/Users/rajaniapple/Downloads/Software/OpenJDK/JDK20.0.2/jdk-20.0.2.jdk/Contents/Home/"
+rajaniapple@Rajanis-MacBook-Pro ~ % echo $JAVA_HOME                                                                                       
+/Users/rajaniapple/Downloads/Software/OpenJDK/JDK20.0.2/jdk-20.0.2.jdk/Contents/Home/
+rajaniapple@Rajanis-MacBook-Pro ~ % pwd
+/Users/rajaniapple
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Working/Java/JavaGCC/JNI                                            
+rajaniapple@Rajanis-MacBook-Pro JNI % pwd                                                    
+/Users/rajaniapple/Desktop/Working/Java/JavaGCC/JNI
+rajaniapple@Rajanis-MacBook-Pro JNI % javac -h . SampleJNI.java
+rajaniapple@Rajanis-MacBook-Pro JNI % gcc -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/darwin" -dynamiclib -o libSample.dylib SampleJNI.c
+rajaniapple@Rajanis-MacBook-Pro JNI % java -Djava.library.path=. SampleJNI
+C code!
+rajaniapple@Rajanis-MacBook-Pro JNI % rm -rf libSample.dylib             
+rajaniapple@Rajanis-MacBook-Pro JNI % g++ -fPIC -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/darwin" -dynamiclib -o libSample.dylib SampleJNI.cpp
+rajaniapple@Rajanis-MacBook-Pro JNI % java -Djava.library.path=. SampleJNI
+C++ code!
+rajaniapple@Rajanis-MacBook-Pro JNI % 

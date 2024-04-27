@@ -1,0 +1,147 @@
+% docker version
+
+
+# The connection to the server 127.0.0.1:49400 was refused - did you specify the right host or port? # % minikube start
+% kubectl version --output=yaml
+
+
+% kubectl config view
+
+
+% minikube version
+
+
+
+
+## Create a minikube cluster
+% minikube start
+
+
+# Enable the Ingress controller
+% minikube addons enable ingress
+
+
+# Verify that the NGINX Ingress controller is running
+% kubectl get pods -n ingress-nginx
+
+
+# Deploy a hello, world app
+% kubectl create deployment web --image=gcr.io/google-samples/hello-app:1.0
+
+# Expose the Deployment:
+% kubectl expose deployment web --type=NodePort --port=8080
+
+
+# Verify the Service is created and is available on a node port
+% kubectl get service web
+
+
+# Visit the Service via NodePort
+% minikube service web --url
+
+# Browser visit # http://127.0.0.1:49557/
+[
+Hello, world!
+Version: 1.0.0
+Hostname: web-548f6458b5-gqllc
+]
+
+
+# In another window # curl # http://127.0.0.1:49557
+% curl http://127.0.0.1:49557
+[
+Hello, world!
+Version: 1.0.0
+Hostname: web-548f6458b5-gqllc
+]
+
+
+
+
+## Create an Ingress
+% curl -L https://k8s.io/examples/service/networking/example-ingress.yaml
+% wget https://k8s.io/examples/service/networking/example-ingress.yaml
+% cat example-ingress.yaml
+[
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+    - host: hello-world.info
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 8080
+]
+
+
+# Create the Ingress object 
+% kubectl apply -f example-ingress.yaml
+
+
+# Verify the IP address is set # Note: This can take a couple of minutes.
+% kubectl get ingress
+
+
+# In another window # minikube tunnel
+% sudo minikube tunnel
+
+
+# Verify that the Ingress controller is directing traffic
+% curl --resolve "hello-world.info:80:$( minikube ip )" -i http://hello-world.info
+
+
+# Look up the external IP address as reported by minikube
+% minikube ip
+
+
+# Add external IP address as reported by minikube to the bottom of the /etc/hosts file on your computer (you will need administrator access)
+# minikube ip # 192.168.49.2
+# 172.17.0.15 hello-world.info
+# sudo vim /etc/hosts
+% cat /etc/hosts
+
+
+# After you make this change, your web browser sends requests for hello-world.info URLs to Minikube.
+% open http://hello-world.info/
+
+
+
+
+## Clean up
+# 172.17.0.15 hello-world.info
+# sudo nano /etc/hosts
+% cat /etc/hosts
+
+
+# web
+% kubectl delete service web
+# web
+% kubectl delete deployment web
+
+
+# Stop the Minikube cluster
+% minikube stop
+
+
+# Delete the Minikube VM:
+% minikube delete
+
+
+# minikube delete all profiles
+% minikube delete --all
+
+
+# remove folder # .docker # .minikube # .kube
+# % rm -rf /Users/rajaniapple/.docker
+% rm -rf /Users/rajaniapple/.minikube
+% rm -rf /Users/rajaniapple/.kube

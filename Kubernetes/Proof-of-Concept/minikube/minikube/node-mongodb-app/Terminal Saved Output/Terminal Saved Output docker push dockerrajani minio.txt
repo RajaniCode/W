@@ -1,0 +1,74 @@
+Last login: Mon Nov  6 14:17:52 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % sw_vers          
+ProductName:		macOS
+ProductVersion:		14.0
+BuildVersion:		23A344
+rajaniapple@Rajanis-MacBook-Pro ~ % arch             
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % docker version   
+Client:
+ Cloud integration: v1.0.35+desktop.5
+ Version:           24.0.6
+ API version:       1.43
+ Go version:        go1.20.7
+ Git commit:        ed223bc
+ Built:             Mon Sep  4 12:28:49 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.25.0 (126437)
+ Engine:
+  Version:          24.0.6
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.7
+  Git commit:       1a79695
+  Built:            Mon Sep  4 12:31:36 2023
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.22
+  GitCommit:        8165feabfdfe38c65b599c4993d227328c231fca
+ runc:
+  Version:          1.1.8
+  GitCommit:        v1.1.8-0-g82f18fe
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro ~ % docker login     
+Authenticating with existing credentials...
+Login Succeeded
+rajaniapple@Rajanis-MacBook-Pro ~ % docker pull minio/minio
+Using default tag: latest
+latest: Pulling from minio/minio
+b650cfbb2837: Pull complete 
+e9d5ce196263: Pull complete 
+c1b201109fa1: Pull complete 
+26d5f7e47938: Pull complete 
+e3dbc49ce3d2: Pull complete 
+a6bfa4552f85: Pull complete 
+1ff33655e246: Pull complete 
+Digest: sha256:8871650797a40e6094828e86709f3e7180615f03d72ea9d385a720dfb2b63510
+Status: Downloaded newer image for minio/minio:latest
+docker.io/minio/minio:latest
+
+What's Next?
+  View a summary of image vulnerabilities and recommendations → docker scout quickview minio/minio
+rajaniapple@Rajanis-MacBook-Pro ~ % docker image list
+REPOSITORY    TAG       IMAGE ID       CREATED      SIZE
+minio/minio   latest    565eb431a93a   4 days ago   146MB
+rajaniapple@Rajanis-MacBook-Pro ~ % docker tag minio/minio dockerrajani/minio:version1.0
+rajaniapple@Rajanis-MacBook-Pro ~ % docker image list
+REPOSITORY           TAG          IMAGE ID       CREATED      SIZE
+dockerrajani/minio   version1.0   565eb431a93a   4 days ago   146MB
+minio/minio          latest       565eb431a93a   4 days ago   146MB
+rajaniapple@Rajanis-MacBook-Pro ~ % docker push dockerrajani/minio:version1.0
+The push refers to repository [docker.io/dockerrajani/minio]
+1f558be70736: Mounted from minio/minio 
+0b736bb6762d: Mounted from minio/minio 
+5ac27ae4b233: Mounted from minio/minio 
+ff7dc3ad4a3a: Mounted from minio/minio 
+73c85b3fe91f: Mounted from minio/minio 
+a7c0cd12812c: Mounted from minio/minio 
+1dfb9c30ff19: Mounted from minio/minio 
+version1.0: digest: sha256:3fe41fdc8d049e33b39b56bfb82a81f45e9bed859d7d08e79f3859d0f7a686f3 size: 1787
+rajaniapple@Rajanis-MacBook-Pro ~ % 

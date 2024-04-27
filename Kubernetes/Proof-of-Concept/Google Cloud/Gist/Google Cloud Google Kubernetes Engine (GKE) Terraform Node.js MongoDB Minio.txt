@@ -1,0 +1,3983 @@
+###########################################################################################################################
+
+Google Cloud Google Kubernetes Engine (GKE) # Terraform
+
+###########################################################################################################################
+===========================================================================================================================
+
+# Cleanup # $HOME
+
+===========================================================================================================================
+
+% ls ~/.terraform.d
+% rm -rf ~/.terraform.d
+
+
+% ls ~/.kube
+% rm -rf ~/.kube
+
+
+% ls ~/.config
+% rm -rf ~/.config
+
+
+% ls ~/.boto
+% rm -rf ~/.boto
+
+===========================================================================================================================
+
+# Version
+
+===========================================================================================================================
+
+% terraform version
+
+
+% kubectl version
+
+
+% python3 --version
+
+
+% gcloud version
+
+
+% gke-gcloud-auth-plugin --version
+
+===========================================================================================================================
+***************************************************************************************************************************
+
+# Initialize gcloud
+# This will authorize the SDK to access GCP using the user account credentials and add the SDK to the PATH.
+# This step requires login and selection of the project.
+# [4] Create a new project # 4
+# Project ID # rajani-terraform-gke
+
+***************************************************************************************************************************
+
+% gcloud init
+[
+Welcome! This command will take you through the configuration of gcloud.
+
+Your current configuration has been set to: [default]
+
+You can skip diagnostics next time by using the following flag:
+  gcloud init --skip-diagnostics
+
+Network diagnostic detects and fixes local network connection issues.
+Checking network connection...done.                                                                                                                            
+Reachability Check passed.
+Network diagnostic passed (1/1 checks passed).
+
+You must log in to continue. Would you like to log in (Y/n)?  Y
+
+Your browser has been opened to visit:
+
+    https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8085%2F&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=s1er46DQHGxYrADkH8LrO2qcjHLyP1&access_type=offline&code_challenge=zJt2QNhwMHE8lIfcxaZcV9F_04yrbjd17FiWNOntRG8&code_challenge_method=S256
+
+You are logged in as: [<Google Cloud>@gmail.com].
+
+Pick cloud project to use: 
+ [1] advance-symbol-405910
+ [2] emerald-oxide-405910
+ [3] Enter a project ID
+ [4] Create a new project
+Please enter numeric choice or text value (must exactly match list item):  4
+
+Enter a Project ID. Note that a Project ID CANNOT be changed later.
+Project IDs must be 6-30 characters (lowercase ASCII, digits, or
+hyphens) in length and start with a lowercase letter. rajani-terraform-gke
+Waiting for [operations/cp.5722598982475308700] to finish...done.                                                                                              
+Your current project has been set to: [rajani-terraform-gke].
+
+Not setting default zone/region (this feature makes it easier to use
+[gcloud compute] by setting an appropriate default value for the
+--zone and --region flag).
+See https://cloud.google.com/compute/docs/gcloud-compute section on how to set
+default compute region and zone manually. If you would like [gcloud init] to be
+able to do this for you the next time you run it, make sure the
+Compute Engine API is enabled for your project on the
+https://console.developers.google.com/apis page.
+
+Created a default .boto configuration file at [~/.boto]. See this file and
+[https://cloud.google.com/storage/docs/gsutil/commands/config] for more
+information about configuring Google Cloud Storage.
+Your Google Cloud SDK is configured and ready to use!
+
+* Commands that require authentication will use <Google Cloud>@gmail.com by default
+* Commands will reference project `rajani-terraform-gke` by default
+Run `gcloud help config` to learn how to change individual settings
+
+This gcloud configuration is called [default]. You can create additional configurations if you work with multiple accounts and/or projects.
+Run `gcloud topic configurations` to learn more.
+
+Some things to try next:
+
+* Run `gcloud --help` to see the Cloud Platform services you can interact with. And run `gcloud help COMMAND` to get help on any gcloud command.
+* Run `gcloud topic --help` to learn about advanced features of the SDK like arg files and output formatting
+* Run `gcloud cheat-sheet` to see a roster of go-to `gcloud` commands.
+]
+
+***************************************************************************************************************************
+
+# Add the Google Cloud account to the Application Default Credentials (ADC).
+# This will allow Terraform to access these credentials to provision resources on GCloud.
+
+***************************************************************************************************************************
+
+% gcloud auth application-default login
+
+***************************************************************************************************************************
+
+# Set up and initialize the Terraform workspace
+
+***************************************************************************************************************************
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/GKE/Terraform
+
+% git clone https://github.com/hashicorp/learn-terraform-provision-gke-cluster
+
+# Explore this repository by changing directories or navigating in the UI.
+% cd learn-terraform-provision-gke-cluster
+
+% tree
+[
+.
+├── LICENSE
+├── README.md
+├── gke.tf
+├── kubernetes-dashboard-admin.rbac.yaml
+├── outputs.tf
+├── terraform.tfvars
+├── versions.tf
+└── vpc.tf
+
+1 directory, 8 files
+]
+
+[
+# Four files used to provision a VPC, subnets and a GKE cluster.
+1. vpc.tf provisions a VPC and subnet. A new VPC is created so that it doesn't impact the existing cloud environment and resources. This file outputs region.
+
+2. gke.tf provisions a GKE cluster and a separately managed node pool (recommended). Separately managed node pools allows to customize the Kubernetes cluster profile — this is useful if some Pods require more resources than others. The number of nodes in the node pool is defined also defined here.
+
+3. terraform.tfvars is a template for the project_id and region variables.
+
+4. versions.tf sets the Terraform version to at least 0.14.
+]
+
+***************************************************************************************************************************
+
+# Update the terraform.tfvars file.
+# Replace the values in the terraform.tfvars file with the project_id and region.
+# Terraform will use these values to target the project when provisioning the resources.
+# The terraform.tfvars file should look like the following.
+# terraform.tfvars
+project_id = "REPLACE_ME"
+region     = "us-central1"
+
+***************************************************************************************************************************
+
+% cat terraform.tfvars
+
+# rajani-terraform-gke
+% nano terraform.tfvars
+
+% cat terraform.tfvars
+
+***************************************************************************************************************************
+
+# Find the project the gcloud is configured to with this command # The region has been defaulted to us-central1
+
+***************************************************************************************************************************
+
+% gcloud config get-value project
+
+***************************************************************************************************************************
+
+# Initialize Terraform workspace
+# After saving the customized variables file, initialize the Terraform workspace, which will download the provider and initialize it with the values provided in the terraform.tfvars file.
+
+***************************************************************************************************************************
+
+% terraform init
+[
+Initializing the backend...
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/google from the dependency lock file
+- Installing hashicorp/google v4.74.0...
+- Installed hashicorp/google v4.74.0 (signed by HashiCorp)
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+]
+
+***************************************************************************************************************************
+
+# Provision the GKE cluster
+# NOTE
+# Compute Engine API and Kubernetes Engine API are required for terraform apply to work on this configuration.
+# Enable both APIs for the Google Cloud project before continuing.
+
+***************************************************************************************************************************
+
+https://console.cloud.google.com/apis/dashboard?authuser=5&hl=en&project=rajani-terraform-gke
+
+# RPI APIs & Services
+# Click “Enable APIs and services” or go to the API library.
+
+# Compute Engine API
+[
+Product details
+Compute Engine API
+Google Enterprise API
+ENABLE
+]
+
+# Kubernetes Engine API
+[
+Kubernetes Engine API
+Google Enterprise API
+Builds and manages container-based applications, powered by the open source Kubernetes technology.
+ENABLE
+
+To use this API, you may need credentials.
+]
+#
+[
+Create credentials
+
+Credential Type
+Which API are you using?
+Different APIs use different auth platforms and some credentials can be restricted to only call certain APIs.
+
+Select an API
+Kubernetes Engine API
+
+What data will you be accessing?*
+Different credentials are required to authorize access depending on the type of data that you request.
+
+This Google Cloud API is usually accessed from a server using a service account. To create a service account, select "Application data".
+
+Application data
+Data belonging to your own application, such as your app's Cloud Firestore backend. This will create a service account.
+
+NEXT
+1
+Service account details
+Service account name
+rajani-terraform-gke-service-account
+Display name for this service account
+
+Service account ID *
+rajani-terraform-gke-svc-ac-id
+Email address: rajani-terraform-gke-svc-ac-id@rajani-terraform-gke.iam.gserviceaccount.com
+
+Service account description
+Rajani Terraform GKE Kubernetes Engine API
+Describe what this service account will do
+
+2
+Grant this service account access to project (optional)
+
+3
+Grant users access to this service account (optional)
+
+CREATE AND CONTINUE
+
+2
+Grant this service account access to project (optional)
+Grant this service account access to rajani-terraform-gke so that it has permission to complete specific actions on the resources in your project. 
+
+Role
+Owner
+Full access to most Google Cloud resources. See the list of included permissions.
+
+CONTINUE
+
+3
+Grant users access to this service account (optional)
+Grant access to users or groups that need to perform actions as this service account.
+
+Service account users role
+<Google Cloud>@gmail.com
+Grant users the permissions to deploy jobs and VMs with this service account
+
+Service account admins role
+<Google Cloud>@gmail.com
+Grant users the permission to administer this service account
+
+DONE
+]
+
+***************************************************************************************************************************
+
+% terraform plan
+[
+data.google_container_engine_versions.gke_version: Reading...
+data.google_container_engine_versions.gke_version: Read complete after 2s [id=2023-11-30 01:32:52.882936 +0000 UTC]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # google_compute_network.vpc will be created
+  + resource "google_compute_network" "vpc" {
+      + auto_create_subnetworks                   = false
+      + delete_default_routes_on_create           = false
+      + gateway_ipv4                              = (known after apply)
+      + id                                        = (known after apply)
+      + internal_ipv6_range                       = (known after apply)
+      + mtu                                       = (known after apply)
+      + name                                      = "rajani-terraform-gke-vpc"
+      + network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL"
+      + project                                   = (known after apply)
+      + routing_mode                              = (known after apply)
+      + self_link                                 = (known after apply)
+    }
+
+  # google_compute_subnetwork.subnet will be created
+  + resource "google_compute_subnetwork" "subnet" {
+      + creation_timestamp         = (known after apply)
+      + external_ipv6_prefix       = (known after apply)
+      + fingerprint                = (known after apply)
+      + gateway_address            = (known after apply)
+      + id                         = (known after apply)
+      + ip_cidr_range              = "10.10.0.0/24"
+      + ipv6_cidr_range            = (known after apply)
+      + name                       = "rajani-terraform-gke-subnet"
+      + network                    = "rajani-terraform-gke-vpc"
+      + private_ip_google_access   = (known after apply)
+      + private_ipv6_google_access = (known after apply)
+      + project                    = (known after apply)
+      + purpose                    = (known after apply)
+      + region                     = "us-central1"
+      + secondary_ip_range         = (known after apply)
+      + self_link                  = (known after apply)
+      + stack_type                 = (known after apply)
+    }
+
+  # google_container_cluster.primary will be created
+  + resource "google_container_cluster" "primary" {
+      + cluster_ipv4_cidr           = (known after apply)
+      + datapath_provider           = (known after apply)
+      + default_max_pods_per_node   = (known after apply)
+      + enable_binary_authorization = false
+      + enable_intranode_visibility = (known after apply)
+      + enable_kubernetes_alpha     = false
+      + enable_l4_ilb_subsetting    = false
+      + enable_legacy_abac          = false
+      + enable_shielded_nodes       = true
+      + endpoint                    = (known after apply)
+      + id                          = (known after apply)
+      + initial_node_count          = 1
+      + label_fingerprint           = (known after apply)
+      + location                    = "us-central1"
+      + logging_service             = (known after apply)
+      + master_version              = (known after apply)
+      + monitoring_service          = (known after apply)
+      + name                        = "rajani-terraform-gke-gke"
+      + network                     = "rajani-terraform-gke-vpc"
+      + networking_mode             = (known after apply)
+      + node_locations              = (known after apply)
+      + node_version                = (known after apply)
+      + operation                   = (known after apply)
+      + private_ipv6_google_access  = (known after apply)
+      + project                     = (known after apply)
+      + remove_default_node_pool    = true
+      + self_link                   = (known after apply)
+      + services_ipv4_cidr          = (known after apply)
+      + subnetwork                  = "rajani-terraform-gke-subnet"
+      + tpu_ipv4_cidr_block         = (known after apply)
+    }
+
+  # google_container_node_pool.primary_nodes will be created
+  + resource "google_container_node_pool" "primary_nodes" {
+      + cluster                     = "rajani-terraform-gke-gke"
+      + id                          = (known after apply)
+      + initial_node_count          = (known after apply)
+      + instance_group_urls         = (known after apply)
+      + location                    = "us-central1"
+      + managed_instance_group_urls = (known after apply)
+      + max_pods_per_node           = (known after apply)
+      + name                        = "rajani-terraform-gke-gke"
+      + name_prefix                 = (known after apply)
+      + node_count                  = 2
+      + node_locations              = (known after apply)
+      + operation                   = (known after apply)
+      + project                     = (known after apply)
+      + version                     = "1.27.4-gke.900"
+
+      + node_config {
+          + disk_size_gb      = (known after apply)
+          + disk_type         = (known after apply)
+          + guest_accelerator = (known after apply)
+          + image_type        = (known after apply)
+          + labels            = {
+              + "env" = "rajani-terraform-gke"
+            }
+          + local_ssd_count   = (known after apply)
+          + logging_variant   = "DEFAULT"
+          + machine_type      = "n1-standard-1"
+          + metadata          = {
+              + "disable-legacy-endpoints" = "true"
+            }
+          + min_cpu_platform  = (known after apply)
+          + oauth_scopes      = [
+              + "https://www.googleapis.com/auth/logging.write",
+              + "https://www.googleapis.com/auth/monitoring",
+            ]
+          + preemptible       = false
+          + service_account   = (known after apply)
+          + spot              = false
+          + tags              = [
+              + "gke-node",
+              + "rajani-terraform-gke-gke",
+            ]
+          + taint             = (known after apply)
+        }
+    }
+
+Plan: 4 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + kubernetes_cluster_host = (known after apply)
+  + kubernetes_cluster_name = "rajani-terraform-gke-gke"
+  + project_id              = "rajani-terraform-gke"
+  + region                  = "us-central1"
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
+]
+
+[
+% terraform plan -out terraform-gke-plan
+% terraform show -json terraform-gke-plan
+% rm -rf terraform-gke-plan
+]
+
+***************************************************************************************************************************
+
+# In the initialized directory, run terraform apply and review the planned actions. 
+# The terminal output should indicate the plan is running and what resources will be created.
+
+# The terraform apply will provision a VPC, subnet, GKE Cluster and a GKE node pool.
+# Confirm the apply with a yes.
+
+# This process should take approximately 10 minutes. Upon successful application, the terminal prints the outputs defined in vpc.tf and gke.tf.
+
+Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+kubernetes_cluster_host = "35.232.196.187"
+kubernetes_cluster_name = "dos-terraform-edu-gke"
+project_id = "dos-terraform-edu"
+region = "us-central1"
+
+***************************************************************************************************************************
+
+% terraform apply
+[
+data.google_container_engine_versions.gke_version: Reading...
+data.google_container_engine_versions.gke_version: Read complete after 2s [id=2023-11-30 01:56:14.693373 +0000 UTC]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # google_compute_network.vpc will be created
+  + resource "google_compute_network" "vpc" {
+      + auto_create_subnetworks                   = false
+      + delete_default_routes_on_create           = false
+      + gateway_ipv4                              = (known after apply)
+      + id                                        = (known after apply)
+      + internal_ipv6_range                       = (known after apply)
+      + mtu                                       = (known after apply)
+      + name                                      = "rajani-terraform-gke-vpc"
+      + network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL"
+      + project                                   = (known after apply)
+      + routing_mode                              = (known after apply)
+      + self_link                                 = (known after apply)
+    }
+
+  # google_compute_subnetwork.subnet will be created
+  + resource "google_compute_subnetwork" "subnet" {
+      + creation_timestamp         = (known after apply)
+      + external_ipv6_prefix       = (known after apply)
+      + fingerprint                = (known after apply)
+      + gateway_address            = (known after apply)
+      + id                         = (known after apply)
+      + ip_cidr_range              = "10.10.0.0/24"
+      + ipv6_cidr_range            = (known after apply)
+      + name                       = "rajani-terraform-gke-subnet"
+      + network                    = "rajani-terraform-gke-vpc"
+      + private_ip_google_access   = (known after apply)
+      + private_ipv6_google_access = (known after apply)
+      + project                    = (known after apply)
+      + purpose                    = (known after apply)
+      + region                     = "us-central1"
+      + secondary_ip_range         = (known after apply)
+      + self_link                  = (known after apply)
+      + stack_type                 = (known after apply)
+    }
+
+  # google_container_cluster.primary will be created
+  + resource "google_container_cluster" "primary" {
+      + cluster_ipv4_cidr           = (known after apply)
+      + datapath_provider           = (known after apply)
+      + default_max_pods_per_node   = (known after apply)
+      + enable_binary_authorization = false
+      + enable_intranode_visibility = (known after apply)
+      + enable_kubernetes_alpha     = false
+      + enable_l4_ilb_subsetting    = false
+      + enable_legacy_abac          = false
+      + enable_shielded_nodes       = true
+      + endpoint                    = (known after apply)
+      + id                          = (known after apply)
+      + initial_node_count          = 1
+      + label_fingerprint           = (known after apply)
+      + location                    = "us-central1"
+      + logging_service             = (known after apply)
+      + master_version              = (known after apply)
+      + monitoring_service          = (known after apply)
+      + name                        = "rajani-terraform-gke-gke"
+      + network                     = "rajani-terraform-gke-vpc"
+      + networking_mode             = (known after apply)
+      + node_locations              = (known after apply)
+      + node_version                = (known after apply)
+      + operation                   = (known after apply)
+      + private_ipv6_google_access  = (known after apply)
+      + project                     = (known after apply)
+      + remove_default_node_pool    = true
+      + self_link                   = (known after apply)
+      + services_ipv4_cidr          = (known after apply)
+      + subnetwork                  = "rajani-terraform-gke-subnet"
+      + tpu_ipv4_cidr_block         = (known after apply)
+    }
+
+  # google_container_node_pool.primary_nodes will be created
+  + resource "google_container_node_pool" "primary_nodes" {
+      + cluster                     = "rajani-terraform-gke-gke"
+      + id                          = (known after apply)
+      + initial_node_count          = (known after apply)
+      + instance_group_urls         = (known after apply)
+      + location                    = "us-central1"
+      + managed_instance_group_urls = (known after apply)
+      + max_pods_per_node           = (known after apply)
+      + name                        = "rajani-terraform-gke-gke"
+      + name_prefix                 = (known after apply)
+      + node_count                  = 2
+      + node_locations              = (known after apply)
+      + operation                   = (known after apply)
+      + project                     = (known after apply)
+      + version                     = "1.27.4-gke.900"
+
+      + node_config {
+          + disk_size_gb      = (known after apply)
+          + disk_type         = (known after apply)
+          + guest_accelerator = (known after apply)
+          + image_type        = (known after apply)
+          + labels            = {
+              + "env" = "rajani-terraform-gke"
+            }
+          + local_ssd_count   = (known after apply)
+          + logging_variant   = "DEFAULT"
+          + machine_type      = "n1-standard-1"
+          + metadata          = {
+              + "disable-legacy-endpoints" = "true"
+            }
+          + min_cpu_platform  = (known after apply)
+          + oauth_scopes      = [
+              + "https://www.googleapis.com/auth/logging.write",
+              + "https://www.googleapis.com/auth/monitoring",
+            ]
+          + preemptible       = false
+          + service_account   = (known after apply)
+          + spot              = false
+          + tags              = [
+              + "gke-node",
+              + "rajani-terraform-gke-gke",
+            ]
+          + taint             = (known after apply)
+        }
+    }
+
+Plan: 4 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + kubernetes_cluster_host = (known after apply)
+  + kubernetes_cluster_name = "rajani-terraform-gke-gke"
+  + project_id              = "rajani-terraform-gke"
+  + region                  = "us-central1"
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+google_compute_network.vpc: Creating...
+google_compute_network.vpc: Still creating... [10s elapsed]
+google_compute_network.vpc: Still creating... [20s elapsed]
+google_compute_network.vpc: Creation complete after 23s [id=projects/rajani-terraform-gke/global/networks/rajani-terraform-gke-vpc]
+google_compute_subnetwork.subnet: Creating...
+google_compute_subnetwork.subnet: Still creating... [10s elapsed]
+google_compute_subnetwork.subnet: Creation complete after 17s [id=projects/rajani-terraform-gke/regions/us-central1/subnetworks/rajani-terraform-gke-subnet]
+google_container_cluster.primary: Creating...
+╷
+│ Error: googleapi: Error 403: Insufficient regional quota to satisfy request: resource "SSD_TOTAL_GB": request requires '300.0' and is short '50.0'. project has a quota of '250.0' with '250.0' available. View and manage quotas at https://console.cloud.google.com/iam-admin/quotas?usage=USED&project=rajani-terraform-gke.
+│ Details:
+│ [
+│   {
+│     "@type": "type.googleapis.com/google.rpc.RequestInfo",
+│     "requestId": "0x90e5360b36ac9f9d"
+│   }
+│ ]
+│ , forbidden
+│ 
+│   with google_container_cluster.primary,
+│   on gke.tf line 25, in resource "google_container_cluster" "primary":
+│   25: resource "google_container_cluster" "primary" {
+│ 
+╵
+]
+
+***************************************************************************************************************************
+
+Error: googleapi: Error 403: Insufficient regional quota to satisfy request: resource "SSD_TOTAL_GB": request requires '300.0' and is short '50.0'. project has a quota of '250.0' with '250.0' available. View and manage quotas at https://console.cloud.google.com/iam-admin/quotas?usage=USED&project=rajani-terraform-gke.
+
+***************************************************************************************************************************
+
+https://cloud.google.com/compute/resource-usage
+[
+In the Google Cloud console, go to the Quotas page.
+
+Go to Quotas
+
+Click filter_list Filter table and select Service.
+
+Choose Compute Engine API.
+
+Choose Quota: VM instances.
+
+To see a list of your VM instance quotas by region, click All Quotas. Your region quotas are listed from highest to lowest usage.
+
+Click the checkbox of the region whose quota you want to change.
+
+Click create Edit Quotas.
+
+Complete the form.
+
+Click Submit Request.
+]
+
+# Google Cloud console
+Quotas
+IAM & Admin
+
+Quotas for project "rajani-terraform-gke"
+
+# Choose Service: Compute Engine API
+
+# Choose Quota: VM instances
+
+# Choose region: us-central1
+
+Free trial accounts have limited quota during their trial period. In order to increase your quota, upgrade to a paid account by clicking Upgrade my account from the top of any page once you are logged into the Google Cloud console
+
+***************************************************************************************************************************
+
+https://cloud.google.com/kubernetes-engine/docs/concepts/types-of-clusters#availability
+
+Cluster availability type
+
+With GKE, you can create a cluster tailored to the availability requirements of your workload and your budget. The types of available clusters include: zonal (single-zone or multi-zonal) and regional.
+
+Note: Clusters created in the Autopilot mode are regional.
+To help you choose which available cluster to create in the Standard mode, see Choosing a regional or zonal control plane.
+
+After you create a cluster, you cannot change it from zonal to regional, or from regional to zonal. Instead, you must create a new cluster then migrate traffic to it.
+
+Zonal clusters
+Zonal clusters have a single control plane in a single zone. Depending on your availability requirements, you can choose to distribute your nodes for your zonal cluster in a single zone or in multiple zones.
+
+***************************************************************************************************************************
+
+https://cloud.google.com/docs/geography-and-regions#regions_and_zones
+
+Zone
+
+A zone is a deployment area within a region. The fully-qualified name for a zone is made up of <region>-<zone>. For example, the fully qualified name for zone a in region us-central1 is us-central1-a.
+
+Depending on how widely you want to distribute your resources, create instances across multiple zones in multiple regions for redundancy.
+
+***************************************************************************************************************************
+
+# Edit gke.tf
+# resource "google_container_cluster" "primary"
+# resource "google_container_node_pool" "primary_nodes"
+# From regional cluster
+  location = var.region
+# To zonal cluster
+  location = "us-central1-a"
+
+***************************************************************************************************************************
+
+% terraform apply
+[
+google_compute_network.vpc: Refreshing state... [id=projects/rajani-terraform-gke/global/networks/rajani-terraform-gke-vpc]
+data.google_container_engine_versions.gke_version: Reading...
+google_compute_subnetwork.subnet: Refreshing state... [id=projects/rajani-terraform-gke/regions/us-central1/subnetworks/rajani-terraform-gke-subnet]
+data.google_container_engine_versions.gke_version: Read complete after 2s [id=2023-11-30 02:49:10.974261 +0000 UTC]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # google_container_cluster.primary will be created
+  + resource "google_container_cluster" "primary" {
+      + cluster_ipv4_cidr           = (known after apply)
+      + datapath_provider           = (known after apply)
+      + default_max_pods_per_node   = (known after apply)
+      + enable_binary_authorization = false
+      + enable_intranode_visibility = (known after apply)
+      + enable_kubernetes_alpha     = false
+      + enable_l4_ilb_subsetting    = false
+      + enable_legacy_abac          = false
+      + enable_shielded_nodes       = true
+      + endpoint                    = (known after apply)
+      + id                          = (known after apply)
+      + initial_node_count          = 1
+      + label_fingerprint           = (known after apply)
+      + location                    = "us-central1-a"
+      + logging_service             = (known after apply)
+      + master_version              = (known after apply)
+      + monitoring_service          = (known after apply)
+      + name                        = "rajani-terraform-gke-gke"
+      + network                     = "rajani-terraform-gke-vpc"
+      + networking_mode             = (known after apply)
+      + node_locations              = (known after apply)
+      + node_version                = (known after apply)
+      + operation                   = (known after apply)
+      + private_ipv6_google_access  = (known after apply)
+      + project                     = (known after apply)
+      + remove_default_node_pool    = true
+      + self_link                   = (known after apply)
+      + services_ipv4_cidr          = (known after apply)
+      + subnetwork                  = "rajani-terraform-gke-subnet"
+      + tpu_ipv4_cidr_block         = (known after apply)
+    }
+
+  # google_container_node_pool.primary_nodes will be created
+  + resource "google_container_node_pool" "primary_nodes" {
+      + cluster                     = "rajani-terraform-gke-gke"
+      + id                          = (known after apply)
+      + initial_node_count          = (known after apply)
+      + instance_group_urls         = (known after apply)
+      + location                    = "us-central1-a"
+      + managed_instance_group_urls = (known after apply)
+      + max_pods_per_node           = (known after apply)
+      + name                        = "rajani-terraform-gke-gke"
+      + name_prefix                 = (known after apply)
+      + node_count                  = 2
+      + node_locations              = (known after apply)
+      + operation                   = (known after apply)
+      + project                     = (known after apply)
+      + version                     = "1.27.4-gke.900"
+
+      + node_config {
+          + disk_size_gb      = (known after apply)
+          + disk_type         = (known after apply)
+          + guest_accelerator = (known after apply)
+          + image_type        = (known after apply)
+          + labels            = {
+              + "env" = "rajani-terraform-gke"
+            }
+          + local_ssd_count   = (known after apply)
+          + logging_variant   = "DEFAULT"
+          + machine_type      = "n1-standard-1"
+          + metadata          = {
+              + "disable-legacy-endpoints" = "true"
+            }
+          + min_cpu_platform  = (known after apply)
+          + oauth_scopes      = [
+              + "https://www.googleapis.com/auth/logging.write",
+              + "https://www.googleapis.com/auth/monitoring",
+            ]
+          + preemptible       = false
+          + service_account   = (known after apply)
+          + spot              = false
+          + tags              = [
+              + "gke-node",
+              + "rajani-terraform-gke-gke",
+            ]
+          + taint             = (known after apply)
+        }
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + kubernetes_cluster_host = (known after apply)
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+google_container_cluster.primary: Creating...
+google_container_cluster.primary: Still creating... [10s elapsed]
+google_container_cluster.primary: Still creating... [20s elapsed]
+google_container_cluster.primary: Still creating... [30s elapsed]
+google_container_cluster.primary: Still creating... [40s elapsed]
+google_container_cluster.primary: Still creating... [50s elapsed]
+google_container_cluster.primary: Still creating... [1m0s elapsed]
+google_container_cluster.primary: Still creating... [1m10s elapsed]
+google_container_cluster.primary: Still creating... [1m20s elapsed]
+google_container_cluster.primary: Still creating... [1m30s elapsed]
+google_container_cluster.primary: Still creating... [1m40s elapsed]
+google_container_cluster.primary: Still creating... [1m50s elapsed]
+google_container_cluster.primary: Still creating... [2m0s elapsed]
+google_container_cluster.primary: Still creating... [2m10s elapsed]
+google_container_cluster.primary: Still creating... [2m20s elapsed]
+google_container_cluster.primary: Still creating... [2m30s elapsed]
+google_container_cluster.primary: Still creating... [2m40s elapsed]
+google_container_cluster.primary: Still creating... [2m50s elapsed]
+google_container_cluster.primary: Still creating... [3m0s elapsed]
+google_container_cluster.primary: Still creating... [3m10s elapsed]
+google_container_cluster.primary: Still creating... [3m20s elapsed]
+google_container_cluster.primary: Still creating... [3m30s elapsed]
+google_container_cluster.primary: Still creating... [3m40s elapsed]
+google_container_cluster.primary: Still creating... [3m50s elapsed]
+google_container_cluster.primary: Still creating... [4m0s elapsed]
+google_container_cluster.primary: Still creating... [4m10s elapsed]
+google_container_cluster.primary: Still creating... [4m20s elapsed]
+google_container_cluster.primary: Still creating... [4m30s elapsed]
+google_container_cluster.primary: Still creating... [4m40s elapsed]
+google_container_cluster.primary: Still creating... [4m50s elapsed]
+google_container_cluster.primary: Still creating... [5m0s elapsed]
+google_container_cluster.primary: Still creating... [5m10s elapsed]
+google_container_cluster.primary: Still creating... [5m20s elapsed]
+google_container_cluster.primary: Still creating... [5m30s elapsed]
+google_container_cluster.primary: Still creating... [5m40s elapsed]
+google_container_cluster.primary: Still creating... [5m50s elapsed]
+google_container_cluster.primary: Still creating... [6m0s elapsed]
+google_container_cluster.primary: Still creating... [6m10s elapsed]
+google_container_cluster.primary: Still creating... [6m20s elapsed]
+google_container_cluster.primary: Still creating... [6m30s elapsed]
+google_container_cluster.primary: Still creating... [6m40s elapsed]
+google_container_cluster.primary: Still creating... [6m50s elapsed]
+google_container_cluster.primary: Still creating... [7m0s elapsed]
+google_container_cluster.primary: Still creating... [7m10s elapsed]
+google_container_cluster.primary: Still creating... [7m20s elapsed]
+google_container_cluster.primary: Still creating... [7m30s elapsed]
+google_container_cluster.primary: Still creating... [7m40s elapsed]
+google_container_cluster.primary: Still creating... [7m50s elapsed]
+google_container_cluster.primary: Still creating... [8m0s elapsed]
+google_container_cluster.primary: Creation complete after 8m2s [id=projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke]
+google_container_node_pool.primary_nodes: Creating...
+google_container_node_pool.primary_nodes: Still creating... [10s elapsed]
+google_container_node_pool.primary_nodes: Still creating... [20s elapsed]
+google_container_node_pool.primary_nodes: Still creating... [30s elapsed]
+google_container_node_pool.primary_nodes: Still creating... [40s elapsed]
+google_container_node_pool.primary_nodes: Still creating... [50s elapsed]
+google_container_node_pool.primary_nodes: Still creating... [1m0s elapsed]
+google_container_node_pool.primary_nodes: Creation complete after 1m6s [id=projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke/nodePools/rajani-terraform-gke-gke]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+kubernetes_cluster_host = "34.135.124.120"
+kubernetes_cluster_name = "rajani-terraform-gke-gke"
+project_id = "rajani-terraform-gke"
+region = "us-central1"
+]
+
+***************************************************************************************************************************
+
+# Configure kubectl
+
+# Now that the GKE cluster has been provisioned, configure kubectl.
+
+# Run the following command to retrieve the access credentials for the cluster and automatically configure kubectl with the output:
+
+Fetching cluster endpoint and auth data.
+
+kubeconfig entry generated for dos-terraform-edu-gke.
+
+***************************************************************************************************************************
+
+# gcloud container clusters get-credentials $(terraform output -raw kubernetes_cluster_name) --region $(terraform output -raw region)
+# The Kubernetes cluster name and region correspond to the output variables showed after the successful Terraform run.
+
+% gcloud container clusters get-credentials rajani-terraform-gke-gke --location us-central1-a
+
+***************************************************************************************************************************
+
+# Deploy and access Kubernetes Dashboard
+
+# To verify the cluster is correctly configured and running, deploy the Kubernetes dashboard and navigate to it in the local browser.
+
+# While the Kubernetes dashboard can be deployed using Terraform, kubectl is used so that it is not needed to configure the Terraform Kubernetes Provider.
+
+# Schedule the resources necessary for the dashboard.
+
+***************************************************************************************************************************
+
+[
+% kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+% curl https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+% curl https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml -o recommended.yaml --create-dirs --output-dir KubernetesDashboard
+% cat KubernetesDashboard/recommended.yaml
+]
+
+https://github.com/kubernetes/dashboard/releases
+
+[
+% kubectl apply -f KubernetesDashboard/dashboard-3.0.0-alpha0/charts/kubernetes-dashboard.yaml
+% kubectl delete -f KubernetesDashboard/dashboard-3.0.0-alpha0/charts/kubernetes-dashboard.yaml
+]
+[
+% kubectl apply -f KubernetesDashboard/dashboard-master/charts/kubernetes-dashboard.yaml
+% kubectl delete -f KubernetesDashboard/dashboard-master/charts/kubernetes-dashboard.yaml
+]
+
+% kubectl apply -f KubernetesDashboard/dashboard-2.7.0/aio/deploy/recommended.yaml
+[
+% kubectl delete -f KubernetesDashboard/dashboard-2.7.0/aio/deploy/recommended.yaml
+]
+
+***************************************************************************************************************************
+
+# Create a proxy server that will allow to navigate to the dashboard from the browser on the local machine.
+
+# This will continue running until the process is stopped by pressing CTRL + C.
+
+***************************************************************************************************************************
+
+% kubectl proxy
+
+# Access the Kubernetes dashboard here
+
+http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
+
+***************************************************************************************************************************
+
+# Authenticate to Kubernetes Dashboard
+
+# To use the Kubernetes dashboard, create a ClusterRoleBinding and provide an authorization token.
+
+# This gives the cluster-admin permission to access the kubernetes-dashboard.
+
+# Authenticating using kubeconfig is not an option.
+
+# In another terminal (do not close the kubectl proxy process), create the ClusterRoleBinding resource.
+
+***************************************************************************************************************************
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/GKE/Terraform/learn-terraform-provision-gke-cluster
+
+[
+% kubectl apply -f https://raw.githubusercontent.com/hashicorp/learn-terraform-provision-gke-cluster/main/kubernetes-dashboard-admin.rbac.yaml
+]
+
+% kubectl apply -f KubernetesDashboard/learn-terraform-provision-gke-cluster-main/kubernetes-dashboard-admin.rbac.yaml
+
+***************************************************************************************************************************
+
+# Generate the authorization token.
+
+***************************************************************************************************************************
+
+% kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep service-controller-token | awk '{print $1}')
+[
+Name:         admin-user
+Namespace:    kube-system
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: admin-user
+              kubernetes.io/service-account.uid: fb7d8989-a068-49d8-b99d-04ea0e95e210
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1509 bytes
+namespace:  11 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImFCTV94R0N0VGxodVV2WkdhZGI5T2Q3ZjY0T1VtYTRGUFlKUVVPSGhVN3cifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJmYjdkODk4OS1hMDY4LTQ5ZDgtYjk5ZC0wNGVhMGU5NWUyMTAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06YWRtaW4tdXNlciJ9.Ws76FB2A-mMZ8_T0Mte8rGyQZp6ZSCQB_HLF6d-usP_gQRf0ffGZAaMlGy2qDkA59I0hkR0tTTyn60bDSCLw2gUym9AhdS9vs7rJJE9SFCvRjiOSaMOBUMDG4yTj3WcNIXqtm-uv9dnSHFS8EilnZmPEH3SUC2FYsBbx4dnXMw23GOB98mHL7g2cOMPEkRTbs2zLVTzmXhxjBtl32inAzLkRYwrVBcm7SjZXkJuyyWsKpmO4rPG2qIe-0wLAZD_vHMy3Icm3CaKJEQcpxs4IKJXNw-aE4EHvxJs_VHDQA_FCj7csJN_YWoqPXKf4cjLhcJeANXSh09gLE1b1HXuT3w
+]
+
+***************************************************************************************************************************
+
+# Select "Token" on the Dashboard UI then copy and paste the entire token into the dashboard authentication screen [http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/] to sign in.
+
+# Now signed in to the dashboard for the Kubernetes cluster.
+
+***************************************************************************************************************************
+
+# GKE nodes and node pool
+
+# On the Dashboard UI, click Nodes on the left hand menu.
+
+[
+# Notice there are 6 nodes in the cluster, even though gke_num_nodes in the gke.tf file was set to 2.
+# This is because a node pool was provisioned in each of the three zones within the region to provide high availability.
+]
+# resource "google_container_cluster" "primary"
+# resource "google_container_node_pool" "primary_nodes"
+# From regional cluster
+  location = var.region
+# To zonal cluster
+  location = "us-central1-a"
+
+# To see the zones that the cluster deployed each node pool to, run the following in the learn-terraform-provision-gke-cluster directory.
+
+***************************************************************************************************************************
+
+# gcloud container clusters describe $(terraform output -raw kubernetes_cluster_name) --region us-central1 --format='default(locations)'
+
+% gcloud container clusters describe rajani-terraform-gke-gke --location us-central1-a --format='default(locations)'
+[
+locations:
+- us-central1-a
+]
+
+***************************************************************************************************************************
+###########################################################################################################################
+
+# Node.js MongoDB Minio App
+
+# node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+
+###########################################################################################################################
+***************************************************************************************************************************
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/GKE/Terraform/learn-terraform-provision-gke-cluster
+
+
+% tree node-mongodb-app/kubectl-aws-linux-x86-64/
+[
+node-mongodb-app/kubectl-aws-linux-x86-64/
+├── cluster-ip-service-minio-aws-linux-x86-64.yaml
+├── cluster-ip-service-mongo-aws-linux-x86-64.yaml
+└── load-balancer-service-node-mongodb-app-v2-aws-linux-x86-64.yaml
+
+1 directory, 3 files
+]
+
+
+% cat node-mongodb-app/kubectl-aws-linux-x86-64/cluster-ip-service-minio-aws-linux-x86-64.yaml
+[
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-service
+spec:
+  selector:
+    app: minio
+  ports:
+    - port: 9090
+      name: console
+    - port: 9000
+      name: s3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-deployment
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio-container
+          image: dockerrajani/minio-aws-linux-x86-64:version1.0.0
+          imagePullPolicy: Always
+          args:
+            - server
+            - /storage
+          env:
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - name: storage
+              mountPath: /storage
+          command:
+            - /bin/bash
+            - -c
+          args:
+              - minio server /data --console-address :9090
+      restartPolicy: Always
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: minio-persistentvolumeclaim
+]
+
+
+% cat node-mongodb-app/kubectl-aws-linux-x86-64/cluster-ip-service-mongo-aws-linux-x86-64.yaml
+[
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo-container
+          image: dockerrajani/mongo-aws-linux-x86-64:version1.0.0
+          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mongo-persistentvolumeclaim
+]
+
+
+% cat node-mongodb-app/kubectl-aws-linux-x86-64/load-balancer-service-node-mongodb-app-v2-aws-linux-x86-64.yaml
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-mongodb-app-service
+spec:
+  selector:
+    app: node-mongodb-app
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-mongodb-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-mongodb-app
+  template:
+    metadata:
+      labels:
+        app: node-mongodb-app
+    spec:
+      containers:
+        - name: node-mongodb-app-container
+          image: dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo-service:27017/dev
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+            - name: MINIO_HOST
+              value: minio-service
+]
+
+
+% kubectl apply -f node-mongodb-app/kubectl-aws-linux-x86-64/
+[
+% kubectl delete -f node-mongodb-app/kubectl-aws-linux-x86-64/
+]
+
+
+% kubectl get pods --watch
+
+
+% kubectl get pods
+
+
+% kubectl get services
+
+***************************************************************************************************************************
+
+% kubectl apply -f node-mongodb-app/kubectl-aws-linux-x86-64/
+[
+persistentvolumeclaim/minio-persistentvolumeclaim created
+service/minio-service created
+deployment.apps/minio-deployment created
+persistentvolumeclaim/mongo-persistentvolumeclaim created
+service/mongo-service created
+deployment.apps/mongo-deployment created
+service/node-mongodb-app-service created
+deployment.apps/node-mongodb-app-deployment created
+]
+
+% kubectl get pods --watch
+[
+NAME                                         READY   STATUS              RESTARTS   AGE
+minio-deployment-58485b4c44-prw88            0/1     ContainerCreating   0          10s
+mongo-deployment-75f67dff4b-2zw7k            0/1     ContainerCreating   0          8s
+node-mongodb-app-deployment-66b4d7c9-4f44q   1/1     Running             0          7s
+minio-deployment-58485b4c44-prw88            1/1     Running             0          15s
+mongo-deployment-75f67dff4b-2zw7k            1/1     Running             0          15s
+^C%
+]
+
+% kubectl get pods
+[
+NAME                                         READY   STATUS    RESTARTS   AGE
+minio-deployment-58485b4c44-prw88            1/1     Running   0          29s
+mongo-deployment-75f67dff4b-2zw7k            1/1     Running   0          27s
+node-mongodb-app-deployment-66b4d7c9-4f44q   1/1     Running   0          26s
+]
+
+% kubectl get services
+[
+NAME                       TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+kubernetes                 ClusterIP      10.163.240.1     <none>        443/TCP             3h38m
+minio-service              ClusterIP      10.163.249.224   <none>        9090/TCP,9000/TCP   40s
+mongo-service              ClusterIP      10.163.241.88    <none>        27017/TCP           38s
+node-mongodb-app-service   LoadBalancer   10.163.255.93    <pending>     80:32366/TCP        37s
+]
+
+% kubectl get services
+[
+NAME                       TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)             AGE
+kubernetes                 ClusterIP      10.163.240.1     <none>           443/TCP             3h38m
+minio-service              ClusterIP      10.163.249.224   <none>           9090/TCP,9000/TCP   56s
+mongo-service              ClusterIP      10.163.241.88    <none>           27017/TCP           54s
+node-mongodb-app-service   LoadBalancer   10.163.255.93    34.173.162.100   80:32366/TCP        53s
+]
+
+% kubectl delete -f node-mongodb-app/kubectl-aws-linux-x86-64/
+[
+persistentvolumeclaim "minio-persistentvolumeclaim" deleted
+service "minio-service" deleted
+deployment.apps "minio-deployment" deleted
+persistentvolumeclaim "mongo-persistentvolumeclaim" deleted
+service "mongo-service" deleted
+deployment.apps "mongo-deployment" deleted
+service "node-mongodb-app-service" deleted
+deployment.apps "node-mongodb-app-deployment" deleted
+]
+
+***************************************************************************************************************************
+
+% tree node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/
+[
+node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/
+├── load-balancer-service-minio-aws-linux-x86-64.yaml
+├── load-balancer-service-mongo-aws-linux-x86-64.yaml
+└── load-balancer-service-node-mongodb-app-v2-aws-linux-x86-64.yaml
+
+1 directory, 3 files
+]
+
+
+% cat node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/load-balancer-service-minio-aws-linux-x86-64.yaml
+[
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-service
+spec:
+  selector:
+    app: minio
+  ports:
+    - port: 9090
+      name: console
+    - port: 9000
+      name: s3
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-deployment
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio-container
+          image: dockerrajani/minio-aws-linux-x86-64:version1.0.0
+          imagePullPolicy: Always
+          args:
+            - server
+            - /storage
+          env:
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - name: storage
+              mountPath: /storage
+          command:
+            - /bin/bash
+            - -c
+          args:
+              - minio server /data --console-address :9090
+      restartPolicy: Always
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: minio-persistentvolumeclaim
+]
+
+
+% cat node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/load-balancer-service-mongo-aws-linux-x86-64.yaml
+[
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo-container
+          image: dockerrajani/mongo-aws-linux-x86-64:version1.0.0
+          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mongo-persistentvolumeclaim
+]
+
+
+% cat node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/load-balancer-service-node-mongodb-app-v2-aws-linux-x86-64.yaml
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-mongodb-app-service
+spec:
+  selector:
+    app: node-mongodb-app
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-mongodb-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-mongodb-app
+  template:
+    metadata:
+      labels:
+        app: node-mongodb-app
+    spec:
+      containers:
+        - name: node-mongodb-app-container
+          image: dockerrajani/node-mongodb-app-amazon-linux-extras-x86-64:version2.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo-service:27017/dev
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+            - name: MINIO_HOST
+              value: minio-service
+]
+
+
+% kubectl apply -f node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/
+[
+% kubectl delete -f node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/
+]
+
+
+% kubectl get pods --watch
+
+
+% kubectl get pods
+
+
+% kubectl get services
+
+***************************************************************************************************************************
+
+% kubectl apply -f node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/
+[
+persistentvolumeclaim/minio-persistentvolumeclaim created
+service/minio-service created
+deployment.apps/minio-deployment created
+persistentvolumeclaim/mongo-persistentvolumeclaim created
+service/mongo-service created
+deployment.apps/mongo-deployment created
+service/node-mongodb-app-service created
+deployment.apps/node-mongodb-app-deployment created
+]
+
+% kubectl get pods --watch   
+[               
+NAME                                         READY   STATUS              RESTARTS   AGE
+minio-deployment-58485b4c44-f4kbq            0/1     ContainerCreating   0          13s
+mongo-deployment-75f67dff4b-8pxlr            0/1     ContainerCreating   0          11s
+node-mongodb-app-deployment-66b4d7c9-8hgnt   1/1     Running             0          10s
+mongo-deployment-75f67dff4b-8pxlr            1/1     Running             0          14s
+minio-deployment-58485b4c44-f4kbq            1/1     Running             0          16s
+^C%
+]                                                                                                                                                         
+
+% kubectl get pods
+[                 
+NAME                                         READY   STATUS    RESTARTS   AGE
+minio-deployment-58485b4c44-f4kbq            1/1     Running   0          30s
+mongo-deployment-75f67dff4b-8pxlr            1/1     Running   0          28s
+node-mongodb-app-deployment-66b4d7c9-8hgnt   1/1     Running   0          27s
+]
+
+% kubectl get services
+[                    
+NAME                       TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)                         AGE
+kubernetes                 ClusterIP      10.163.240.1     <none>        443/TCP                         4h36m
+minio-service              LoadBalancer   10.163.241.65    <pending>     9090:31624/TCP,9000:30665/TCP   44s
+mongo-service              LoadBalancer   10.163.254.60    <pending>     27017:32472/TCP                 42s
+node-mongodb-app-service   LoadBalancer   10.163.247.253   <pending>     80:32505/TCP                    41s
+]
+
+% kubectl get services
+[
+NAME                       TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)                         AGE
+kubernetes                 ClusterIP      10.163.240.1     <none>           443/TCP                         4h37m
+minio-service              LoadBalancer   10.163.241.65    34.41.64.83      9090:31624/TCP,9000:30665/TCP   67s
+mongo-service              LoadBalancer   10.163.254.60    34.173.162.100   27017:32472/TCP                 65s
+node-mongodb-app-service   LoadBalancer   10.163.247.253   34.71.199.89     80:32505/TCP                    64s
+]
+
+***************************************************************************************************************************
+
+http://34.41.64.83:9090/login
+
+http://34.173.162.100:27017/
+
+http://34.71.199.89/
+
+***************************************************************************************************************************
+
+# MongoDB Shell
+
+***************************************************************************************************************************
+
+% mongosh mongodb://34.173.162.100:27017/
+[
+Current Mongosh Log ID:	65683c83574e501a589ee938
+Connecting to:		mongodb://34.173.162.100:27017/?directConnection=true&appName=mongosh+2.1.0
+(node:11434) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Using MongoDB:		7.0.3
+Using Mongosh:		2.1.0
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2023-11-30T07:29:39.198+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2023-11-30T07:29:39.950+00:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+   2023-11-30T07:29:39.951+00:00: vm.max_map_count is too low
+------
+
+test> db.version()
+7.0.3
+test> show dbs
+admin   40.00 KiB
+config  60.00 KiB
+dev     40.00 KiB
+local   40.00 KiB
+test> use dev
+switched to db dev
+dev> show collections
+notes
+dev> db.notes.find()
+[
+  {
+    _id: ObjectId('65683aaf2da6753ae446b06f'),
+    description: 'Apache Hadoop Ecosystem O’Reilly\r\n' +
+      '\r\n' +
+      '\r\n' +
+      ' ![](/img/Apache%20Hadoop%20Ecosystem%20O%C3%A2%C2%80%C2%99Reilly.png)'
+  }
+]
+dev> db.notes.find()
+[
+  {
+    _id: ObjectId('65683aaf2da6753ae446b06f'),
+    description: 'Apache Hadoop Ecosystem O’Reilly\r\n' +
+      '\r\n' +
+      '\r\n' +
+      ' ![](/img/Apache%20Hadoop%20Ecosystem%20O%C3%A2%C2%80%C2%99Reilly.png)'
+  },
+  {
+    _id: ObjectId('65683da22da6753ae446b070'),
+    description: 'gcloud app deploy\r\n\r\n\r\n ![](/img/2.jpg)'
+  }
+]
+dev> exit
+]
+
+***************************************************************************************************************************
+
+% kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep service-controller-token | awk '{print $1}')
+[
+Name:         admin-user
+Namespace:    kube-system
+Labels:       kubernetes.io/legacy-token-last-used=2023-11-30
+Annotations:  kubernetes.io/service-account.name: admin-user
+              kubernetes.io/service-account.uid: fb7d8989-a068-49d8-b99d-04ea0e95e210
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1509 bytes
+namespace:  11 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImFCTV94R0N0VGxodVV2WkdhZGI5T2Q3ZjY0T1VtYTRGUFlKUVVPSGhVN3cifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJmYjdkODk4OS1hMDY4LTQ5ZDgtYjk5ZC0wNGVhMGU5NWUyMTAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06YWRtaW4tdXNlciJ9.Ws76FB2A-mMZ8_T0Mte8rGyQZp6ZSCQB_HLF6d-usP_gQRf0ffGZAaMlGy2qDkA59I0hkR0tTTyn60bDSCLw2gUym9AhdS9vs7rJJE9SFCvRjiOSaMOBUMDG4yTj3WcNIXqtm-uv9dnSHFS8EilnZmPEH3SUC2FYsBbx4dnXMw23GOB98mHL7g2cOMPEkRTbs2zLVTzmXhxjBtl32inAzLkRYwrVBcm7SjZXkJuyyWsKpmO4rPG2qIe-0wLAZD_vHMy3Icm3CaKJEQcpxs4IKJXNw-aE4EHvxJs_VHDQA_FCj7csJN_YWoqPXKf4cjLhcJeANXSh09gLE1b1HXuT3w
+]
+
+***************************************************************************************************************************
+
+http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
+
+***************************************************************************************************************************
+
+% kubectl delete -f node-mongodb-app/kubectl-aws-linux-x86-64-lload-balancers/
+[
+persistentvolumeclaim "minio-persistentvolumeclaim" deleted
+service "minio-service" deleted
+deployment.apps "minio-deployment" deleted
+persistentvolumeclaim "mongo-persistentvolumeclaim" deleted
+service "mongo-service" deleted
+deployment.apps "mongo-deployment" deleted
+service "node-mongodb-app-service" deleted
+deployment.apps "node-mongodb-app-deployment" deleted
+]
+
+***************************************************************************************************************************
+
+# Clean up the workspace
+
+# A GKE cluster has been provisioned with a separated node pool, configured kubectl, and deployed the Kubernetes dashboard.
+
+# To manage the GKE cluster using the Terraform Kubernetes Provider, leave the cluster running and continue to the Kubernetes provider (Manage Kubernetes resources via Terraform).
+
+# Note
+
+# This directory is only used to provision a GKE cluster with Terraform.
+
+# By keeping the Terraform configuration for provisioning a Kubernetes cluster and managing a Kubernetes cluster resources separate, changes in one repository don't affect the other.
+
+# In addition, the modularity makes the configuration more readable and helps to scope different permissions to each workspace.
+
+# If not, remember to destroy any resources created.
+
+# Run the destroy command and confirm with yes in thr terminal.
+
+***************************************************************************************************************************
+###########################################################################################################################
+
+# Manage Kubernetes resources via Terraform
+
+###########################################################################################################################
+***************************************************************************************************************************
+
+# Configure the provider
+
+# Before scheduling any Kubernetes services using Terraform, configure the Terraform Kubernetes provider.
+
+# There are many ways to configure the Kubernetes provider. Refer to the following order (most recommended first, least recommended last):
+
+# Use cloud-specific auth plugins (for example, eks get-token, az get-token, gcloud config)
+
+# Use oauth2 token
+
+# Use TLS certificate credentials
+
+# Use kubeconfig file by setting both config_path and config_context
+
+# Use username and password (HTTP Basic Authorization)
+
+# Follow the instructions in the kind or cloud provider tabs to configure the provider to target a specific Kubernetes cluster.
+
+# The cloud provider tabs will configure the Kubernetes provider using cloud-specific auth tokens.
+
+***************************************************************************************************************************
+
+% kubectl cluster-info
+[
+Kubernetes control plane is running at https://34.135.124.120
+GLBCDefaultBackend is running at https://34.135.124.120/api/v1/namespaces/kube-system/services/default-http-backend:http/proxy
+KubeDNS is running at https://34.135.124.120/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+Metrics-server is running at https://34.135.124.120/api/v1/namespaces/kube-system/services/https:metrics-server:/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+]
+
+% kubectl config view
+[
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: DATA+OMITTED
+    server: https://34.135.124.120
+  name: gke_rajani-terraform-gke_us-central1-a_rajani-terraform-gke-gke
+contexts:
+- context:
+    cluster: gke_rajani-terraform-gke_us-central1-a_rajani-terraform-gke-gke
+    user: gke_rajani-terraform-gke_us-central1-a_rajani-terraform-gke-gke
+  name: gke_rajani-terraform-gke_us-central1-a_rajani-terraform-gke-gke
+current-context: gke_rajani-terraform-gke_us-central1-a_rajani-terraform-gke-gke
+kind: Config
+preferences: {}
+users:
+- name: gke_rajani-terraform-gke_us-central1-a_rajani-terraform-gke-gke
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      args: null
+      command: gke-gcloud-auth-plugin
+      env: null
+      installHint: Install gke-gcloud-auth-plugin for use with kubectl by following
+        https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+      interactiveMode: IfAvailable
+      provideClusterInfo: true
+]
+
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/GKE/Terraform
+
+
+# Create a directory named learn-terraform-deploy-nginx-kubernetes
+% mkdir -p learn-terraform-deploy-nginx-kubernetes
+
+
+# Then, navigate into it
+% cd learn-terraform-deploy-nginx-kubernetes
+
+# Note
+# This directory is only used for managing Kubernetes cluster resources with Terraform.
+# By keeping the Terraform configuration for provisioning a Kubernetes cluster and managing a Kubernetes resources separate, changes in one repository doesn't affect the other. # In addition, the modularity makes the configuration more readable and enables you to scope different permissions to each workspace.
+
+***************************************************************************************************************************
+
+# Create a new file named kubernetes.tf and add the following sample configuration to it.
+# Find this configuration on the gke branch of Deploy NGINX on Kubernetes repository [https://github.com/hashicorp/learn-terraform-deploy-nginx-kubernetes-provider/blob/gke/kubernetes.tf].
+# 1 # kubernetes.tf
+# rajani-terraform-gke-gke # location = "us-central1-a"
+data "google_container_cluster" "rajani-terraform-gke-gke" {
+  name     = data.terraform_remote_state.gke.outputs.kubernetes_cluster_name
+  location = "us-central1-a"
+}
+# 2 # rajani-terraform-gke-gke
+  host = "https://${data.terraform_remote_state.gke.outputs.kubernetes_cluster_host}"
+# 3 # rajani-terraform-gke-gke
+  cluster_ca_certificate = base64decode(data.google_container_cluster.rajani-terraform-gke-gke.master_auth[0].cluster_ca_certificate)
+# 4 # rajani-terraform-gke-gke
+---------------------------------------------------------------------------------------------------------------------------
+╷
+│ Error: Incompatible provider version
+│ 
+│ Provider registry.terraform.io/hashicorp/google v3.52.0 does not have a package available for your current platform, darwin_arm64.
+│ 
+│ Provider releases are separate from Terraform CLI releases, so not all providers are available for all platforms. Other versions of this provider may have
+│ different platforms supported.
+╵
+---------------------------------------------------------------------------------------------------------------------------
+[
+    /*
+    google = {
+      source  = "hashicorp/google"
+      version = "3.52.0"
+    }
+    */
+]
+---------------------------------------------------------------------------------------------------------------------------
+% nano kubernetes.tf
+[
+terraform {
+  required_providers {
+    /*
+    google = {
+      source  = "hashicorp/google"
+      version = "3.52.0"
+    }
+    */
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.0.1"
+    }
+  }
+}
+
+data "terraform_remote_state" "gke" {
+  backend = "local"
+
+  config = {
+    path = "../learn-terraform-provision-gke-cluster/terraform.tfstate"
+  }
+}
+
+# Retrieve GKE cluster information
+provider "google" {
+  project = data.terraform_remote_state.gke.outputs.project_id
+  region  = data.terraform_remote_state.gke.outputs.region
+}
+
+# Configure kubernetes provider with Oauth2 access token.
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/client_config
+# This fetches a new token, which will expire in 1 hour.
+data "google_client_config" "default" {}
+
+data "google_container_cluster" "rajani-terraform-gke-gke" {
+  name     = data.terraform_remote_state.gke.outputs.kubernetes_cluster_name
+  location = "us-central1-a"
+}
+
+provider "kubernetes" {
+  host = "https://${data.terraform_remote_state.gke.outputs.kubernetes_cluster_host}"
+
+  token                  = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(data.google_container_cluster.rajani-terraform-gke-gke.master_auth[0].cluster_ca_certificate)
+}
+]
+
+% cat kubernetes.tf
+
+% terraform init
+[
+Initializing the backend...
+
+Initializing provider plugins...
+- terraform.io/builtin/terraform is built in to Terraform
+- Finding hashicorp/kubernetes versions matching ">= 2.0.1"...
+- Finding latest version of hashicorp/google...
+- Installing hashicorp/kubernetes v2.24.0...
+- Installed hashicorp/kubernetes v2.24.0 (signed by HashiCorp)
+- Installing hashicorp/google v5.7.0...
+- Installed hashicorp/google v5.7.0 (signed by HashiCorp)
+
+Terraform has created a lock file .terraform.lock.hcl to record the provider
+selections it made above. Include this file in your version control repository
+so that Terraform can guarantee to make the same selections by default when
+you run "terraform init" in the future.
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+]
+
+***************************************************************************************************************************
+
+# Schedule a deployment
+# Add the following to the kubernetes.tf file.
+# This Terraform configuration will schedule a NGINX deployment with two replicas on the Kubernetes cluster, internally exposing port 80 (HTTP).
+# kubernetes.tf
+[
+resource "kubernetes_deployment" "nginx" {
+  metadata {
+    name = "scalable-nginx-example"
+    labels = {
+      App = "ScalableNginxExample"
+    }
+  }
+
+  spec {
+    replicas = 2
+    selector {
+      match_labels = {
+        App = "ScalableNginxExample"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          App = "ScalableNginxExample"
+        }
+      }
+      spec {
+        container {
+          image = "nginx:1.7.8"
+          name  = "example"
+
+          port {
+            container_port = 80
+          }
+
+          resources {
+            limits = {
+              cpu    = "0.5"
+              memory = "512Mi"
+            }
+            requests = {
+              cpu    = "250m"
+              memory = "50Mi"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+]
+
+% cat kubernetes.tf
+
+% nano kubernetes.tf
+
+% cat kubernetes.tf
+
+***************************************************************************************************************************
+
+# Notice the similarities between the Terraform configuration and Kubernetes configuration YAML file.
+
+# Apply the configuration to schedule the NGINX deployment.
+# Confirm the apply with a yes.
+
+***************************************************************************************************************************
+
+% terraform apply
+
+***************************************************************************************************************************
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/GKE/Terraform/learn-terraform-provision-gke-cluster
+
+% terraform destroy
+[
+data.terraform_remote_state.gke: Reading...
+data.terraform_remote_state.gke: Read complete after 0s
+data.google_client_config.default: Reading...
+data.google_container_cluster.rajani-terraform-gke-gke: Reading...
+data.google_client_config.default: Read complete after 1s [id=projects/"rajani-terraform-gke"/regions/"us-central1"/zones/<null>]
+data.google_container_cluster.rajani-terraform-gke-gke: Read complete after 4s [id=projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # kubernetes_deployment.nginx will be created
+  + resource "kubernetes_deployment" "nginx" {
+      + id               = (known after apply)
+      + wait_for_rollout = true
+
+      + metadata {
+          + generation       = (known after apply)
+          + labels           = {
+              + "App" = "ScalableNginxExample"
+            }
+          + name             = "scalable-nginx-example"
+          + namespace        = "default"
+          + resource_version = (known after apply)
+          + uid              = (known after apply)
+        }
+
+      + spec {
+          + min_ready_seconds         = 0
+          + paused                    = false
+          + progress_deadline_seconds = 600
+          + replicas                  = "2"
+          + revision_history_limit    = 10
+
+          + selector {
+              + match_labels = {
+                  + "App" = "ScalableNginxExample"
+                }
+            }
+
+          + template {
+              + metadata {
+                  + generation       = (known after apply)
+                  + labels           = {
+                      + "App" = "ScalableNginxExample"
+                    }
+                  + name             = (known after apply)
+                  + resource_version = (known after apply)
+                  + uid              = (known after apply)
+                }
+              + spec {
+                  + automount_service_account_token  = true
+                  + dns_policy                       = "ClusterFirst"
+                  + enable_service_links             = true
+                  + host_ipc                         = false
+                  + host_network                     = false
+                  + host_pid                         = false
+                  + hostname                         = (known after apply)
+                  + node_name                        = (known after apply)
+                  + restart_policy                   = "Always"
+                  + scheduler_name                   = (known after apply)
+                  + service_account_name             = (known after apply)
+                  + share_process_namespace          = false
+                  + termination_grace_period_seconds = 30
+
+                  + container {
+                      + image                      = "nginx:1.7.8"
+                      + image_pull_policy          = (known after apply)
+                      + name                       = "example"
+                      + stdin                      = false
+                      + stdin_once                 = false
+                      + termination_message_path   = "/dev/termination-log"
+                      + termination_message_policy = (known after apply)
+                      + tty                        = false
+
+                      + port {
+                          + container_port = 80
+                          + protocol       = "TCP"
+                        }
+
+                      + resources {
+                          + limits   = {
+                              + "cpu"    = "0.5"
+                              + "memory" = "512Mi"
+                            }
+                          + requests = {
+                              + "cpu"    = "250m"
+                              + "memory" = "50Mi"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+kubernetes_deployment.nginx: Creating...
+kubernetes_deployment.nginx: Still creating... [10s elapsed]
+kubernetes_deployment.nginx: Creation complete after 10s [id=default/scalable-nginx-example]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+]
+
+***************************************************************************************************************************
+
+% kubectl get deployments
+[
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+scalable-nginx-example   2/2     2            2           73s
+]
+
+***************************************************************************************************************************
+
+# Schedule a Service
+
+# There are multiple Kubernetes services that can be used to expose the NGINX to users.
+
+# If the Kubernetes cluster is hosted locally on kind, expose the NGINX instance via NodePort to access the instance.
+# This exposes the service on each node's IP at a static port, allowing access to the service from outside the cluster at <NodeIP>:<NodePort>.
+
+# If the Kubernetes cluster is hosted on a cloud provider, expose the NGINX instance via LoadBalancer to access the instance.
+# This exposes the service externally using a cloud provider's load balancer.
+
+# Notice how the Kubernetes Service resource block dynamically assigns the selector to the Deployment's label.
+# This avoids common bugs due to mismatched service label selectors.
+
+# Add the following configuration to the kubernetes.tf file.
+# This creates a LoadBalancer, which routes traffic from the external load balancer to pods with the matching selector.
+# kubernetes.tf
+[
+resource "kubernetes_service" "nginx" {
+  metadata {
+    name = "nginx-example"
+  }
+  spec {
+    selector = {
+      App = kubernetes_deployment.nginx.spec.0.template.0.metadata[0].labels.App
+    }
+    port {
+      port        = 80
+      target_port = 80
+    }
+
+    type = "LoadBalancer"
+  }
+}
+]
+
+% cat kubernetes.tf
+
+% nano kubernetes.tf
+
+% cat kubernetes.tf
+
+***************************************************************************************************************************
+
+# Next, create an output which will display the IP address that can be used to access the service.
+# Hostname-based (AWS) and IP-based (Azure, Google Cloud) load balancers reference different values.
+
+# Add the following configuration to the kubernetes.tf file.
+# This will set lb_ip to the Google Cloud ingress' IP address.
+# kubernetes.tf
+[
+output "lb_ip" {
+  value = kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.ip
+}
+]
+
+% cat kubernetes.tf
+
+% nano kubernetes.tf
+
+% cat kubernetes.tf
+
+***************************************************************************************************************************
+
+# Apply the configuration to schedule the LoadBalancer service.
+# Confirm the terraform apply with a yes.
+
+***************************************************************************************************************************
+
+% terraform apply
+[
+data.terraform_remote_state.gke: Reading...
+data.terraform_remote_state.gke: Read complete after 0s
+data.google_client_config.default: Reading...
+data.google_container_cluster.rajani-terraform-gke-gke: Reading...
+data.google_client_config.default: Read complete after 1s [id=projects/"rajani-terraform-gke"/regions/"us-central1"/zones/<null>]
+data.google_container_cluster.rajani-terraform-gke-gke: Read complete after 4s [id=projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke]
+kubernetes_deployment.nginx: Refreshing state... [id=default/scalable-nginx-example]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # kubernetes_service.nginx will be created
+  + resource "kubernetes_service" "nginx" {
+      + id                     = (known after apply)
+      + status                 = (known after apply)
+      + wait_for_load_balancer = true
+
+      + metadata {
+          + generation       = (known after apply)
+          + name             = "nginx-example"
+          + namespace        = "default"
+          + resource_version = (known after apply)
+          + uid              = (known after apply)
+        }
+
+      + spec {
+          + allocate_load_balancer_node_ports = true
+          + cluster_ip                        = (known after apply)
+          + cluster_ips                       = (known after apply)
+          + external_traffic_policy           = (known after apply)
+          + health_check_node_port            = (known after apply)
+          + internal_traffic_policy           = (known after apply)
+          + ip_families                       = (known after apply)
+          + ip_family_policy                  = (known after apply)
+          + publish_not_ready_addresses       = false
+          + selector                          = {
+              + "App" = "ScalableNginxExample"
+            }
+          + session_affinity                  = "None"
+          + type                              = "LoadBalancer"
+
+          + port {
+              + node_port   = (known after apply)
+              + port        = 80
+              + protocol    = "TCP"
+              + target_port = "80"
+            }
+        }
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + lb_ip = (known after apply)
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+kubernetes_service.nginx: Creating...
+kubernetes_service.nginx: Still creating... [10s elapsed]
+kubernetes_service.nginx: Still creating... [20s elapsed]
+kubernetes_service.nginx: Still creating... [30s elapsed]
+kubernetes_service.nginx: Creation complete after 39s [id=default/nginx-example]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+lb_ip = "34.136.34.188"
+]
+
+***************************************************************************************************************************
+
+# Once the apply is complete, verify the NGINX service is running.
+
+# Access the NGINX instance by navigating to the lb_ip output.
+[
+lb_ip = "34.136.34.188"
+]
+
+***************************************************************************************************************************
+
+% kubectl get pods --watch
+[
+NAME                                      READY   STATUS    RESTARTS   AGE
+scalable-nginx-example-59994fff68-s94g8   1/1     Running   0          14m
+scalable-nginx-example-59994fff68-xtsp4   1/1     Running   0          14m
+^C% 
+]
+
+
+% kubectl get pods
+[
+NAME                                      READY   STATUS    RESTARTS   AGE
+scalable-nginx-example-59994fff68-s94g8   1/1     Running   0          15m
+scalable-nginx-example-59994fff68-xtsp4   1/1     Running   0          15m
+]
+
+% kubectl get services
+[
+NAME            TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)        AGE
+kubernetes      ClusterIP      10.163.240.1     <none>          443/TCP        8h
+nginx-example   LoadBalancer   10.163.244.124   34.136.34.188   80:32289/TCP   3m2s
+]
+
+% curl http://34.136.34.188/
+
+% open http://34.136.34.188/
+[
+Welcome to nginx!
+
+If you see this page, the nginx web server is successfully installed and working. Further configuration is required.
+
+For online documentation and support please refer to nginx.org.
+Commercial support is available at nginx.com.
+
+Thank you for using nginx.
+]
+
+***************************************************************************************************************************
+
+# Scale the deployment
+# Scale the deployment by increasing the replicas field in the configuration.
+# Change the number of replicas in the Kubernetes deployment from 2 to 4.
+# kubernetes.tf
+[
+resource "kubernetes_deployment" "nginx" {
+  ## ...
+
+  spec {
+    replicas = 4
+
+    ## ...
+  }
+
+  ## ...
+}
+]
+
+% cat kubernetes.tf
+
+% nano kubernetes.tf
+
+% cat kubernetes.tf
+
+***************************************************************************************************************************
+
+# Apply the change to scale the deployment.
+# Confirm the terraform apply with a yes.
+
+***************************************************************************************************************************
+
+% terraform apply
+[
+data.terraform_remote_state.gke: Reading...
+data.terraform_remote_state.gke: Read complete after 0s
+data.google_client_config.default: Reading...
+data.google_container_cluster.rajani-terraform-gke-gke: Reading...
+data.google_client_config.default: Read complete after 0s [id=projects/"rajani-terraform-gke"/regions/"us-central1"/zones/<null>]
+data.google_container_cluster.rajani-terraform-gke-gke: Read complete after 3s [id=projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke]
+kubernetes_deployment.nginx: Refreshing state... [id=default/scalable-nginx-example]
+kubernetes_service.nginx: Refreshing state... [id=default/nginx-example]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # kubernetes_deployment.nginx will be updated in-place
+  ~ resource "kubernetes_deployment" "nginx" {
+        id               = "default/scalable-nginx-example"
+        # (1 unchanged attribute hidden)
+
+      ~ spec {
+          ~ replicas                  = "2" -> "4"
+            # (4 unchanged attributes hidden)
+
+            # (3 unchanged blocks hidden)
+        }
+
+        # (1 unchanged block hidden)
+    }
+
+Plan: 0 to add, 1 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+kubernetes_deployment.nginx: Modifying... [id=default/scalable-nginx-example]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 10s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 20s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 30s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 40s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 50s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 1m0s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 1m10s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 1m20s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 1m30s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 1m40s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 1m50s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 2m0s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 2m10s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 2m20s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 2m30s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 2m40s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 2m50s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 3m0s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 3m10s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 3m20s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 3m30s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 3m40s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 3m50s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 4m0s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 4m10s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 4m20s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 4m30s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 4m40s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 4m50s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 5m0s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 5m10s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 5m20s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 5m30s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 5m40s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 5m50s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 6m0s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 6m10s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 6m20s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 6m30s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 6m40s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 6m50s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 7m0s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 7m10s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 7m20s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 7m30s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 7m40s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 7m50s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 8m0s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 8m10s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 8m20s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 8m30s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 8m40s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 8m50s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 9m0s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 9m10s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 9m20s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 9m30s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 9m40s elapsed]
+kubernetes_deployment.nginx: Still modifying... [id=default/scalable-nginx-example, 9m50s elapsed]
+╷
+│ Error: Waiting for rollout to finish: 4 replicas wanted; 2 replicas Ready
+│ 
+│   with kubernetes_deployment.nginx,
+│   on kubernetes.tf line 47, in resource "kubernetes_deployment" "nginx":
+│   47: resource "kubernetes_deployment" "nginx" {
+│ 
+╵
+]
+
+% kubectl rollout status deployment/scalable-nginx-example
+[
+Waiting for deployment "scalable-nginx-example" rollout to finish: 2 of 4 updated replicas are available...
+^C%                                                                        
+]
+[
+# Once the apply is complete, verify the NGINX deployment has four replicas.
+]
+
+% kubectl get deployments
+[
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+scalable-nginx-example   2/4     4            2           128m
+]
+
+***************************************************************************************************************************
+
+# Revert the number of replicas in the Kubernetes deployment from 4 to 2.
+# kubernetes.tf
+[
+resource "kubernetes_deployment" "nginx" {
+  ## ...
+
+  spec {
+    replicas = 2
+
+    ## ...
+  }
+
+  ## ...
+}
+]
+
+% cat kubernetes.tf
+
+% nano kubernetes.tf
+
+% cat kubernetes.tf
+
+***************************************************************************************************************************
+
+# Apply the change to scale the deployment.
+# Confirm the terraform apply with a yes.
+
+***************************************************************************************************************************
+
+% terraform apply
+[
+data.terraform_remote_state.gke: Reading...
+data.terraform_remote_state.gke: Read complete after 0s
+data.google_client_config.default: Reading...
+data.google_container_cluster.rajani-terraform-gke-gke: Reading...
+data.google_client_config.default: Read complete after 1s [id=projects/"rajani-terraform-gke"/regions/"us-central1"/zones/<null>]
+data.google_container_cluster.rajani-terraform-gke-gke: Read complete after 9s [id=projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke]
+kubernetes_deployment.nginx: Refreshing state... [id=default/scalable-nginx-example]
+kubernetes_service.nginx: Refreshing state... [id=default/nginx-example]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # kubernetes_deployment.nginx will be updated in-place
+  ~ resource "kubernetes_deployment" "nginx" {
+        id               = "default/scalable-nginx-example"
+        # (1 unchanged attribute hidden)
+
+      ~ spec {
+          ~ replicas                  = "4" -> "2"
+            # (4 unchanged attributes hidden)
+
+            # (3 unchanged blocks hidden)
+        }
+
+        # (1 unchanged block hidden)
+    }
+
+Plan: 0 to add, 1 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+kubernetes_deployment.nginx: Modifying... [id=default/scalable-nginx-example]
+kubernetes_deployment.nginx: Modifications complete after 2s [id=default/scalable-nginx-example]
+
+Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
+
+Outputs:
+
+lb_ip = "34.136.34.188"
+]
+
+% kubectl get deployments
+[
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+scalable-nginx-example   2/2     2            2           133m
+]
+
+***************************************************************************************************************************
+
+# Managing Custom Resource
+
+# In addition to built-in resources and data sources, the Terraform provider also includes a kubernetes_manifest resource that help manage custom resource definitions (CRDs), custom resources, or any resource that is not built into the Terraform provider.
+
+# Use Terraform to apply a CRD then manage custom resources in two steps:
+
+# Apply the required CRD to the cluster
+# Apply the Custom Resources to the cluster
+
+# Two apply steps are needed because at plan time Terraform queries the Kubernetes API to verify the schema for the kind of object specified in the manifest field.
+# If Terraform doesn't find the CRD for the resource defined in the manifest the plan will return an error.
+
+# Note
+# To make this faster, the CRD is included in the same workspace as the Kubernetes resources that it manages.
+# In production create a new workspace for the CRD.
+
+***************************************************************************************************************************
+
+# Create a custom resource definition
+
+# Create a new file named crontab_crd.tf and paste in the bellow configuration for a CRD that extends Kubernetes to store cron data as a resource called CronTab.
+# crontab_crd.tf
+[
+resource "kubernetes_manifest" "crontab_crd" {
+  manifest = {
+    "apiVersion" = "apiextensions.k8s.io/v1"
+    "kind"       = "CustomResourceDefinition"
+    "metadata" = {
+      "name" = "crontabs.stable.example.com"
+    }
+    "spec" = {
+      "group" = "stable.example.com"
+      "names" = {
+        "kind"   = "CronTab"
+        "plural" = "crontabs"
+        "shortNames" = [
+          "ct",
+        ]
+        "singular" = "crontab"
+      }
+      "scope" = "Namespaced"
+      "versions" = [
+        {
+          "name" = "v1"
+          "schema" = {
+            "openAPIV3Schema" = {
+              "properties" = {
+                "spec" = {
+                  "properties" = {
+                    "cronSpec" = {
+                      "type" = "string"
+                    }
+                    "image" = {
+                      "type" = "string"
+                    }
+                  }
+                  "type" = "object"
+                }
+              }
+              "type" = "object"
+            }
+          }
+          "served"  = true
+          "storage" = true
+        },
+      ]
+    }
+  }
+}
+]
+
+% nano crontab_crd.tf
+
+% cat crontab_crd.tf
+
+***************************************************************************************************************************
+
+# The resource has two configurable fields: cronSpec and image.
+# Apply the configuration to create the CRD.
+# Confirm the terraform apply with a yes.
+
+***************************************************************************************************************************
+
+% terraform apply
+[
+data.terraform_remote_state.gke: Reading...
+data.terraform_remote_state.gke: Read complete after 0s
+data.google_client_config.default: Reading...
+data.google_container_cluster.rajani-terraform-gke-gke: Reading...
+data.google_client_config.default: Read complete after 0s [id=projects/"rajani-terraform-gke"/regions/"us-central1"/zones/<null>]
+data.google_container_cluster.rajani-terraform-gke-gke: Read complete after 8s [id=projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke]
+kubernetes_deployment.nginx: Refreshing state... [id=default/scalable-nginx-example]
+kubernetes_service.nginx: Refreshing state... [id=default/nginx-example]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # kubernetes_manifest.crontab_crd will be created
+  + resource "kubernetes_manifest" "crontab_crd" {
+      + manifest = {
+          + apiVersion = "apiextensions.k8s.io/v1"
+          + kind       = "CustomResourceDefinition"
+          + metadata   = {
+              + name = "crontabs.stable.example.com"
+            }
+          + spec       = {
+              + group    = "stable.example.com"
+              + names    = {
+                  + kind       = "CronTab"
+                  + plural     = "crontabs"
+                  + shortNames = [
+                      + "ct",
+                    ]
+                  + singular   = "crontab"
+                }
+              + scope    = "Namespaced"
+              + versions = [
+                  + {
+                      + name    = "v1"
+                      + schema  = {
+                          + openAPIV3Schema = {
+                              + properties = {
+                                  + spec = {
+                                      + properties = {
+                                          + cronSpec = {
+                                              + type = "string"
+                                            }
+                                          + image    = {
+                                              + type = "string"
+                                            }
+                                        }
+                                      + type       = "object"
+                                    }
+                                }
+                              + type       = "object"
+                            }
+                        }
+                      + served  = true
+                      + storage = true
+                    },
+                ]
+            }
+        }
+      + object   = {
+          + apiVersion = "apiextensions.k8s.io/v1"
+          + kind       = "CustomResourceDefinition"
+          + metadata   = {
+              + annotations                = (known after apply)
+              + creationTimestamp          = (known after apply)
+              + deletionGracePeriodSeconds = (known after apply)
+              + deletionTimestamp          = (known after apply)
+              + finalizers                 = (known after apply)
+              + generateName               = (known after apply)
+              + generation                 = (known after apply)
+              + labels                     = (known after apply)
+              + managedFields              = (known after apply)
+              + name                       = "crontabs.stable.example.com"
+              + namespace                  = (known after apply)
+              + ownerReferences            = (known after apply)
+              + resourceVersion            = (known after apply)
+              + selfLink                   = (known after apply)
+              + uid                        = (known after apply)
+            }
+          + spec       = {
+              + conversion            = {
+                  + strategy = (known after apply)
+                  + webhook  = {
+                      + clientConfig             = {
+                          + caBundle = (known after apply)
+                          + service  = {
+                              + name      = (known after apply)
+                              + namespace = (known after apply)
+                              + path      = (known after apply)
+                              + port      = (known after apply)
+                            }
+                          + url      = (known after apply)
+                        }
+                      + conversionReviewVersions = (known after apply)
+                    }
+                }
+              + group                 = "stable.example.com"
+              + names                 = {
+                  + categories = (known after apply)
+                  + kind       = "CronTab"
+                  + listKind   = (known after apply)
+                  + plural     = "crontabs"
+                  + shortNames = [
+                      + "ct",
+                    ]
+                  + singular   = "crontab"
+                }
+              + preserveUnknownFields = (known after apply)
+              + scope                 = "Namespaced"
+              + versions              = [
+                  + {
+                      + additionalPrinterColumns = (known after apply)
+                      + deprecated               = (known after apply)
+                      + deprecationWarning       = (known after apply)
+                      + name                     = "v1"
+                      + schema                   = {
+                          + openAPIV3Schema = {
+                              + properties = {
+                                  + spec = {
+                                      + properties = {
+                                          + cronSpec = {
+                                              + type = "string"
+                                            }
+                                          + image    = {
+                                              + type = "string"
+                                            }
+                                        }
+                                      + type       = "object"
+                                    }
+                                }
+                              + type       = "object"
+                            }
+                        }
+                      + served                   = true
+                      + storage                  = true
+                      + subresources             = {
+                          + scale  = {
+                              + labelSelectorPath  = (known after apply)
+                              + specReplicasPath   = (known after apply)
+                              + statusReplicasPath = (known after apply)
+                            }
+                          + status = (known after apply)
+                        }
+                    },
+                ]
+            }
+        }
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+kubernetes_manifest.crontab_crd: Creating...
+kubernetes_manifest.crontab_crd: Creation complete after 2s
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+lb_ip = "34.136.34.188"
+]
+
+***************************************************************************************************************************
+
+# Note that in the plan, Terraform created a resource with two attributes: manifest and object.
+
+# The manifest attribute is the desired configuration, and object is the end state returned by the Kubernetes API server after Terraform created the resource.
+# The object attribute contains many more fields than that was specified in manifest because Terraform generated a schema containing all of the possible resource attributes that the Kubernetes API server could add. When referencing the kubernetes_manifest resource from outputs or other resources, always use the object attribute.
+
+# Confirm that Terraform created the CRD using kubectl.
+
+***************************************************************************************************************************
+
+% kubectl get crds crontabs.stable.example.com
+[
+NAME                          CREATED AT
+crontabs.stable.example.com   2023-11-30T13:20:46Z
+]
+
+***************************************************************************************************************************
+
+# The contrabs resource definition now exists in Kubernetes, but not used it to define any Kubernetes resources yet.
+# Check for the resource definition with kubectl, which would return error: the server doesn't have a resource type "crontab" if the CRD didn't exist.
+
+***************************************************************************************************************************
+
+% kubectl get crontabs 
+[
+No resources found in default namespace.
+]
+
+***************************************************************************************************************************
+
+# Create a custom resource
+
+# Now, create a new file named my_new_crontab.tf and paste in the following configuration, which creates a custom resource based on the newly created CronTab CRD.
+
+# my_new_crontab.tf
+[
+resource "kubernetes_manifest" "my_new_crontab" {
+  manifest = {
+    "apiVersion" = "stable.example.com/v1"
+    "kind"       = "CronTab"
+    "metadata" = {
+      "name"      = "my-new-cron-object"
+      "namespace" = "default"
+    }
+    "spec" = {
+      "cronSpec" = "* * * * */5"
+      "image"    = "my-awesome-cron-image"
+    }
+  }
+}
+]
+
+% nano my_new_crontab.tf
+
+% cat my_new_crontab.tf
+
+***************************************************************************************************************************
+
+# Apply the configuration to create the custom resource.
+# Confirm the apply with a yes.
+
+***************************************************************************************************************************
+
+% terraform apply
+[
+data.terraform_remote_state.gke: Reading...
+data.terraform_remote_state.gke: Read complete after 0s
+data.google_client_config.default: Reading...
+data.google_container_cluster.rajani-terraform-gke-gke: Reading...
+data.google_client_config.default: Read complete after 0s [id=projects/"rajani-terraform-gke"/regions/"us-central1"/zones/<null>]
+data.google_container_cluster.rajani-terraform-gke-gke: Read complete after 8s [id=projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke]
+kubernetes_deployment.nginx: Refreshing state... [id=default/scalable-nginx-example]
+kubernetes_service.nginx: Refreshing state... [id=default/nginx-example]
+kubernetes_manifest.crontab_crd: Refreshing state...
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # kubernetes_manifest.my_new_crontab will be created
+  + resource "kubernetes_manifest" "my_new_crontab" {
+      + manifest = {
+          + apiVersion = "stable.example.com/v1"
+          + kind       = "CronTab"
+          + metadata   = {
+              + name      = "my-new-cron-object"
+              + namespace = "default"
+            }
+          + spec       = {
+              + cronSpec = "* * * * */5"
+              + image    = "my-awesome-cron-image"
+            }
+        }
+      + object   = {
+          + apiVersion = "stable.example.com/v1"
+          + kind       = "CronTab"
+          + metadata   = {
+              + annotations                = (known after apply)
+              + creationTimestamp          = (known after apply)
+              + deletionGracePeriodSeconds = (known after apply)
+              + deletionTimestamp          = (known after apply)
+              + finalizers                 = (known after apply)
+              + generateName               = (known after apply)
+              + generation                 = (known after apply)
+              + labels                     = (known after apply)
+              + managedFields              = (known after apply)
+              + name                       = "my-new-cron-object"
+              + namespace                  = "default"
+              + ownerReferences            = (known after apply)
+              + resourceVersion            = (known after apply)
+              + selfLink                   = (known after apply)
+              + uid                        = (known after apply)
+            }
+          + spec       = {
+              + cronSpec = "* * * * */5"
+              + image    = "my-awesome-cron-image"
+            }
+        }
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+kubernetes_manifest.my_new_crontab: Creating...
+kubernetes_manifest.my_new_crontab: Creation complete after 1s
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+lb_ip = "34.136.34.188"
+]
+
+***************************************************************************************************************************
+
+# Confirm that Terraform created the custom resource.
+
+***************************************************************************************************************************
+
+% kubectl get crontabs
+[
+NAME                 AGE
+my-new-cron-object   61s
+]
+
+***************************************************************************************************************************
+
+% kubectl proxy
+
+http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
+
+% kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep service-controller-token | awk '{print $1}')
+
+http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/customresourcedefinition/crontabs.stable.example.com?namespace=_all
+[
+Metadata
+Name
+crontabs.stable.example.com
+
+Created
+Nov 30, 2023
+
+Age
+27 minutes ago
+
+UID
+2e8f4cc6-81ae-416d-9624-8e80413e7ab6
+]
+
+***************************************************************************************************************************
+
+# View the new custom resource.
+
+***************************************************************************************************************************
+
+% kubectl describe crontab my-new-cron-object
+[
+Name:         my-new-cron-object
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+API Version:  stable.example.com/v1
+Kind:         CronTab
+Metadata:
+  Creation Timestamp:  2023-11-30T13:40:55Z
+  Generation:          1
+  Resource Version:    302096
+  UID:                 9efaa1e5-4de4-4c14-932e-de6c7d11ce14
+Spec:
+  Cron Spec:  * * * * */5
+  Image:      my-awesome-cron-image
+Events:       <none>
+]
+
+***************************************************************************************************************************
+
+# Clean up the workspace
+
+# Destroy any resources created.
+
+# Running terraform destroy will de-provision the NGINX deployment and service.
+
+# Confirm your destroy with a yes.
+
+***************************************************************************************************************************
+
+% terraform destroy
+[
+data.terraform_remote_state.gke: Reading...
+data.terraform_remote_state.gke: Read complete after 0s
+data.google_client_config.default: Reading...
+data.google_container_cluster.rajani-terraform-gke-gke: Reading...
+data.google_client_config.default: Read complete after 0s [id=projects/"rajani-terraform-gke"/regions/"us-central1"/zones/<null>]
+data.google_container_cluster.rajani-terraform-gke-gke: Read complete after 8s [id=projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke]
+kubernetes_deployment.nginx: Refreshing state... [id=default/scalable-nginx-example]
+kubernetes_service.nginx: Refreshing state... [id=default/nginx-example]
+kubernetes_manifest.crontab_crd: Refreshing state...
+kubernetes_manifest.my_new_crontab: Refreshing state...
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # kubernetes_deployment.nginx will be destroyed
+  - resource "kubernetes_deployment" "nginx" {
+      - id               = "default/scalable-nginx-example" -> null
+      - wait_for_rollout = true -> null
+
+      - metadata {
+          - annotations      = {} -> null
+          - generation       = 7 -> null
+          - labels           = {
+              - "App" = "ScalableNginxExample"
+            } -> null
+          - name             = "scalable-nginx-example" -> null
+          - namespace        = "default" -> null
+          - resource_version = "290351" -> null
+          - uid              = "a465799a-82ce-463f-a66e-7821fbbbf0dc" -> null
+        }
+
+      - spec {
+          - min_ready_seconds         = 0 -> null
+          - paused                    = false -> null
+          - progress_deadline_seconds = 600 -> null
+          - replicas                  = "2" -> null
+          - revision_history_limit    = 10 -> null
+
+          - selector {
+              - match_labels = {
+                  - "App" = "ScalableNginxExample"
+                } -> null
+            }
+
+          - strategy {
+              - type = "RollingUpdate" -> null
+
+              - rolling_update {
+                  - max_surge       = "25%" -> null
+                  - max_unavailable = "25%" -> null
+                }
+            }
+
+          - template {
+              - metadata {
+                  - annotations = {} -> null
+                  - generation  = 0 -> null
+                  - labels      = {
+                      - "App" = "ScalableNginxExample"
+                    } -> null
+                }
+              - spec {
+                  - active_deadline_seconds          = 0 -> null
+                  - automount_service_account_token  = true -> null
+                  - dns_policy                       = "ClusterFirst" -> null
+                  - enable_service_links             = true -> null
+                  - host_ipc                         = false -> null
+                  - host_network                     = false -> null
+                  - host_pid                         = false -> null
+                  - node_selector                    = {} -> null
+                  - restart_policy                   = "Always" -> null
+                  - scheduler_name                   = "default-scheduler" -> null
+                  - share_process_namespace          = false -> null
+                  - termination_grace_period_seconds = 30 -> null
+
+                  - container {
+                      - args                       = [] -> null
+                      - command                    = [] -> null
+                      - image                      = "nginx:1.7.8" -> null
+                      - image_pull_policy          = "IfNotPresent" -> null
+                      - name                       = "example" -> null
+                      - stdin                      = false -> null
+                      - stdin_once                 = false -> null
+                      - termination_message_path   = "/dev/termination-log" -> null
+                      - termination_message_policy = "File" -> null
+                      - tty                        = false -> null
+
+                      - port {
+                          - container_port = 80 -> null
+                          - host_port      = 0 -> null
+                          - protocol       = "TCP" -> null
+                        }
+
+                      - resources {
+                          - limits   = {
+                              - "cpu"    = "500m"
+                              - "memory" = "512Mi"
+                            } -> null
+                          - requests = {
+                              - "cpu"    = "250m"
+                              - "memory" = "50Mi"
+                            } -> null
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+  # kubernetes_manifest.crontab_crd will be destroyed
+  - resource "kubernetes_manifest" "crontab_crd" {
+      - manifest = {
+          - apiVersion = "apiextensions.k8s.io/v1"
+          - kind       = "CustomResourceDefinition"
+          - metadata   = {
+              - name = "crontabs.stable.example.com"
+            }
+          - spec       = {
+              - group    = "stable.example.com"
+              - names    = {
+                  - kind       = "CronTab"
+                  - plural     = "crontabs"
+                  - shortNames = [
+                      - "ct",
+                    ]
+                  - singular   = "crontab"
+                }
+              - scope    = "Namespaced"
+              - versions = [
+                  - {
+                      - name    = "v1"
+                      - schema  = {
+                          - openAPIV3Schema = {
+                              - properties = {
+                                  - spec = {
+                                      - properties = {
+                                          - cronSpec = {
+                                              - type = "string"
+                                            }
+                                          - image    = {
+                                              - type = "string"
+                                            }
+                                        }
+                                      - type       = "object"
+                                    }
+                                }
+                              - type       = "object"
+                            }
+                        }
+                      - served  = true
+                      - storage = true
+                    },
+                ]
+            }
+        } -> null
+      - object   = {
+          - apiVersion = "apiextensions.k8s.io/v1"
+          - kind       = "CustomResourceDefinition"
+          - metadata   = {
+              - annotations                = null
+              - creationTimestamp          = null
+              - deletionGracePeriodSeconds = null
+              - deletionTimestamp          = null
+              - finalizers                 = null
+              - generateName               = null
+              - generation                 = null
+              - labels                     = null
+              - managedFields              = null
+              - name                       = "crontabs.stable.example.com"
+              - namespace                  = null
+              - ownerReferences            = null
+              - resourceVersion            = null
+              - selfLink                   = null
+              - uid                        = null
+            }
+          - spec       = {
+              - conversion            = {
+                  - strategy = "None"
+                  - webhook  = {
+                      - clientConfig             = {
+                          - caBundle = null
+                          - service  = {
+                              - name      = null
+                              - namespace = null
+                              - path      = null
+                              - port      = null
+                            }
+                          - url      = null
+                        }
+                      - conversionReviewVersions = null
+                    }
+                }
+              - group                 = "stable.example.com"
+              - names                 = {
+                  - categories = null
+                  - kind       = "CronTab"
+                  - listKind   = "CronTabList"
+                  - plural     = "crontabs"
+                  - shortNames = [
+                      - "ct",
+                    ]
+                  - singular   = "crontab"
+                }
+              - preserveUnknownFields = null
+              - scope                 = "Namespaced"
+              - versions              = [
+                  - {
+                      - additionalPrinterColumns = null
+                      - deprecated               = null
+                      - deprecationWarning       = null
+                      - name                     = "v1"
+                      - schema                   = {
+                          - openAPIV3Schema = {
+                              - properties = {
+                                  - spec = {
+                                      - properties = {
+                                          - cronSpec = {
+                                              - type = "string"
+                                            }
+                                          - image    = {
+                                              - type = "string"
+                                            }
+                                        }
+                                      - type       = "object"
+                                    }
+                                }
+                              - type       = "object"
+                            }
+                        }
+                      - served                   = true
+                      - storage                  = true
+                      - subresources             = {
+                          - scale  = {
+                              - labelSelectorPath  = null
+                              - specReplicasPath   = null
+                              - statusReplicasPath = null
+                            }
+                          - status = null
+                        }
+                    },
+                ]
+            }
+        } -> null
+    }
+
+  # kubernetes_manifest.my_new_crontab will be destroyed
+  - resource "kubernetes_manifest" "my_new_crontab" {
+      - manifest = {
+          - apiVersion = "stable.example.com/v1"
+          - kind       = "CronTab"
+          - metadata   = {
+              - name      = "my-new-cron-object"
+              - namespace = "default"
+            }
+          - spec       = {
+              - cronSpec = "* * * * */5"
+              - image    = "my-awesome-cron-image"
+            }
+        } -> null
+      - object   = {
+          - apiVersion = "stable.example.com/v1"
+          - kind       = "CronTab"
+          - metadata   = {
+              - annotations                = null
+              - creationTimestamp          = null
+              - deletionGracePeriodSeconds = null
+              - deletionTimestamp          = null
+              - finalizers                 = null
+              - generateName               = null
+              - generation                 = null
+              - labels                     = null
+              - managedFields              = null
+              - name                       = "my-new-cron-object"
+              - namespace                  = "default"
+              - ownerReferences            = null
+              - resourceVersion            = null
+              - selfLink                   = null
+              - uid                        = null
+            }
+          - spec       = {
+              - cronSpec = "* * * * */5"
+              - image    = "my-awesome-cron-image"
+            }
+        } -> null
+    }
+
+  # kubernetes_service.nginx will be destroyed
+  - resource "kubernetes_service" "nginx" {
+      - id                     = "default/nginx-example" -> null
+      - status                 = [
+          - {
+              - load_balancer = [
+                  - {
+                      - ingress = [
+                          - {
+                              - hostname = ""
+                              - ip       = "34.136.34.188"
+                            },
+                        ]
+                    },
+                ]
+            },
+        ] -> null
+      - wait_for_load_balancer = true -> null
+
+      - metadata {
+          - annotations      = {} -> null
+          - generation       = 0 -> null
+          - labels           = {} -> null
+          - name             = "nginx-example" -> null
+          - namespace        = "default" -> null
+          - resource_version = "236278" -> null
+          - uid              = "51c5b305-c42a-498b-b9f0-ce6c92406656" -> null
+        }
+
+      - spec {
+          - allocate_load_balancer_node_ports = true -> null
+          - cluster_ip                        = "10.163.244.124" -> null
+          - cluster_ips                       = [
+              - "10.163.244.124",
+            ] -> null
+          - external_ips                      = [] -> null
+          - external_traffic_policy           = "Cluster" -> null
+          - health_check_node_port            = 0 -> null
+          - internal_traffic_policy           = "Cluster" -> null
+          - ip_families                       = [
+              - "IPv4",
+            ] -> null
+          - ip_family_policy                  = "SingleStack" -> null
+          - load_balancer_source_ranges       = [] -> null
+          - publish_not_ready_addresses       = false -> null
+          - selector                          = {
+              - "App" = "ScalableNginxExample"
+            } -> null
+          - session_affinity                  = "None" -> null
+          - type                              = "LoadBalancer" -> null
+
+          - port {
+              - node_port   = 32289 -> null
+              - port        = 80 -> null
+              - protocol    = "TCP" -> null
+              - target_port = "80" -> null
+            }
+        }
+    }
+
+Plan: 0 to add, 0 to change, 4 to destroy.
+
+Changes to Outputs:
+  - lb_ip = "34.136.34.188" -> null
+
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+kubernetes_service.nginx: Destroying... [id=default/nginx-example]
+kubernetes_manifest.my_new_crontab: Destroying...
+kubernetes_manifest.crontab_crd: Destroying...
+kubernetes_manifest.my_new_crontab: Destruction complete after 0s
+kubernetes_manifest.crontab_crd: Destruction complete after 0s
+kubernetes_service.nginx: Still destroying... [id=default/nginx-example, 10s elapsed]
+kubernetes_service.nginx: Still destroying... [id=default/nginx-example, 20s elapsed]
+kubernetes_service.nginx: Still destroying... [id=default/nginx-example, 30s elapsed]
+kubernetes_service.nginx: Destruction complete after 39s
+kubernetes_deployment.nginx: Destroying... [id=default/scalable-nginx-example]
+kubernetes_deployment.nginx: Destruction complete after 0s
+
+Destroy complete! Resources: 4 destroyed.
+]
+
+***************************************************************************************************************************
+
+# Remove the learn-terraform-provision-gke-cluster resources.
+
+***************************************************************************************************************************
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/GKE/Terraform/learn-terraform-provision-gke-cluster
+
+% terraform destroy
+[
+data.google_container_engine_versions.gke_version: Reading...
+google_compute_network.vpc: Refreshing state... [id=projects/rajani-terraform-gke/global/networks/rajani-terraform-gke-vpc]
+google_compute_subnetwork.subnet: Refreshing state... [id=projects/rajani-terraform-gke/regions/us-central1/subnetworks/rajani-terraform-gke-subnet]
+google_container_cluster.primary: Refreshing state... [id=projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke]
+data.google_container_engine_versions.gke_version: Read complete after 2s [id=2023-11-30 13:55:31.361271 +0000 UTC]
+google_container_node_pool.primary_nodes: Refreshing state... [id=projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke/nodePools/rajani-terraform-gke-gke]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # google_compute_network.vpc will be destroyed
+  - resource "google_compute_network" "vpc" {
+      - auto_create_subnetworks                   = false -> null
+      - delete_default_routes_on_create           = false -> null
+      - enable_ula_internal_ipv6                  = false -> null
+      - id                                        = "projects/rajani-terraform-gke/global/networks/rajani-terraform-gke-vpc" -> null
+      - mtu                                       = 0 -> null
+      - name                                      = "rajani-terraform-gke-vpc" -> null
+      - network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL" -> null
+      - project                                   = "rajani-terraform-gke" -> null
+      - routing_mode                              = "REGIONAL" -> null
+      - self_link                                 = "https://www.googleapis.com/compute/v1/projects/rajani-terraform-gke/global/networks/rajani-terraform-gke-vpc" -> null
+    }
+
+  # google_compute_subnetwork.subnet will be destroyed
+  - resource "google_compute_subnetwork" "subnet" {
+      - creation_timestamp         = "2023-11-29T17:56:55.562-08:00" -> null
+      - gateway_address            = "10.10.0.1" -> null
+      - id                         = "projects/rajani-terraform-gke/regions/us-central1/subnetworks/rajani-terraform-gke-subnet" -> null
+      - ip_cidr_range              = "10.10.0.0/24" -> null
+      - name                       = "rajani-terraform-gke-subnet" -> null
+      - network                    = "https://www.googleapis.com/compute/v1/projects/rajani-terraform-gke/global/networks/rajani-terraform-gke-vpc" -> null
+      - private_ip_google_access   = true -> null
+      - private_ipv6_google_access = "DISABLE_GOOGLE_ACCESS" -> null
+      - project                    = "rajani-terraform-gke" -> null
+      - purpose                    = "PRIVATE" -> null
+      - region                     = "us-central1" -> null
+      - secondary_ip_range         = [] -> null
+      - self_link                  = "https://www.googleapis.com/compute/v1/projects/rajani-terraform-gke/regions/us-central1/subnetworks/rajani-terraform-gke-subnet" -> null
+      - stack_type                 = "IPV4_ONLY" -> null
+    }
+
+  # google_container_cluster.primary will be destroyed
+  - resource "google_container_cluster" "primary" {
+      - cluster_ipv4_cidr           = "10.160.0.0/14" -> null
+      - enable_autopilot            = false -> null
+      - enable_binary_authorization = false -> null
+      - enable_intranode_visibility = false -> null
+      - enable_kubernetes_alpha     = false -> null
+      - enable_l4_ilb_subsetting    = false -> null
+      - enable_legacy_abac          = false -> null
+      - enable_shielded_nodes       = true -> null
+      - enable_tpu                  = false -> null
+      - endpoint                    = "34.135.124.120" -> null
+      - id                          = "projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke" -> null
+      - initial_node_count          = 1 -> null
+      - label_fingerprint           = "a9dc16a7" -> null
+      - location                    = "us-central1-a" -> null
+      - logging_service             = "logging.googleapis.com/kubernetes" -> null
+      - master_version              = "1.27.3-gke.100" -> null
+      - monitoring_service          = "monitoring.googleapis.com/kubernetes" -> null
+      - name                        = "rajani-terraform-gke-gke" -> null
+      - network                     = "projects/rajani-terraform-gke/global/networks/rajani-terraform-gke-vpc" -> null
+      - networking_mode             = "ROUTES" -> null
+      - node_locations              = [] -> null
+      - node_version                = "1.27.4-gke.900" -> null
+      - project                     = "rajani-terraform-gke" -> null
+      - remove_default_node_pool    = true -> null
+      - resource_labels             = {} -> null
+      - self_link                   = "https://container.googleapis.com/v1/projects/rajani-terraform-gke/zones/us-central1-a/clusters/rajani-terraform-gke-gke" -> null
+      - services_ipv4_cidr          = "10.163.240.0/20" -> null
+      - subnetwork                  = "projects/rajani-terraform-gke/regions/us-central1/subnetworks/rajani-terraform-gke-subnet" -> null
+
+      - addons_config {
+          - gce_persistent_disk_csi_driver_config {
+              - enabled = true -> null
+            }
+          - network_policy_config {
+              - disabled = true -> null
+            }
+        }
+
+      - binary_authorization {
+          - enabled = false -> null
+        }
+
+      - cluster_autoscaling {
+          - enabled = false -> null
+        }
+
+      - database_encryption {
+          - state = "DECRYPTED" -> null
+        }
+
+      - default_snat_status {
+          - disabled = false -> null
+        }
+
+      - logging_config {
+          - enable_components = [
+              - "SYSTEM_COMPONENTS",
+              - "WORKLOADS",
+            ] -> null
+        }
+
+      - master_auth {
+          - cluster_ca_certificate = "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVMVENDQXBXZ0F3SUJBZ0lSQUozanV4ZTlxSnJTRHdweFpzVVdJMzR3RFFZSktvWklodmNOQVFFTEJRQXcKTHpFdE1Dc0dBMVVFQXhNa016RTVZVGxsWXpNdE16RTNOQzAwWTJRMkxUa3dZamt0WkdGbU56WTBNakpsT1RZeApNQ0FYRFRJek1URXpNREF4TkRreU1Gb1lEekl3TlRNeE1USXlNREkwT1RJd1dqQXZNUzB3S3dZRFZRUURFeVF6Ck1UbGhPV1ZqTXkwek1UYzBMVFJqWkRZdE9UQmlPUzFrWVdZM05qUXlNbVU1TmpFd2dnR2lNQTBHQ1NxR1NJYjMKRFFFQkFRVUFBNElCandBd2dnR0tBb0lCZ1FDSm5YSzdwRHc5TXJLTWNCOEhLbnJHT01FYVJLem1TbUJMa1FsaApHWmE3aVhMQ2U2Rlp2RUxDSGRxaWgrNDE2ZnJpZVJ6dW5oTzB5dUxNNTlRc0c0QmhWS3hvV3Vsbno1MUMydllVCi9PcmVZRjFmNEJPVzZOTEE2MUl4RjZJSWpvODNXWW5uczdDcU5UNkNnMTFRNmwrMU04aG5zV2hQWVdtY0JRVDQKNGswaWx4dkY5Mk5rMjdreE9ycVg1MmpDZUpNcTVuWnQvZ0JjeTRvOTFmQ1NnWGpCN0oxUGl1Qkp0S25adDVPUQpINFhSY2hLT09KekZLV3FEdTVGeE8zM05janBPL05NKzhVM0YwWGI1UHowVWhvNlZVK2x6RWhuMHdrd1hkb0s4Cmk5a0RqNnRWTnFDZUl3cnlzZDdOQmNDWEc4Tlp0NFBJWXZrRmxXK1N3RmFKWW9RU3RrYldGTFVna2RJT1Y4dGwKUlJtWmY4MDRTUEwwNnU1eDZtT3d3amtHZmxyMTE4ZXdlNTR0NFpWY3YzNXZBc01KajZhaUNqMlVIMWFKVHJTVgpiN3pGVk5ROGhJbGVxeTMzckhlOGtUdDRiOU1tQm5PL0VEUzNFZ1NIcXdYc0luV3Q5WFJhUnlXK0hpbEIycWdCCjJMMFRLb1JRVlljUnRDWE9aN3BIdlljem1vOENBd0VBQWFOQ01FQXdEZ1lEVlIwUEFRSC9CQVFEQWdJRU1BOEcKQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGSWxNdG40ajJYeEM2ZSszMFpWMy94U09sbWtnTUEwRwpDU3FHU0liM0RRRUJDd1VBQTRJQmdRQk1RenRHYmFiV1REOEpuNG0wRVhvM1FDK2hLZG5rTTZaWDFzeWRpL2ZyCjRtZ2oxZUJNVVJpNnlueWhoU1VTUTRkNzgySmo4dXFOS2xHV0Irb1ZBQml4MjcrWWVhL0FZQTRDYkdybDRZRmEKWUJIdkovWDdLQmZRTktTRWlVRXJLaExYZ1ZhajBQUUJtVHhxcmVHcUFkMnRubjc0YXZKQXozbm1ZUWd0Qi9WUQo5cys0bU44VHBqR2tPT01oTWVwNUQzUElVMWlEK0ZyWHVLNlFOS2U1SXAyWU1OVzA1cTNZZEg0bVlGSlJVUDJSCk9ZOEsyc3R3T2k5NDZzb1VmOUxrY1NKZmROck8rQWVBTDBsM2syeVFIUzJJZHFNSExKck5lNmFnQ3AvL09PTHUKQXBvRllRMkRiVG83ZGZCUUYxOGh6RUpaMndrWWZNa05zOWR4UURGeEE3U1hiNVNkZ3FZT2FiRXRTQlJScGhIKwo2WHBQR0RTcEUrenRsR0EvU2FWRXM1ajd6ZEdPL1ZmZWRGT2pSUkpTNFd1bUpZSjYzRkd5RFZpb0Q2andOVlh0CjlTTnlJUXhCdVdsWVExSEZqbzlINThHMjFCQmtDNFA5RmdvZ1VqdmlkWDlFZDZFbTduRHcxUnE1WVNuOFlGWFMKQU5VbzBEQVZIak01VDNQM2NyT2dpNmM9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K" -> null
+
+          - client_certificate_config {
+              - issue_client_certificate = false -> null
+            }
+        }
+
+      - monitoring_config {
+          - enable_components = [
+              - "SYSTEM_COMPONENTS",
+            ] -> null
+
+          - managed_prometheus {
+              - enabled = true -> null
+            }
+        }
+
+      - network_policy {
+          - enabled  = false -> null
+          - provider = "PROVIDER_UNSPECIFIED" -> null
+        }
+
+      - node_config {
+          - disk_size_gb      = 100 -> null
+          - disk_type         = "pd-balanced" -> null
+          - guest_accelerator = [] -> null
+          - image_type        = "COS_CONTAINERD" -> null
+          - labels            = {
+              - "env" = "rajani-terraform-gke"
+            } -> null
+          - local_ssd_count   = 0 -> null
+          - logging_variant   = "DEFAULT" -> null
+          - machine_type      = "n1-standard-1" -> null
+          - metadata          = {
+              - "disable-legacy-endpoints" = "true"
+            } -> null
+          - oauth_scopes      = [
+              - "https://www.googleapis.com/auth/logging.write",
+              - "https://www.googleapis.com/auth/monitoring",
+            ] -> null
+          - preemptible       = false -> null
+          - resource_labels   = {} -> null
+          - service_account   = "default" -> null
+          - spot              = false -> null
+          - tags              = [
+              - "gke-node",
+              - "rajani-terraform-gke-gke",
+            ] -> null
+          - taint             = [] -> null
+
+          - shielded_instance_config {
+              - enable_integrity_monitoring = true -> null
+              - enable_secure_boot          = false -> null
+            }
+        }
+
+      - node_pool {
+          - initial_node_count          = 2 -> null
+          - instance_group_urls         = [
+              - "https://www.googleapis.com/compute/v1/projects/rajani-terraform-gke/zones/us-central1-a/instanceGroupManagers/gke-rajani-terraform-rajani-terraform-2f6156d9-grp",
+            ] -> null
+          - managed_instance_group_urls = [
+              - "https://www.googleapis.com/compute/v1/projects/rajani-terraform-gke/zones/us-central1-a/instanceGroups/gke-rajani-terraform-rajani-terraform-2f6156d9-grp",
+            ] -> null
+          - max_pods_per_node           = 0 -> null
+          - name                        = "rajani-terraform-gke-gke" -> null
+          - node_count                  = 2 -> null
+          - node_locations              = [
+              - "us-central1-a",
+            ] -> null
+          - version                     = "1.27.4-gke.900" -> null
+
+          - management {
+              - auto_repair  = true -> null
+              - auto_upgrade = true -> null
+            }
+
+          - network_config {
+              - create_pod_range     = false -> null
+              - enable_private_nodes = false -> null
+            }
+
+          - node_config {
+              - disk_size_gb      = 100 -> null
+              - disk_type         = "pd-balanced" -> null
+              - guest_accelerator = [] -> null
+              - image_type        = "COS_CONTAINERD" -> null
+              - labels            = {
+                  - "env" = "rajani-terraform-gke"
+                } -> null
+              - local_ssd_count   = 0 -> null
+              - logging_variant   = "DEFAULT" -> null
+              - machine_type      = "n1-standard-1" -> null
+              - metadata          = {
+                  - "disable-legacy-endpoints" = "true"
+                } -> null
+              - oauth_scopes      = [
+                  - "https://www.googleapis.com/auth/logging.write",
+                  - "https://www.googleapis.com/auth/monitoring",
+                ] -> null
+              - preemptible       = false -> null
+              - resource_labels   = {} -> null
+              - service_account   = "default" -> null
+              - spot              = false -> null
+              - tags              = [
+                  - "gke-node",
+                  - "rajani-terraform-gke-gke",
+                ] -> null
+              - taint             = [] -> null
+
+              - shielded_instance_config {
+                  - enable_integrity_monitoring = true -> null
+                  - enable_secure_boot          = false -> null
+                }
+            }
+
+          - upgrade_settings {
+              - max_surge       = 1 -> null
+              - max_unavailable = 0 -> null
+              - strategy        = "SURGE" -> null
+            }
+        }
+
+      - node_pool_defaults {
+          - node_config_defaults {
+              - logging_variant = "DEFAULT" -> null
+            }
+        }
+
+      - notification_config {
+          - pubsub {
+              - enabled = false -> null
+            }
+        }
+
+      - private_cluster_config {
+          - enable_private_endpoint = false -> null
+          - enable_private_nodes    = false -> null
+          - private_endpoint        = "10.10.0.2" -> null
+          - public_endpoint         = "34.135.124.120" -> null
+
+          - master_global_access_config {
+              - enabled = false -> null
+            }
+        }
+
+      - release_channel {
+          - channel = "REGULAR" -> null
+        }
+
+      - security_posture_config {
+          - mode               = "BASIC" -> null
+          - vulnerability_mode = "VULNERABILITY_MODE_UNSPECIFIED" -> null
+        }
+
+      - service_external_ips_config {
+          - enabled = false -> null
+        }
+    }
+
+  # google_container_node_pool.primary_nodes will be destroyed
+  - resource "google_container_node_pool" "primary_nodes" {
+      - cluster                     = "rajani-terraform-gke-gke" -> null
+      - id                          = "projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke/nodePools/rajani-terraform-gke-gke" -> null
+      - initial_node_count          = 2 -> null
+      - instance_group_urls         = [
+          - "https://www.googleapis.com/compute/v1/projects/rajani-terraform-gke/zones/us-central1-a/instanceGroupManagers/gke-rajani-terraform-rajani-terraform-2f6156d9-grp",
+        ] -> null
+      - location                    = "us-central1-a" -> null
+      - managed_instance_group_urls = [
+          - "https://www.googleapis.com/compute/v1/projects/rajani-terraform-gke/zones/us-central1-a/instanceGroups/gke-rajani-terraform-rajani-terraform-2f6156d9-grp",
+        ] -> null
+      - name                        = "rajani-terraform-gke-gke" -> null
+      - node_count                  = 2 -> null
+      - node_locations              = [
+          - "us-central1-a",
+        ] -> null
+      - project                     = "rajani-terraform-gke" -> null
+      - version                     = "1.27.4-gke.900" -> null
+
+      - management {
+          - auto_repair  = true -> null
+          - auto_upgrade = true -> null
+        }
+
+      - network_config {
+          - create_pod_range     = false -> null
+          - enable_private_nodes = false -> null
+        }
+
+      - node_config {
+          - disk_size_gb      = 100 -> null
+          - disk_type         = "pd-balanced" -> null
+          - guest_accelerator = [] -> null
+          - image_type        = "COS_CONTAINERD" -> null
+          - labels            = {
+              - "env" = "rajani-terraform-gke"
+            } -> null
+          - local_ssd_count   = 0 -> null
+          - logging_variant   = "DEFAULT" -> null
+          - machine_type      = "n1-standard-1" -> null
+          - metadata          = {
+              - "disable-legacy-endpoints" = "true"
+            } -> null
+          - oauth_scopes      = [
+              - "https://www.googleapis.com/auth/logging.write",
+              - "https://www.googleapis.com/auth/monitoring",
+            ] -> null
+          - preemptible       = false -> null
+          - resource_labels   = {} -> null
+          - service_account   = "default" -> null
+          - spot              = false -> null
+          - tags              = [
+              - "gke-node",
+              - "rajani-terraform-gke-gke",
+            ] -> null
+          - taint             = [] -> null
+
+          - shielded_instance_config {
+              - enable_integrity_monitoring = true -> null
+              - enable_secure_boot          = false -> null
+            }
+        }
+
+      - upgrade_settings {
+          - max_surge       = 1 -> null
+          - max_unavailable = 0 -> null
+          - strategy        = "SURGE" -> null
+        }
+    }
+
+Plan: 0 to add, 0 to change, 4 to destroy.
+
+Changes to Outputs:
+  - kubernetes_cluster_host = "34.135.124.120" -> null
+  - kubernetes_cluster_name = "rajani-terraform-gke-gke" -> null
+  - project_id              = "rajani-terraform-gke" -> null
+  - region                  = "us-central1" -> null
+
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+google_container_node_pool.primary_nodes: Destroying... [id=projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke/nodePools/rajani-terraform-gke-gke]
+google_container_node_pool.primary_nodes: Still destroying... [id=projects/rajani-terraform-gke/locations...gke/nodePools/rajani-terraform-gke-gke, 10s elapsed]
+google_container_node_pool.primary_nodes: Still destroying... [id=projects/rajani-terraform-gke/locations...gke/nodePools/rajani-terraform-gke-gke, 20s elapsed]
+google_container_node_pool.primary_nodes: Still destroying... [id=projects/rajani-terraform-gke/locations...gke/nodePools/rajani-terraform-gke-gke, 30s elapsed]
+google_container_node_pool.primary_nodes: Still destroying... [id=projects/rajani-terraform-gke/locations...gke/nodePools/rajani-terraform-gke-gke, 40s elapsed]
+google_container_node_pool.primary_nodes: Still destroying... [id=projects/rajani-terraform-gke/locations...gke/nodePools/rajani-terraform-gke-gke, 50s elapsed]
+google_container_node_pool.primary_nodes: Still destroying... [id=projects/rajani-terraform-gke/locations...gke/nodePools/rajani-terraform-gke-gke, 1m0s elapsed]
+google_container_node_pool.primary_nodes: Still destroying... [id=projects/rajani-terraform-gke/locations...gke/nodePools/rajani-terraform-gke-gke, 1m10s elapsed]
+google_container_node_pool.primary_nodes: Still destroying... [id=projects/rajani-terraform-gke/locations...gke/nodePools/rajani-terraform-gke-gke, 1m20s elapsed]
+google_container_node_pool.primary_nodes: Still destroying... [id=projects/rajani-terraform-gke/locations...gke/nodePools/rajani-terraform-gke-gke, 1m30s elapsed]
+google_container_node_pool.primary_nodes: Still destroying... [id=projects/rajani-terraform-gke/locations...gke/nodePools/rajani-terraform-gke-gke, 1m40s elapsed]
+google_container_node_pool.primary_nodes: Still destroying... [id=projects/rajani-terraform-gke/locations...gke/nodePools/rajani-terraform-gke-gke, 1m50s elapsed]
+google_container_node_pool.primary_nodes: Still destroying... [id=projects/rajani-terraform-gke/locations...gke/nodePools/rajani-terraform-gke-gke, 2m0s elapsed]
+google_container_node_pool.primary_nodes: Destruction complete after 2m9s
+google_container_cluster.primary: Destroying... [id=projects/rajani-terraform-gke/locations/us-central1-a/clusters/rajani-terraform-gke-gke]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 10s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 20s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 30s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 40s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 50s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 1m0s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 1m10s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 1m20s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 1m30s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 1m40s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 1m50s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 2m0s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 2m10s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 2m20s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 2m30s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 2m40s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 2m50s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 3m0s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 3m10s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 3m20s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 3m30s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 3m40s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 3m50s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 4m0s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 4m10s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 4m20s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 4m30s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 4m40s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 4m50s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 5m0s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 5m10s elapsed]
+google_container_cluster.primary: Still destroying... [id=projects/rajani-terraform-gke/locations...l1-a/clusters/rajani-terraform-gke-gke, 5m20s elapsed]
+google_container_cluster.primary: Destruction complete after 5m20s
+google_compute_subnetwork.subnet: Destroying... [id=projects/rajani-terraform-gke/regions/us-central1/subnetworks/rajani-terraform-gke-subnet]
+google_compute_subnetwork.subnet: Still destroying... [id=projects/rajani-terraform-gke/regions/u...ubnetworks/rajani-terraform-gke-subnet, 10s elapsed]
+google_compute_subnetwork.subnet: Destruction complete after 15s
+google_compute_network.vpc: Destroying... [id=projects/rajani-terraform-gke/global/networks/rajani-terraform-gke-vpc]
+google_compute_network.vpc: Still destroying... [id=projects/rajani-terraform-gke/global/networks/rajani-terraform-gke-vpc, 10s elapsed]
+google_compute_network.vpc: Still destroying... [id=projects/rajani-terraform-gke/global/networks/rajani-terraform-gke-vpc, 20s elapsed]
+google_compute_network.vpc: Destruction complete after 22s
+
+Destroy complete! Resources: 4 destroyed.
+]
+
+***************************************************************************************************************************
+
+# gcloud projects # cleanup
+
+***************************************************************************************************************************
+
+% gcloud projects list
+[
+PROJECT_ID             NAME                  PROJECT_NUMBER
+advance-symbol-405910  My First Project      578357058053
+emerald-oxide-405910   My First Project      612707172154
+rajani-terraform-gke   rajani-terraform-gke  43362268641
+]
+
+
+$ gcloud container clusters list --project rajani-terraform-gke
+
+
+% gcloud alpha projects search --query="displayName=rajani*"
+[
+DISPLAY_NAME          NAME                   PARENT  STATE
+rajani-terraform-gke  projects/43362268641           ACTIVE
+rajani-gke-project    projects/624021776926          DELETE_REQUESTED
+]
+
+
+% gcloud alpha projects list
+[
+PROJECT_ID             NAME                  PROJECT_NUMBER
+advance-symbol-405910  My First Project      578357058053
+emerald-oxide-405910   My First Project      612707172154
+rajani-terraform-gke   rajani-terraform-gke  43362268641
+]
+
+
+% gcloud beta projects list
+[
+PROJECT_ID             NAME                  PROJECT_NUMBER
+advance-symbol-405910  My First Project      578357058053
+emerald-oxide-405910   My First Project      612707172154
+rajani-terraform-gke   rajani-terraform-gke  43362268641
+]
+
+
+% gcloud projects delete rajani-terraform-gke
+[
+Your project will be deleted.
+
+Do you want to continue (Y/n)?  Y
+
+Deleted [https://cloudresourcemanager.googleapis.com/v1/projects/rajani-terraform-gke].
+
+You can undo this operation for a limited period by running the command below.
+    $ gcloud projects undelete rajani-terraform-gke
+
+See https://cloud.google.com/resource-manager/docs/creating-managing-projects for information on shutting down projects.
+]
+
+
+% gcloud alpha projects search --query="state:DELETE_REQUESTED"
+[
+DISPLAY_NAME          NAME                   PARENT  STATE
+rajani-terraform-gke  projects/43362268641           DELETE_REQUESTED
+rajani-gke-project    projects/624021776926          DELETE_REQUESTED
+]
+
+
+% gcloud alpha projects describe rajani-terraform-gke
+[
+createTime: '2023-11-29T23:59:32.324Z'
+lifecycleState: DELETE_REQUESTED
+name: rajani-terraform-gke
+projectId: rajani-terraform-gke
+projectNumber: '43362268641'
+]
+
+
+% gcloud beta projects describe rajani-terraform-gke
+[
+createTime: '2023-11-29T23:59:32.324Z'
+lifecycleState: DELETE_REQUESTED
+name: rajani-terraform-gke
+projectId: rajani-terraform-gke
+projectNumber: '43362268641'
+]
+
+
+% gcloud projects list
+[
+PROJECT_ID             NAME              PROJECT_NUMBER
+advance-symbol-405910  My First Project  578357058053
+emerald-oxide-405910   My First Project  612707172154
+]
+
+
+% gcloud projects delete advance-symbol-405910
+[
+Your project will be deleted.
+
+Do you want to continue (Y/n)?  Y
+
+Deleted [https://cloudresourcemanager.googleapis.com/v1/projects/advance-symbol-405910].
+
+You can undo this operation for a limited period by running the command below.
+    $ gcloud projects undelete advance-symbol-405910
+
+See https://cloud.google.com/resource-manager/docs/creating-managing-projects for information on shutting down projects.
+]
+
+
+% gcloud projects delete emerald-oxide-405910
+[
+Your project will be deleted.
+
+Do you want to continue (Y/n)?  Y
+
+Deleted [https://cloudresourcemanager.googleapis.com/v1/projects/emerald-oxide-405910].
+
+You can undo this operation for a limited period by running the command below.
+    $ gcloud projects undelete emerald-oxide-405910
+
+See https://cloud.google.com/resource-manager/docs/creating-managing-projects for information on shutting down projects.
+]
+
+
+% gcloud alpha projects search --query="state:DELETE_REQUESTED"
+[
+DISPLAY_NAME          NAME                   PARENT  STATE
+rajani-terraform-gke  projects/43362268641           DELETE_REQUESTED
+rajani-gke-project    projects/624021776926          DELETE_REQUESTED
+My First Project      projects/612707172154          DELETE_REQUESTED
+My First Project      projects/578357058053          DELETE_REQUESTED
+]
+
+
+% gcloud projects list
+[
+Listed 0 items.
+]
+
+===========================================================================================================================
+
+# Cleanup # $HOME
+
+===========================================================================================================================
+
+% ls ~/.terraform.d
+% rm -rf ~/.terraform.d
+
+
+% ls ~/.kube
+% rm -rf ~/.kube
+
+
+% ls ~/.config
+% rm -rf ~/.config
+
+
+% ls ~/.boto
+% rm -rf ~/.boto
+
+===========================================================================================================================
+***************************************************************************************************************************
+###########################################################################################################################

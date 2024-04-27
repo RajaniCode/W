@@ -1,0 +1,138 @@
+Last login: Sat Nov 11 20:14:39 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % sqlplus Oracle_23c_Free_User/Oracle_23c_Free@//localhost:1521/FREEPDB1
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Sat Nov 11 21:30:39 2023
+Version 19.8.0.0.0
+
+Copyright (c) 1982, 2020, Oracle.  All rights reserved.
+
+Last Successful login time: Sat Nov 11 2023 21:27:02 +05:30
+
+Connected to:
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+
+SQL> SELECT * FROM v$version;
+
+BANNER
+--------------------------------------------------------------------------------
+BANNER_FULL
+--------------------------------------------------------------------------------
+BANNER_LEGACY
+--------------------------------------------------------------------------------
+    CON_ID
+----------
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+	 0
+
+BANNER
+--------------------------------------------------------------------------------
+BANNER_FULL
+--------------------------------------------------------------------------------
+BANNER_LEGACY
+--------------------------------------------------------------------------------
+    CON_ID
+----------
+
+
+SQL> SELECT user FROM DUAL;
+
+USER
+--------------------------------------------------------------------------------
+ORACLE_23C_FREE_USER
+
+SQL> SELECT sys_context('USERENV','INSTANCE_NAME') FROM DUAL;
+
+SYS_CONTEXT('USERENV','INSTANCE_NAME')
+--------------------------------------------------------------------------------
+FREE
+
+SQL> SELECT sys_context('USERENV', 'SID') FROM DUAL;
+
+SYS_CONTEXT('USERENV','SID')
+--------------------------------------------------------------------------------
+53
+
+SQL> SELECT sys_context('USERENV','DB_NAME') FROM DUAL;
+
+SYS_CONTEXT('USERENV','DB_NAME')
+--------------------------------------------------------------------------------
+FREEPDB1
+
+SQL> SELECT sys_context('USERENV','SERVICE_NAME') FROM DUAL;
+
+SYS_CONTEXT('USERENV','SERVICE_NAME')
+--------------------------------------------------------------------------------
+freepdb1
+
+SQL> SELECT ora_database_name FROM DUAL;
+
+ORA_DATABASE_NAME
+--------------------------------------------------------------------------------
+FREEPDB1
+
+SQL> SELECT * from global_name;
+
+GLOBAL_NAME
+--------------------------------------------------------------------------------
+FREEPDB1
+
+SQL> SELECT table_name FROM user_tables;
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+USERS
+
+SQL> SELECT * FROM users;
+
+	ID USERNAME					      LOGIN_DAT
+---------- -------------------------------------------------- ---------
+LOGIN_TIME
+----------
+CREATED_AT
+---------------------------------------------------------------------------
+UPDATED_AT
+---------------------------------------------------------------------------
+	 1 Foo						      06-NOV-16
+10:49:35
+06-NOV-16 10.49.35.000000 AM
+06-NOV-16 10.49.35.000000 AM
+
+
+SQL> SELECT * FROM users;
+
+	ID USERNAME					      LOGIN_DAT
+---------- -------------------------------------------------- ---------
+LOGIN_TIME
+----------
+CREATED_AT
+---------------------------------------------------------------------------
+UPDATED_AT
+---------------------------------------------------------------------------
+	 1 Foo						      06-NOV-16
+10:49:35
+06-NOV-16 10.49.35.000000 AM
+06-NOV-16 10.49.35.000000 AM
+
+
+	ID USERNAME					      LOGIN_DAT
+---------- -------------------------------------------------- ---------
+LOGIN_TIME
+----------
+CREATED_AT
+---------------------------------------------------------------------------
+UPDATED_AT
+---------------------------------------------------------------------------
+	 2 Bar						      06-NOV-16
+10:49:35
+06-NOV-16 10.49.35.000000 AM
+06-NOV-16 10.49.35.000000 AM
+
+
+SQL> exit
+Disconnected from Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.3.0.23.09
+rajaniapple@Rajanis-MacBook-Pro ~ % 

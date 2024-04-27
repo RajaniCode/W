@@ -1,0 +1,634 @@
+$ mvn -v
+
+$ mvn archetype:generate -DgroupId=com.sample -DartifactId=KeyGenerator -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
+$ mvn archetype:generate -DgroupId="com.example.exercise" -DartifactId="HibernateMySQLAnnotationSample" -DarchetypeArtifactId="maven-archetype-quickstart" -DinteractiveMode=false
+
+$ mvn archetype:generate -DarchetypeArtifactId=jersey-quickstart-grizzly2 -DarchetypeGroupId=org.glassfish.jersey.archetypes -DinteractiveMode=false -DgroupId=com.example.rest -DartifactId=jersey-service -Dpackage=com.example.rest -DarchetypeVersion=2.17
+
+$ mvn eclipse:eclipse
+
+$ mvn clean
+
+$ mvn package
+
+$ mvn clean package
+
+$ mvn test
+
+$ mvn clean test
+
+$ mvn -Dtest=AppTest test
+
+$ mvn -Dtest=AppTest#testApp test
+
+$ mvn test-compile
+
+$ mvn install
+
+$ mvn clean install
+
+$ mvn exec:java
+
+$ mvn spring-boot:run
+
+# Display the project dependencies
+$ mvn dependency:tree
+
+# Jetty
+$ mvn jetty:run
+# OR
+$ mvn -Djetty.port=8085 jetty:run
+
+$ mvn war:war # $ mvn jar:jar # $ mvn ear:ear
+
+[$ jar tvf target/spring-jetty-tomcat-app.war]
+
+[$ jar tvf target/KeyGenerator-1.0-SNAPSHOT.jar] # [$ jar tvf target/example.ear]
+
+[$ java -cp target/KeyGenerator-1.0-SNAPSHOT.jar com.sample.App]
+
+[$ jar tvf target/SpringSecurityOAuth2Example.war]
+
+[$ jar tvf target/myproject-0.0.1-SNAPSHOT.jar]
+
+[$ java -jar target/myproject-0.0.1-SNAPSHOT.jar]
+
+$ mvn clean package && java -jar target/gs-actuator-service-0.1.0.jar
+
+$ mvn -Dexec.mainClass=com.websystique.springmvc.SpringRestClient -Dexec.classpathScope=test test-compile exec:java
+
+$ mvn compile exec:java -Dexec.mainClass=course.BlogController
+
+
+#########################################################################################
+# mvn compile vs mvn package
+
+$ mvn compile
+
+$ java -cp target/classes org.checkerframework.example.MavenExample
+
+$ mvn package
+
+$ java -cp target/MavenExample-1.0-SNAPSHOT.jar org.checkerframework.example.MavenExample
+#########################################################################################
+
+
+# Java CLASSPATH and jar files
+[
+$ cd "E:\Working\SQL\HSQLDB\hsqldb-2.3.4\hsqldb"
+$ java -classpath lib/hsqldb.jar org.hsqldb.server.Server --database.0 file:hsqldb/demodb --dbname.0 testdb
+
+$ cd "E:\Working\SQL\HSQLDB\hsqldb-2.3.4\hsqldb\src"
+$ export CLASSPATH="E:\Working\SQL\HSQLDB\hsqldb-2.3.4\hsqldb\lib\hsqldb.jar;E:\Working\SQL\HSQLDB\hsqldb-2.3.4\hsqldb\lib\sqltool.jar;.;"
+$ java org.hsqldb.cmdline.SqlTool --sql "\dt" --rcFile E:/Working/SQL/HSQLDB/hsqldb-2.3.4/hsqldb/hsqldb/sqltool.rc personal
+$ java org.hsqldb.cmdline.SqlTool --rcFile E:/Working/SQL/HSQLDB/hsqldb-2.3.4/hsqldb/hsqldb/sqltool.rc personal
+# OR
+$ java -classpath /e/Working/SQL/HSQLDB/hsqldb-2.3.4/hsqldb/lib/hsqldb.jar:/e/Working/SQL/HSQLDB/hsqldb-2.3.4/hsqldb/lib/sqltool.jar org.hsqldb.cmdline.SqlTool --sql "\dt" --rcFile /e/Working/SQL/HSQLDB/hsqldb-2.3.4/hsqldb/hsqldb/sqltool.rc personal
+$ java -classpath /e/Working/SQL/HSQLDB/hsqldb-2.3.4/hsqldb/lib/hsqldb.jar:/e/Working/SQL/HSQLDB/hsqldb-2.3.4/hsqldb/lib/sqltool.jar org.hsqldb.cmdline.SqlTool --rcFile /e/Working/SQL/HSQLDB/hsqldb-2.3.4/hsqldb/hsqldb/sqltool.rc personal
+]
+
+
+# Java # Working-Directory-Classpath
+cd "E:\Working\Java\Working-Directory-Classpath"
+
+[
+mkdir -p "E:\Working\Java\Working-Directory-Classpath\classes"
+
+javac -d "E:\Working\Java\Working-Directory-Classpath\classes" "E:\Working\Java\Working-Directory-Classpath\src\com\greek\Omega.java"
+
+java -cp "E:\Working\Java\Working-Directory-Classpath\classes" Omega
+
+rm -rf "E:\Working\Java\Working-Directory-Classpath\classes"
+
+# OR
+
+mkdir -p "classes"
+
+javac -d "classes" "src\com\greek\Omega.java"
+
+java -cp "classes" Omega
+
+rm -rf "classes"
+]
+
+mkdir -p classes
+
+javac -d classes src/com/greek/Omega.java
+
+java -cp classes Omega
+
+rm -rf classes
+
+# OR
+
+javac src/com/greek/Omega.java
+
+java -cp src/com/greek Omega
+
+
+# Java # Working-Directory-Package-Classpath
+cd "E:\Working\Java\Working-Directory-Package-Classpath"
+
+[
+mkdir -p "E:\Working\Java\Working-Directory-Package-Classpath\classes"
+
+javac -d "E:\Working\Java\Working-Directory-Package-Classpath\classes" "E:\Working\Java\Working-Directory-Package-Classpath\src\com\greek\Omega.java"
+
+java -cp "E:\Working\Java\Working-Directory-Package-Classpath\classes" com.greek.Omega
+
+rm -rf "E:\Working\Java\Working-Directory-Package-Classpath\classes"
+
+# OR
+
+mkdir -p "classes"
+
+javac -d "classes" "src\com\greek\Omega.java"
+
+java -cp "classes" com.greek.Omega
+
+rm -rf "classes"
+]
+
+mkdir -p classes
+
+javac -d classes src/com/greek/Omega.java
+
+java -cp classes com.greek.Omega
+
+rm -rf classes
+
+# OR
+
+javac src/com/greek/Omega.java
+
+java -cp src com.greek.Omega
+
+
+# Java# Working-Directory-Package-Classpath-Jar
+cd "E:\Working\Java\Working-Directory-Package-Classpath-Jar"
+
+[
+export CLASSPATH="E:\Working\Java\Working-Directory-Package-Classpath-Jar\mysql-connector-java\mysql-connector-java-5.1.39-bin.jar;.;"
+
+echo $CLASSPATH
+]
+
+[
+mkdir -p "E:\Working\Java\Working-Directory-Package-Classpath-Jar\classes"
+
+javac -d "E:\Working\Java\Working-Directory-Package-Classpath-Jar\classes" "E:\Working\Java\Working-Directory-Package-Classpath-Jar\src\com\greek\Omega.java"
+
+java -cp "E:\Working\Java\Working-Directory-Package-Classpath-Jar\classes;E:\Working\Java\Working-Directory-Package-Classpath-Jar\mysql-connector-java\mysql-connector-java-5.1.39-bin.jar;.;" com.greek.Omega
+
+rm -rf "E:\Working\Java\Working-Directory-Package-Classpath-Jar\classes"
+
+# OR
+
+mkdir -p "classes"
+
+javac -d "classes" "src\com\greek\Omega.java"
+
+java -cp "classes;E:\Working\Java\Working-Directory-Package-Classpath-Jar\mysql-connector-java\mysql-connector-java-5.1.39-bin.jar;.;" com.greek.Omega
+
+rm -rf "classes"
+]
+
+mkdir -p classes
+
+javac -d classes src/com/greek/Omega.java
+
+java -cp "classes;E:\Working\Java\Working-Directory-Package-Classpath-Jar\mysql-connector-java\mysql-connector-java-5.1.39-bin.jar;.;" com.greek.Omega
+
+rm -rf classes
+
+# OR
+
+javac src/com/greek/Omega.java
+
+java -cp "src;E:\Working\Java\Working-Directory-Package-Classpath-Jar\mysql-connector-java\mysql-connector-java-5.1.39-bin.jar;.;" com.greek.Omega
+
+
+# Jar
+
+$ javac Program.java
+
+$ jar cvf program.jar Program.class
+added manifest
+adding: Program.class(in = 421) (out= 293)(deflated 30%)
+
+$ jar tf program.jar
+META-INF/
+META-INF/MANIFEST.MF
+Program.class
+
+[
+> del Program.class
+]
+
+$ rm -rf Program.class
+
+$ jar xvf program.jar
+  created: META-INF/
+ inflated: META-INF/MANIFEST.MF
+ inflated: Program.class
+
+$ ls Program.class
+Program.class
+
+[
+> type META-INF\MANIFEST.MF
+]
+
+$ unzip -q -c program.jar META-INF/MANIFEST.MF 
+[
+-q will suppress verbose output from the unzip program
+-c will extract to stdout
+$ unzip -q -c program.jar META-INF/MANIFEST.MF > test
+]
+
+$ jar cfm program.jar META-INF/MANIFEST.MF Program.class
+
+$ jar cfe program.jar Program Program.class
+
+$ java -jar program.jar
+
+
+
+
+# Java Maven ArchetypeQuickstart
+
+$ java -version
+
+$ mvn -version
+
+$ cd "E:\Working\Java\Maven\Example\Maven-Archetype-Quickstart"
+
+[
+# Interactive
+$ mvn archetype:generate
+[# Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): 944:] org.apache.maven.archetypes:maven-archetype-quickstart
+[# 
+Choose archetype:
+1: remote -> org.apache.maven.archetypes:maven-archetype-quickstart (An archetype which contains a sample Maven project.)
+]
+[# Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): 1:] 1
+[# 
+Choose org.apache.maven.archetypes:maven-archetype-quickstart version:]
+1: 1.0-alpha-1
+2: 1.0-alpha-2
+3: 1.0-alpha-3
+4: 1.0-alpha-4
+5: 1.0
+6: 1.1
+Choose a number: 6:] 6
+[#
+Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/archetypes/maven-archetype-quickstart/1.1/maven-archetype-quickstart-1.1.pom
+Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/archetypes/maven-archetype-quickstart/1.1/maven-archetype-quickstart-1.1.pom (2 KB at 0.6 KB/sec)
+Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/archetypes/maven-archetype-bundles/4/maven-archetype-bundles-4.pom
+Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/archetypes/maven-archetype-bundles/4/maven-archetype-bundles-4.pom (4 KB at 5.8 KB/sec)
+Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/archetype/maven-archetype/2.0-alpha-5/maven-archetype-2.0-alpha-5.pom
+Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/archetype/maven-archetype/2.0-alpha-5/maven-archetype-2.0-alpha-5.pom (9 KB at 13.2 KB/sec)
+Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/archetypes/maven-archetype-quickstart/1.1/maven-archetype-quickstart-1.1.jar
+Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/archetypes/maven-archetype-quickstart/1.1/maven-archetype-quickstart-1.1.jar (7 KB at 8.8 KB/sec)
+]
+[# Define value for property 'groupId':] com.sample
+[# Define value for property 'artifactId':] playground-project
+[# Define value for property 'version' 1.0-SNAPSHOT: :] 1.0-SNAPSHOT
+[# Define value for property 'package' com.sample: :] com.sample
+[# 
+Confirm properties configuration:
+groupId: com.sample
+artifactId: playground-project
+version: 1.0-SNAPSHOT
+package: com.sample
+ Y: :] Y
+
+# Non interactive
+$ mvn archetype:generate -B \
+    -DarchetypeGroupId=org.apache.maven.archetypes \
+    -DarchetypeArtifactId=maven-archetype-quickstart \
+    -DarchetypeVersion=1.1 \
+    -DgroupId=com.sample \
+    -DartifactId=playground-project \
+    -Dversion=1.0-SNAPSHOT \
+    -Dpackage=com.sample
+
+# playground-project
+  |
+  |`-src
+  | |`--main
+  | | `---java
+  | |  `----com
+  | |   `-----sample
+  | |    `------App.java
+  | |`--test
+  | | `---java
+  | |  `----com
+  | |   `-----sample
+  | |    `------AppTest.java
+   `-pom.xml
+
+$ cd playground-project
+
+$ mvn eclipse:eclipse
+
+$ mvn package
+
+# playground-project
+  |
+  |`-src
+  | |`--main
+  | | `---java
+  | |  `----com
+  | |   `-----sample
+  | |    `------App.java
+  | |`--test
+  | | `---java
+  | |  `----com
+  | |   `-----sample
+  | |    `------AppTest.java
+  |`-target
+  | |`-classes
+  | | `--com
+  | |  `----sample
+  | |`-maven-archiver
+  | | `--pom.properties
+  | |`-maven-status
+  | | `--maven-compiler-plugin
+  | |  `---compile
+  | |  `-----default-compile
+  | |   `------createdFiles.lst
+  | |   `------inputFiles.lst
+  | |  `---testCompile
+  | |  `-----default-testCompile
+  | |   `------createdFiles.lst
+  | |   `------inputFiles.lst
+  | |`-surefire-reports
+  | |  `--com.sample.AppTest.txt
+  | |  `--TEST-com.sample.AppTest.xml
+  | |`-test-classes
+  | | `--com
+  | |  `----sample
+  | |  `-----AppTest.class
+  | |`-playground-project-1.0-SNAPSHOT.jar
+  |`-.classpath
+  |`-.project
+   `-pom.xml
+
+# Note
+[
+# The following will not work
+$ mvn java:compile
+
+$ mvn java:run -DmainClass=com.sample.App
+]
+
+$ java -cp target/playground-project-1.0-SNAPSHOT.jar com.sample.App
+
+$ mvn test
+
+$ mvn -Dtest=AppTest test
+
+$ mvn -Dtest=AppTest#testApp test
+
+########################################################################################################
+
+# pom.xml - Edit JUnit from 3.8.1 to 4.12, Add maven-enforcer-plugin 1.4.1, Java 1.8
+
+# Edit
+
+# JUnit 3.8.1
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+# JUnit 4.12
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+########################################################################################################
+
+# Add 
+
+# maven-enforcer-plugin 1.4.1, Java 1.8
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>1.4.1</version>
+        <executions>
+          <execution>
+            <id>enforce-java</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion>
+                  <version>1.8.0</version>
+                </requireJavaVersion>
+              </rules>    
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+########################################################################################################
+
+# Updated pom.xml
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.sample</groupId>
+  <artifactId>playground-project</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>playground-project</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>1.4.1</version>
+        <executions>
+          <execution>
+            <id>enforce-java</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion>
+                  <version>1.8.0</version>
+                </requireJavaVersion>
+              </rules>    
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+
+########################################################################################################
+
+$ mvn eclipse:eclipse
+
+########################################################################################################
+
+# AppTest.java, App.java - Edit
+
+# Edit AppTest.java
+
+    public void testApp()
+    {
+        String message = "Hello Wolrd!";
+        App obj = new App();
+        assertTrue(message == "Hello Wolrd!");
+        assertTrue(36 == obj.generateUniqueKey().length());
+    }
+
+########################################################################################################
+
+# Updated AppTest.java
+
+package com.sample;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+/**
+ * Unit test for simple App.
+ */
+public class AppTest 
+    extends TestCase
+{
+    /**
+     * Create the test case
+     *
+     * @param testName name of the test case
+     */
+    public AppTest( String testName )
+    {
+        super( testName );
+    }
+
+    /**
+     * @return the suite of tests being tested
+     */
+    public static Test suite()
+    {
+        return new TestSuite( AppTest.class );
+    }
+
+    /**
+     * Rigourous Test :-)
+     */
+    public void testApp()
+    {
+        String message = "Hello Wolrd!";
+        App obj = new App();
+        assertTrue(message == "Hello Wolrd!");
+        assertTrue(36 == obj.generateUniqueKey().length());
+    }
+}
+
+########################################################################################################
+
+# Edit App.java
+
+import java.util.UUID;
+
+    public static void main( String[] args )
+    {
+        System.out.println( "Hello World!" );
+        App obj = new App();
+        System.out.println("Unique ID : " + obj.generateUniqueKey());
+    }
+
+    public String generateUniqueKey() 
+    {
+        String id = UUID.randomUUID().toString();
+        return id;
+    }
+
+########################################################################################################
+
+# Updated App.java
+
+package com.sample;
+
+import java.util.UUID;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args )
+    {
+        System.out.println( "Hello World!" );
+        App obj = new App();
+        System.out.println("Unique ID : " + obj.generateUniqueKey());
+    }
+
+    public String generateUniqueKey() 
+    {
+        String id = UUID.randomUUID().toString();
+        return id;
+    }
+}
+
+########################################################################################################
+
+$ mvn eclipse:eclipse
+
+$ mvn package
+
+$ java -cp target/playground-project-1.0-SNAPSHOT.jar com.sample.App
+
+$ mvn test
+
+$ mvn -Dtest=AppTest test
+
+$ mvn -Dtest=AppTest#testApp test
+
+########################################################################################################

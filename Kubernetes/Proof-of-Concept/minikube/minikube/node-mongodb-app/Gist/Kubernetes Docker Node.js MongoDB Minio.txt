@@ -1,0 +1,2575 @@
+###########################################################################################################################
+
+Kubernetes Docker Node.js MongoDB Minio
+
+###########################################################################################################################
+
+# node-mongodb-app Version 1.0.0
+
+###########################################################################################################################
+
+% sw_vers`
+
+% arch
+
+% node -v
+
+% npm -v
+
+% pwd
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app
+
+% pwd
+
+% mkdir -p Version1.0.0
+
+% cd Version1.0.0
+
+% pwd
+
+
+% nano index.js
+[
+const path = require('path')
+const express = require('express')
+const { MongoClient } = require('mongodb')
+const multer = require('multer')
+const { marked } = require('marked')
+
+const app = express()
+const port = process.env.PORT || 3000
+const mongoURL = process.env.MONGO_URL || 'mongodb://localhost:27017/dev'
+const client = new MongoClient(mongoURL)
+
+async function initMongo() {
+  console.log('Initialising MongoDB...')
+  let success = false
+  while (!success) {
+    try {
+      await client.connect()
+      success = true
+    } catch {
+      console.log('Error connecting to MongoDB, retrying in 1 second')
+      await new Promise(resolve => setTimeout(resolve, 1000))
+    }
+  }
+  console.log('MongoDB initialised')
+  return client.db(client.s.options.dbName).collection('notes')
+}
+
+async function start() {
+  const db = await initMongo()
+
+  app.set('view engine', 'pug')
+  app.set('views', path.join(__dirname, 'views'))
+  app.use(express.static(path.join(__dirname, 'public')))
+  app.use(express.static(path.join(__dirname, '/images')))
+
+  app.get('/', async (req, res) => {
+    res.render('index', { notes: await retrieveNotes(db) })
+  })
+
+  app.post(
+    '/note',
+    multer({ dest: path.join(__dirname, 'public/uploads/') }).single('image'),
+    async (req, res) => {
+      if (!req.body.upload && req.body.description) {
+        await saveNote(db, { description: req.body.description })
+        res.redirect('/')
+      } else if (req.body.upload && req.file) {
+        const link = `/uploads/${encodeURIComponent(req.file.filename)}`
+        res.render('index', {
+          content: `${req.body.description} ![](${link})`,
+          notes: await retrieveNotes(db),
+        })
+      }
+    },
+  )
+
+  app.listen(port, () => {
+    console.log(`App listening on http://localhost:${port}`)
+  })
+}
+
+async function saveNote(db, note) {
+  await db.insertOne(note)
+}
+
+async function retrieveNotes(db) {
+  const notes = await db.find().toArray()
+  const sortedNotes = notes.reverse()
+  return sortedNotes.map(it => ({ ...it, description: marked(it.description) }))
+}
+
+start()
+]
+% cat index.js
+
+
+% mkdir -p views  
+
+    
+% nano views/index.pug
+[
+html
+  head
+    title= title
+    link(rel="stylesheet", href="tachyons.min.css")
+  body.ph3.pt0.pb4.mw7.center.sans-serif
+    h1.f2.mb0 #[img(src='/images/Node.png')] #[span.green N]ode.js #[img(src='/images/MongoDB.png')] #[span.green M]ongoDB 
+    <!-- img(src="https://avatars.githubusercontent.com/u/9950313?s=48&v=4") -->
+    // img(src='https://avatars.githubusercontent.com/u/45120?s=48&v=4')
+    p.f5.mt1.mb4.lh-copy A Node.js-MongoDB image upload app.
+    form(action="/note" method="POST" enctype="multipart/form-data")
+      ol.list.pl0
+        li.mv3
+          label.f6.b.db.mb2(for="image") Upload an image
+          input.f6.link.dim.br1.ba.b--black-20.ph3.pv2.mb2.dib.black.bg-white.pointer(type="file" name="image")
+          input.f6.link.dim.br1.ba.bw1.ph3.pv2.mb2.dib.black.bg-white.pointer.ml2(type="submit" value="Upload" name="upload")
+        li.mv3
+          label.f6.b.db.mb2(for="description") Write your content here
+          textarea.f4.db.border-box.hover-black.w-100.measure.ba.b--black-20.pa2.br2.mb2(rows="5" name="description") #{content || ''}
+          input.f6.link.dim.br1.ba.bw1.ph3.pv2.mb2.dib.black.bg-white.pointer(type="submit" value="Publish" name="publish")
+    if notes.length > 0
+      ul.list.pl0
+        p.f6.b.db.mb2 Notes
+        each note in notes
+          li.mv3.bb.bw2.b--light-yellow.bg-washed-yellow.ph4.pv2
+            p.measure!= note.description
+    else
+      p.lh-copy.f6 You don't have any notes yet.
+]
+% cat views/index.pug
+
+
+[
+% mkdir -p public
+]
+% curl -L https://raw.githubusercontent.com/tachyons-css/tachyons/master/css/tachyons.min.css
+% wget https://raw.githubusercontent.com/tachyons-css/tachyons/master/css/tachyons.min.css --directory-prefix=public
+% cat public/tachyons.min.css
+
+
+% curl --output Node.png "https://avatars.githubusercontent.com/u/9950313?s=48&v=4" --create-dirs --output-dir public/images
+% ls public/images/Node.png
+% curl --output MongoDB.png "https://avatars.githubusercontent.com/u/45120?s=48&v=4" --create-dirs --output-dir public/images
+% ls public/images/MongoDB.png
+
+
+# package name: (Version1.0.0):
+node-mongodb-app
+% npm init
+
+% cat package.json 
+
+% npm list --global
+% npm list
+
+% npm --version
+% npm update --global
+% npm upgrade --global
+% npm outdated --global
+
+[
+% npm install -g npm-add-script 
+]
+% npmAddScript -k start -v "node index.js"
+[
+% npmAddScript -k mongodb -v "mongod"
+]
+
+% npm run-script
+
+% cat package.json  
+
+% npm run-script
+
+% npm list --global
+% npm list
+
+% npm install express
+% npm install marked
+% npm install mongodb
+% npm install multer
+% npm install pug
+
+% npm list --global
+% npm list
+
+% cat package.json
+[
+{
+  "name": "node-mongodb-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "marked": "^9.1.5",
+    "mongodb": "^6.2.0",
+    "multer": "^1.4.5-lts.1",
+    "pug": "^3.0.2"
+  }
+}
+]
+
+
+[
+% npm run mongodb -- --dbpath /opt/homebrew/var/mongodb
+[
+throw new Error("unsupported architecture, ia32 and x64 are the only valid options");
+]
+% npm run start
+]
+% node index.js
+
+
+# In another terminal window
+[
+# % pgrep mongo # % pkill mongo
+# % pgrep mongod # % pkill mongod
+# % ps -A | grep mongod | awk '{print $1}' # kill <mongod pid>
+# % ps aux | grep -v grep | grep mongod # kill <mongod pid>
+# % ps aux | grep -v grep | grep mongod | awk '{print $2}' # kill <mongod pid>
+% ls /opt/homebrew/var/mongodb
+% ls /opt/homebrew/var/log/mongodb/mongo.log
+% mongod --dbpath /opt/homebrew/var/mongodb --logpath /opt/homebrew/var/log/mongodb/mongo.log --fork
+
+# % pgrep mongo # % pkill mongo
+# % pgrep mongod # % pkill mongod
+# % ps -A | grep mongod | awk '{print $1}' # kill <mongod pid>
+# % ps aux | grep -v grep | grep mongod # kill <mongod pid>
+# % ps aux | grep -v grep | grep mongod | awk '{print $2}' # kill <mongod pid>
+% ls /opt/homebrew/etc/mongod.conf
+% sudo nano /opt/homebrew/etc/mongod.conf
+% cat /opt/homebrew/etc/mongod.conf 
+% mongod --config /opt/homebrew/etc/mongod.conf --fork
+
+# MongoDB Shell % mongosh --version
+% mongosh
+]
+% brew services start mongodb-community
+[
+% brew services list
+% brew services stop mongodb-community
+% brew services restart mongodb-community
+]
+
+
+[
+http://localhost:3000/images/Node.png
+http://localhost:3000/images/MongoDB.png
+]
+http://localhost:3000/
+
+
+# Switch to the terminal where brew services start mongodb-community was run
+% mongosh
+test> db.version()
+
+# Current storage engine
+test> db.serverStatus().storageEngine
+
+# Configuration details of wiredTiger
+test> db.serverStatus().wiredTiger
+
+test> show databases
+test> show dbs
+test> db.getMongo().getDBNames()
+test> db.adminCommand('listDatabases')
+
+test> use dev
+dev> show tables
+dev> show collections
+dev> db.getCollectionNames()
+dev> db.notes.find()
+dev> db.notes.find({}).sort({_id:1}).limit(1).next()._id.getTimestamp()
+dev> for (var key in db.notes.findOne()) { print (key, typeof key) }
+
+/*
+test> var dbs = db.getMongo().getDBNames()
+for (var i in dbs) {
+    db = db.getMongo().getDB( dbs[i] );
+    if(db.getName() != "admin" && db.getName() != "config" && db.getName() != "local") {
+        print( "dropping db " + db.getName() );
+        db.dropDatabase();
+    }
+}
+*/
+
+dev> exit
+
+
+% ls ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Version1.0.0/public/uploads
+
+###########################################################################################################################
+
+# node-mongodb-app Version 1.0.0 # Docker # Dockerfile # docker run
+
+###########################################################################################################################
+
+# node:20.9-slim
+# https://hub.docker.com/layers/library/node/20.9-slim/images/sha256-5d7b108ace8af7f430e7704e411d4b1c31716de471e03e81afb3bbb18384eef2?context=repo&tab=vulnerabilities
+
+% sw_vers
+
+% arch
+
+% node -v
+
+% npm -v
+
+% pwd
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app
+
+% pwd
+
+% mkdir -p Docker/Version1.0.0
+
+% cp -r Version1.0.0/ Docker/Version1.0.0
+
+% cd Docker/Version1.0.0
+
+% pwd
+
+% ls public/uploads
+
+% rm -rf public/uploads
+
+
+% nano Dockerfile
+[
+FROM node:20.9-slim
+WORKDIR /usr/src/app
+COPY . .
+RUN npm install
+CMD [ "node", "index.js" ]
+]
+% cat Dockerfile
+
+% echo node_modules > .dockerignore
+% cat .dockerignore
+
+
+% docker version
+
+
+% docker build -t node-mongodb-app .
+
+
+[
+% docker save node-mongodb-app > node-mongodb-app.tar
+% ls node-mongodb-app.tar
+% tar -tf node-mongodb-app.tar
+* mv node-mongodb-app.tar ..
+]
+
+
+[
+% docker image ls
+% docker images
+]
+% docker image list
+
+
+# docker # network
+[
+% docker network ls
+]
+% docker network create node-mongodb-app-network
+[
+% docker network rm node-mongodb-app-network 
+]
+
+
+% docker run \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-app-network \
+  mongo
+
+
+# In another terminal window
+% docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  node-mongodb-app
+
+
+# In another terminal window
+% open http://localhost:3000
+[
+http://localhost:3000
+...
+A Node.js-MongoDB image upload app.
+...
+]
+
+
+# In another terminal window
+# container # mongo # shell
+% docker exec -it mongo bash
+root@44d2152f50af:/# mongosh
+test> show dbs
+test> exit
+root@44d2152f50af:/# exit
+
+
+# In another terminal window
+% docker stop node-mongodb-app mongo
+[      
+node-mongodb-app
+mongo
+]
+[
+% docker ps
+[
+CONTAINER ID   IMAGE              COMMAND                  CREATED              STATUS              PORTS                    NAMES
+4adf4e2f11cf   node-mongodb-app   "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:3000->3000/tcp   node-mongodb-app
+731e4925e9a9   mongo              "docker-entrypoint.s…"   2 minutes ago        Up 2 minutes        27017/tcp                mongo
+]
+
+% docker # stop # node-mongodb-app
+% docker stop 4adf4e2f11cf
+
+% docker # stop # mongo
+% docker stop 731e4925e9a9
+]
+
+
+# docker # remove # container(s)
+[
+% docker rm node-mongodb-app mongo
+]
+# docker # remove and un-tag image(s) # Local
+[
+% docker rmi images node-mongodb-app mongo
+]
+
+###########################################################################################################################
+
+# node-mongodb-app Version 1.0.0 # Docker Hub
+
+###########################################################################################################################
+
+[
+# Docker cleanup 
+# minikube cleanup
+]
+
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/Version1.0.0
+
+
+% docker version
+
+% docker build -t node-mongodb-app .
+[
+[
+% docker network ls
+]
+% docker network create node-mongodb-app-network
+[
+% docker network rm node-mongodb-app-network 
+]
+
+% docker run \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-app-network \
+  mongo
+
+# In another terminal window
+% docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  node-mongodb-app
+
+http://localhost:3000
+
+# In another terminal window
+% docker stop node-mongodb-app mongo
+]
+
+
+% docker login
+
+
+% docker-credential-$(
+  jq -r .credsStore ~/.docker/config.json
+) list | jq -r '
+  . |
+    to_entries[] |
+    select(
+      .key | 
+      contains("docker.io")
+    ) |
+    last(.value)
+'
+
+
+% docker tag node-mongodb-app dockerrajani/node-mongodb-app:version1.0.0
+[
+% docker rmi dockerrajani/node-mongodb-app:version1.0.0
+]
+
+
+% docker push dockerrajani/node-mongodb-app:version1.0.0
+
+
+https://hub.docker.com/repository/docker/dockerrajani/node-mongodb-app
+
+
+[
+# Docker cleanup 
+# minikube cleanup
+]
+
+
+% docker version
+
+
+[
+% docker network ls
+]
+% docker network create node-mongodb-app-network
+[
+% docker network rm node-mongodb-app-network 
+]
+
+% docker run \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-app-network \
+  mongo
+
+# In another terminal window
+% docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  dockerrajani/node-mongodb-app:version1.0.0
+
+http://localhost:3000
+Choose File: Apache Hadoop Stack.png Upload
+
+# In another terminal window
+% docker exec -it mongo bash
+root@25da295e54af:/# mongosh
+[
+test> show dbs
+admin   40.00 KiB
+config  12.00 KiB
+local   40.00 KiB
+test> show dbs
+admin   40.00 KiB
+config  60.00 KiB
+dev     40.00 KiB
+local   40.00 KiB
+test> use dev
+switched to db dev
+dev> show collections
+notes
+dev> db.notes.find()
+[
+  {
+    _id: ObjectId("654b928cda8d9b72671bfa8b"),
+    description: 'Apache Hadoop Ecosystem\r\n' +
+      '\r\n' +
+      ' ![](/uploads/cf0f89b4f875afa115c32321e35ab0e9)'
+  }
+]
+dev> exit
+root@25da295e54af:/# exit
+exit
+]
+
+
+# In another terminal window
+% docker stop node-mongodb-app mongo
+node-mongodb-app
+mongo
+
+
+# Local
+% docker rmi dockerrajani/node-mongodb-app:version1.0.0 mongo
+
+
+https://hub.docker.com/repository/docker/dockerrajani/node-mongodb-app
+
+###########################################################################################################################
+
+# node-mongodb-app Version 1.0.0 # Docker Hub # pull mongo # tag mongo dockerrajani/mongo:version1.0.0
+
+###########################################################################################################################
+
+[
+# Docker cleanup 
+# minikube cleanup
+]
+
+
+% docker version
+
+
+% docker login
+
+
+% docker pull mongo
+
+
+% docker image list
+[
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+mongo        latest    8b10e7ef0208   3 weeks ago   712MB
+]
+
+% docker tag mongo dockerrajani/mongo:version1.0.0
+
+
+% docker image list
+[
+REPOSITORY           TAG            IMAGE ID       CREATED       SIZE
+dockerrajani/mongo   version1.0.0   8b10e7ef0208   3 weeks ago   712MB
+mongo                latest         8b10e7ef0208   3 weeks ago   712MB
+]
+
+
+% docker push dockerrajani/mongo:version1.0.0
+
+
+https://hub.docker.com/repository/docker/dockerrajani/mongo
+
+
+[
+% docker network ls
+]
+% docker network create node-mongodb-app-network
+[
+% docker network rm node-mongodb-app-network 
+]
+% docker run \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-app-network \
+  dockerrajani/mongo:version1.0.0
+
+[
+% docker logs mongo --follow
+
+# volume
+% docker run -d \
+    -p 27017:27017 \
+    --name=mongo \
+    --volume=mongo-data-volume:/data/db \
+    dockerrajani/mongo:version1.0.0
+
+% docker volume ls
+
+# config
+% docker run -d \
+    --name=mongo \
+    --volume=mongo-data-volume:/data/db \
+    --volume ./mongo.conf:/etc/mongo/mongo.conf \
+    dockerrajani/mongo:version1.0.0 --config /etc/mongo/mongo.conf
+
+# evv # MONGODB_INITDB_ROOT_USERNAME # MONGODB_INITDB_ROOT_PASSWORD # $MongoDB@7.0.2
+% docker run -d \
+    --name=mongo \
+    --volume=mongo-data-volume:/data/db \
+    --env=MONGODB_INITDB_ROOT_USERNAME=docker-rajani-mongo \
+    --env=MONGODB_INITDB_ROOT_PASSWORD=$MongoDB@7.0.2 \
+    dockerrajani/mongo:version1.0.0 --config /etc/mongo/mongo.conf
+
+# evv # MONGODB_INITDB_ROOT_USERNAME # MONGODB_INITDB_ROOT_PASSWORD_FILE
+% docker run -d \
+    --name=mongo \
+    --volume=mongo-data-volume:/data/db \
+    --env=MONGODB_INITDB_ROOT_USERNAME=docker-rajani-mongo \
+    --env=MONGODB_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo-root-pw \
+    dockerrajani/mongo:version1.0.0 --config /etc/mongo/mongo.conf
+]
+
+
+# container # mongo # shell
+% docker exec -it mongo bash
+root@44d2152f50af:/# mongosh
+test> show dbs
+test> exit
+root@44d2152f50af:/# exit
+
+
+# In another terminal window
+% ps aux | grep -v grep | grep mongod # kill <mongod pid>
+
+
+# In another terminal window
+% docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  dockerrajani/node-mongodb-app:version1.0.0
+
+http://localhost:3000
+# Upload image
+
+# In another terminal window
+% docker exec -it mongo bash
+root@44d2152f50af:/# mongosh
+# Before image upload
+[
+test> show dbs
+admin   40.00 KiB
+config  12.00 KiB
+local   40.00 KiB
+]
+# After image upload
+test> show dbs 
+admin   40.00 KiB
+config  12.00 KiB
+dev     40.00 KiB
+local   40.00 KiB
+test> use dev
+switched to db dev
+dev> show collections
+notes
+dev> db.notes.find()
+[
+  {
+    _id: ObjectId("65484baaff7984a73f3d9352"),
+    description: 'Apache Hadoop Ecosystem ![](/uploads/2083c9ed23b9015361b59476491dc90c)'
+  }
+]
+dev> exit
+root@2d3af5bd7f83:/# exit
+
+
+# In another terminal window
+% docker stop node-mongodb-app mongo
+node-mongodb-app
+mongo
+
+
+# Local
+% docker rmi dockerrajani/node-mongodb-app:version1.0.0 dockerrajani/mongo:version1.0.0
+% docker rmi mongo
+
+###########################################################################################################################
+
+# node-mongodb-app Version 1.0.0 # Docker Hub # pull minio # tag minio dockerrajani/minio:version1.0.0
+
+###########################################################################################################################
+
+[
+# Docker cleanup 
+# minikube cleanup
+]
+
+
+% docker version
+
+
+% docker login
+
+
+% docker pull quay.io/minio/minio:latest
+
+
+% docker image list
+[
+REPOSITORY            TAG       IMAGE ID       CREATED       SIZE
+quay.io/minio/minio   latest    8c6e49e2e9c7   3 hours ago   143MB
+]
+
+% docker tag quay.io/minio/minio dockerrajani/minio:version1.0.0
+
+
+% docker image list
+[
+REPOSITORY            TAG            IMAGE ID       CREATED       SIZE
+dockerrajani/minio    version1.0.0   8c6e49e2e9c7   3 hours ago   143MB
+quay.io/minio/minio   latest         8c6e49e2e9c7   3 hours ago   143MB
+]
+
+
+% docker push dockerrajani/minio:version1.0.0
+
+
+https://hub.docker.com/repository/docker/dockerrajani/minio
+
+###########################################################################################################################
+
+# Docker Hub # Delete a repository
+
+###########################################################################################################################
+
+# Warning: Deleting a repository deletes all the images it contains and its build settings. This action can't be undone.
+
+Navigate to your repository.
+Select the Settings tab.
+Select Delete repository.
+Enter the name of your repository to confirm.
+
+###########################################################################################################################
+
+# node-mongodb-app Version 1.0.0 # Kubernetes
+
+###########################################################################################################################
+
+[
+# Docker cleanup 
+# minikube cleanup
+]
+
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker
+
+
+% docker version
+
+
+% minikube version
+
+
+% minikube start
+
+
+% minikube ip
+
+
+% minikube profile list
+
+
+# profile # minikube
+% minikube service list -p minikube
+
+
+% kubectl version
+
+
+% kubectl config view
+
+
+[
+% minikube image list --format table
+
+% docker ps
+]
+
+% mkdir -p kube
+
+
+% nano kube/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always.yaml # image: dockerrajani/node-mongodb-app:version1.0.0 # imagePullPolicy: Always     
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-mongodb-app-service
+spec:
+  selector:
+    app: node-mongodb-app
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-mongodb-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-mongodb-app
+  template:
+    metadata:
+      labels:
+        app: node-mongodb-app
+    spec:
+      containers:
+        - name: node-mongodb-app-container
+          image: dockerrajani/node-mongodb-app:version1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo-service:27017/dev
+]
+% cat kube/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always.yaml
+[
+% kubectl apply -f kube/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always.yaml
+]
+[
+% kubectl delete -f kube/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always.yaml
+]
+
+
+% nano kube/cluster-ip-service-mongo-imagepull-always.yaml # image: dockerrajani/mongo:version1.0.0 # imagePullPolicy: Always
+[
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo-container
+          image: dockerrajani/mongo:version1.0.0
+          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mongo-persistentvolumeclaim
+]
+% cat kube/cluster-ip-service-mongo-imagepull-always.yaml
+[
+% kubectl apply -f kube/cluster-ip-service-mongo-imagepull-always.yaml
+]
+[
+% kubectl delete -f kube/cluster-ip-service-mongo-imagepull-always.yaml
+]
+
+
+% tree kube/
+
+
+% minikube status
+
+
+% kubectl apply -f kube
+[
+% kubectl delete -f kube
+]
+
+
+% kubectl get pods --watch
+
+
+[
+% minikube image list --format table
+
+% docker ps
+]
+
+
+% minikube service node-mongodb-app-service
+
+
+# In another terminal window
+% minikube service mongo-service
+
+
+# In another terminal window
+% mongosh --port <from mongo-service>
+
+###########################################################################################################################
+
+# node-mongodb-app Version 1.0.0 # imagePullPolicy: Never
+
+###########################################################################################################################
+***************************************************************************************************************************
+
+# 1 #
+[
+# % minikube image build -t node-mongodb-app . 
+]
+# 2 #
+[
+# % docker build -t node-mongodb-app . % minikube image load node-mongodb-app
+]
+# 3 #
+[
+# % eval $(minikube docker-env) % docker build -t node-mongodb-app .
+]
+
+***************************************************************************************************************************
+
+[
+# Docker cleanup 
+# minikube cleanup
+]
+
+             
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker
+
+
+% docker version
+
+
+% minikube version 
+
+
+% minikube start 
+
+
+% docker image list
+
+
+% minikube image ls --format table
+
+
+# 1 #
+[
+% mkdir -p DockerImageBuild
+
+% cp -r Version1.0.0/ DockerImageBuild/
+
+% cd DockerImageBuild
+
+[
+% chmod u=rwx,g=rx,o=rx public/images
+]
+% chmod 755 public/images
+
+% minikube image build -t node-mongodb-app .
+
+]
+# 2 #
+[
+% mkdir -p DockerImage
+
+% cp -r Version1.0.0/ DockerImage/
+
+% cd DockerImage
+
+% docker build -t node-mongodb-app .
+% minikube image load node-mongodb-app
+]
+# 3 #
+[
+% mkdir -p Dockerenv
+
+% cp -r Version1.0.0/ Dockerenv/
+
+% cd Dockerenv
+
+% eval $(minikube docker-env)
+
+% echo $DOCKER_TLS_VERIFY
+% echo $DOCKER_HOST
+% echo $DOCKER_CERT_PATH
+% echo $MINIKUBE_ACTIVE_DOCKERD
+
+% docker build -t node-mongodb-app .
+]
+
+
+% docker image list
+
+
+% minikube image ls --format table
+
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker
+													     																	     																	     		
+
+% nano kube-never/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-never.yaml # image: node-mongodb-app # imagePullPolicy: Never
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-mongodb-app-service
+spec:
+  selector:
+    app: node-mongodb-app
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-mongodb-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-mongodb-app
+  template:
+    metadata:
+      labels:
+        app: node-mongodb-app
+    spec:
+      containers:
+        - name: node-mongodb-app-container
+          image: node-mongodb-app
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo-service:27017/dev
+
+]
+% cat kube-never/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-never.yaml
+[
+% kubectl apply -f kube-never/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-never.yaml
+]
+[
+% kubectl delete -f kube-never/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-never.yaml
+]
+
+
+% cp kube/cluster-ip-service-mongo-imagepull-always.yaml kube-never/
+% cat kube-never/cluster-ip-service-mongo-imagepull-always.yaml
+[
+% kubectl apply -f kube-never/cluster-ip-service-mongo-imagepull-always.yaml
+]
+[
+% kubectl delete -f kube-never/cluster-ip-service-mongo-imagepull-always.yaml
+]
+
+
+% tree kube-never/
+
+
+% minikube status
+
+
+% kubectl apply -f kube
+[
+% kubectl delete -f kube
+]
+
+
+% kubectl get pods --watch
+
+
+% minikube service node-mongodb-app-service
+
+
+# In another terminal window
+% minikube service mongo-service
+
+
+# In another terminal window
+% mongosh --port <from mongo-service>
+
+***************************************************************************************************************************
+###########################################################################################################################
+
+# node-mongodb-app Version 2.0.0 # MinIO Object Storage for Kubernetes
+
+###########################################################################################################################
+
+[
+# Docker cleanup 
+# minikube cleanup
+]
+
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker
+
+
+% docker version
+
+
+% minikube version
+
+
+% minikube start
+
+
+% minikube ip
+
+
+% minikube profile list
+
+
+# profile # minikube
+% minikube service list -p minikube
+
+
+% kubectl version
+
+
+% kubectl config view
+
+
+% mkdir -p Version2.0.0
+
+
+% cd Version2.0.0
+
+
+% nano index.js
+[
+const path = require('path')
+const express = require('express')
+const { MongoClient } = require('mongodb')
+const multer = require('multer')
+const { marked } = require('marked')
+
+// minio
+const minio = require('minio')
+
+const app = express()
+const port = process.env.PORT || 3000
+const mongoURL = process.env.MONGO_URL || 'mongodb://localhost:27017/dev'
+const client = new MongoClient(mongoURL)
+
+// minio
+const minioHost = process.env.MINIO_HOST || 'localhost'
+const minioBucket = 'image-storage'
+
+async function initMongo() {
+  console.log('Initialising MongoDB...')
+  let success = false
+  while (!success) {
+    try {
+      await client.connect()
+      success = true
+    } catch {
+      console.log('Error connecting to MongoDB, retrying in 1 second')
+      await new Promise(resolve => setTimeout(resolve, 1000))
+    }
+  }
+  console.log('MongoDB initialised')
+  return client.db(client.s.options.dbName).collection('notes')
+}
+
+// minio
+async function initMinIO() {
+  console.log('Initialising MinIO...')
+  const client = new minio.Client({
+    endPoint: minioHost,
+    port: 9000,
+    useSSL: false,
+    accessKey: process.env.MINIO_ACCESS_KEY,
+    secretKey: process.env.MINIO_SECRET_KEY,
+  })
+  let success = false
+  while (!success) {
+    try {
+      if (!(await client.bucketExists(minioBucket))) {
+        await client.makeBucket(minioBucket)
+      }
+      success = true
+    } catch {
+      await new Promise(resolve => setTimeout(resolve, 1000))
+    }
+  }
+  console.log('MinIO initialised')
+  return client
+}
+
+async function start() {
+  const db = await initMongo()
+  
+  // minio
+  const minio = await initMinIO()
+
+  app.set('view engine', 'pug')
+  app.set('views', path.join(__dirname, 'views'))
+  app.use(express.static(path.join(__dirname, 'public')))
+  app.use(express.static(path.join(__dirname, '/images')))
+
+  app.get('/', async (req, res) => {
+    res.render('index', { notes: await retrieveNotes(db) })
+  })
+
+  app.post(
+    '/note',
+    
+    // minio
+    multer({ storage: multer.memoryStorage() }).single('image'),
+    
+    async (req, res) => {
+      if (!req.body.upload && req.body.description) {
+        await saveNote(db, { description: req.body.description })
+        res.redirect('/')
+      } else if (req.body.upload && req.file) {
+      
+        // minio
+        await minio.putObject(
+          minioBucket,
+          req.file.originalname,
+          req.file.buffer,
+        )
+        
+        // minio
+        const link = `/img/${encodeURIComponent(req.file.originalname)}`
+        
+        res.render('index', {
+          content: `${req.body.description} ![](${link})`,
+          notes: await retrieveNotes(db),
+        })
+      }
+    },
+  )
+
+  // minio
+  app.get('/img/:name', async (req, res) => {
+    const stream = await minio.getObject(
+      minioBucket,
+      decodeURIComponent(req.params.name),
+    )
+    stream.pipe(res)
+  })
+
+  app.listen(port, () => {
+    console.log(`App listening on http://localhost:${port}`)
+  })
+}
+
+async function saveNote(db, note) {
+  await db.insertOne(note)
+}
+
+async function retrieveNotes(db) {
+  const notes = await db.find().toArray()
+  const sortedNotes = notes.reverse()
+  return sortedNotes.map(it => ({ ...it, description: marked(it.description) }))
+}
+
+start()
+]
+% cat index.js
+
+
+[
+% mkdir -p public
+]
+% curl -L https://raw.githubusercontent.com/tachyons-css/tachyons/master/css/tachyons.min.css
+% wget https://raw.githubusercontent.com/tachyons-css/tachyons/master/css/tachyons.min.css --directory-prefix=public
+% cat public/tachyons.min.css
+
+
+% curl --output Node.png "https://avatars.githubusercontent.com/u/9950313?s=48&v=4" --create-dirs --output-dir public/images
+% ls public/images/Node.png
+% curl --output MongoDB.png "https://avatars.githubusercontent.com/u/45120?s=48&v=4" --create-dirs --output-dir public/images
+% ls public/images/MongoDB.png
+% curl --output Minio.png "https://avatars.githubusercontent.com/u/695951?s=48&v=4" --create-dirs --output-dir public/images
+% ls public/images/Minio.png
+
+
+% nano public/custom.style.css
+[
+.brick-red {
+  color: #c72b48
+}
+]
+% cat public/custom.style.css
+
+
+% mkdir -p views
+
+
+% nano views/index.pug
+[
+html
+  head
+    title= title
+    link(rel="stylesheet", href="tachyons.min.css")
+    link(rel="stylesheet", href="custom.style.css")
+  body.ph3.pt0.pb4.mw7.center.sans-serif
+    h1.f2.mb0 #[img(src='/images/Node.png')] #[span.green N]ode #[img(src='/images/MongoDB.png')] #[span.green M]ongoDB #[img(src='/images/Minio.png')] #[span.brick-red Minio]
+    <!-- img(src="https://avatars.githubusercontent.com/u/9950313?s=48&v=4") -->
+    // img(src='https://avatars.githubusercontent.com/u/45120?s=48&v=4')
+    // img(src='https://avatars.githubusercontent.com/u/695951?s=48&v=4')
+    p.f5.mt1.mb4.lh-copy A Node.js-MongoDB-Minio image upload app.
+    form(action="/note" method="POST" enctype="multipart/form-data")
+      ol.list.pl0
+        li.mv3
+          label.f6.b.db.mb2(for="image") Upload an image
+          input.f6.link.dim.br1.ba.b--black-20.ph3.pv2.mb2.dib.black.bg-white.pointer(type="file" name="image")
+          input.f6.link.dim.br1.ba.bw1.ph3.pv2.mb2.dib.black.bg-white.pointer.ml2(type="submit" value="Upload" name="upload")
+        li.mv3
+          label.f6.b.db.mb2(for="description") Write your content here
+          textarea.f4.db.border-box.hover-black.w-100.measure.ba.b--black-20.pa2.br2.mb2(rows="5" name="description") #{content || ''}
+          input.f6.link.dim.br1.ba.bw1.ph3.pv2.mb2.dib.black.bg-white.pointer(type="submit" value="Publish" name="publish")
+    if notes.length > 0
+      ul.list.pl0
+        p.f6.b.db.mb2 Notes
+        each note in notes
+          li.mv3.bb.bw2.b--light-yellow.bg-washed-yellow.ph4.pv2
+            p.measure!= note.description
+    else
+      p.lh-copy.f6 You don't have any notes yet.
+]
+% cat views/index.pug
+
+
+# package name: (Version2.0.0)
+node-mongodb-app
+# version: (1.0.0) 
+2.0.0
+% npm init
+
+% cat package.json 
+
+% npm list --global
+% npm list
+
+% npm --version
+% npm update --global
+% npm upgrade --global
+% npm outdated --global
+
+[
+% npm install -g npm-add-script 
+]
+% npmAddScript -k start -v "node index.js"
+[
+% npmAddScript -k mongodb -v "mongod"
+]
+
+% npm run-script
+
+% cat package.json 
+
+% npm run-script
+
+% npm list --global
+% npm list
+
+% npm install express
+% npm install marked
+% npm install mongodb
+% npm install multer
+% npm install pug
+% npm install marked
+% npm install minio
+
+% npm list --global
+% npm list
+
+% cat package.json
+[
+{
+  "name": "node-mongodb-app",
+  "version": "2.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "marked": "^9.1.5",
+    "minio": "^7.1.3",
+    "mongodb": "^6.2.0",
+    "multer": "^1.4.5-lts.1",
+    "pug": "^3.0.2"
+  }
+}
+]
+
+
+% node index.js
+
+
+# In another terminal window
+[
+# % pgrep mongo # % pkill mongo
+# % pgrep mongod # % pkill mongod
+# % ps -A | grep mongod | awk '{print $1}' # kill <mongod pid>
+# % ps aux | grep -v grep | grep mongod # kill <mongod pid>
+# % ps aux | grep -v grep | grep mongod | awk '{print $2}' # kill <mongod pid>
+% ls /opt/homebrew/var/mongodb
+% ls /opt/homebrew/var/log/mongodb/mongo.log
+% mongod --dbpath /opt/homebrew/var/mongodb --logpath /opt/homebrew/var/log/mongodb/mongo.log --fork
+
+# % pgrep mongo # % pkill mongo
+# % pgrep mongod # % pkill mongod
+# % ps -A | grep mongod | awk '{print $1}' # kill <mongod pid>
+# % ps aux | grep -v grep | grep mongod # kill <mongod pid>
+# % ps aux | grep -v grep | grep mongod | awk '{print $2}' # kill <mongod pid>
+% ls /opt/homebrew/etc/mongod.conf
+% sudo nano /opt/homebrew/etc/mongod.conf
+% cat /opt/homebrew/etc/mongod.conf 
+% mongod --config /opt/homebrew/etc/mongod.conf --fork
+
+# MongoDB Shell % mongosh --version
+% mongosh
+]
+% brew services start mongodb-community
+[
+% brew services list
+% brew services stop mongodb-community
+% brew services restart mongodb-community
+]
+
+
+# In another terminal window
+% minio server ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio --console-address :9090
+
+
+http://localhost:9090
+minioadmin
+minioadmin
+
+
+http://localhost:3000
+Choose File
+Upload
+Write content
+Publish
+
+
+# In another terminal window
+% mongosh
+[
+test> show dbs
+admin   148.00 KiB
+config   72.00 KiB
+dev      72.00 KiB
+local    88.00 KiB
+test> use dev
+switched to db dev
+dev> show collections
+notes
+dev> db.notes.find()
+]dev> exit
+]
+
+###########################################################################################################################
+
+# node-mongodb-app Version 2.0.0 # Docker # Dockerfile # Docker Hub
+
+###########################################################################################################################
+
+[
+# Docker cleanup 
+# minikube cleanup
+]
+
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/Version2.0.0
+
+
+% docker version
+
+
+% nano Dockerfile
+[
+FROM node:20.9-slim
+WORKDIR /usr/src/app
+COPY . .
+RUN npm install
+CMD [ "node", "index.js" ]
+]
+% cat Dockerfile
+
+% echo node_modules > .dockerignore
+% cat .dockerignore
+
+
+% docker build -t node-mongodb-app .
+
+
+% docker login
+
+
+% docker-credential-$(
+  jq -r .credsStore ~/.docker/config.json
+) list | jq -r '
+  . |
+    to_entries[] |
+    select(
+      .key | 
+      contains("docker.io")
+    ) |
+    last(.value)
+'
+
+
+% docker tag node-mongodb-app dockerrajani/node-mongodb-app:version2.0.0
+[
+% docker rmi dockerrajani/node-mongodb-app:version2.0.0
+]
+
+
+% docker push dockerrajani/node-mongodb-app:version2.0.0
+
+
+https://hub.docker.com/repository/docker/dockerrajani/node-mongodb-app
+
+###########################################################################################################################
+
+# node-mongodb-app Version 2.0.0 # Docker # docker run
+
+###########################################################################################################################
+
+[
+# Docker cleanup 
+# minikube cleanup
+]
+
+
+% docker version
+
+[
+% docker network ls
+]
+% docker network create node-mongodb-app-network
+[
+% docker network rm node-mongodb-app-network 
+]
+
+
+% docker run \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-app-network \
+  dockerrajani/mongo:version1.0.0 
+
+
+# In another terminal window
+% docker run \
+  -p 9000:9000 \
+  -p 9090:9090 \
+  --name minio \
+  --network=node-mongodb-app-network \
+  -v ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio/data:/data \
+  -e "MINIO_ROOT_USER=minioadmin" \
+  -e "MINIO_ROOT_PASSWORD=minioadmin" \
+  dockerrajani/minio:version1.0.0 server /data --console-address ":9090"
+
+[
+% docker run \
+  -p 9000:9000 \
+  -p 9090:9090 \
+  --name minio \
+  --network=node-mongodb-app-network \
+  -v ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio/data:/data \
+  -e "MINIO_ACCESS_KEY=minioadmin" \
+  -e "MINIO_SECRET_KEY=minioadmin" \
+  dockerrajani/minio:version1.0.0 server /data --console-address ":9090"
+]
+
+[
+# In another terminal window
+% docker run \
+  -p 9000:9000 \
+  -p 9090:9090 \
+  --name minio \
+  --network=node-mongodb-app-network \
+  -v ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio/data:/data \
+  -e "MINIO_ROOT_USER=minioadmin" \
+  -e "MINIO_ROOT_PASSWORD=minioadmin" \
+  -e "MINIO_ACCESS_KEY=minioadmin" \
+  -e "MINIO_SECRET_KEY=minioadmin" \
+  dockerrajani/minio:version1.0.0 server /data --console-address ":9090"
+]
+
+
+# In another terminal window
+% docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  -e "MINIO_ACCESS_KEY=minioadmin" \
+  -e "MINIO_SECRET_KEY=minioadmin" \
+  -e "MINIO_HOST=minio" \
+  dockerrajani/node-mongodb-app:version2.0.0
+
+[
+# In another terminal window
+% docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-app-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  -e "MINIO_ROOT_USER=minioadmin" \
+  -e "MINIO_ROOT_PASSWORD=minioadmin" \
+  -e "MINIO_ACCESS_KEY=minioadmin" \
+  -e "MINIO_SECRET_KEY=minioadmin" \
+  -e "MINIO_HOST=minio" \
+  dockerrajani/node-mongodb-app:version2.0.0
+]
+
+
+http://localhost:3000
+Choose File: Kubernetes vs Docker.png Upload
+
+
+http://localhost:9090/
+minioadmin
+minioadmin
+
+
+# In another terminal window
+% docker exec -it mongo bash
+root@25da295e54af:/# mongosh
+[
+test> show dbs
+admin   40.00 KiB
+config  12.00 KiB
+local   40.00 KiB
+test> show dbs
+admin   40.00 KiB
+config  60.00 KiB
+dev     40.00 KiB
+local   40.00 KiB
+test> use dev
+switched to db dev
+dev> show collections
+notes
+dev> db.notes.find()
+[
+  {
+    _id: ObjectId("654bbf291f37fb2edf4b4cf9"),
+    description: 'Kubernetes vs Docker\r\n\r\n\r\n ![](/img/Kubernetes%20vs%20Docker.jpg)'
+  }
+]
+dev> exit
+root@25da295e54af:/# exit
+exit
+]
+
+% docker stop node-mongodb-app minio mongo
+
+###########################################################################################################################
+
+# node-mongodb-app Version 2.0.0 # Kubernetes
+
+###########################################################################################################################
+
+[
+# Docker cleanup 
+# minikube cleanup
+]
+
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker
+
+
+% docker version
+
+
+% minikube version
+
+
+% minikube start
+
+
+% mkdir -p kube-minio
+
+% nano kube-minio/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always-minio.yaml # image: dockerrajani/node-mongodb-app:version1.0.0 # imagePullPolicy: Always     
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-mongodb-app-service
+spec:
+  selector:
+    app: node-mongodb-app
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-mongodb-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-mongodb-app
+  template:
+    metadata:
+      labels:
+        app: node-mongodb-app
+    spec:
+      containers:
+        - name: node-mongodb-app-container
+          image: dockerrajani/node-mongodb-app:version2.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo-service:27017/dev
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+            - name: MINIO_HOST
+              value: minio-service
+]
+% cat kube-minio/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always-minio.yaml
+[
+% kubectl apply -f kube-minio/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always-minio.yaml
+]
+[
+% kubectl delete -f kube-minio/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always-minio.yaml
+]
+
+
+% nano kube-minio/cluster-ip-service-mongo-imagepull-always.yaml # image: dockerrajani/mongo:version1.0.0 # imagePullPolicy: Always
+[
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo-container
+          image: dockerrajani/mongo:version1.0.0
+          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mongo-persistentvolumeclaim
+]
+% cat kube-minio/cluster-ip-service-mongo-imagepull-always.yaml
+[
+% kubectl apply -f kube-minio/cluster-ip-service-mongo-imagepull-always.yaml
+]
+[
+% kubectl delete -f kube-minio/cluster-ip-service-mongo-imagepull-always.yaml
+]
+
+
+% nano kube-minio/cluster-ip-service-minio-imagepull-always.yaml # image: dockerrajani/minio:version1.0.0 # imagePullPolicy: Always     
+[
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-service
+spec:
+  selector:
+    app: minio
+  ports:
+    - port: 9090
+      name: console
+    - port: 9000
+      name: s3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-deployment
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio-container
+          image: dockerrajani/minio:version1.0.0
+          imagePullPolicy: Always
+          args:
+            - server
+            - /storage
+          env:
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - name: storage
+              mountPath: /storage
+          command:
+            - /bin/bash
+            - -c
+          args:
+              - minio server /data --console-address :9090
+      restartPolicy: Always
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: minio-persistentvolumeclaim
+]
+% cat kube-minio/cluster-ip-service-minio-imagepull-always.yaml
+[
+% kubectl apply -f kube-minio/cluster-ip-service-minio-imagepull-always.yaml
+]
+[
+% kubectl delete -f kube-minio/cluster-ip-service-minio-imagepull-always.yaml
+]
+
+
+% tree kube-minio/
+
+
+% minikube status
+
+
+% kubectl apply -f kube-minio
+[
+% kubectl delete -f kube-minio
+]
+
+
+% kubectl get pods --watch
+
+
+% kubectl port-forward minio-deployment-76bcb6669f-7wxd7 9000 9090
+
+
+# http://127.0.0.1:9090/
+http://127.0.0.1:9090/login
+minioadmin
+minioadmin
+
+
+# In another terminal window
+% minikube service node-mongodb-app-service
+
+
+# In another terminal window
+% minikube service mongo-service
+
+
+# In another terminal window
+% mongosh --port <from mongo-service>
+
+
+# In another terminal window
+% minikube service minio-service
+
+# URL <from minio-service>
+minioadmin
+minioadmin
+
+###########################################################################################################################
+
+# node-mongodb-app Version 2.0.0 # Kubernetes # scale --replicas
+
+###########################################################################################################################
+
+[
+# Docker cleanup 
+# minikube cleanup
+]
+
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker
+
+
+% docker version
+
+
+% minikube version
+
+
+% minikube start
+
+
+% mkdir -p kube-minio
+
+% nano kube-minio/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always-minio.yaml # image: dockerrajani/node-mongodb-app:version1.0.0 # imagePullPolicy: Always     
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-mongodb-app-service
+spec:
+  selector:
+    app: node-mongodb-app
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-mongodb-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-mongodb-app
+  template:
+    metadata:
+      labels:
+        app: node-mongodb-app
+    spec:
+      containers:
+        - name: node-mongodb-app-container
+          image: dockerrajani/node-mongodb-app:version2.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo-service:27017/dev
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+            - name: MINIO_HOST
+              value: minio-service
+]
+% cat kube-minio/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always-minio.yaml
+[
+% kubectl apply -f kube-minio/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always-minio.yaml
+]
+[
+% kubectl delete -f kube-minio/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always-minio.yaml
+]
+
+
+% nano kube-minio/cluster-ip-service-mongo-imagepull-always.yaml # image: dockerrajani/mongo:version1.0.0 # imagePullPolicy: Always
+[
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo-container
+          image: dockerrajani/mongo:version1.0.0
+          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mongo-persistentvolumeclaim
+]
+% cat kube-minio/cluster-ip-service-mongo-imagepull-always.yaml
+[
+% kubectl apply -f kube-minio/cluster-ip-service-mongo-imagepull-always.yaml
+]
+[
+% kubectl delete -f kube-minio/cluster-ip-service-mongo-imagepull-always.yaml
+]
+
+
+% nano kube-minio/cluster-ip-service-minio-imagepull-always.yaml # image: dockerrajani/minio:version1.0.0 # imagePullPolicy: Always     
+[
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-service
+spec:
+  selector:
+    app: minio
+  ports:
+    - port: 9090
+      name: console
+    - port: 9000
+      name: s3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-deployment
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio-container
+          image: dockerrajani/minio:version1.0.0
+          imagePullPolicy: Always
+          args:
+            - server
+            - /storage
+          env:
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - name: storage
+              mountPath: /storage
+          command:
+            - /bin/bash
+            - -c
+          args:
+              - minio server /data --console-address :9090
+      restartPolicy: Always
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: minio-persistentvolumeclaim
+]
+% cat kube-minio/cluster-ip-service-minio-imagepull-always.yaml
+[
+% kubectl apply -f kube-minio/cluster-ip-service-minio-imagepull-always.yaml
+]
+[
+% kubectl delete -f kube-minio/cluster-ip-service-minio-imagepull-always.yaml
+]
+
+
+% tree kube-minio/
+
+
+% minikube status
+
+
+% kubectl apply -f kube-minio
+[
+% kubectl delete -f kube-minio
+]
+
+
+% kubectl get pods --watch
+
+
+% kubectl scale --replicas=10 deployment.apps/node-mongodb-app-deployment
+
+
+% kubectl get pods -l app=node-mongodb-app --watch
+
+
+% kubectl get replicasets 
+
+
+% kubectl get all
+
+
+% kubectl port-forward minio-deployment-5d5c9d8fb5-8rr8z 9000 9090
+
+
+# http://127.0.0.1:9090/
+http://127.0.0.1:9090/login
+minioadmin
+minioadmin
+
+
+# In another terminal window
+% minikube service node-mongodb-app-service
+
+
+# In another terminal window
+% minikube service mongo-service
+
+
+# In another terminal window
+% mongosh --port <from mongo-service>
+
+
+# In another terminal window
+% minikube service minio-service
+
+# URL <from minio-service>
+minioadmin
+minioadmin
+
+###########################################################################################################################
+
+# MinIO Object Storage for Container # Docker (Rootfull)
+
+###########################################################################################################################
+***************************************************************************************************************************
+
+[
+# Docker cleanup 
+# minikube cleanup
+]
+
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker
+
+
+% docker version
+
+
+% mkdir -p minio/data
+[
+~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio/data
+]
+
+% docker run \
+   -p 9000:9000 \
+   -p 9090:9090 \
+   --name minio \
+   -v ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio/data:/data \
+   -e "MINIO_ROOT_USER=ROOTNAME" \
+   -e "MINIO_ROOT_PASSWORD=CHANGEME123" \
+   quay.io/minio/minio server /data --console-address ":9090"
+[
+Unable to find image 'quay.io/minio/minio:latest' locally
+latest: Pulling from minio/minio
+b650cfbb2837: Pull complete 
+e9d5ce196263: Pull complete 
+c1b201109fa1: Pull complete 
+26d5f7e47938: Pull complete 
+e3dbc49ce3d2: Pull complete 
+a6bfa4552f85: Pull complete 
+1ff33655e246: Pull complete 
+Digest: sha256:8871650797a40e6094828e86709f3e7180615f03d72ea9d385a720dfb2b63510
+Status: Downloaded newer image for quay.io/minio/minio:latest
+Formatting 1st pool, 1 set(s), 1 drives per set.
+WARNING: Host local has more than 0 drives of set. A host failure will result in data becoming unavailable.
+MinIO Object Storage Server
+Copyright: 2015-2023 MinIO, Inc.
+License: GNU AGPLv3 <https://www.gnu.org/licenses/agpl-3.0.html>
+Version: RELEASE.2023-11-01T18-37-25Z (go1.21.3 linux/arm64)
+
+Status:         1 Online, 0 Offline. 
+S3-API: http://172.17.0.2:9000  http://127.0.0.1:9000 
+Console: http://172.17.0.2:9090 http://127.0.0.1:9090 
+
+Documentation: https://min.io/docs/minio/linux/index.html
+Warning: The standard parity is set to 0. This can lead to data loss.
+]
+
+***************************************************************************************************************************
+
+The example above works this way:
+
+mkdir creates a new local directory at ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio/data in your home directory.
+
+docker run starts the MinIO container.
+
+-p binds a local port to a container port.
+
+-name creates a name for the container.
+
+-v sets a file path as a persistent volume location for the container to use. When MinIO writes data to /data, that data mirrors to the local path ~/minio/data, allowing it to persist between container restarts. You can replace ~/minio/data with another local file location to which the user has read, write, and delete access.
+
+-e sets the environment variables MINIO_ROOT_USER and MINIO_ROOT_PASSWORD, respectively. These set the root user credentials. Change the example values to use for your container.
+
+***************************************************************************************************************************
+
+# MinIO Object Storage for Container # Docker (Rootless)
+
+***************************************************************************************************************************
+
+mkdir -p ${HOME}/minio/data
+
+docker run \
+   -p 9000:9000 \
+   -p 9090:9090 \
+   --user $(id -u):$(id -g) \
+   --name minio1 \
+   -e "MINIO_ROOT_USER=ROOTUSER" \
+   -e "MINIO_ROOT_PASSWORD=CHANGEME123" \
+   -v ${HOME}/minio/data:/data \
+   quay.io/minio/minio server /data --console-address ":9090"
+
+***************************************************************************************************************************
+
+The example above works this way:
+
+mkdir creates a new local directory at ~/minio/data in your home directory.
+
+docker run starts the MinIO container.
+
+-p binds a local port to a container port.
+
+-user sets the username for the container to the policies for the current user and user group.
+
+-name creates a name for the container.
+
+-v sets a file path as a persistent volume location for the container to use. When MinIO writes data to /data, that data actually writes to the local path ~/minio/data where it can persist between container restarts. You can replace ${HOME}/minio/data with another location in the user’s home directory to which the user has read, write, and delete access.
+
+-e sets the environment variables MINIO_ROOT_USER and MINIO_ROOT_PASSWORD, respectively. These set the root user credentials. Change the example values to use for your container.
+
+***************************************************************************************************************************
+
+# MinIO Object Storage for Container # Connect your Browser to the MinIO Server
+
+***************************************************************************************************************************
+
+Access the MinIO Console by going to a browser and going to http://127.0.0.1:9000 or one of the Console addresses specified in the minio server command’s output. For example, console: http://192.0.2.10:9090 http://127.0.0.1:9090 in the example output indicates two possible addresses to use for connecting to the Console.
+
+While port 9000 is used for connecting to the API, MinIO automatically redirects browser access to the MinIO Console.
+
+Log in to the Console with the credentials you defined in the MINIO_ROOT_USER and MINIO_ROOT_PASSWORD environment variables.
+
+***************************************************************************************************************************
+
+# docker # container # minio # shell
+
+***************************************************************************************************************************
+
+% docker exec -it minio bash
+bash-5.1# mc
+mc: Configuration written to `/tmp/.mc/config.json`. Please update your access credentials.
+mc: Successfully created `/tmp/.mc/share`.
+mc: Initialized share uploads `/tmp/.mc/share/uploads.json` file.
+mc: Initialized share downloads `/tmp/.mc/share/downloads.json` file.
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── (q)uit/esc
+NAME:                                                       
+  mc - MinIO Client for object storage and filesystems.     
+                                                            
+USAGE:                                                      
+  mc [FLAGS] COMMAND [COMMAND FLAGS | -h] [ARGUMENTS...]    
+                                                            
+COMMANDS:                                                   
+  alias      manage server credentials in configuration file
+  ls         list buckets and objects                       
+  mb         make a bucket                                  
+  rb         remove a bucket                                
+  cp         copy objects                                   
+  mv         move objects                                   
+  rm         remove object(s)                               
+  mirror     synchronize object(s) to a remote site         
+  cat        display object contents                        
+  head       display first 'n' lines of an object           
+  pipe       stream STDIN to an object                      
+  find       search for objects                             
+  sql        run sql queries on objects                     
+  stat       show object metadata                           
+  tree       list buckets and objects in a tree format      
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 0%   
+
+# control + c
+
+bash-5.1# mc --version
+mc version RELEASE.2023-10-30T18-43-32Z (commit-id=9f2fb2b6a9f86684cbea0628c5926dafcff7de28)
+Runtime: go1.21.3 linux/arm64
+Copyright (c) 2015-2023 MinIO, Inc.
+License GNU AGPLv3 <https://www.gnu.org/licenses/agpl-3.0.html>
+bash-5.1# exit
+exit
+%
+
+***************************************************************************************************************************
+###########################################################################################################################
+
+# minio
+
+###########################################################################################################################
+***************************************************************************************************************************
+
+# minio server
+
+***************************************************************************************************************************
+
+% nano ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio/minio
+
+% export MINIO_CONFIG_ENV_FILE=~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio/minio
+
+% minio server ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio --console-address :9090
+
+*************************************************************************************************************************** 
+
+# minio client
+
+***************************************************************************************************************************
+
+[
+mc: Configuration written to `~/.mc/config.json`. Please update your access credentials.
+mc: Successfully created `~/.mc/share`.
+mc: Initialized share uploads `~/.mc/share/uploads.json` file.
+mc: Initialized share downloads `~/.mc/share/downloads.json` file.
+]
+% mc alias set myminio http://192.168.191.31:9000
+Enter Access Key: minioadmin
+Enter Secret Key: minioadmin
+Added `myminio` successfully.
+
+% mc alias set myminio http://192.168.191.31:9000 minioadmin
+Enter Secret Key: minioadmin
+Added `myminio` successfully.
+
+***************************************************************************************************************************
+###########################################################################################################################
+
+# Docker cleanup
+
+###########################################################################################################################
+
+[
+% docker ps --all --quiet
+% docker stop $(docker ps -a -q)
+% docker rm $(docker ps -a -q) --force
+]
+% docker container list --all --quiet
+% docker stop $(docker container list -a -q)
+% docker rm $(docker container list -a -q) --force
+% docker container prune
+
+% docker image list --all --quiet
+% docker rmi $(docker image list -a -q) --force 
+% docker image prune --all
+
+% docker volume list --quiet
+% docker volume rm $(docker volume list --quiet) --force
+% docker volume prune --all
+
+% docker network list --quiet --filter "type=custom"
+% docker network rm $(docker network list --quiet --filter "type=custom")
+% docker network prune
+
+% docker system info
+% docker system prune --all --volumes
+
+###########################################################################################################################
+
+# minikube cleanup
+
+###########################################################################################################################
+
+% minikube stop
+% minikube delete
+
+% ls ~/.minikube
+% rm -rf ~/.minikube
+% ls ~/.kube
+% rm -rf ~/.kube
+
+###########################################################################################################################

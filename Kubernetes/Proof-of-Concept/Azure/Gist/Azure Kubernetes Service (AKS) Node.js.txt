@@ -1,0 +1,899 @@
+###########################################################################################################################
+
+Azure Kubernetes Service (AKS)
+
+###########################################################################################################################
+
+# Create a new cluster
+
+###########################################################################################################################
+***************************************************************************************************************************
+
+# 1. Create an Azure resource group using the az group create command.
+
+***************************************************************************************************************************
+===========================================================================================================================
+
+# Cleanup # $HOME
+
+===========================================================================================================================
+
+% ls ~/.kube
+% rm -rf ~/.kube
+
+
+% ls ~/.azure
+% rm -rf ~/.azure
+
+===========================================================================================================================
+
+# Version
+
+===========================================================================================================================
+
+% az -v
+
+
+% kubectl version
+
+[
+% kubelogin --version
+]
+
+===========================================================================================================================
+
+% az group create --name rajaniAKSResourceGroup --location centralus
+[
+Please run 'az login' to setup account.
+]
+
+% az login
+[
+http://localhost:49466/?code=0.AXsAMe_N-B6jSkuT5F9XHpElWpV3sATbjRpGu-4C-eG_e0YBAAA.AgABAAIAAAAmoFfGtYxvRrNriQdPKIZ-AgDs_wUA9P_YEdY5BKr6mPft3g9LR5MiBfD9RBzRLFAIRQTJRFG8-6jDjPSNnE8e7WAhI4S9jt5FrjDavbjwvZ1e_RzbeP5Dy7q6vQm_A6JXxzAcXyZRMe4gLVYwcZYnDmPfdocloL7a8tV5bStaloAT15DjNB6wtMZgxeqhZco2NIvk8Kikr951-SOJWTVaLBRjsYBLOuh3C6ByxGCWybq6hKETFTj94Ed4pBeMsGd346htz8ynm-lzB36xZmI-SXZnVRX_SxEoFqAYWbIXVVGTD3yKkM3ZJIoAQeYID_PseBQwK2HSCT9qEXw3TSnNLF6sCqeKn-o_wSix6j43JJj-tUCcoZ-UQDw2d9T9iwa0p_Es8SAr_4tBj_dc2M3esh5fbkfFvaEtW4yGbDChYvewepIVZ5fWbSfHZrHu3inlTW0Y7pBl1wcC7w_QElHqXMCgiD_Glitmw0hXiZuwadjaFKRGi661903CPLHYyqhQb6J5E-ohuZXDC_esrxFCT1HT-TuwpfOOZ_GkfASEjFllETcru7hPgIIYXM8iNSkLkgBkxcyFA81SQcibZ4XgklaSOd2DOniy4rRXr9QEwzojz16Gkvw7qKl4hpOw3wGRgIHJ5F2b0l13sZ7ifA4ig-wMWMO-UXoNLSNMy0zFW45yr4zDrUqs9Ai8nZYJcPJFb984GlNnLjs3Luwp8JGJUh_qI5psERAjOQpopT9iCb1JwDtpBxfnDR3fKwU5ynwblO_Prd9pY4yZvyE7xJlQqrTYfNkDp2YxsFWita3DjJuc_65Eisoq795RUB41u7mBX5U5pozqgjozGCv8TUAJzsX45gGKPAtqNSZxp_Cs0kwUPcTlA3NGdvQ_8ZYVOR1WqlWBP9mJMKlJIAuVMghH-5MI5AoWmPxYTMh714drH7PjyNQdWc6hzg-pEH9wALvlC9tjYvXCns87Ad84QcsyWQBlZj-ZO2FLZM67M6rqSZq6x2JpqN1jUWjHVko3kSxoydx1Ns_3l6NnRSLzVdNtDYjsXv_sQL-H0J6javTXiq_ihOJqhLdvnzd4UhJK7ZSNnpXngZcpKRnyu3AxKEdDqwG7uIuiB0-osNi9dah0f8QDwM0208CWejwoiYi_9i356sckfwr4pBqGHkWY6c77cuplgtJsVfzKeFc5uXsfskDNjRF_kYXUOkFsQp0uvuqHVZ5SlSv-9QOOrbOzWcFfgd4myYX1Jpt5HTvPpdUmYSIpBiu0_ZXTtMyTNLI4BlZnzob0PQnnVnXAKaCgL2F-du2U8VdNTK4OXG5Bfr9mbZaJ2lfKBA&client_info=eyJ1aWQiOiIwMDAwMDAwMC0wMDAwLTAwMDAtOGNhNC0zMjA2YzZlMmUwNjMiLCJ1dGlkIjoiOTE4ODA0MGQtNmM2Ny00YzViLWIxMTItMzZhMzA0YjY2ZGFkIn0&state=IVEqXSvDzMOlseJg&session_state=3a764be8-d0fd-45cb-a87c-46fe63ffaf6b
+
+You have logged into Microsoft Azure!
+
+You can close this window, or we will redirect you to the Azure CLI documentation in 1 minute.
+
+Announcements
+
+[Windows only] Azure CLI is collecting feedback on using the Web Account Manager (WAM) broker for the login experience.
+
+You may opt-in to use WAM by running the following commands:
+
+az config set core.allow_broker=true
+az account clear
+az login
+]
+
+[
+A web browser has been opened at https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize. Please continue the login in the web browser. If no web browser is available or if the web browser fails to open, use device code flow with `az login --use-device-code`.
+[
+  {
+    "cloudName": "AzureCloud",
+    "homeTenantId": "e7142166-b9df-478f-bd88-8fccb8609b60",
+    "id": "<Subscription ID>",
+    "isDefault": true,
+    "managedByTenants": [],
+    "name": "Free Trial",
+    "state": "Enabled",
+    "tenantId": "e7142166-b9df-478f-bd88-8fccb8609b60",
+    "user": {
+      "name": "<Azure>@outlook.com",
+      "type": "user"
+    }
+  }
+]
+]
+
+% az group create --name rajaniAKSResourceGroup --location centralus
+[
+{
+  "id": "/subscriptions/<Subscription ID>/resourceGroups/rajaniAKSResourceGroup",
+  "location": "centralus",
+  "managedBy": null,
+  "name": "rajaniAKSResourceGroup",
+  "properties": {
+    "provisioningState": "Succeeded"
+  },
+  "tags": null,
+  "type": "Microsoft.Resources/resourceGroups"
+}
+]
+
+[
+% az group list --query "[?location=='centralus']"
+
+% az group delete --resource-group rajaniAKSResourceGroup
+]
+
+***************************************************************************************************************************
+
+# 2. Create an AKS cluster and enable administration access for your Microsoft Entra group using the az aks create command.
+
+***************************************************************************************************************************
+
+# % az aks create -g rajaniAKSResourceGroup -n rajaniAKSManagedCluster --enable-aad --aad-admin-group-object-ids <id> [--aad-tenant-id <id>]
+
+% az aks create -g rajaniAKSResourceGroup -n rajaniAKSManagedCluster --enable-aad --aad-admin-group-object-ids "<Subscription ID>" --aad-tenant-id "e7142166-b9df-478f-bd88-8fccb8609b60"
+
+[
+(QuotaExceeded) Provisioning of resource(s) for container service rajaniAKSManagedCluster in resource group MC_rajaniAKSResourceGroup_rajaniAKSManagedCluster_centralus failed. Message: Operation could not be completed as it results in exceeding approved Total Regional Cores quota. Additional details - Deployment Model: Resource Manager, Location: centralus, Current Limit: 4, Current Usage: 0, Additional Required: 6, (Minimum) New Limit Required: 6. Submit a request for Quota increase at https://aka.ms/ProdportalCRP/#blade/Microsoft_Azure_Capacity/UsageAndQuota.ReactView/Parameters/%7B%22subscriptionId%22:%22<Subscription ID>%22,%22command%22:%22openQuotaApprovalBlade%22,%22quotas%22:[%7B%22location%22:%22centralus%22,%22providerId%22:%22Microsoft.Compute%22,%22resourceName%22:%22cores%22,%22quotaRequest%22:%7B%22properties%22:%7B%22limit%22:6,%22unit%22:%22Count%22,%22name%22:%7B%22value%22:%22cores%22%7D%7D%7D%7D]%7D by specifying parameters listed in the ‘Details’ section for deployment to succeed. Please read more about quota limits at https://docs.microsoft.com/en-us/azure/azure-supportability/regional-quota-requests. Details: 
+Code: QuotaExceeded
+Message: Provisioning of resource(s) for container service rajaniAKSManagedCluster in resource group MC_rajaniAKSResourceGroup_rajaniAKSManagedCluster_centralus failed. Message: Operation could not be completed as it results in exceeding approved Total Regional Cores quota. Additional details - Deployment Model: Resource Manager, Location: centralus, Current Limit: 4, Current Usage: 0, Additional Required: 6, (Minimum) New Limit Required: 6. Submit a request for Quota increase at https://aka.ms/ProdportalCRP/#blade/Microsoft_Azure_Capacity/UsageAndQuota.ReactView/Parameters/%7B%22subscriptionId%22:%22<Subscription ID>%22,%22command%22:%22openQuotaApprovalBlade%22,%22quotas%22:[%7B%22location%22:%22centralus%22,%22providerId%22:%22Microsoft.Compute%22,%22resourceName%22:%22cores%22,%22quotaRequest%22:%7B%22properties%22:%7B%22limit%22:6,%22unit%22:%22Count%22,%22name%22:%7B%22value%22:%22cores%22%7D%7D%7D%7D]%7D by specifying parameters listed in the ‘Details’ section for deployment to succeed. Please read more about quota limits at https://docs.microsoft.com/en-us/azure/azure-supportability/regional-quota-requests. Details: 
+]
+
+[
+https://aka.ms/ProdportalCRP/#blade/Microsoft_Azure_Capacity/UsageAndQuota.ReactView/Parameters/%7B%22subscriptionId%22:%22<Subscription ID>%22,%22command%22:%22openQuotaApprovalBlade%22,%22quotas%22
+]
+
+https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-resource-quota?tabs=azure-cli#solution
+
+# Resolve errors for resource quotas
+
+# To request a quota increase, go to the portal and file a support issue. In the support issue, request an increase in your quota for the region into which you want to deploy.
+
+[
+Subscriptions
+Select Subscription name
+[
+Subscription name	Subscription ID		My role		Current cost	Secure Score	Parent management group		Status
+Free Trial		<Subscription ID>	Account admin	Not available	-						Active
+]
+Free Trial
+
+%Usage + quotas%
+
+Free Trial | Usage + quotas
+
+Availability Sets
+
+New support request
+
+Your free trial subscription isn't eligible for a quota increase. To request a quota increase, first upgrade to a Pay-As-You-Go subscription.
+]
+
+***************************************************************************************************************************
+
+Upgrade
+
+***************************************************************************************************************************
+
+Move to pay-as-you-go pricing for free services and uninterrupted access to Azure.
+
+Please let us know where you will use your service. Then enter a friendly subscription name and tax Id. Finally, select a support plan and click the Upgrade button
+
+You will use your service at Chennai, TN Click here to update your service usage address
+
+Subscription name
+#**********#
+Azure subscription AKS
+#**********#
+
+PAN Id
+#**********#
+<PAN>
+#**********#
+
+BasicIncluded
+For individuals or teams that need billing and subscription management support and do not require technical support.
+
+By selecting Upgrade to pay as you go, you authorize Microsoft to charge your payment method on a monthly basis for services used beyond the monthly free amounts indicated in the offer details until your account is canceled or terminated. Find pricing details and learn about cancellation.
+ 
+Upgrade to pay as you go
+
+"Successfully upgraded to Pay as you go. Your free credit is still available until the end of the free trial billing cycle. Usage over your free credit will be applied to your payment method."
+ 
+***************************************************************************************************************************
+
+https://portal.azure.com/#@<Azure>outlook.onmicrosoft.com/asset/Microsoft_Azure_Billing/Subscription/<Subscription ID>
+
+Azure subscription AKS
+
+Subscription ID:
+<Subscription ID>
+
+Directory:
+Default Directory (<Azure>outlook.onmicrosoft.com)
+
+My role:
+Account admin
+
+Offer:
+Free Trial
+
+Offer ID:
+MS-AZR-0044P
+
+Subscription name:
+Azure subscription AKS
+
+Current billing period:
+11/23/2023-12/22/2023
+
+Currency:
+INR
+
+Status:
+Active
+
+Secure Score:
+Not available
+
+***************************************************************************************************************************
+
+% az aks create -g rajaniAKSResourceGroup -n rajaniAKSManagedCluster --enable-aad --aad-admin-group-object-ids "<Subscription ID>" --aad-tenant-id "e7142166-b9df-478f-bd88-8fccb8609b60"
+[
+{
+  "aadProfile": {
+    "adminGroupObjectIDs": [
+      "<Subscription ID>"
+    ],
+    "adminUsers": null,
+    "clientAppId": null,
+    "enableAzureRbac": false,
+    "managed": true,
+    "serverAppId": null,
+    "serverAppSecret": null,
+    "tenantId": "e7142166-b9df-478f-bd88-8fccb8609b60"
+  },
+  "addonProfiles": null,
+  "agentPoolProfiles": [
+    {
+      "availabilityZones": null,
+      "count": 3,
+      "creationData": null,
+      "currentOrchestratorVersion": "1.26.6",
+      "enableAutoScaling": false,
+      "enableEncryptionAtHost": false,
+      "enableFips": false,
+      "enableNodePublicIp": false,
+      "enableUltraSsd": false,
+      "gpuInstanceProfile": null,
+      "hostGroupId": null,
+      "kubeletConfig": null,
+      "kubeletDiskType": "OS",
+      "linuxOsConfig": null,
+      "maxCount": null,
+      "maxPods": 110,
+      "minCount": null,
+      "mode": "System",
+      "name": "nodepool1",
+      "nodeImageVersion": "AKSUbuntu-2204gen2containerd-202310.31.0",
+      "nodeLabels": null,
+      "nodePublicIpPrefixId": null,
+      "nodeTaints": null,
+      "orchestratorVersion": "1.26.6",
+      "osDiskSizeGb": 128,
+      "osDiskType": "Managed",
+      "osSku": "Ubuntu",
+      "osType": "Linux",
+      "podSubnetId": null,
+      "powerState": {
+        "code": "Running"
+      },
+      "provisioningState": "Succeeded",
+      "proximityPlacementGroupId": null,
+      "scaleDownMode": null,
+      "scaleSetEvictionPolicy": null,
+      "scaleSetPriority": null,
+      "spotMaxPrice": null,
+      "tags": null,
+      "type": "VirtualMachineScaleSets",
+      "upgradeSettings": {
+        "drainTimeoutInMinutes": null,
+        "maxSurge": null
+      },
+      "vmSize": "Standard_DS2_v2",
+      "vnetSubnetId": null,
+      "workloadRuntime": null
+    }
+  ],
+  "apiServerAccessProfile": null,
+  "autoScalerProfile": null,
+  "autoUpgradeProfile": {
+    "nodeOsUpgradeChannel": "NodeImage",
+    "upgradeChannel": null
+  },
+  "azureMonitorProfile": null,
+  "azurePortalFqdn": "rajaniaksm-rajaniaksresourc-5b2c12-cajrc6us.portal.hcp.centralus.azmk8s.io",
+  "currentKubernetesVersion": "1.26.6",
+  "disableLocalAccounts": false,
+  "diskEncryptionSetId": null,
+  "dnsPrefix": "rajaniAKSM-rajaniAKSResourc-5b2c12",
+  "enablePodSecurityPolicy": null,
+  "enableRbac": true,
+  "extendedLocation": null,
+  "fqdn": "rajaniaksm-rajaniaksresourc-5b2c12-cajrc6us.hcp.centralus.azmk8s.io",
+  "fqdnSubdomain": null,
+  "httpProxyConfig": null,
+  "id": "/subscriptions/<Subscription ID>/resourcegroups/rajaniAKSResourceGroup/providers/Microsoft.ContainerService/managedClusters/rajaniAKSManagedCluster",
+  "identity": {
+    "delegatedResources": null,
+    "principalId": "6a101073-fda4-40a8-aba1-c38b7769ea3d",
+    "tenantId": "e7142166-b9df-478f-bd88-8fccb8609b60",
+    "type": "SystemAssigned",
+    "userAssignedIdentities": null
+  },
+  "identityProfile": {
+    "kubeletidentity": {
+      "clientId": "eafe89f6-bd07-4254-9b8d-7f371c2dab0b",
+      "objectId": "b470e605-cbd2-4785-aeff-74475e8b1c0e",
+      "resourceId": "/subscriptions/<Subscription ID>/resourcegroups/MC_rajaniAKSResourceGroup_rajaniAKSManagedCluster_centralus/providers/Microsoft.ManagedIdentity/userAssignedIdentities/rajaniAKSManagedCluster-agentpool"
+    }
+  },
+  "kubernetesVersion": "1.26.6",
+  "linuxProfile": {
+    "adminUsername": "azureuser",
+    "ssh": {
+      "publicKeys": [
+        {
+          "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDC3jREUIMoWm8DvcWntVjcoBV1e+oYshb1WUsb5eAMKSjQmrYfxd+BqJuTG1urxXz/47Bg2RLWb5egiQKVmFJl3eG9BQbSpdpO9ac8u4f9d/9lotEZlD6bLVy64pWvDrH/t2TTI8yK8PAWOJjwSV+RXM/DROwvnjjRPFHjqtSdZ8x+Z7uoAaRV7sSMYymXte9qJIOWp6nMNCrIgNsLZst0LfoaVA4mN4u0ICT+Auf8Lj4ZsFKUF+13GYgkjrxEgQS3mRZwUnqut7BCXe3wd8A2bx2XuHDQFHXKpXJY1NidaNzqp3xd05p+Bd/7mczZJVoGO28w33TzmEuYbh13TXTHNIVvz0BFszBRRyw76873ILdaOhUCWb4N6IBrtR1OiZkcHJrJ30qg10BK5ExOl77kRgqwHciWP0UILR4eMzkexKGfgKB6ucQx7S0Ftd2P+4WKBWP5Umhzf2jr8vU6N6yXTSO1/iYK8qUMmmFnVXga2z2+SkcZd/C70fQRrTquh+pPDHMAGtl601QJg0tkq8sZqgSDUaf7dQYbFZj34Jfq2plETcMe9Ol4gFDfD0pnb+ZtFv+bOzpGKF+N00BdX42k3umCxlMWBtKQL9QoyocxAm/hCT18roR8vhJJ4ebS6pTQlBLmCeWFoXzlOqKyLQMTrDm4BIlEkr9eHw1bbozNRQ== <Apple>@Rajanis-MacBook-Pro.local\n"
+        }
+      ]
+    }
+  },
+  "location": "centralus",
+  "maxAgentPools": 100,
+  "name": "rajaniAKSManagedCluster",
+  "networkProfile": {
+    "dnsServiceIp": "10.0.0.10",
+    "ipFamilies": [
+      "IPv4"
+    ],
+    "loadBalancerProfile": {
+      "allocatedOutboundPorts": null,
+      "effectiveOutboundIPs": [
+        {
+          "id": "/subscriptions/<Subscription ID>/resourceGroups/MC_rajaniAKSResourceGroup_rajaniAKSManagedCluster_centralus/providers/Microsoft.Network/publicIPAddresses/2a35c914-72e1-4300-9c42-49da531f582e",
+          "resourceGroup": "MC_rajaniAKSResourceGroup_rajaniAKSManagedCluster_centralus"
+        }
+      ],
+      "enableMultipleStandardLoadBalancers": null,
+      "idleTimeoutInMinutes": null,
+      "managedOutboundIPs": {
+        "count": 1,
+        "countIpv6": null
+      },
+      "outboundIPs": null,
+      "outboundIpPrefixes": null
+    },
+    "loadBalancerSku": "Standard",
+    "natGatewayProfile": null,
+    "networkDataplane": null,
+    "networkMode": null,
+    "networkPlugin": "kubenet",
+    "networkPluginMode": null,
+    "networkPolicy": null,
+    "outboundType": "loadBalancer",
+    "podCidr": "10.244.0.0/16",
+    "podCidrs": [
+      "10.244.0.0/16"
+    ],
+    "serviceCidr": "10.0.0.0/16",
+    "serviceCidrs": [
+      "10.0.0.0/16"
+    ]
+  },
+  "nodeResourceGroup": "MC_rajaniAKSResourceGroup_rajaniAKSManagedCluster_centralus",
+  "oidcIssuerProfile": {
+    "enabled": false,
+    "issuerUrl": null
+  },
+  "podIdentityProfile": null,
+  "powerState": {
+    "code": "Running"
+  },
+  "privateFqdn": null,
+  "privateLinkResources": null,
+  "provisioningState": "Succeeded",
+  "publicNetworkAccess": null,
+  "resourceGroup": "rajaniAKSResourceGroup",
+  "resourceUid": "655fabd9afac530001df1f74",
+  "securityProfile": {
+    "azureKeyVaultKms": null,
+    "defender": null,
+    "imageCleaner": null,
+    "workloadIdentity": null
+  },
+  "serviceMeshProfile": null,
+  "servicePrincipalProfile": {
+    "clientId": "msi",
+    "secret": null
+  },
+  "sku": {
+    "name": "Base",
+    "tier": "Free"
+  },
+  "storageProfile": {
+    "blobCsiDriver": null,
+    "diskCsiDriver": {
+      "enabled": true
+    },
+    "fileCsiDriver": {
+      "enabled": true
+    },
+    "snapshotController": {
+      "enabled": true
+    }
+  },
+  "supportPlan": "KubernetesOfficial",
+  "systemData": null,
+  "tags": null,
+  "type": "Microsoft.ContainerService/ManagedClusters",
+  "upgradeSettings": null,
+  "windowsProfile": null,
+  "workloadAutoScalerProfile": {
+    "keda": null,
+    "verticalPodAutoscaler": null
+  }
+}
+]
+
+***************************************************************************************************************************
+###########################################################################################################################
+
+# Access the enabled cluster
+
+###########################################################################################################################
+***************************************************************************************************************************
+
+# 1. Get the user credentials to access the cluster using the az aks get-credentials command.
+
+***************************************************************************************************************************
+
+% ls ~/.kube
+% rm -rf ~/.kube
+
+% az aks get-credentials --resource-group rajaniAKSResourceGroup --name rajaniAKSManagedCluster
+[
+Merged "rajaniAKSManagedCluster" as current context in ~/.kube/config
+]
+
+% cat ~/.kube/config
+[
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUU2RENDQXRDZ0F3SUJBZ0lRV3RLMHlibkxsR25CcHM0TngvUVNtVEFOQmdrcWhraUc5dzBCQVFzRkFEQU4KTVFzd0NRWURWUVFERXdKallUQWdGdzB5TXpFeE1qTXhPVE0xTlRkYUdBOHlNRFV6TVRFeU16RTVORFUxTjFvdwpEVEVMTUFrR0ExVUVBeE1DWTJFd2dnSWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUNEd0F3Z2dJS0FvSUNBUUNuCnc2eStDcW91UlpvNVFYNEI1U0xOeldLeHBGdFlNMFVvTk5wRnc2SDh5eS84TjhlVlg4Y1hta3pyUHVhNHRERDUKZThkTWE3WVRTYm5RRFNEY0lCMFd2ano0R1BwUXAwUWdrSWcwZHVyQ1JQMXVWTXRGK0VDa2RtUHNmcmhmbEU2SQpOSjFkSWFIdmdUa25VYlRqU1U3ei9jcUNnVElZd2IvZHNGd29yQ3ZUd01BV0l4ODZKbDFTb1BnNDBrcmN2Ylc2CnVHTDBHalZDc3dVWUZDZmwrU3lDV1VhUHROVXJHNWZXc3FyWmZpaDc3VllkMU1wQjdJYTZ1aXEzcjFaYTF4b1oKY3VOcnlRN3REZFNRL2hrZVc0aGwrWnI4MmZQZ3FmK01TcTF3WHlBbXkxSVJpeWs0dE1IWXpodTRNLzNYQ0tsaQpXV2ZzMUxKKzIwLzZpdjY5Y05iUmR5MzVPTVNYUlA1WFcxdXRHdGs0R0ZncHdOb3FuNllMUmpwaExRUkR0Q3RUCkY3ZGJZWVZzakczdlVSMzc5MUdBZmV6Z1hSTzlFdDVsZWVVK1o1cjY1UWZPOCtnTE5yM3ZSQnlZMEQ0TU4rYVYKTzZxSnJLVUM2UWgxODBlT1FlbExrL1ZYOEtQT0hqeHNmZG5IWUg2ZVdMNS9ueDB0by9KbEkvOHlqL242aEhjOQprWml6eDlkTVY4KzRHUUpvOHRwNnZCMWhZRmtydFJGRVhxMXJDM2JoS2hTRDNkOVg3NXlweWpqV3phYzAzcXcrClJkYmYzSnJySmVNRjhncEhHSEdpMUxJRkFXb3RPWXcveEljb2MwMzZvcEZKTnNpNCtHT2hSSlZNTTFTTzBNekoKbnJpci80MkZwZjFCQ0xaUkthUE9nVktWbFZkTFVhNEtjeVRsTWFSbFR3SURBUUFCbzBJd1FEQU9CZ05WSFE4QgpBZjhFQkFNQ0FxUXdEd1lEVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVVla1NjRjBYQXM4b0ZWNXdVCjRJTUp0eU1hamhRd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dJQkFEOWNCYW02czNHU2NUeDRDbmlIb3haNTlpRWoKQW5XTVdScGkzSENmZE5aNkVndWs5RDIrTUJjRVp0REdWS3lpM2ZDVHJ0WXFlY1lJTDRsUkFYZmRqRy9TRHhzVgpNZGFGV28zelRrNURKSTBUeWZ2YVpsekZzWUJTN1ZqWmVuekRrUE1vZEtWb3JESElwZDBVcTVTTk84d1NDWlBVCkd0U0gxUEc3MTRwRU1DY1RVQllLV0VjbEZUUzI1YlA0QlNIaFZqL0VPNXpxanEzNjJEYjZwYU5qRCtjOEw1UlAKQlNSdDBjWHc4LzduZTZoWCswaEZMZjRKWmxUeWJRZWJIa1BKY3B5K0V2eUlJdGhNVGJTUzlsY0QxTXNOVkVMRgptZ0EyZ3lyeWs5K0l4dGlRMjhxaE5ybmhNQTZuVHdLNnJaNmQvOFdPVHUzQnU4b0VxbmJLa1FmS0x1WEVhK0ErCkRweFZUZ1h3c1hnOVBYeTFuYkVZOWU5cks2UVJHZ1MrTjc3SlJPVkRkbTBqc1lWY3NxS2RIV2syMEFKMXQvSGkKb3p3dlhmdnRpZzJMeEVaWGdycXJWTkdEeWhkVDFPMm5FSXkyV0tpUVUzN09tYUlkQ2lXNFZ5TVEvTWRHQXo3bQpKakx1Y0NZZHVBR2o5aVJONi9lblhwT0Urb1JSQ1B6OEFDdURQVTFxQ3VrbmNsQVRQRmNxbitNcE5jcWJYUkVKCmx1YVVGWGxVeTRiQk12ek9zMTBoR0ZFVjBEelRZaWVzd2dMMHdjb3FwaTc1akgwYlBvYkd5emNqVy9GblM4YUQKdjVWZW9MZjdCU2htTDFEcnhQTXF0bjBsanN3dkczVDBIcndIVXpZMEpSK3NEWXRlYjlkY2ttajZoci9rSExSVQpXMFBlbmIxamUvK1M3R3dHCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    server: https://rajaniaksm-rajaniaksresourc-5b2c12-cajrc6us.hcp.centralus.azmk8s.io:443
+  name: rajaniAKSManagedCluster
+contexts:
+- context:
+    cluster: rajaniAKSManagedCluster
+    user: clusterUser_rajaniAKSResourceGroup_rajaniAKSManagedCluster
+  name: rajaniAKSManagedCluster
+current-context: rajaniAKSManagedCluster
+kind: Config
+preferences: {}
+users:
+- name: clusterUser_rajaniAKSResourceGroup_rajaniAKSManagedCluster
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      args:
+      - get-token
+      - --environment
+      - AzurePublicCloud
+      - --server-id
+      - 6dae42f8-4368-4678-94ff-3960e28e3630
+      - --client-id
+      - 80faf920-1908-4b52-b5ef-a8e7bedfc67a
+      - --tenant-id
+      - e7142166-b9df-478f-bd88-8fccb8609b60
+      - --login
+      - devicecode
+      command: kubelogin
+      env: null
+      installHint: '
+
+        kubelogin is not installed which is required to connect to AAD enabled cluster.
+
+
+        To learn more, please go to https://aka.ms/aks/kubelogin
+
+        '
+      provideClusterInfo: false
+]
+
+***************************************************************************************************************************
+
+# 2. Installation - Azure Kubelogin
+
+***************************************************************************************************************************
+
+% brew install Azure/kubelogin/kubelogin
+[
+% brew update && brew upgrade Azure/kubelogin/kubelogin
+]
+
+% kubelogin --version
+
+***************************************************************************************************************************
+
+# 3. Set kubelogin to use the Azure CLI.
+
+***************************************************************************************************************************
+
+% kubelogin convert-kubeconfig -l azurecli
+
+***************************************************************************************************************************
+
+# 4. View the nodes in the cluster with the kubectl get nodes command.
+
+***************************************************************************************************************************
+
+% kubectl get nodes
+[
+Error from server (Forbidden): nodes is forbidden: User "b32c27c8-5214-4277-b5d8-1639bb94302f" cannot list resource "nodes" in API group "" at the cluster scope
+]
+
+***************************************************************************************************************************
+
+# Non-interactive sign-in with kubelogin
+
+***************************************************************************************************************************
+
+% az aks get-credentials --admin --resource-group rajaniAKSResourceGroup --name rajaniAKSManagedCluster
+[
+Merged "rajaniAKSManagedCluster-admin" as current context in ~/.kube/config
+]
+
+% kubectl get nodes
+[
+NAME                                STATUS   ROLES   AGE   VERSION
+aks-nodepool1-24448357-vmss000000   Ready    agent   25m   v1.26.6
+aks-nodepool1-24448357-vmss000001   Ready    agent   25m   v1.26.6
+aks-nodepool1-24448357-vmss000002   Ready    agent   25m   v1.26.6
+]
+
+% kubectl get all
+[
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.0.0.1     <none>        443/TCP   28m
+]
+
+***************************************************************************************************************************
+###########################################################################################################################
+
+# Deploy node-21-express-app
+
+###########################################################################################################################
+
+% pwd
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/AKS
+
+% pwd
+
+% nano node-21-express-app-dockerrajani.yaml
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-21-express-app-service
+spec:
+  selector:
+    app: node-21-express-app
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-21-express-app-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: node-21-express-app
+  template:
+    metadata:
+      labels:
+        app: node-21-express-app
+    spec:
+      containers:
+      - name: node-21-express-app-container
+        image: dockerrajani/node-21-express-app-amazon-linux-extras-x86-64:version1.0.0
+        ports:
+          - containerPort: 3000
+]
+% cat node-21-express-app-dockerrajani.yaml
+% kubectl apply -f node-21-express-app-dockerrajani.yaml
+[
+% kubectl delete -f node-21-express-app-dockerrajani.yaml
+]
+
+% kubectl get pods --watch
+
+% kubectl get pods
+
+% kubectl get all
+
+% kubectl get services
+
+% kubectl get services node-21-express-app-service
+[
+NAME                          TYPE           CLUSTER-IP   EXTERNAL-IP      PORT(S)        AGE
+kubernetes                    ClusterIP      10.0.0.1     <none>           443/TCP        31m
+node-21-express-app-service   LoadBalancer   10.0.29.28   52.185.110.181   80:32174/TCP   36s
+]
+
+% curl http://52.185.110.181/
+[
+Node.js Version: v20.9.0
+]
+
+% open http://52.185.110.181/
+
+***************************************************************************************************************************
+###########################################################################################################################
+
+# Cleanup
+
+###########################################################################################################################
+
+[
+% kubectl delete -f node-21-express-app-dockerrajani.yaml
+]
+
+% az aks delete -g rajaniAKSResourceGroup -n rajaniAKSManagedCluster
+[
+Are you sure you want to perform this operation? (y/n): y
+]
+
+% az aks list
+[]
+
+% az group list --query "[?location=='centralus']"
+[
+  {
+    "id": "/subscriptions/<Subscription ID>/resourceGroups/rajaniAKSResourceGroup",
+    "location": "centralus",
+    "managedBy": null,
+    "name": "rajaniAKSResourceGroup",
+    "properties": {
+      "provisioningState": "Succeeded"
+    },
+    "tags": null,
+    "type": "Microsoft.Resources/resourceGroups"
+  },
+  {
+    "id": "/subscriptions/<Subscription ID>/resourceGroups/NetworkWatcherRG",
+    "location": "centralus",
+    "managedBy": null,
+    "name": "NetworkWatcherRG",
+    "properties": {
+      "provisioningState": "Succeeded"
+    },
+    "tags": null,
+    "type": "Microsoft.Resources/resourceGroups"
+  }
+]
+
+% az group delete --resource-group NetworkWatcherRG
+[
+Are you sure you want to perform this operation? (y/n): y
+]
+
+% az group list --query "[?location=='centralus']"
+[
+  {
+    "id": "/subscriptions/<Subscription ID>/resourceGroups/rajaniAKSResourceGroup",
+    "location": "centralus",
+    "managedBy": null,
+    "name": "rajaniAKSResourceGroup",
+    "properties": {
+      "provisioningState": "Succeeded"
+    },
+    "tags": null,
+    "type": "Microsoft.Resources/resourceGroups"
+  }
+]
+
+% az group delete --resource-group rajaniAKSResourceGroup
+[
+Are you sure you want to perform this operation? (y/n): y
+]
+
+% az group list --query "[?location=='centralus']"       
+[]
+
+% az group list                           
+[]
+
+***************************************************************************************************************************
+
+# az aks commands
+[
+    browse                         : Show the dashboard for a Kubernetes cluster in a web browser.
+    check-acr                      : Validate an ACR is accessible from an AKS cluster.
+    create                         : Create a new managed Kubernetes cluster.
+    delete                         : Delete a managed Kubernetes cluster.
+    disable-addons                 : Disable Kubernetes addons.
+    enable-addons                  : Enable Kubernetes addons.
+    get-credentials                : Get access credentials for a managed Kubernetes cluster.
+    get-upgrades                   : Get the upgrade versions available for a managed Kubernetes
+                                     cluster.
+    get-versions                   : Get the versions available for creating a managed Kubernetes
+                                     cluster.
+    install-cli                    : Download and install kubectl, the Kubernetes command-line tool.
+                                     Download and install kubelogin, a client-go credential (exec)
+                                     plugin implementing azure authentication.
+    list                           : List managed Kubernetes clusters.
+    operation-abort                : Abort last running operation on managed cluster.
+    remove-dev-spaces [Deprecated] : Remove Azure Dev Spaces from a managed Kubernetes
+                                     cluster.
+    rotate-certs                   : Rotate certificates and keys on a managed Kubernetes cluster.
+    scale                          : Scale the node pool in a managed Kubernetes cluster.
+    show                           : Show the details for a managed Kubernetes cluster.
+    start                          : Starts a previously stopped Managed Cluster.
+    stop                           : Stops a Managed Cluster.
+    update                         : Update a managed Kubernetes cluster. When called with no
+                                     optional arguments this attempts to move the cluster to its
+                                     goal state without changing the current cluster configuration.
+                                     This can be used to move out of a non succeeded state.
+    update-credentials             : Update credentials for a managed Kubernetes cluster, like
+                                     service principal.
+    upgrade                        : Upgrade a managed Kubernetes cluster to a newer version.
+    use-dev-spaces    [Deprecated] : Use Azure Dev Spaces with a managed Kubernetes
+                                     cluster.
+    wait                           : Wait for a managed Kubernetes cluster to reach a desired state.
+]
+
+# az commands
+[
+    configure             : Manage Azure CLI configuration. This command is interactive.
+    feedback              : Send feedback to the Azure CLI Team.
+    find                  : I'm an AI robot, my advice is based on our Azure documentation as well
+                            as the usage patterns of Azure CLI and Azure ARM users. Using me
+                            improves Azure products and documentation.
+    interactive [Preview] : Start interactive mode. Installs the Interactive extension if
+                            not installed already.
+    login                 : Log in to Azure.
+    logout                : Log out to remove access to Azure subscriptions.
+    rest                  : Invoke a custom request.
+    survey                : Take Azure CLI survey.
+    upgrade     [Preview] : Upgrade Azure CLI and extensions.
+    version               : Show the versions of Azure CLI modules and extensions in JSON format by
+                            default or format configured by --output.
+]
+
+***************************************************************************************************************************
+===========================================================================================================================
+
+# Cleanup # $HOME
+
+===========================================================================================================================
+
+% ls ~/.kube
+% rm -rf ~/.kube
+
+
+% ls ~/.azure
+% rm -rf ~/.azure
+
+===========================================================================================================================
+###########################################################################################################################
+
+https://portal.azure.com/#view/Microsoft_Azure_Billing/SubscriptionsBladeV2
+
+# Cancel subscription
+
+###########################################################################################################################
+
+Subscriptions
+
+Default Directory (Default Directory (<Azure>outlook.onmicrosoft.com)
+
+Subscription name	Subscription ID		My role			Current cost	Secure Score	Parent management group		Status
+Azure subscription AKS	<Subscription ID>	Account admin		0.00		-						Active
+
+***************************************************************************************************************************
+
+Azure subscription AKS
+
+***************************************************************************************************************************
+
+Cancel subscription
+
+When you cancel the subscription, its resources will be turned off immediately and will no longer be incurring charges.
+
+Your subscription and data will be automatically deleted 90 days after cancellation.
+
+Confirm subscription
+
+Subscription name
+Azure subscription AKS
+
+Reason for cancellation
+Details
+Evaluation successful.
+
+Cancel subscription
+
+Your subscription was canceled.
+
+It may take up to 10 minutes for the subscription status to update.
+
+All resources have been turned off and will no longer be incurring charges.
+
+Your subscription and data will be automatically deleted in 90 days or you can manually delete them after 3 days.
+
+Cancellation details
+
+Product name
+Azure subscription AKS
+
+Product type
+Usage based subscription
+
+Status
+Canceled
+
+Close
+
+***************************************************************************************************************************
+
+# Azure subscription AKS # Status
+
+***************************************************************************************************************************
+
+This subscription is currently disabled and not incurring any charges. If you do not delete or reactivate this subscription, this subscription will be permanently deleted. You will be able to manually delete this subscription 3 days after it was initially canceled.
+ 
+Tokenization is required to store card details due to a Reserve Bank of India directive. To tokenize your card details or allow automatic payments, add and verify your card.
+
+Subscription ID
+<Subscription ID>
+
+Directory
+Default Directory (<Azure>outlook.onmicrosoft.com)
+
+My role
+Account admin
+
+Offer
+Pay-As-You-Go
+
+Offer ID
+MS-AZR-0044P
+
+Parent management group
+---
+
+Subscription name
+Azure subscription AKS
+
+Current billing period
+Not available
+
+Currency
+INR
+
+Status
+Disabled
+
+Secure Score
+Not available
+
+***************************************************************************************************************************
+
+# Delete Azure subscription AKS
+
+***************************************************************************************************************************
+
+Manually delete your subscription
+Your subscription was cancelled and is not incurring charges. If not manually deleted, your data will be automatically deleted. To manually delete your subscription and data, complete the following two steps.
+
+Delete resources
+After deleting or moving resources, please allow 10 minutes for these changes to be updated in the portal.
+Complete
+
+Manual deletion date
+To minimize business impact, there is a 3-day waiting period for deletion.
+You can manually delete this subscription in 3 days
+
+***************************************************************************************************************************
+###########################################################################################################################

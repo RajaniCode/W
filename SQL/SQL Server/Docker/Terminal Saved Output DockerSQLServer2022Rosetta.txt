@@ -1,0 +1,71 @@
+Last login: Thu Jul 20 02:26:06 on console
+rajaniapple@Rajanis-MacBook-Pro ~ % arch                                                  
+i386
+rajaniapple@Rajanis-MacBook-Pro ~ % docker pull mcr.microsoft.com/mssql/server:2022-latest
+2022-latest: Pulling from mssql/server
+bbfe84ab0c13: Pull complete 
+fd849ceae6e5: Pull complete 
+d40626ee3ec6: Pull complete 
+Digest: sha256:f59eae35f672300b68470b6f2fd735cf44982cb1585dd7ff40d7869661899b1d
+Status: Downloaded newer image for mcr.microsoft.com/mssql/server:2022-latest
+mcr.microsoft.com/mssql/server:2022-latest
+
+What's Next?
+  View summary of image vulnerabilities and recommendations → docker scout quickview mcr.microsoft.com/mssql/server:2022-latest
+rajaniapple@Rajanis-MacBook-Pro ~ % docker run -d --name mssql -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$QL$erver@2022' -p 1433:1433 mcr.microsoft.com/mssql/server:2022-latest
+WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+0be20d86ef748566eb4f7f5c4c3bf8356be7e07c54ab76608fc4b7dd1c4a294a
+rajaniapple@Rajanis-MacBook-Pro ~ % mssql -u sa -p
+Enter password: **************
+Connecting to localhost...done
+
+sql-cli version 0.6.2
+Enter ".help" for usage hints.
+mssql> SELECT @@VERSION;
+                                                                                                                                                                                               
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Microsoft SQL Server 2022 (RTM-CU5) (KB5026806) - 16.0.4045.3 (X64) 
+	May 26 2023 12:52:08 
+	Copyright (C) 2022 Microsoft Corporation
+	Developer Edition (64-bit) on Linux (Ubuntu 20.04.6 LTS) <X64>
+
+1 row(s) returned
+
+Executed in 1 ms
+mssql> SELECT DB_NAME();
+      
+------
+master
+
+1 row(s) returned
+
+Executed in 1 ms
+mssql> SELECT name FROM sys.tables;
+name                 
+---------------------
+spt_fallback_db      
+spt_fallback_dev     
+spt_fallback_usg     
+spt_monitor          
+MSreplication_options
+
+5 row(s) returned
+
+Executed in 1 ms
+mssql> .help
+command             description                                     
+------------------  ------------------------------------------------
+.help               Shows this message                              
+.databases          Lists all the databases                         
+.tables             Lists all the tables                            
+.sprocs             Lists all the stored procedures                 
+.search TYPE VALUE  Searches for a value of specific type (col|text)
+.indexes TABLE      Lists all the indexes of a table                
+.read FILENAME      Execute commands in a file                      
+.run FILENAME       Execute the file as a sql script                
+.schema TABLE       Shows the schema of a table                     
+.analyze            Analyzes the database for missing indexes.      
+.quit               Exit the cli                                    
+
+mssql> .quit
+rajaniapple@Rajanis-MacBook-Pro ~ % 

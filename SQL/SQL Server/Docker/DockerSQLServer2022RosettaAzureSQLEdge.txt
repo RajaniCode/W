@@ -1,0 +1,81 @@
+DockerRajani
+rajani.net@gmail.com
+https://docker.com
+
+# Start Docker Desktop
+docker version
+
+docker info 
+
+# SQL Server 2022 # Docker # Rosetta
+# Find the “Features in development” option, and select the “Use Rosetta for x86/amd64 emulation on Apple Silicon” checkbox
+[
+# WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+]
+docker pull mcr.microsoft.com/mssql/server:2022-latest
+
+docker run -d --name mssql -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$QL$erver@2022' -p 1433:1433 mcr.microsoft.com/mssql/server:2022-latest
+
+
+# Azure SQL Edge
+docker pull mcr.microsoft.com/azure-sql-edge:latest
+
+docker run --cap-add SYS_PTRACE -e 'ACCEPT_EULA=1' -e 'MSSQL_SA_PASSWORD=@zure$QLEdge1433' -p 1433:1433 --name azuresqledge -d mcr.microsoft.com/azure-sql-edge
+
+
+npm install -g sql-cli
+
+mssql -u sa -p
+
+
+docker ps
+
+docker ps -a
+
+docker ps -f "name=azuresqledge"
+
+docker ps -a -f "name=azuresqledge"
+
+docker ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+
+docker ps -a -f "name=azuresqledge" --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+
+docker stop azuresqledge
+
+docker start azuresqledge
+
+docker rm --force goofy_curran
+
+docker rm --force keen_chatterjee
+
+docker rm --force hungry_mccarthy
+
+docker image ls
+
+# Delete image
+[
+docker image rmi <IMAGE ID>
+]
+
+docker container ls
+
+where docker
+
+ls /usr/local/bin/docker
+
+ls /usr/local/bin
+
+
+# mssql> 
+
+SELECT @@VERSION;
+
+SELECT DB_NAME();
+
+SELECT name FROM sys.tables;
+
+.help
+
+.quit
+
+

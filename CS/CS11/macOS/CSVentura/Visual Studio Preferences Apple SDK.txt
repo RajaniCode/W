@@ -1,0 +1,4 @@
+Visual Studio - Preferences - Build and Debug - SDK Locations - Apple
+Apple SDK
+Xcode 14.3.1 found at specified location.
+Location: Application/Xcode.app

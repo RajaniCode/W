@@ -1,0 +1,210 @@
+Last login: Tue Oct 24 10:13:21 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % arch 
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % pwd
+/Users/rajaniapple
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Technology/Kubernetes/Proof-of-Concept/minikube 
+rajaniapple@Rajanis-MacBook-Pro minikube % pwd
+/Users/rajaniapple/Desktop/Technology/Kubernetes/Proof-of-Concept/minikube
+rajaniapple@Rajanis-MacBook-Pro minikube % docker version
+Client:
+ Cloud integration: v1.0.35+desktop.5
+ Version:           24.0.6
+ API version:       1.43
+ Go version:        go1.20.7
+ Git commit:        ed223bc
+ Built:             Mon Sep  4 12:28:49 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.24.0 (122432)
+ Engine:
+  Version:          24.0.6
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.7
+  Git commit:       1a79695
+  Built:            Mon Sep  4 12:31:36 2023
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.22
+  GitCommit:        8165feabfdfe38c65b599c4993d227328c231fca
+ runc:
+  Version:          1.1.8
+  GitCommit:        v1.1.8-0-g82f18fe
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl version --output=yaml
+clientVersion:
+  buildDate: "2023-09-13T09:29:06Z"
+  compiler: gc
+  gitCommit: 89a4ea3e1e4ddd7f7572286090359983e0387b2f
+  gitTreeState: clean
+  gitVersion: v1.28.2
+  goVersion: go1.20.8
+  major: "1"
+  minor: "28"
+  platform: darwin/arm64
+kustomizeVersion: v5.0.4-0.20230601165947-6ce0bf390ce3
+serverVersion:
+  buildDate: "2023-07-19T12:14:49Z"
+  compiler: gc
+  gitCommit: fa3d7990104d7c1f16943a67f11b154b71f6a132
+  gitTreeState: clean
+  gitVersion: v1.27.4
+  goVersion: go1.20.6
+  major: "1"
+  minor: "27"
+  platform: linux/arm64
+
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /Users/rajaniapple/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Tue, 24 Oct 2023 09:52:52 IST
+        provider: minikube.sigs.k8s.io
+        version: v1.31.2
+      name: cluster_info
+    server: https://127.0.0.1:50384
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Tue, 24 Oct 2023 09:52:52 IST
+        provider: minikube.sigs.k8s.io
+        version: v1.31.2
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /Users/rajaniapple/.minikube/profiles/minikube/client.crt
+    client-key: /Users/rajaniapple/.minikube/profiles/minikube/client.key
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube version
+minikube version: v1.31.2
+commit: fd7ecd9c4599bef9f04c0986c4a0187f98a4396e
+rajaniapple@Rajanis-MacBook-Pro minikube % curl https://storage.googleapis.com/minikube-site-examples/ingress-example.yaml
+[
+kind: Pod
+apiVersion: v1
+metadata:
+  name: foo-app
+  labels:
+    app: foo
+spec:
+  containers:
+    - name: foo-app
+      image: 'kicbase/echo-server:1.0'
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: foo-service
+spec:
+  selector:
+    app: foo
+  ports:
+    - port: 8080
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: bar-app
+  labels:
+    app: bar
+spec:
+  containers:
+    - name: bar-app
+      image: 'kicbase/echo-server:1.0'
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: bar-service
+spec:
+  selector:
+    app: bar
+  ports:
+    - port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /foo
+            backend:
+              service:
+                name: foo-service
+                port:
+                  number: 8080
+          - pathType: Prefix
+            path: /bar
+            backend:
+              service:
+                name: bar-service
+                port:
+                  number: 8080
+---
+]
+rajaniapple@Rajanis-MacBook-Pro minikube % wget https://storage.googleapis.com/minikube-site-examples/ingress-example.yaml
+--2023-10-24 10:22:41--  https://storage.googleapis.com/minikube-site-examples/ingress-example.yaml
+Resolving storage.googleapis.com (storage.googleapis.com)... 142.250.196.187, 142.250.182.155, 142.250.195.59, ...
+Connecting to storage.googleapis.com (storage.googleapis.com)|142.250.196.187|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 1047 (1.0K) [application/octet-stream]
+Saving to: ‘ingress-example.yaml’
+
+ingress-example.yaml                    100%[===============================================================================>]   1.02K  --.-KB/s    in 0s      
+
+2023-10-24 10:22:41 (2.24 MB/s) - ‘ingress-example.yaml’ saved [1047/1047]
+
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl apply -f ingress-example.yaml
+pod/foo-app created
+service/foo-service created
+pod/bar-app created
+service/bar-service created
+ingress.networking.k8s.io/example-ingress created
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get ingress
+NAME              CLASS    HOSTS   ADDRESS   PORTS   AGE
+example-ingress   <none>   *                 80      17s
+rajaniapple@Rajanis-MacBook-Pro minikube % curl http://127.0.0.1:8080/
+Request served by balanced-567b5f87b5-n7669
+
+HTTP/1.1 GET /
+
+Host: 127.0.0.1:8080
+Accept: */*
+User-Agent: curl/8.1.2
+rajaniapple@Rajanis-MacBook-Pro minikube % curl 127.0.0.1:8080/foo    
+Request served by balanced-567b5f87b5-n7669
+
+HTTP/1.1 GET /foo
+
+Host: 127.0.0.1:8080
+Accept: */*
+User-Agent: curl/8.1.2
+rajaniapple@Rajanis-MacBook-Pro minikube % curl 127.0.0.1:8080/bar   
+Request served by balanced-567b5f87b5-n7669
+
+HTTP/1.1 GET /bar
+
+Host: 127.0.0.1:8080
+Accept: */*
+User-Agent: curl/8.1.2
+rajaniapple@Rajanis-MacBook-Pro minikube %

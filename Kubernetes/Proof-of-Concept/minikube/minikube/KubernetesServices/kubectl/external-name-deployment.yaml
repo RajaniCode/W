@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-name-deployment
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: openjs
+      engine: v8
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: openjs
+        engine: v8
+    spec:
+      containers:
+      - name: expressjs-4-container
+        image: "dockerrajani/node-21-express-dns-app-macos-arm64:version1.0.0"
+        env:
+        - name: "PORT"
+          value: "3000"
+        env:
+        - name: "HOST"
+          value: "external-name-service.production.svc.cluster.local"

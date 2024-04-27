@@ -1,0 +1,34 @@
+Last login: Sat Nov  4 00:13:57 on ttys002
+rajaniapple@Rajanis-MacBook-Pro ~ % sw_vers
+ProductName:		macOS
+ProductVersion:		14.0
+BuildVersion:		23A344
+rajaniapple@Rajanis-MacBook-Pro ~ % arch
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % node -v
+v20.9.0
+rajaniapple@Rajanis-MacBook-Pro ~ % npm -v
+10.1.0
+rajaniapple@Rajanis-MacBook-Pro ~ % docker ps
+CONTAINER ID   IMAGE              COMMAND                  CREATED              STATUS              PORTS                    NAMES
+4adf4e2f11cf   node-mongodb-app   "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:3000->3000/tcp   node-mongodb-app
+731e4925e9a9   mongo              "docker-entrypoint.s…"   2 minutes ago        Up 2 minutes        27017/tcp                mongo
+rajaniapple@Rajanis-MacBook-Pro ~ % docker stop 4adf4e2f11cf
+4adf4e2f11cf
+rajaniapple@Rajanis-MacBook-Pro ~ % docker stop 731e4925e9a9
+731e4925e9a9
+rajaniapple@Rajanis-MacBook-Pro ~ % 
+
+
+
+
+
+
+
+
+
+
+
+
+
+

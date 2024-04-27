@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: js-deployment
+spec:
+  selector:
+    matchLabels:
+      app: js
+      ecosystem: javascript
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: js
+        ecosystem: javascript
+    spec:
+      containers:
+      - name: js-container
+        image: "dockerrajani/node-21-express-app-macos-arm64:version1.0.0"

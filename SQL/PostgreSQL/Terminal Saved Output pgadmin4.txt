@@ -1,0 +1,397 @@
+Last login: Thu Jul 20 13:03:44 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % python3 -m venv pgadmin4
+rajaniapple@Rajanis-MacBook-Pro ~ % source pgadmin4/bin/activate
+(pgadmin4) rajaniapple@Rajanis-MacBook-Pro ~ % pip install pgadmin4
+Collecting pgadmin4
+  Downloading pgadmin4-7.4-py3-none-any.whl (85.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 85.2/85.2 MB 1.9 MB/s eta 0:00:00
+Collecting Authlib==1.2.* (from pgadmin4)
+  Downloading Authlib-1.2.1-py2.py3-none-any.whl (215 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 215.3/215.3 kB 1.3 MB/s eta 0:00:00
+Collecting Flask-Babel==3.1.* (from pgadmin4)
+  Downloading flask_babel-3.1.0-py3-none-any.whl (9.6 kB)
+Collecting Flask-Compress==1.* (from pgadmin4)
+  Downloading Flask_Compress-1.13-py3-none-any.whl (7.9 kB)
+Collecting Flask-Gravatar==0.* (from pgadmin4)
+  Using cached Flask_Gravatar-0.5.0-py2.py3-none-any.whl (7.5 kB)
+Collecting Flask-Login==0.* (from pgadmin4)
+  Downloading Flask_Login-0.6.2-py3-none-any.whl (17 kB)
+Collecting Flask-Mail==0.* (from pgadmin4)
+  Using cached Flask-Mail-0.9.1.tar.gz (45 kB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting Flask-Migrate==4.* (from pgadmin4)
+  Downloading Flask_Migrate-4.0.4-py3-none-any.whl (20 kB)
+Collecting Flask-Paranoid==0.* (from pgadmin4)
+  Downloading Flask_Paranoid-0.3.0-py3-none-any.whl (4.5 kB)
+Collecting Flask-SQLAlchemy==3.0.* (from pgadmin4)
+  Downloading flask_sqlalchemy-3.0.5-py3-none-any.whl (24 kB)
+Collecting Flask-Security-Too==5.1.* (from pgadmin4)
+  Downloading Flask_Security_Too-5.1.2-py2.py3-none-any.whl (369 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 370.0/370.0 kB 3.7 MB/s eta 0:00:00
+Collecting Flask-SocketIO==5.3.* (from pgadmin4)
+  Downloading Flask_SocketIO-5.3.4-py3-none-any.whl (17 kB)
+Collecting Flask-WTF==1.1.1 (from pgadmin4)
+  Downloading Flask_WTF-1.1.1-py3-none-any.whl (12 kB)
+Collecting Flask==2.2.* (from pgadmin4)
+  Downloading Flask-2.2.5-py3-none-any.whl (101 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 101.8/101.8 kB 4.2 MB/s eta 0:00:00
+Collecting Pillow==9.* (from pgadmin4)
+  Downloading Pillow-9.5.0-cp311-cp311-macosx_11_0_arm64.whl (3.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.1/3.1 MB 3.9 MB/s eta 0:00:00
+Collecting SQLAlchemy==2.* (from pgadmin4)
+  Downloading SQLAlchemy-2.0.19-cp311-cp311-macosx_11_0_arm64.whl (2.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 5.0 MB/s eta 0:00:00
+Collecting WTForms==3.0.* (from pgadmin4)
+  Using cached WTForms-3.0.1-py3-none-any.whl (136 kB)
+Collecting Werkzeug==2.2.3 (from pgadmin4)
+  Downloading Werkzeug-2.2.3-py3-none-any.whl (233 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 233.6/233.6 kB 5.3 MB/s eta 0:00:00
+Collecting azure-identity==1.13.0 (from pgadmin4)
+  Downloading azure_identity-1.13.0-py3-none-any.whl (151 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 151.6/151.6 kB 5.1 MB/s eta 0:00:00
+Collecting azure-mgmt-rdbms==10.1.0 (from pgadmin4)
+  Downloading azure_mgmt_rdbms-10.1.0-py3-none-any.whl (639 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 639.7/639.7 kB 6.1 MB/s eta 0:00:00
+Collecting azure-mgmt-resource==23.0.1 (from pgadmin4)
+  Downloading azure_mgmt_resource-23.0.1-py3-none-any.whl (2.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.5/2.5 MB 5.1 MB/s eta 0:00:00
+Collecting azure-mgmt-subscription==3.1.1 (from pgadmin4)
+  Downloading azure_mgmt_subscription-3.1.1-py3-none-any.whl (79 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 79.4/79.4 kB 4.6 MB/s eta 0:00:00
+Collecting bcrypt==4.0.* (from pgadmin4)
+  Downloading bcrypt-4.0.1-cp36-abi3-macosx_10_10_universal2.whl (473 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 473.4/473.4 kB 2.3 MB/s eta 0:00:00
+Collecting boto3==1.26.* (from pgadmin4)
+  Downloading boto3-1.26.165-py3-none-any.whl (135 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.9/135.9 kB 610.7 kB/s eta 0:00:00
+Collecting botocore==1.29.* (from pgadmin4)
+  Downloading botocore-1.29.165-py3-none-any.whl (11.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.0/11.0 MB 5.6 MB/s eta 0:00:00
+Collecting cryptography==40.0.* (from pgadmin4)
+  Downloading cryptography-40.0.2-cp36-abi3-macosx_10_12_universal2.whl (5.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.1/5.1 MB 5.9 MB/s eta 0:00:00
+Collecting eventlet==0.33.3 (from pgadmin4)
+  Downloading eventlet-0.33.3-py2.py3-none-any.whl (226 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 226.8/226.8 kB 5.3 MB/s eta 0:00:00
+Collecting google-api-python-client==2.* (from pgadmin4)
+  Downloading google_api_python_client-2.94.0-py2.py3-none-any.whl (11.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.5/11.5 MB 6.6 MB/s eta 0:00:00
+Collecting google-auth-oauthlib==1.0.0 (from pgadmin4)
+  Downloading google_auth_oauthlib-1.0.0-py2.py3-none-any.whl (18 kB)
+Collecting httpagentparser==1.9.* (from pgadmin4)
+  Downloading httpagentparser-1.9.5.tar.gz (7.7 kB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting keyring==23.* (from pgadmin4)
+  Downloading keyring-23.13.1-py3-none-any.whl (37 kB)
+Collecting ldap3==2.* (from pgadmin4)
+  Using cached ldap3-2.9.1-py2.py3-none-any.whl (432 kB)
+Collecting passlib==1.* (from pgadmin4)
+  Using cached passlib-1.7.4-py2.py3-none-any.whl (525 kB)
+Collecting psutil==5.9.* (from pgadmin4)
+  Downloading psutil-5.9.5-cp38-abi3-macosx_11_0_arm64.whl (246 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 246.1/246.1 kB 4.8 MB/s eta 0:00:00
+Collecting psycopg[binary]==3.1.8 (from pgadmin4)
+  Downloading psycopg-3.1.8-py3-none-any.whl (167 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 167.4/167.4 kB 2.1 MB/s eta 0:00:00
+Collecting pyotp==2.* (from pgadmin4)
+  Downloading pyotp-2.8.0-py3-none-any.whl (12 kB)
+Collecting python-dateutil==2.* (from pgadmin4)
+  Using cached python_dateutil-2.8.2-py2.py3-none-any.whl (247 kB)
+Collecting pytz==2023.* (from pgadmin4)
+  Downloading pytz-2023.3-py2.py3-none-any.whl (502 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 502.3/502.3 kB 2.4 MB/s eta 0:00:00
+Collecting qrcode==7.* (from pgadmin4)
+  Downloading qrcode-7.4.2-py3-none-any.whl (46 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 46.2/46.2 kB 3.7 MB/s eta 0:00:00
+Collecting speaklater3==1.* (from pgadmin4)
+  Using cached speaklater3-1.4-py3-none-any.whl (5.9 kB)
+Collecting sqlparse==0.* (from pgadmin4)
+  Downloading sqlparse-0.4.4-py3-none-any.whl (41 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41.2/41.2 kB 3.5 MB/s eta 0:00:00
+Collecting sshtunnel==0.* (from pgadmin4)
+  Using cached sshtunnel-0.4.0-py2.py3-none-any.whl (24 kB)
+Collecting urllib3==1.26.* (from pgadmin4)
+  Downloading urllib3-1.26.16-py2.py3-none-any.whl (143 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 143.1/143.1 kB 3.3 MB/s eta 0:00:00
+Collecting user-agents==2.2.0 (from pgadmin4)
+  Using cached user_agents-2.2.0-py3-none-any.whl (9.6 kB)
+Collecting azure-core<2.0.0,>=1.11.0 (from azure-identity==1.13.0->pgadmin4)
+  Downloading azure_core-1.28.0-py3-none-any.whl (185 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 185.4/185.4 kB 4.5 MB/s eta 0:00:00
+Collecting msal<2.0.0,>=1.20.0 (from azure-identity==1.13.0->pgadmin4)
+  Downloading msal-1.22.0-py2.py3-none-any.whl (90 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 90.0/90.0 kB 5.7 MB/s eta 0:00:00
+Collecting msal-extensions<2.0.0,>=0.3.0 (from azure-identity==1.13.0->pgadmin4)
+  Downloading msal_extensions-1.0.0-py2.py3-none-any.whl (19 kB)
+Collecting six>=1.12.0 (from azure-identity==1.13.0->pgadmin4)
+  Using cached six-1.16.0-py2.py3-none-any.whl (11 kB)
+Collecting msrest>=0.6.21 (from azure-mgmt-rdbms==10.1.0->pgadmin4)
+  Downloading msrest-0.7.1-py3-none-any.whl (85 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 85.4/85.4 kB 3.0 MB/s eta 0:00:00
+Collecting azure-common~=1.1 (from azure-mgmt-rdbms==10.1.0->pgadmin4)
+  Downloading azure_common-1.1.28-py2.py3-none-any.whl (14 kB)
+Collecting azure-mgmt-core<2.0.0,>=1.3.0 (from azure-mgmt-rdbms==10.1.0->pgadmin4)
+  Downloading azure_mgmt_core-1.4.0-py3-none-any.whl (27 kB)
+Collecting isodate<1.0.0,>=0.6.1 (from azure-mgmt-resource==23.0.1->pgadmin4)
+  Downloading isodate-0.6.1-py2.py3-none-any.whl (41 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41.7/41.7 kB 2.5 MB/s eta 0:00:00
+Collecting jmespath<2.0.0,>=0.7.1 (from boto3==1.26.*->pgadmin4)
+  Downloading jmespath-1.0.1-py3-none-any.whl (20 kB)
+Collecting s3transfer<0.7.0,>=0.6.0 (from boto3==1.26.*->pgadmin4)
+  Downloading s3transfer-0.6.1-py3-none-any.whl (79 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 79.8/79.8 kB 3.3 MB/s eta 0:00:00
+Collecting cffi>=1.12 (from cryptography==40.0.*->pgadmin4)
+  Downloading cffi-1.15.1-cp311-cp311-macosx_11_0_arm64.whl (174 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 174.2/174.2 kB 5.6 MB/s eta 0:00:00
+Collecting dnspython>=1.15.0 (from eventlet==0.33.3->pgadmin4)
+  Downloading dnspython-2.4.0-py3-none-any.whl (300 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 300.0/300.0 kB 5.7 MB/s eta 0:00:00
+Collecting greenlet>=0.3 (from eventlet==0.33.3->pgadmin4)
+  Downloading greenlet-2.0.2-cp311-cp311-macosx_10_9_universal2.whl (243 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 243.0/243.0 kB 3.3 MB/s eta 0:00:00
+Collecting Jinja2>=3.0 (from Flask==2.2.*->pgadmin4)
+  Downloading Jinja2-3.1.2-py3-none-any.whl (133 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 133.1/133.1 kB 5.4 MB/s eta 0:00:00
+Collecting itsdangerous>=2.0 (from Flask==2.2.*->pgadmin4)
+  Downloading itsdangerous-2.1.2-py3-none-any.whl (15 kB)
+Collecting click>=8.0 (from Flask==2.2.*->pgadmin4)
+  Downloading click-8.1.6-py3-none-any.whl (97 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 97.9/97.9 kB 4.2 MB/s eta 0:00:00
+Collecting Babel>=2.12 (from Flask-Babel==3.1.*->pgadmin4)
+  Downloading Babel-2.12.1-py3-none-any.whl (10.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.1/10.1 MB 5.3 MB/s eta 0:00:00
+Collecting brotli (from Flask-Compress==1.*->pgadmin4)
+  Downloading Brotli-1.0.9-cp311-cp311-macosx_10_9_universal2.whl (806 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 806.0/806.0 kB 6.1 MB/s eta 0:00:00
+Collecting blinker (from Flask-Mail==0.*->pgadmin4)
+  Downloading blinker-1.6.2-py3-none-any.whl (13 kB)
+Collecting alembic>=1.9.0 (from Flask-Migrate==4.*->pgadmin4)
+  Downloading alembic-1.11.1-py3-none-any.whl (224 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 224.5/224.5 kB 1.5 MB/s eta 0:00:00
+Collecting Flask-Principal>=0.4.0 (from Flask-Security-Too==5.1.*->pgadmin4)
+  Using cached Flask-Principal-0.4.0.tar.gz (5.5 kB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting email-validator>=1.1.1 (from Flask-Security-Too==5.1.*->pgadmin4)
+  Downloading email_validator-2.0.0.post2-py3-none-any.whl (31 kB)
+Requirement already satisfied: setuptools in ./pgadmin4/lib/python3.11/site-packages (from Flask-Security-Too==5.1.*->pgadmin4) (65.5.0)
+Collecting python-socketio>=5.0.2 (from Flask-SocketIO==5.3.*->pgadmin4)
+  Downloading python_socketio-5.8.0-py3-none-any.whl (56 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.0/57.0 kB 2.5 MB/s eta 0:00:00
+Collecting httplib2<1.dev0,>=0.15.0 (from google-api-python-client==2.*->pgadmin4)
+  Downloading httplib2-0.22.0-py3-none-any.whl (96 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 96.9/96.9 kB 2.0 MB/s eta 0:00:00
+Collecting google-auth<3.0.0.dev0,>=1.19.0 (from google-api-python-client==2.*->pgadmin4)
+  Downloading google_auth-2.22.0-py2.py3-none-any.whl (181 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 181.8/181.8 kB 4.0 MB/s eta 0:00:00
+Collecting google-auth-httplib2>=0.1.0 (from google-api-python-client==2.*->pgadmin4)
+  Downloading google_auth_httplib2-0.1.0-py2.py3-none-any.whl (9.3 kB)
+Collecting google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5 (from google-api-python-client==2.*->pgadmin4)
+  Downloading google_api_core-2.11.1-py3-none-any.whl (120 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 120.5/120.5 kB 5.6 MB/s eta 0:00:00
+Collecting uritemplate<5,>=3.0.1 (from google-api-python-client==2.*->pgadmin4)
+  Downloading uritemplate-4.1.1-py2.py3-none-any.whl (10 kB)
+Collecting requests-oauthlib>=0.7.0 (from google-auth-oauthlib==1.0.0->pgadmin4)
+  Downloading requests_oauthlib-1.3.1-py2.py3-none-any.whl (23 kB)
+Collecting jaraco.classes (from keyring==23.*->pgadmin4)
+  Downloading jaraco.classes-3.3.0-py3-none-any.whl (5.9 kB)
+Collecting importlib-metadata>=4.11.4 (from keyring==23.*->pgadmin4)
+  Downloading importlib_metadata-6.8.0-py3-none-any.whl (22 kB)
+Collecting pyasn1>=0.4.6 (from ldap3==2.*->pgadmin4)
+  Downloading pyasn1-0.5.0-py2.py3-none-any.whl (83 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 83.9/83.9 kB 5.1 MB/s eta 0:00:00
+Collecting typing-extensions>=4.1 (from psycopg[binary]==3.1.8->pgadmin4)
+  Downloading typing_extensions-4.7.1-py3-none-any.whl (33 kB)
+Collecting psycopg-binary<=3.1.8,>=3.1.6 (from psycopg[binary]==3.1.8->pgadmin4)
+  Downloading psycopg_binary-3.1.8-cp311-cp311-macosx_11_0_arm64.whl (2.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 2.8 MB/s eta 0:00:00
+Collecting pypng (from qrcode==7.*->pgadmin4)
+  Downloading pypng-0.20220715.0-py3-none-any.whl (58 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58.1/58.1 kB 3.0 MB/s eta 0:00:00
+Collecting paramiko>=2.7.2 (from sshtunnel==0.*->pgadmin4)
+  Downloading paramiko-3.2.0-py3-none-any.whl (224 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 224.2/224.2 kB 4.7 MB/s eta 0:00:00
+Collecting ua-parser>=0.10.0 (from user-agents==2.2.0->pgadmin4)
+  Downloading ua_parser-0.18.0-py2.py3-none-any.whl (38 kB)
+Collecting MarkupSafe>=2.1.1 (from Werkzeug==2.2.3->pgadmin4)
+  Downloading MarkupSafe-2.1.3-cp311-cp311-macosx_10_9_universal2.whl (17 kB)
+Collecting Mako (from alembic>=1.9.0->Flask-Migrate==4.*->pgadmin4)
+  Downloading Mako-1.2.4-py3-none-any.whl (78 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.7/78.7 kB 3.7 MB/s eta 0:00:00
+Collecting requests>=2.18.4 (from azure-core<2.0.0,>=1.11.0->azure-identity==1.13.0->pgadmin4)
+  Downloading requests-2.31.0-py3-none-any.whl (62 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.6/62.6 kB 3.8 MB/s eta 0:00:00
+Collecting pycparser (from cffi>=1.12->cryptography==40.0.*->pgadmin4)
+  Using cached pycparser-2.21-py2.py3-none-any.whl (118 kB)
+Collecting httpcore>=0.17.3 (from dnspython>=1.15.0->eventlet==0.33.3->pgadmin4)
+  Downloading httpcore-0.17.3-py3-none-any.whl (74 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 74.5/74.5 kB 4.0 MB/s eta 0:00:00
+Collecting sniffio<2.0,>=1.1 (from dnspython>=1.15.0->eventlet==0.33.3->pgadmin4)
+  Downloading sniffio-1.3.0-py3-none-any.whl (10 kB)
+Collecting idna>=2.0.0 (from email-validator>=1.1.1->Flask-Security-Too==5.1.*->pgadmin4)
+  Downloading idna-3.4-py3-none-any.whl (61 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 61.5/61.5 kB 3.9 MB/s eta 0:00:00
+Collecting googleapis-common-protos<2.0.dev0,>=1.56.2 (from google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.*->pgadmin4)
+  Downloading googleapis_common_protos-1.59.1-py2.py3-none-any.whl (224 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 224.5/224.5 kB 5.2 MB/s eta 0:00:00
+Collecting protobuf!=3.20.0,!=3.20.1,!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<5.0.0.dev0,>=3.19.5 (from google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.*->pgadmin4)
+  Downloading protobuf-4.23.4-cp37-abi3-macosx_10_9_universal2.whl (400 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 400.3/400.3 kB 4.7 MB/s eta 0:00:00
+Collecting cachetools<6.0,>=2.0.0 (from google-auth<3.0.0.dev0,>=1.19.0->google-api-python-client==2.*->pgadmin4)
+  Downloading cachetools-5.3.1-py3-none-any.whl (9.3 kB)
+Collecting pyasn1-modules>=0.2.1 (from google-auth<3.0.0.dev0,>=1.19.0->google-api-python-client==2.*->pgadmin4)
+  Downloading pyasn1_modules-0.3.0-py2.py3-none-any.whl (181 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 181.3/181.3 kB 4.8 MB/s eta 0:00:00
+Collecting rsa<5,>=3.1.4 (from google-auth<3.0.0.dev0,>=1.19.0->google-api-python-client==2.*->pgadmin4)
+  Downloading rsa-4.9-py3-none-any.whl (34 kB)
+Collecting pyparsing!=3.0.0,!=3.0.1,!=3.0.2,!=3.0.3,<4,>=2.4.2 (from httplib2<1.dev0,>=0.15.0->google-api-python-client==2.*->pgadmin4)
+  Downloading pyparsing-3.1.0-py3-none-any.whl (102 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 102.6/102.6 kB 4.7 MB/s eta 0:00:00
+Collecting zipp>=0.5 (from importlib-metadata>=4.11.4->keyring==23.*->pgadmin4)
+  Downloading zipp-3.16.2-py3-none-any.whl (7.2 kB)
+Collecting PyJWT[crypto]<3,>=1.0.0 (from msal<2.0.0,>=1.20.0->azure-identity==1.13.0->pgadmin4)
+  Downloading PyJWT-2.8.0-py3-none-any.whl (22 kB)
+Collecting portalocker<3,>=1.0 (from msal-extensions<2.0.0,>=0.3.0->azure-identity==1.13.0->pgadmin4)
+  Downloading portalocker-2.7.0-py2.py3-none-any.whl (15 kB)
+Collecting certifi>=2017.4.17 (from msrest>=0.6.21->azure-mgmt-rdbms==10.1.0->pgadmin4)
+  Downloading certifi-2023.5.7-py3-none-any.whl (156 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 157.0/157.0 kB 3.6 MB/s eta 0:00:00
+Collecting pynacl>=1.5 (from paramiko>=2.7.2->sshtunnel==0.*->pgadmin4)
+  Downloading PyNaCl-1.5.0-cp36-abi3-macosx_10_10_universal2.whl (349 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 349.9/349.9 kB 4.0 MB/s eta 0:00:00
+Collecting bidict>=0.21.0 (from python-socketio>=5.0.2->Flask-SocketIO==5.3.*->pgadmin4)
+  Downloading bidict-0.22.1-py3-none-any.whl (35 kB)
+Collecting python-engineio>=4.3.0 (from python-socketio>=5.0.2->Flask-SocketIO==5.3.*->pgadmin4)
+  Downloading python_engineio-4.5.1-py3-none-any.whl (53 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 53.5/53.5 kB 3.6 MB/s eta 0:00:00
+Collecting oauthlib>=3.0.0 (from requests-oauthlib>=0.7.0->google-auth-oauthlib==1.0.0->pgadmin4)
+  Downloading oauthlib-3.2.2-py3-none-any.whl (151 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 151.7/151.7 kB 3.7 MB/s eta 0:00:00
+Collecting more-itertools (from jaraco.classes->keyring==23.*->pgadmin4)
+  Downloading more_itertools-9.1.0-py3-none-any.whl (54 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 54.2/54.2 kB 2.7 MB/s eta 0:00:00
+Collecting h11<0.15,>=0.13 (from httpcore>=0.17.3->dnspython>=1.15.0->eventlet==0.33.3->pgadmin4)
+  Downloading h11-0.14.0-py3-none-any.whl (58 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58.3/58.3 kB 2.9 MB/s eta 0:00:00
+Collecting anyio<5.0,>=3.0 (from httpcore>=0.17.3->dnspython>=1.15.0->eventlet==0.33.3->pgadmin4)
+  Downloading anyio-3.7.1-py3-none-any.whl (80 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 80.9/80.9 kB 3.4 MB/s eta 0:00:00
+Collecting charset-normalizer<4,>=2 (from requests>=2.18.4->azure-core<2.0.0,>=1.11.0->azure-identity==1.13.0->pgadmin4)
+  Downloading charset_normalizer-3.2.0-cp311-cp311-macosx_11_0_arm64.whl (122 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 122.8/122.8 kB 5.2 MB/s eta 0:00:00
+Building wheels for collected packages: Flask-Mail, httpagentparser, Flask-Principal
+  Building wheel for Flask-Mail (pyproject.toml) ... done
+  Created wheel for Flask-Mail: filename=Flask_Mail-0.9.1-py3-none-any.whl size=7579 sha256=86c45b1540a5e86f3701c05fc870fed0195582bb1e1506a1e4d1f3ed17ea2bea
+  Stored in directory: /Users/rajaniapple/Library/Caches/pip/wheels/f6/38/ab/b955b60e85ca451344be85d42bd267ef32311bd61cb21e5a1c
+  Building wheel for httpagentparser (pyproject.toml) ... done
+  Created wheel for httpagentparser: filename=httpagentparser-1.9.5-py3-none-any.whl size=7540 sha256=424cd360cc9b0f391fb0096d13a38e7478eddab34ba56cb60b993c2eafde0288
+  Stored in directory: /Users/rajaniapple/Library/Caches/pip/wheels/4a/e1/b1/5730e0e3c9a63525ef4d81bcee36ab006eae344cf2632b4a87
+  Building wheel for Flask-Principal (pyproject.toml) ... done
+  Created wheel for Flask-Principal: filename=Flask_Principal-0.4.0-py3-none-any.whl size=5575 sha256=4767d69bb2da1b0d4411fea400cedc9354caec5f933898c87e8cb46fe6e0b8cc
+  Stored in directory: /Users/rajaniapple/Library/Caches/pip/wheels/78/f6/ea/be1b073211b56068f184b2fa0a8e7c0e6a172dadef910abb1f
+Successfully built Flask-Mail httpagentparser Flask-Principal
+Installing collected packages: ua-parser, speaklater3, pytz, pypng, passlib, httpagentparser, brotli, azure-common, zipp, user-agents, urllib3, uritemplate, typing-extensions, sqlparse, sniffio, six, python-engineio, pyparsing, pyotp, PyJWT, pycparser, pyasn1, psycopg-binary, psutil, protobuf, portalocker, Pillow, oauthlib, more-itertools, MarkupSafe, jmespath, itsdangerous, idna, h11, greenlet, click, charset-normalizer, certifi, cachetools, blinker, bidict, bcrypt, Babel, WTForms, Werkzeug, SQLAlchemy, rsa, requests, qrcode, python-socketio, python-dateutil, pyasn1-modules, psycopg, Mako, ldap3, Jinja2, jaraco.classes, isodate, importlib-metadata, httplib2, googleapis-common-protos, cffi, anyio, requests-oauthlib, pynacl, keyring, httpcore, google-auth, Flask, cryptography, botocore, azure-core, alembic, s3transfer, paramiko, msrest, google-auth-oauthlib, google-auth-httplib2, google-api-core, Flask-WTF, Flask-SQLAlchemy, Flask-SocketIO, Flask-Principal, Flask-Paranoid, Flask-Mail, Flask-Login, Flask-Gravatar, Flask-Compress, Flask-Babel, dnspython, azure-mgmt-core, Authlib, sshtunnel, msal, google-api-python-client, Flask-Migrate, eventlet, email-validator, boto3, azure-mgmt-subscription, azure-mgmt-resource, azure-mgmt-rdbms, msal-extensions, Flask-Security-Too, azure-identity, pgadmin4
+Successfully installed Authlib-1.2.1 Babel-2.12.1 Flask-2.2.5 Flask-Babel-3.1.0 Flask-Compress-1.13 Flask-Gravatar-0.5.0 Flask-Login-0.6.2 Flask-Mail-0.9.1 Flask-Migrate-4.0.4 Flask-Paranoid-0.3.0 Flask-Principal-0.4.0 Flask-SQLAlchemy-3.0.5 Flask-Security-Too-5.1.2 Flask-SocketIO-5.3.4 Flask-WTF-1.1.1 Jinja2-3.1.2 Mako-1.2.4 MarkupSafe-2.1.3 Pillow-9.5.0 PyJWT-2.8.0 SQLAlchemy-2.0.19 WTForms-3.0.1 Werkzeug-2.2.3 alembic-1.11.1 anyio-3.7.1 azure-common-1.1.28 azure-core-1.28.0 azure-identity-1.13.0 azure-mgmt-core-1.4.0 azure-mgmt-rdbms-10.1.0 azure-mgmt-resource-23.0.1 azure-mgmt-subscription-3.1.1 bcrypt-4.0.1 bidict-0.22.1 blinker-1.6.2 boto3-1.26.165 botocore-1.29.165 brotli-1.0.9 cachetools-5.3.1 certifi-2023.5.7 cffi-1.15.1 charset-normalizer-3.2.0 click-8.1.6 cryptography-40.0.2 dnspython-2.4.0 email-validator-2.0.0.post2 eventlet-0.33.3 google-api-core-2.11.1 google-api-python-client-2.94.0 google-auth-2.22.0 google-auth-httplib2-0.1.0 google-auth-oauthlib-1.0.0 googleapis-common-protos-1.59.1 greenlet-2.0.2 h11-0.14.0 httpagentparser-1.9.5 httpcore-0.17.3 httplib2-0.22.0 idna-3.4 importlib-metadata-6.8.0 isodate-0.6.1 itsdangerous-2.1.2 jaraco.classes-3.3.0 jmespath-1.0.1 keyring-23.13.1 ldap3-2.9.1 more-itertools-9.1.0 msal-1.22.0 msal-extensions-1.0.0 msrest-0.7.1 oauthlib-3.2.2 paramiko-3.2.0 passlib-1.7.4 pgadmin4-7.4 portalocker-2.7.0 protobuf-4.23.4 psutil-5.9.5 psycopg-3.1.8 psycopg-binary-3.1.8 pyasn1-0.5.0 pyasn1-modules-0.3.0 pycparser-2.21 pynacl-1.5.0 pyotp-2.8.0 pyparsing-3.1.0 pypng-0.20220715.0 python-dateutil-2.8.2 python-engineio-4.5.1 python-socketio-5.8.0 pytz-2023.3 qrcode-7.4.2 requests-2.31.0 requests-oauthlib-1.3.1 rsa-4.9 s3transfer-0.6.1 six-1.16.0 sniffio-1.3.0 speaklater3-1.4 sqlparse-0.4.4 sshtunnel-0.4.0 typing-extensions-4.7.1 ua-parser-0.18.0 uritemplate-4.1.1 urllib3-1.26.16 user-agents-2.2.0 zipp-3.16.2
+
+[notice] A new release of pip is available: 23.1.2 -> 23.2
+[notice] To update, run: pip install --upgrade pip
+(pgadmin4) rajaniapple@Rajanis-MacBook-Pro ~ % sudo mkdir /var/lib/pgadmin
+Password:
+(pgadmin4) rajaniapple@Rajanis-MacBook-Pro ~ % sudo mkdir -p /var/log/pgadmin
+(pgadmin4) rajaniapple@Rajanis-MacBook-Pro ~ % sudo chown $USER /var/lib/pgadmin                   
+(pgadmin4) rajaniapple@Rajanis-MacBook-Pro ~ % sudo chown $USER /var/log/pgadmin
+(pgadmin4) rajaniapple@Rajanis-MacBook-Pro ~ % pgadmin4                         
+NOTE: Configuring authentication for SERVER mode.
+
+Enter the email address and password to use for the initial pgAdmin user account:
+
+Email address: heapunderebb@gmail.com
+Password: https://
+Retype password: https://
+pgAdmin 4 - Application Initialisation
+======================================
+
+Starting pgAdmin 4. Please navigate to http://127.0.0.1:5050 in your browser.
+2023-07-20 13:26:53,440: WARNING	werkzeug:	WebSocket transport not available. Install simple-websocket for improved performance.
+ * Serving Flask app 'pgadmin'
+ * Debug mode: off
+2023-07-20 13:27:26,063: ERROR	pgadmin:	Exception when checking for update
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/urllib/request.py", line 1348, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/http/client.py", line 1286, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/http/client.py", line 1332, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/http/client.py", line 1281, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/http/client.py", line 1041, in _send_output
+    self.send(msg)
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/http/client.py", line 979, in send
+    self.connect()
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/http/client.py", line 1458, in connect
+    self.sock = self._context.wrap_socket(self.sock,
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/ssl.py", line 517, in wrap_socket
+    return self.sslsocket_class._create(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/ssl.py", line 1075, in _create
+    self.do_handshake()
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/ssl.py", line 1346, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1002)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/rajaniapple/pgadmin4/lib/python3.11/site-packages/pgadmin4/pgadmin/browser/__init__.py", line 433, in check_browser_upgrade
+    response = urlopen(url, data, 5)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/urllib/request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/urllib/request.py", line 519, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/urllib/request.py", line 536, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/urllib/request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/urllib/request.py", line 1391, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/urllib/request.py", line 1351, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1002)>
+2023-07-20 13:27:33,648: ERROR	pgadmin:	400 Bad Request: The CSRF session token is missing.
+Traceback (most recent call last):
+  File "/Users/rajaniapple/pgadmin4/lib/python3.11/site-packages/flask_wtf/csrf.py", line 261, in protect
+    validate_csrf(self._get_csrf_token())
+  File "/Users/rajaniapple/pgadmin4/lib/python3.11/site-packages/flask_wtf/csrf.py", line 103, in validate_csrf
+    raise ValidationError("The CSRF session token is missing.")
+wtforms.validators.ValidationError: The CSRF session token is missing.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/rajaniapple/pgadmin4/lib/python3.11/site-packages/flask/app.py", line 1821, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/rajaniapple/pgadmin4/lib/python3.11/site-packages/flask/app.py", line 2313, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/rajaniapple/pgadmin4/lib/python3.11/site-packages/flask_wtf/csrf.py", line 229, in csrf_protect
+    self.protect()
+  File "/Users/rajaniapple/pgadmin4/lib/python3.11/site-packages/flask_wtf/csrf.py", line 264, in protect
+    self._error_response(e.args[0])
+  File "/Users/rajaniapple/pgadmin4/lib/python3.11/site-packages/flask_wtf/csrf.py", line 307, in _error_response
+    raise CSRFError(reason)
+flask_wtf.csrf.CSRFError: 400 Bad Request: The CSRF session token is missing.
+^C%                                                                                                                                                 (pgadmin4) rajaniapple@Rajanis-MacBook-Pro ~ % 

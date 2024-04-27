@@ -1,0 +1,320 @@
+Last login: Wed Nov  8 22:46:09 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker
+rajaniapple@Rajanis-MacBook-Pro Docker % mkdir -p kube-minio
+rajaniapple@Rajanis-MacBook-Pro Docker % nano kube-minio/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always-minio.yaml
+rajaniapple@Rajanis-MacBook-Pro Docker % cat kube-minio/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always-minio.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-mongodb-app-service
+spec:
+  selector:
+    app: node-mongodb-app
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-mongodb-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-mongodb-app
+  template:
+    metadata:
+      labels:
+        app: node-mongodb-app
+    spec:
+      containers:
+        - name: node-mongodb-app-container
+          image: dockerrajani/node-mongodb-app:version2.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo-service:27017/dev
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+            - name: MINIO_HOST
+              value: minio
+rajaniapple@Rajanis-MacBook-Pro Docker % nano kube/cluster-ip-service-mongo-imagepull-always.yaml
+rajaniapple@Rajanis-MacBook-Pro Docker % nano kube-minio/cluster-ip-service-mongo-imagepull-always.yaml
+rajaniapple@Rajanis-MacBook-Pro Docker % cat kube-minio/cluster-ip-service-mongo-imagepull-always.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo-container
+          image: dockerrajani/mongo:version1.0.0
+          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mongo-persistentvolumeclaim
+rajaniapple@Rajanis-MacBook-Pro Docker % nano kube-minio/cluster-ip-service-minio-imagepull-always.yaml
+rajaniapple@Rajanis-MacBook-Pro Docker % cat kube-minio/cluster-ip-service-minio-imagepull-always.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+spec:
+  selector:
+    app: minio
+  ports:
+    - port: 9090
+      name: console
+    - port: 9000
+      name: s3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio
+          image: dockerrajani/minio:version1.0.0
+          imagePullPolicy: Always
+          args:
+            - server
+            - /storage
+          env:
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - name: storage
+              mountPath: /storage
+          command:
+            - /bin/bash
+            - -c
+          args:
+              - minio server /data --console-address :9090
+      restartPolicy: Always
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: minio-pvc
+rajaniapple@Rajanis-MacBook-Pro Docker % tree kube-minio/
+kube-minio/
+├── cluster-ip-service-minio-imagepull-always.yaml
+├── cluster-ip-service-mongo-imagepull-always.yaml
+└── load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always-minio.yaml
+
+1 directory, 3 files
+rajaniapple@Rajanis-MacBook-Pro Docker % minikube status
+🤷  Profile "minikube" not found. Run "minikube profile list" to view all profiles.
+👉  To start a cluster, run: "minikube start"
+rajaniapple@Rajanis-MacBook-Pro Docker % minikube start 
+😄  minikube v1.31.2 on Darwin 14.0 (arm64)
+✨  Automatically selected the docker driver
+📌  Using Docker Desktop driver with root privileges
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+💾  Downloading Kubernetes v1.27.4 preload ...
+    > preloaded-images-k8s-v18-v1...:  327.74 MiB / 327.74 MiB  100.00% 2.34 Mi
+    > gcr.io/k8s-minikube/kicbase...:  404.50 MiB / 404.50 MiB  100.00% 2.59 Mi
+🔥  Creating docker container (CPUs=2, Memory=4000MB) ...
+🐳  Preparing Kubernetes v1.27.4 on Docker 24.0.4 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+rajaniapple@Rajanis-MacBook-Pro Docker % tree kube-minio/
+kube-minio/
+├── cluster-ip-service-minio-imagepull-always.yaml
+├── cluster-ip-service-mongo-imagepull-always.yaml
+└── load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always-minio.yaml
+
+1 directory, 3 files
+rajaniapple@Rajanis-MacBook-Pro Docker % minikube status
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+rajaniapple@Rajanis-MacBook-Pro Docker % kubectl apply -f kube-minio
+persistentvolumeclaim/minio-pvc created
+service/minio created
+deployment.apps/minio created
+persistentvolumeclaim/mongo-persistentvolumeclaim created
+service/mongo-service created
+deployment.apps/mongo-deployment created
+service/node-mongodb-app-service created
+deployment.apps/node-mongodb-app-deployment created
+rajaniapple@Rajanis-MacBook-Pro Docker % kubectl get pods --watch
+NAME                                           READY   STATUS              RESTARTS   AGE
+minio-9749cccb7-lvh7h                          0/1     ContainerCreating   0          7s
+mongo-deployment-75dcb8465f-lnsq9              0/1     ContainerCreating   0          7s
+node-mongodb-app-deployment-5468d4fdff-zv8cv   0/1     ContainerCreating   0          7s
+minio-9749cccb7-lvh7h                          1/1     Running             0          15s
+mongo-deployment-75dcb8465f-lnsq9              1/1     Running             0          72s
+node-mongodb-app-deployment-5468d4fdff-zv8cv   1/1     Running             0          95s
+^C%                                                                                                                                                             rajaniapple@Rajanis-MacBook-Pro Docker % kubectl port-forward minio-9749cccb7-lvh7h 9000 9090
+Forwarding from 127.0.0.1:9000 -> 9000
+Forwarding from [::1]:9000 -> 9000
+Forwarding from 127.0.0.1:9090 -> 9090
+Forwarding from [::1]:9090 -> 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+

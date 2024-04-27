@@ -1,0 +1,1471 @@
+###########################################################################################################################
+
+Google Cloud Google Kubernetes Engine (GKE)
+
+###########################################################################################################################
+
+# Install the gcloud CLI
+
+###########################################################################################################################
+===========================================================================================================================
+
+# Cleanup # $HOME
+
+===========================================================================================================================
+
+% ls ~/.kube
+% rm -rf ~/.kube
+
+
+% ls ~/.config
+% rm -rf ~/.config
+
+
+% ls ~/.boto
+% rm -rf ~/.boto
+
+===========================================================================================================================
+
+# Version
+
+===========================================================================================================================
+
+% kubectl version
+
+
+% python3 --version
+
+
+[
+% gcloud version
+
+
+% gke-gcloud-auth-plugin --version
+]
+
+===========================================================================================================================
+
+# https://cloud.google.com/sdk/docs/install
+# https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-455.0.0-darwin-arm.tar.gz
+
+# Download google-cloud-cli-455.0.0-darwin-arm.tar.gz
+% curl https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-455.0.0-darwin-arm.tar.gz -o google-cloud-cli-455.0.0-darwin-arm.tar.gz
+
+# Extract the archive to any location on your file system (preferably your Home directory). On macOS, this can be achieved by opening the downloaded .tar.gz archive file in the preferred location.
+
+% tar -xzf google-cloud-cli-455.0.0-darwin-arm.tar.gz
+
+# Confirm that you have a supported version of Python: 3.8 to 3.11.
+% python3 --version
+
+% ./google-cloud-sdk/install.sh
+
+# New terminal
+% gcloud --version 
+% where gcloud
+% which gcloud
+% type gcloud 
+
+% gcloud --version 
+Google Cloud SDK 455.0.0
+bq 2.0.98
+core 2023.11.10
+gcloud-crc32c 1.0.0
+gke-gcloud-auth-plugin 0.5.6
+gsutil 5.27
+
+% gcloud components update
+Beginning update. This process may take several minutes.
+
+
+Your current Google Cloud CLI version is: 455.0.0
+You will be upgraded to version: 455.0.0
+
+┌────────────────────────────────────────────────┐
+│      These components will be installed.       │
+├─────────────────────────┬────────────┬─────────┤
+│           Name          │  Version   │   Size  │
+├─────────────────────────┼────────────┼─────────┤
+│ gcloud cli dependencies │ 2021.04.16 │ < 1 MiB │
+└─────────────────────────┴────────────┴─────────┘
+
+For the latest full release notes, please visit:
+  https://cloud.google.com/sdk/release_notes
+
+Do you want to continue (Y/n)?  Y
+
+╔════════════════════════════════════════════════════════════╗
+╠═ Creating update staging area                             ═╣
+╠════════════════════════════════════════════════════════════╣
+╠═ Installing: gcloud cli dependencies                      ═╣
+╠════════════════════════════════════════════════════════════╣
+╠═ Creating backup and activating new installation          ═╣
+╚════════════════════════════════════════════════════════════╝
+
+Performing post processing steps...done.                                                                                                                       
+
+Update done!
+
+To revert your CLI to the previously installed version, you may run:
+  $ gcloud components update --version 455.0.0
+
+% gcloud --version 
+Google Cloud SDK 455.0.0
+bq 2.0.98
+core 2023.11.10
+gcloud-crc32c 1.0.0
+gke-gcloud-auth-plugin 0.5.6
+gsutil 5.27
+
+###########################################################################################################################
+
+# gcloud init
+
+###########################################################################################################################
+
+% gcloud init
+[
+Welcome! This command will take you through the configuration of gcloud.
+
+Your current configuration has been set to: [default]
+
+You can skip diagnostics next time by using the following flag:
+  gcloud init --skip-diagnostics
+
+Network diagnostic detects and fixes local network connection issues.
+Checking network connection...done.                                                                                                                            
+Reachability Check passed.
+Network diagnostic passed (1/1 checks passed).
+
+You must log in to continue. Would you like to log in (Y/n)?  Y
+
+Your browser has been opened to visit:
+
+    https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=<Client ID>.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8085%2F&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=FaPHuiKeHn2tMYzzbVRoaW3gyLNfkl&access_type=offline&code_challenge=Rq1ZRcz6K0RicVphbpFw8FTz0PFo2CQRTd-MlcB3BkE&code_challenge_method=S256
+
+You are logged in as: [<Google Cloud>@gmail.com].
+
+Pick cloud project to use: 
+ [1] advance-symbol-405910
+ [2] emerald-oxide-405910
+ [3] Enter a project ID
+ [4] Create a new project
+Please enter numeric choice or text value (must exactly match list item):  4
+
+Enter a Project ID. Note that a Project ID CANNOT be changed later.
+Project IDs must be 6-30 characters (lowercase ASCII, digits, or
+hyphens) in length and start with a lowercase letter. rajani-gke   
+Waiting for [operations/cp.5707634575279115225] to finish...done.                                                                                              
+Your current project has been set to: [rajani-gke].
+
+Not setting default zone/region (this feature makes it easier to use
+[gcloud compute] by setting an appropriate default value for the
+--zone and --region flag).
+See https://cloud.google.com/compute/docs/gcloud-compute section on how to set
+default compute region and zone manually. If you would like [gcloud init] to be
+able to do this for you the next time you run it, make sure the
+Compute Engine API is enabled for your project on the
+https://console.developers.google.com/apis page.
+
+Created a default .boto configuration file at [~/.boto]. See this file and
+[https://cloud.google.com/storage/docs/gsutil/commands/config] for more
+information about configuring Google Cloud Storage.
+Your Google Cloud SDK is configured and ready to use!
+
+* Commands that require authentication will use <Google Cloud>@gmail.com by default
+* Commands will reference project `rajani-gke` by default
+Run `gcloud help config` to learn how to change individual settings
+
+This gcloud configuration is called [default]. You can create additional configurations if you work with multiple accounts and/or projects.
+Run `gcloud topic configurations` to learn more.
+
+Some things to try next:
+
+* Run `gcloud --help` to see the Cloud Platform services you can interact with. And run `gcloud help COMMAND` to get help on any gcloud command.
+* Run `gcloud topic --help` to learn about advanced features of the SDK like arg files and output formatting
+* Run `gcloud cheat-sheet` to see a roster of go-to `gcloud` commands.
+]
+
+[
+% gcloud init --skip-diagnostics
+]
+
+% gcloud --help
+
+% gcloud topic --help
+
+% gcloud cheat-sheet
+
+% gcloud projects list
+
+% gcloud projects describe rajani-gke
+
+###########################################################################################################################
+
+# Deploy an app to a GKE cluster
+
+###########################################################################################################################
+
+***************************************************************************************************************************
+
+[
+# Kubernetes Engine API has not been used in project rajani-gke before or it is disabled.
+# Enable it by visiting https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=rajani-gke then retry.
+]
+
+# 1. In the Google Cloud console, on the project selector page, select or create a Google Cloud project.
+
+# 2. Make sure that billing is enabled for your Google Cloud project.
+[
+Note: If you don't plan to keep the resources that you create in this procedure, create a project instead of selecting an existing project. After you finish these steps, you can delete the project, removing all resources associated with the project.
+]
+
+# 3. Enable the Artifact Registry and Google Kubernetes Engine APIs.
+
+[
+https://console.cloud.google.com/marketplace/product/google/artifactregistry.googleapis.com?returnUrl=%2Fartifacts%3Freferrer%3Dsearch%26authuser%3D5%26project%3Drajani-gke&authuser=5&project=rajani-gke
+
+
+Artifact Registry API
+Google Enterprise API
+
+ENABLE
+]
+
+[
+https://console.cloud.google.com/marketplace/product/google/container.googleapis.com?returnUrl=%2Fkubernetes%2Flist%3Freferrer%3Dsearch%26authuser%3D5%26project%3Drajani-gke&authuser=5&project=rajani-gke
+
+Kubernetes Engine API
+Google Enterprise API
+Builds and manages container-based applications, powered by the open source Kubernetes technology.
+
+ENABLE
+]
+
+***************************************************************************************************************************
+
+# Create a GKE cluster
+
+***************************************************************************************************************************
+
+% gcloud container clusters create-auto hello-cluster \
+    --location=us-central1
+
+[
+Note: The Pod address range limits the maximum size of the cluster. Please refer to https://cloud.google.com/kubernetes-engine/docs/how-to/flexible-pod-cidr to learn how to optimize IP address allocation.
+Creating cluster hello-cluster in us-central1... Cluster is being health-checked (master is healthy)...done.                                                   
+Created [https://container.googleapis.com/v1/projects/rajani-gke/zones/us-central1/clusters/hello-cluster].
+To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/us-central1/hello-cluster?project=rajani-gke
+CRITICAL: ACTION REQUIRED: gke-gcloud-auth-plugin, which is needed for continued use of kubectl, was not found or is not executable. Install gke-gcloud-auth-plugin for use with kubectl by following https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+kubeconfig entry generated for hello-cluster.
+NAME           LOCATION     MASTER_VERSION  MASTER_IP     MACHINE_TYPE  NODE_VERSION    NUM_NODES  STATUS
+hello-cluster  us-central1  1.27.3-gke.100  34.66.152.85  e2-small      1.27.3-gke.100  3          RUNNING
+]
+
+***************************************************************************************************************************
+
+CRITICAL: ACTION REQUIRED: gke-gcloud-auth-plugin, which is needed for continued use of kubectl, was not found or is not executable. Install gke-gcloud-auth-plugin for use with kubectl by following https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+
+***************************************************************************************************************************
+
+% gcloud components install gke-gcloud-auth-plugin
+% gke-gcloud-auth-plugin --version 
+% where gke-gcloud-auth-plugin
+% which gke-gcloud-auth-plugin
+% type gke-gcloud-auth-plugin
+
+# Run kubectl with the new plugin prior to the release of v1.26
+% nano ~/.zprofile
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
+% cat ~/.zprofile
+
+% source ~/.zprofile
+
+% cat ~/.zprofile
+
+***************************************************************************************************************************
+
+# Get authentication credentials for the cluster
+
+***************************************************************************************************************************
+
+# New terminal
+
+# List existing clusters for running containers
+% gcloud container clusters list
+[
+NAME           LOCATION     MASTER_VERSION  MASTER_IP     MACHINE_TYPE  NODE_VERSION    NUM_NODES  STATUS
+hello-cluster  us-central1  1.27.3-gke.100  34.66.152.85  e2-small      1.27.3-gke.100  1          RUNNING
+]
+
+% gcloud container clusters list --location=us-central1
+[
+NAME           LOCATION     MASTER_VERSION  MASTER_IP     MACHINE_TYPE  NODE_VERSION    NUM_NODES  STATUS
+hello-cluster  us-central1  1.27.3-gke.100  34.66.152.85  e2-small      1.27.3-gke.100  1          RUNNING
+]
+
+% gcloud container clusters list --location=us-central1 --project rajani-gke
+[
+NAME           LOCATION     MASTER_VERSION  MASTER_IP     MACHINE_TYPE  NODE_VERSION    NUM_NODES  STATUS
+hello-cluster  us-central1  1.27.3-gke.100  34.66.152.85  e2-small      1.27.3-gke.100  1          RUNNING
+]
+
+# hello-cluster
+% gcloud container clusters get-credentials hello-cluster --location=us-central1
+
+***************************************************************************************************************************
+
+# Deploy an application to the cluster
+
+***************************************************************************************************************************
+
+# Create the Deployment
+% kubectl version
+
+% kubectl create deployment hello-server \
+    --image=us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0
+[
+Warning: autopilot-default-resources-mutator:Autopilot updated Deployment default/hello-server: defaulted unspecified resources for containers [hello-app] (see http://g.co/gke/autopilot-defaults)
+deployment.apps/hello-server created
+]
+[
+% kubectl delete deployments hello-server
+]
+
+% kubectl get deployments
+
+% kubectl get pods --watch
+
+% kubectl get pods
+
+% kubectl get all
+
+***************************************************************************************************************************
+
+# Expose the Deployment
+
+***************************************************************************************************************************
+
+% kubectl expose deployment hello-server \
+    --type LoadBalancer \
+    --port 80 \
+    --target-port 8080
+[
+% kubectl delete services hello-server
+]
+
+***************************************************************************************************************************
+
+# Inspect and view the application
+
+***************************************************************************************************************************
+
+% kubectl get pods --watch
+
+% kubectl get pods
+
+% kubectl get services
+
+% kubectl get services hello-server
+[
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+hello-server   LoadBalancer   34.118.229.219   34.70.35.15   80:32730/TCP   2m51s
+]
+
+# http://EXTERNAL_IP/
+% curl http://34.70.35.15/
+% open http://34.70.35.15/
+
+***************************************************************************************************************************
+
+# Deploy node-21-express-app
+
+***************************************************************************************************************************
+
+% pwd
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/GKE
+
+% pwd
+
+% nano node-21-express-app-dockerrajani.yaml
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-21-express-app-service
+spec:
+  selector:
+    app: node-21-express-app
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-21-express-app-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: node-21-express-app
+  template:
+    metadata:
+      labels:
+        app: node-21-express-app
+    spec:
+      containers:
+      - name: node-21-express-app-container
+        image: dockerrajani/node-21-express-app-amazon-linux-extras-x86-64:version1.0.0
+        ports:
+          - containerPort: 3000
+]
+% cat node-21-express-app-dockerrajani.yaml
+% kubectl apply -f node-21-express-app-dockerrajani.yaml
+[
+% kubectl delete -f node-21-express-app-dockerrajani.yaml
+]
+
+% kubectl get pods --watch
+
+% kubectl get pods
+
+% kubectl get all
+
+% kubectl get services
+
+% kubectl get services node-21-express-app-service
+[
+NAME                          TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+node-21-express-app-service   LoadBalancer   34.118.237.67   34.29.155.8   80:31206/TCP   104s
+]
+
+% curl http://34.29.155.8/
+[
+Node.js Version: v20.9.0
+]
+
+% open http://34.29.155.8/
+
+***************************************************************************************************************************
+###########################################################################################################################
+
+# cloudshell
+
+https://cloud.google.com/kubernetes-engine/docs/deploy-app-cluster?authuser=5&cloudshell=true#main.go
+
+###########################################################################################################################
+***************************************************************************************************************************
+
+Activate Cloud Shell
+
+***************************************************************************************************************************
+
+# A Cloud Shell session opens inside a frame lower on the console.
+
+# Set your default project in the Google Cloud CLI using the following command:
+
+# % gcloud config set project <PROJECT_ID>
+
+***************************************************************************************************************************
+
+# Google Cloud Debian GNU/Linux
+
+***************************************************************************************************************************
+
+$ sudo cat /etc/os-release
+$ sudo cat /etc/*release
+$ sudo cat /etc/*version
+
+
+$ sudo cat /etc/issue
+$ sudo more /etc/issue
+$ sudo less /etc/issue
+
+
+$ sudo cat /proc/version
+
+
+$ sudo lsb_release --all
+$ sudo lsb_release --description
+$ sudo man lsb_release
+
+
+[
+$ sudo hostnamectl
+]
+$ sudo man hostnamectl
+
+
+$ sudo uname -r
+$ sudo uname --release
+$ sudo uname -srm
+$ sudo uname --kernel-name --kernel-release --kernel-version
+$ sudo uname --all
+$ sudo man uname
+
+
+$ sudo grep -E '^(VERSION|NAME)=' /etc/os-release
+$ sudo grep '^VERSION' /etc/os-release
+
+
+$ sudo dpkg -l
+$ sudo which dpkg
+$ sudo man dpkg
+
+
+$ sudo arch
+
+
+$ sudo whoami
+
+
+$ whoami
+
+
+$ sudo echo $USER
+
+
+$ sudo echo $USERNAME
+
+
+$ sudo echo $PATH
+
+
+$ sudo echo $HOME
+
+
+$ sudo echo ~/
+
+
+$ sudo echo $SHELL
+
+
+$ sudo env
+
+
+$ sudo pwd
+
+
+$ sudo ls
+
+
+$ sudo ls -a
+
+
+$ sudo date
+
+***************************************************************************************************************************
+
+# Docker
+
+***************************************************************************************************************************
+
+$ docker --version
+
+$ docker version
+
+$ docker container info
+
+$ docker container list
+
+$ docker image list --all
+
+$ docker pull dockerrajani/node-21-express-app-amazon-linux-extras-x86-64:version1.0.0
+
+$ docker container list
+
+$ docker image list --all
+
+$ docker run -it --rm -p 3000:3000 dockerrajani/node-21-express-app-amazon-linux-extras-x86-64:version1.0.0
+
+***************************************************************************************************************************
+
+# + cloudshell
+
+***************************************************************************************************************************
+
+$ curl http://localhost:3000/
+$ curl http://127.0.0.1:3000/
+
+$ docker container list
+$ docker image list --all
+
+# $ docker stop <container>
+
+$ docker container prune
+$ docker image prune --all
+$ docker system prune --all --volumes
+
+***************************************************************************************************************************
+
+# + cloudshell
+
+***************************************************************************************************************************
+
+$ gke-gcloud-auth-plugin --version 
+
+$ nano ~/.bashrc
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
+$ cat ~/.bashrc
+[
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+#[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+        color_prompt=yes
+    else
+        color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    #alias grep='grep --color=auto'
+    #alias fgrep='fgrep --color=auto'
+    #alias egrep='egrep --color=auto'
+fi
+
+# colored GCC warnings and errors
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# some more ls aliases
+#alias ll='ls -l'
+#alias la='ls -A'
+#alias l='ls -CF'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+source /google/devshell/bashrc.google
+]
+
+$ source ~/.bashrc
+
+$ cat ~/.bashrc
+[
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+#[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+        color_prompt=yes
+    else
+        color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    #alias grep='grep --color=auto'
+    #alias fgrep='fgrep --color=auto'
+    #alias egrep='egrep --color=auto'
+fi
+
+# colored GCC warnings and errors
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# some more ls aliases
+#alias ll='ls -l'
+#alias la='ls -A'
+#alias l='ls -CF'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+source /google/devshell/bashrc.google
+]
+
+***************************************************************************************************************************
+
+# + cloudshell
+
+***************************************************************************************************************************
+
+$ gcloud container clusters list --project rajani-gke
+[
+NAME: hello-cluster
+LOCATION: us-central1
+MASTER_VERSION: 1.27.3-gke.100
+MASTER_IP: 34.66.152.85
+MACHINE_TYPE: e2-small
+NODE_VERSION: 1.27.3-gke.100
+NUM_NODES: 1
+STATUS: RUNNING
+]
+
+$ gcloud container clusters list --location=us-central1
+[
+ERROR: (gcloud.container.clusters.list) The required property [project] is not currently set.
+It can be set on a per-command basis by re-running your command with the [--project] flag.
+
+You may set it for your current workspace by running:
+
+  $ gcloud config set project VALUE
+
+or it can be set temporarily by the environment variable [CLOUDSDK_CORE_PROJECT]
+]
+
+$ gcloud container clusters list --location=us-central1 --project rajani-gke
+[
+27.3-gke.100
+MASTER_IP: 34.66.152.85
+MACHINE_TYPE: e2-small
+NODE_VERSION: 1.27.3-gke.100
+NUM_NODES: 1
+STATUS: RUNNING
+]
+
+$ gcloud container clusters get-credentials hello-cluster --location=us-central1 --project rajani-gke
+
+***************************************************************************************************************************
+
+# + cloudshell # Deploy node-21-express-app
+
+***************************************************************************************************************************
+
+$ nano node-21-express-app-dockerrajani.yaml
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-21-express-app-service
+spec:
+  selector:
+    app: node-21-express-app
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-21-express-app-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: node-21-express-app
+  template:
+    metadata:
+      labels:
+        app: node-21-express-app
+    spec:
+      containers:
+      - name: node-21-express-app-container
+        image: dockerrajani/node-21-express-app-amazon-linux-extras-x86-64:version1.0.0
+        ports:
+          - containerPort: 3000
+]
+$ cat node-21-express-app-dockerrajani.yaml
+$ kubectl apply -f node-21-express-app-dockerrajani.yaml
+[
+$ kubectl delete -f node-21-express-app-dockerrajani.yaml
+]
+
+$ kubectl get pods --watch
+
+$ kubectl get pods
+
+$ kubectl get all
+
+$ kubectl get services
+
+$ kubectl get services node-21-express-app-service
+[
+NAME                          TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+node-21-express-app-service   LoadBalancer   34.118.229.251   34.67.51.179   80:30700/TCP   46s
+]
+
+$ curl http://34.67.51.179/
+[
+Node.js Version: v20.9.0
+]
+
+$ ls
+
+$ rm -rf node-21-express-app-dockerrajani.yaml
+
+$ ls
+[
+README-cloudshell.txt
+]
+
+$ cat README-cloudshell.txt
+[
+Welcome to Google Cloud Shell, a tool for managing resources hosted on Google Cloud Platform!
+The machine comes pre-installed with the Google Cloud SDK and other popular developer tools.
+
+Your 5GB home directory will persist across sessions, but the VM is ephemeral and will be reset
+approximately 20 minutes after your session ends. No system-wide change will persist beyond that.
+
+Type "gcloud help" to get help on using Cloud SDK. For more examples, visit
+https://cloud.google.com/shell/docs/quickstart and https://cloud.google.com/shell/docs/examples
+
+Type "cloudshell help" to get help on using the "cloudshell" utility.  Common functionality is
+aliased to short commands in your shell, for example, you can type "dl <filename>" at Bash prompt to
+download a file. Type "cloudshell aliases" to see these commands.
+
+Type "help" to see this message any time. Type "builtin help" to see Bash interpreter help.
+]
+
+***************************************************************************************************************************
+
+###########################################################################################################################
+
+Clean up
+
+###########################################################################################################################
+
+[
+% kubectl get services hello-server
+% kubectl delete services hello-server
+
+% kubectl get deployments hello-server
+% kubectl delete deployments hello-server
+
+% kubectl delete -f node-21-express-app-dockerrajani.yaml
+]
+
+% gcloud container clusters list --project rajani-gke
+
+% gcloud container clusters list --location=us-central1
+
+% gcloud container clusters list --location=us-central1 --project rajani-gke
+
+% gcloud container clusters delete hello-cluster \
+    --location us-central1 \
+    --project rajani-gke
+[
+The following clusters will be deleted.
+ - [hello-cluster] in [us-central1]
+
+Do you want to continue (Y/n)?  Y
+
+Deleting cluster hello-cluster...working 
+Deleting cluster hello-cluster...done.
+Deleted [https://container.googleapis.com/v1/projects/rajani-gke/zones/us-central1/clusters/hello-cluster].
+]
+
+###########################################################################################################################
+
+# hello-app code review
+
+###########################################################################################################################
+
+***************************************************************************************************************************
+
+# hello-app is a simple web server application that consists of two files: main.go and a Dockerfile.
+
+# hello-app is packaged as a Docker container image. Container images are stored in any Docker image registry, such as Artifact Registry. hello-app is hosted in a Artifact Registry repository at us-docker.pkg.dev/google-samples/containers/gke/hello-app.
+
+***************************************************************************************************************************
+
+# main.go
+
+# main.go is a web server implementation written in the Go programming language. The server responds to any HTTP request with a "Hello, world!" message.
+
+***************************************************************************************************************************
+
+package main
+
+import (
+        "fmt"
+        "log"
+        "net/http"
+        "os"
+)
+
+func main() {
+        // register hello function to handle all requests
+        mux := http.NewServeMux()
+        mux.HandleFunc("/", hello)
+
+        // use PORT environment variable, or default to 8080
+        port := os.Getenv("PORT")
+        if port == "" {
+                port = "8080"
+        }
+
+        // start the web server on port and accept requests
+        log.Printf("Server listening on port %s", port)
+        log.Fatal(http.ListenAndServe(":"+port, mux))
+}
+
+// hello responds to the request with a plain-text "Hello, world" message.
+func hello(w http.ResponseWriter, r *http.Request) {
+        log.Printf("Serving request: %s", r.URL.Path)
+        host, _ := os.Hostname()
+        fmt.Fprintf(w, "Hello, world!\n")
+        fmt.Fprintf(w, "Version: 1.0.0\n")
+        fmt.Fprintf(w, "Hostname: %s\n", host)
+}
+
+***************************************************************************************************************************
+
+# Dockerfile
+
+# Dockerfile describes the image you want Docker to build, including all of its resources and dependencies, and specifies which network port the app should expose.
+
+***************************************************************************************************************************
+
+FROM golang:1.21.0 as builder
+WORKDIR /app
+RUN go mod init hello-app
+COPY *.go ./
+RUN CGO_ENABLED=0 GOOS=linux go build -o /hello-app
+
+FROM gcr.io/distroless/base-debian11
+WORKDIR /
+COPY --from=builder /hello-app /hello-app
+ENV PORT 8080
+USER nonroot:nonroot
+CMD ["/hello-app"]
+
+***************************************************************************************************************************
+
+###########################################################################################################################
+
+# Shutting down (deleting) projects
+
+###########################################################################################################################
+
+# To get the list of all projects use gcloud alpha projects search command
+
+***************************************************************************************************************************
+
+% gcloud alpha projects search --query="displayName=rajani*"
+[
+You do not currently have this command group installed.  Using it 
+requires the installation of components: [alpha]
+
+
+Your current Google Cloud CLI version is: 455.0.0
+Installing components from version: 455.0.0
+
+┌──────────────────────────────────────────────┐
+│     These components will be installed.      │
+├───────────────────────┬────────────┬─────────┤
+│          Name         │  Version   │   Size  │
+├───────────────────────┼────────────┼─────────┤
+│ gcloud Alpha Commands │ 2023.11.10 │ < 1 MiB │
+└───────────────────────┴────────────┴─────────┘
+
+For the latest full release notes, please visit:
+  https://cloud.google.com/sdk/release_notes
+
+Do you want to continue (Y/n)?  Y
+
+╔════════════════════════════════════════════════════════════╗
+╠═ Creating update staging area                             ═╣
+╠════════════════════════════════════════════════════════════╣
+╠═ Installing: gcloud Alpha Commands                        ═╣
+╠════════════════════════════════════════════════════════════╣
+╠═ Creating backup and activating new installation          ═╣
+╚════════════════════════════════════════════════════════════╝
+
+Performing post processing steps...done.                                                                                                                       
+
+Update done!
+
+Restarting command:
+  $ gcloud alpha projects search --query=displayName=rajani*
+
+API [cloudresourcemanager.googleapis.com] not enabled on project [rajani-gke]. Would you like to enable and retry (this will take a few minutes)? (y/N)?  y
+
+Enabling service [cloudresourcemanager.googleapis.com] on project [rajani-gke]...
+ERROR: (gcloud.alpha.projects.search) PERMISSION_DENIED: Service Usage API has not been used in project rajani-gke before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/serviceusage.googleapis.com/overview?project=rajani-gke then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.
+- '@type': type.googleapis.com/google.rpc.Help
+  links:
+  - description: Google developers console API activation
+    url: https://console.developers.google.com/apis/api/serviceusage.googleapis.com/overview?project=rajani-gke
+- '@type': type.googleapis.com/google.rpc.ErrorInfo
+  domain: googleapis.com
+  metadata:
+    consumer: projects/rajani-gke
+    service: serviceusage.googleapis.com
+  reason: SERVICE_DISABLED
+]
+
+[
+Service Usage API
+Google Enterprise API
+Enables services that service consumers want to use on Google Cloud Platform, lists the available…
+
+ENABLE
+
+***************************************************************************************************************************
+
+To use Service Usage API, you may need credentials.
+
+CREATE CREDENTIALS
+
+Select an API
+Service Usage API
+
+What data will you be accessing? *
+Different credentials are required to authorize access depending on the type of data that you request. Learn more 
+This Google Cloud API is usually accessed from a server using a service account. To create a service account, select "Application data".
+
+Data preference is required
+Application data
+Data belonging to your own application, such as your app's Cloud Firestore backend. This will create a service account.
+
+Service account details
+Service account name
+#**********#
+RajaniGKEServiceAccount
+#**********#
+Display name for this service account
+
+Service account ID *
+#**********#
+rajanigkeserviceaccount
+#**********#
+
+Email address: rajanigkeserviceaccount@rajani-gke.iam.gserviceaccount.com 
+Service account description
+#**********#
+rajanigkeserviceaccount@rajani-gke.iam.gserviceaccount.com
+#**********#
+Describe what this service account will do
+
+CREATE AND CONTINUE
+
+Grant this service account access to project (optional)
+Grant users access to this service account (optional)
+
+"Service account created"
+
+Create Role
+Custom roles let you group permissions and assign them to principals in your project or organization. You can manually select permissions or import permissions from another role.
+
+Title 
+RajaniGKERole
+
+Description
+Created on: 2023-11-22
+
+ID 
+RajaniGKERoleID
+
+Role launch stage
+Alpha
+
+ADD PERMISSIONS # Select All
+9 assigned permissions
+
+CREATE
+
+Role created
+
+% gcloud alpha projects search --query="displayName=rajani*"
+DISPLAY_NAME  NAME                   PARENT  STATE
+rajani-gke    projects/624021776926          ACTIVE
+
+% gcloud alpha projects search --query="state:DELETE_REQUESTED"
+
+***************************************************************************************************************************
+
+# Updating projects
+
+# To update a project's name or labels, use the gcloud alpha projects update command
+
+***************************************************************************************************************************
+
+# Available commands for gcloud alpha projects
+[
+      add-iam-policy-binding     *(ALPHA)*  Add IAM policy binding for a
+                                 project.
+      create                     *(ALPHA)*  Create a new project.
+      delete                     *(ALPHA)*  Delete a project.
+      describe                   *(ALPHA)*  Show metadata for a project.
+      get-ancestors              *(ALPHA)*  Get the ancestors for a project.
+      get-ancestors-iam-policy   *(ALPHA)*  Get IAM policies for a project and
+                                 its ancestors.
+      get-iam-policy             *(ALPHA)*  Get the IAM policy for a project.
+      list                       *(ALPHA)*  List projects for which the user has
+                                 resourcemanager.projects.list permission.
+      move                       *(ALPHA)*  Move a project into an organization.
+      remove-iam-policy-binding  *(ALPHA)*  Remove IAM policy binding for a
+                                 project.
+      search                     *(ALPHA)*  Search for projects matching the
+                                 given query.
+      set-iam-policy             *(ALPHA)*  Set IAM policy for a project.
+      undelete                   *(ALPHA)*  Undelete a project.
+      update                     *(ALPHA)*  Update the name and/or labels of a
+                                 project.
+]
+
+[
+gcloud alpha projects update PROJECT_ID \
+    --name=NAME \
+    --update-labels=KEY=VALUE, ...
+Where:
+
+PROJECT_ID is the ID of the project you want to update.
+
+NAME is the new name you want to assign to the project.
+
+KEY=VALUE, ... is a list of the key=value pairs of labels you want to update. If a label already exists, its value is modified. If it does not exist, a new label is created.
+]
+
+% gcloud alpha projects update rajani-gke \
+    --name=rajani-gke-project
+[
+Updated [https://cloudresourcemanager.googleapis.com/v1/projects/rajani-gke].
+PROJECT_ID  NAME                PROJECT_NUMBER
+rajani-gke  rajani-gke-project  624021776926
+]
+
+% gcloud alpha projects describe rajani-gke
+[
+createTime: '2023-11-22T12:24:27.811Z'
+lifecycleState: ACTIVE
+name: rajani-gke-project
+projectId: rajani-gke
+projectNumber: '624021776926'
+]
+
+% gcloud alpha projects list
+[      
+PROJECT_ID             NAME                PROJECT_NUMBER
+advance-symbol-405910  My First Project    578357058053
+emerald-oxide-405910   My First Project    612707172154
+rajani-gke             rajani-gke-project  624021776926
+]
+
+***************************************************************************************************************************
+
+# To delete a project, use the gcloud projects delete command
+
+***************************************************************************************************************************
+
+# gcloud projects delete <PROJECT_ID>
+% gcloud projects delete rajani-gke
+[
+Your project will be deleted.
+
+Do you want to continue (Y/n)?  Y
+
+Deleted [https://cloudresourcemanager.googleapis.com/v1/projects/rajani-gke].
+
+You can undo this operation for a limited period by running the command below.
+    $ gcloud projects undelete rajani-gke
+
+See https://cloud.google.com/resource-manager/docs/creating-managing-projects for information on shutting down projects.
+]
+
+% gcloud alpha projects search --query="state:DELETE_REQUESTED"
+[
+DISPLAY_NAME        NAME                   PARENT  STATE
+rajani-gke-project  projects/624021776926          DELETE_REQUESTED
+]
+
+% gcloud alpha projects describe rajani-gke
+[
+createTime: '2023-11-22T12:24:27.811Z'
+lifecycleState: DELETE_REQUESTED
+name: rajani-gke-project
+projectId: rajani-gke
+projectNumber: '624021776926'
+]
+
+% open https://cloudresourcemanager.googleapis.com/v1/projects/rajani-gke
+[
+{
+  "error": {
+    "code": 401,
+    "message": "Request is missing required authentication credential. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+    "status": "UNAUTHENTICATED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+        "reason": "CREDENTIALS_MISSING",
+        "domain": "googleapis.com",
+        "metadata": {
+          "service": "cloudresourcemanager.googleapis.com",
+          "method": "google.cloudresourcemanager.v1.Projects.GetProject"
+        }
+      }
+    ]
+  }
+}
+]
+
+% gcloud alpha projects describe rajani-gke
+[
+createTime: '2023-11-22T12:24:27.811Z'
+lifecycleState: DELETE_REQUESTED
+name: rajani-gke-project
+projectId: rajani-gke
+projectNumber: '624021776926'
+]
+
+% gcloud projects describe rajani-gke
+[
+createTime: '2023-11-22T12:24:27.811Z'
+lifecycleState: DELETE_REQUESTED
+name: rajani-gke-project
+projectId: rajani-gke
+projectNumber: '624021776926'
+]
+
+% gcloud beta projects describe rajani-gke
+[
+You do not currently have this command group installed.  Using it 
+requires the installation of components: [beta]
+
+
+Your current Google Cloud CLI version is: 455.0.0
+Installing components from version: 455.0.0
+
+┌─────────────────────────────────────────────┐
+│     These components will be installed.     │
+├──────────────────────┬────────────┬─────────┤
+│         Name         │  Version   │   Size  │
+├──────────────────────┼────────────┼─────────┤
+│ gcloud Beta Commands │ 2023.11.10 │ < 1 MiB │
+└──────────────────────┴────────────┴─────────┘
+
+For the latest full release notes, please visit:
+  https://cloud.google.com/sdk/release_notes
+
+Do you want to continue (Y/n)?  Y
+
+╔════════════════════════════════════════════════════════════╗
+╠═ Creating update staging area                             ═╣
+╠════════════════════════════════════════════════════════════╣
+╠═ Installing: gcloud Beta Commands                         ═╣
+╠════════════════════════════════════════════════════════════╣
+╠═ Creating backup and activating new installation          ═╣
+╚════════════════════════════════════════════════════════════╝
+
+Performing post processing steps...done.                                                                                                                       
+
+Update done!
+
+Restarting command:
+  $ gcloud beta projects describe rajani-gke
+
+ERROR: (gcloud.beta.projects.describe) User [<Google Cloud>@gmail.com] does not have permission to access projects instance [rajani-gke] (or it may not exist): Project rajani-gke has been deleted.
+- '@type': type.googleapis.com/google.rpc.ErrorInfo
+  domain: googleapis.com
+  metadata:
+    consumer: projects/rajani-gke
+    service: cloudresourcemanager.googleapis.com
+  reason: USER_PROJECT_DENIED
+]
+
+% gcloud info --format="value(installation.sdk_root)"
+[
+~/Downloads/Software/Google Cloud/gcloud CLI/google-cloud-sdk
+]
+
+% gcloud info --format="value(config.paths.global_config_dir)"
+[
+~/.config/gcloud
+]
+
+===========================================================================================================================
+
+# Cleanup # $HOME
+
+===========================================================================================================================
+
+% ls ~/.kube
+% rm -rf ~/.kube
+
+
+% ls ~/.config
+% rm -rf ~/.config
+
+
+% ls ~/.boto
+% rm -rf ~/.boto
+
+===========================================================================================================================
+***************************************************************************************************************************
+
+# Restoring a project
+
+***************************************************************************************************************************
+
+# % gcloud projects undelete <PROJECT_ID>
+
+***************************************************************************************************************************
+###########################################################################################################################

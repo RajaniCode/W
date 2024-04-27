@@ -1,0 +1,24 @@
+# minio server
+
+% nano /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio/minio
+
+% export MINIO_CONFIG_ENV_FILE=/Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio/minio
+
+% minio server /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio --console-address :9090
+
+
+# minio client
+[
+mc: Configuration written to `/Users/rajaniapple/.mc/config.json`. Please update your access credentials.
+mc: Successfully created `/Users/rajaniapple/.mc/share`.
+mc: Initialized share uploads `/Users/rajaniapple/.mc/share/uploads.json` file.
+mc: Initialized share downloads `/Users/rajaniapple/.mc/share/downloads.json` file.
+]
+% mc alias set myminio http://192.168.191.31:9000
+Enter Access Key: minioadmin
+Enter Secret Key: minioadmin
+Added `myminio` successfully.
+
+ % mc alias set myminio http://192.168.191.31:9000 minioadmin
+Enter Secret Key: minioadmin
+Added `myminio` successfully.

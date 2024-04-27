@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-21-express-dns-app-deployment
+  labels:
+    app: node-21-express-dns-app-label
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: node-21-express-dns-app-label  
+  template:
+    metadata:
+      labels:
+        app: node-21-express-dns-app-label  
+    spec:
+      containers:
+      - name: node-21-express-dns-app-container
+        image: "dockerrajani/node-21-express-dns-app-macos-arm64:version1.0.0"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-21-express-dns-app-load-balancer-service 
+spec:
+  selector:
+    app: node-21-express-dns-app-label 
+  type: LoadBalancer     
+  ports:
+  - protocol: TCP        
+    port: 5000           
+    targetPort: 3000    
+    nodePort: 31110

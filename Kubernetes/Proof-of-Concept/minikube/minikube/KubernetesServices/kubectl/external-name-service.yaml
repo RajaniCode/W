@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-name-service
+  namespace: production
+spec:
+  type: ExternalName
+  externalName: example.com
+  selector:
+    app: expressjs
+    framework: server

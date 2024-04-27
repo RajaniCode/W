@@ -1,0 +1,79 @@
+Last login: Wed Nov  8 17:19:46 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/Version1.0.0
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker version
+Client:
+ Cloud integration: v1.0.35+desktop.5
+ Version:           24.0.6
+ API version:       1.43
+ Go version:        go1.20.7
+ Git commit:        ed223bc
+ Built:             Mon Sep  4 12:28:49 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.25.0 (126437)
+ Engine:
+  Version:          24.0.6
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.7
+  Git commit:       1a79695
+  Built:            Mon Sep  4 12:31:36 2023
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.22
+  GitCommit:        8165feabfdfe38c65b599c4993d227328c231fca
+ runc:
+  Version:          1.1.8
+  GitCommit:        v1.1.8-0-g82f18fe
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker build -t node-mongodb-app .
+[+] Building 0.9s (8/8) FINISHED                                                                                                           docker:desktop-linux
+ => [internal] load .dockerignore                                                                                                                          0.0s
+ => => transferring context: 2B                                                                                                                            0.0s
+ => [internal] load build definition from Dockerfile                                                                                                       0.0s
+ => => transferring dockerfile: 109B                                                                                                                       0.0s
+ => [internal] load metadata for docker.io/library/node:20.9-slim                                                                                          0.8s
+ => [internal] load build context                                                                                                                          0.1s
+ => => transferring context: 146.66kB                                                                                                                      0.1s
+ => [1/3] FROM docker.io/library/node:20.9-slim@sha256:da981564279232f7962576d79d01832cc12f8270e8ddd05bb3077af8061a50ca                                    0.0s
+ => CACHED [2/3] COPY . .                                                                                                                                  0.0s
+ => CACHED [3/3] RUN npm install                                                                                                                           0.0s
+ => exporting to image                                                                                                                                     0.0s
+ => => exporting layers                                                                                                                                    0.0s
+ => => writing image sha256:10c849696651c70ae9bc17a9c8c75d4d333f79321fb272af6336ac98dd92713f                                                               0.0s
+ => => naming to docker.io/library/node-mongodb-app                                                                                                        0.0s
+
+What's Next?
+  View a summary of image vulnerabilities and recommendations → docker scout quickview
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker login
+Authenticating with existing credentials...
+Login Succeeded
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker-credential-$(
+  jq -r .credsStore ~/.docker/config.json
+) list | jq -r '
+  . |
+    to_entries[] |
+    select(
+      .key |
+      contains("docker.io")
+    ) |
+    last(.value)
+'
+dockerrajani
+dockerrajani
+dockerrajani
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker tag node-mongodb-app dockerrajani/node-mongodb-app:version1.0.0
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % docker push dockerrajani/node-mongodb-app:version1.0.0
+The push refers to repository [docker.io/dockerrajani/node-mongodb-app]
+003157c94731: Pushed 
+53b5621f5e84: Pushed 
+f7506b167c11: Mounted from library/node 
+ad747d0eb247: Mounted from library/node 
+5e78c21dfd38: Mounted from library/node 
+bcc2a717f034: Mounted from library/node 
+70e628269d9f: Mounted from library/node 
+version1.0.0: digest: sha256:656639d32fdd2ba0f7a87e7541bebbfa23f74cca5453311dd8095675e9e5c53e size: 1788
+rajaniapple@Rajanis-MacBook-Pro Version1.0.0 % 

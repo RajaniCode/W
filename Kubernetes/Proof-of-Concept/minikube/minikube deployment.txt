@@ -1,0 +1,264 @@
+% docker version
+
+
+# The connection to the server 127.0.0.1:49400 was refused - did you specify the right host or port? # % minikube start
+% kubectl version --output=yaml
+
+
+% kubectl config view
+
+
+% minikube version
+
+
+# NB
+[
+% kubectl get po -A -o wide
+
+% kubectl cluster-info
+
+% kubectl get nodes -o wide
+
+% kubectl get services -o wide
+
+% kubectl get events -o wide
+
+% kubectl get all
+
+% kubectl get deployments -o wide
+
+% kubectl get pods -o wide
+
+% kubectl get replicasets -o wide
+]
+
+
+% minikube start
+
+
+# In another window
+% minikube dashboard
+
+
+
+
+## Deploy applications
+
+# Service #
+
+# Create a sample deployment and expose it on port 8080:
+
+% kubectl create deployment hello-minikube --image=kicbase/echo-server:1.0
+% kubectl expose deployment hello-minikube --type=NodePort --port=8080
+
+# It may take a moment, but your deployment will soon show up when you run:
+% kubectl get services hello-minikube
+
+# The easiest way to access this service is to let minikube launch a web browser for you:
+% minikube service hello-minikube
+
+# http://127.0.0.1:50470
+[
+Request served by hello-minikube-59d4768566-blv5p
+
+HTTP/1.1 GET /
+
+Host: 127.0.0.1:50470
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Connection: keep-alive
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15
+]
+
+
+Alternatively, use kubectl to forward the port:
+% kubectl port-forward service/hello-minikube 7080:8080
+
+Tada! Your application is now available at http://localhost:7080/.
+
+You should be able to see the request metadata in the application output. Try changing the path of the request and observe the changes. Similarly, you can do a POST request and observe the body show up in the output.
+
+# http://localhost:7080/
+[
+Request served by hello-minikube-59d4768566-blv5p
+
+HTTP/1.1 GET /
+
+Host: localhost:7080
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+Connection: keep-alive
+Sec-Ch-Ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "macOS"
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36
+]
+
+
+# LoadBalancer #
+# To access a LoadBalancer deployment, use the “minikube tunnel” command.
+# Here is an example deployment:
+% kubectl create deployment balanced --image=kicbase/echo-server:1.0
+% kubectl expose deployment balanced --type=LoadBalancer --port=8080
+
+[
+# In another window, start the tunnel to create a routable IP for the ‘balanced’ deployment:
+% minikube tunnel
+]
+
+# To find the routable IP, run this command and examine the EXTERNAL-IP column:
+% kubectl get services balanced
+[
+NAME       TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+balanced   LoadBalancer   10.102.99.14   127.0.0.1     8080:32282/TCP   57s
+]
+Your deployment is now available at <EXTERNAL-IP>:8080
+
+# http://127.0.0.1:8080/
+[
+Request served by balanced-567b5f87b5-n7669
+
+HTTP/1.1 GET /
+
+Host: 127.0.0.1:8080
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+Connection: keep-alive
+Sec-Ch-Ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "macOS"
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36
+]
+
+
+# Ingress #
+# Enable ingress addon:
+% minikube addons enable ingress
+# The following example creates simple echo-server services and an Ingress object to route to these services.
+# Check for ingress-example.yaml
+% curl -L https://storage.googleapis.com/minikube-site-examples/ingress-example.yaml
+[
+kind: Pod
+apiVersion: v1
+metadata:
+  name: foo-app
+  labels:
+    app: foo
+spec:
+  containers:
+    - name: foo-app
+      image: 'kicbase/echo-server:1.0'
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: foo-service
+spec:
+  selector:
+    app: foo
+  ports:
+    - port: 8080
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: bar-app
+  labels:
+    app: bar
+spec:
+  containers:
+    - name: bar-app
+      image: 'kicbase/echo-server:1.0'
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: bar-service
+spec:
+  selector:
+    app: bar
+  ports:
+    - port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /foo
+            backend:
+              service:
+                name: foo-service
+                port:
+                  number: 8080
+          - pathType: Prefix
+            path: /bar
+            backend:
+              service:
+                name: bar-service
+                port:
+                  number: 8080
+---
+]
+% wget https://storage.googleapis.com/minikube-site-examples/ingress-example.yaml
+# Apply the contents
+[
+% kubectl apply -f https://storage.googleapis.com/minikube-site-examples/ingress-example.yaml
+]
+% kubectl apply -f ingress-example.yaml
+[
+% kubectl delete -f ingress-example.yaml
+]
+
+
+# Wait for ingress address
+% kubectl get ingress
+[
+NAME              CLASS   HOSTS   ADDRESS        PORTS   AGE
+example-ingress   nginx   *       192.168.49.2   80      12m
+]
+
+
+# Note for Docker Desktop Users:
+# To get ingress to work you’ll need to open a new terminal window and run minikube tunnel and in the following step use 127.0.0.1 in place of <ip_from_above>.
+
+# In another window, start the tunnel to create a routable IP
+% minikube tunnel
+
+
+# Switch back to the terminal where you ran minikube start
+% curl http://127.0.0.1:80/foo
+% open http://127.0.0.1:80/foo
+% curl http://127.0.0.1:80/bar
+% open http://127.0.0.1:80/bar
+
+[
+# get # service # foo-service # EXTERNAL-IP # <none> #
+% kubectl get services foo-service
+# get # service # bar-service # EXTERNAL-IP # <none> #
+% kubectl get services bar-service
+
+% minikube service foo-service
+% minikube service bar-service
+]

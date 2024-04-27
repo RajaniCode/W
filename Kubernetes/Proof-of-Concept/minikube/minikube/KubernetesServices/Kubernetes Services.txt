@@ -1,0 +1,1682 @@
+# Kubernetes Services
+
+# There are five types of Services:
+1. ClusterIP (default) Service
+2. NodePort Service
+3. LoadBalancer Service
+4. ExternalName Service
+5. Headless Service
+
+
+***************************************************************************************************************************
+
+1. ClusterIP (default) Service
+
+***************************************************************************************************************************
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices
+
+% docker --version
+
+% docker version
+
+% docker info
+
+% minikube version
+
+% minikube start
+
+% minikube ip
+
+% minikube profile list
+
+% minikube service list -p minikube
+
+% kubectl version
+
+% kubectl config view
+
+% kubectl cluster-info
+
+% mkdir -p kubectl
+
+% nano kubectl/cluster-ip-deployment-service.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-ip-deployment
+spec:
+  selector:
+    matchLabels:
+      app: openjs
+      engine: v8
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: openjs
+        engine: v8
+    spec:
+      containers:
+      - name: openjs-2019-container
+        image: "dockerrajani/node-21-express-app-macos-arm64:version1.0.0"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-ip-service
+spec:
+  type: ClusterIP
+  # Uncomment the below line to create a Headless Service
+  # clusterIP: None
+  selector:
+    app: openjs
+    engine: v8
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+]
+% cat kubectl/cluster-ip-deployment-service.yaml
+% kubectl apply -f kubectl/cluster-ip-deployment-service.yaml
+[
+% kubectl delete -f kubectl/cluster-ip-deployment-service.yaml
+]
+
+% kubectl get pods 
+[
+NAME                                     READY   STATUS    RESTARTS   AGE
+cluster-ip-deployment-58947c85bf-6x8qq   1/1     Running   0          24s
+cluster-ip-deployment-58947c85bf-7s8ws   1/1     Running   0          24s
+cluster-ip-deployment-58947c85bf-k9xc4   1/1     Running   0          24s
+]
+
+% kubectl exec -it cluster-ip-deployment-58947c85bf-6x8qq -- sh
+[
+/usr/src/app $ apk --version
+/usr/src/app $ env
+/usr/src/app $ ls
+/usr/src/app $ wget -S -O - http://localhost:3000/
+/usr/src/app $ PORT=5000 node index.js 
+control + C
+/usr/src/app $ exit
+]
+
+wget -S -O - http://localhost:3001/
+
+[
+# Terminal New Window
+% sudo minikube tunnel
+
+% kubectl get services
+[
+NAME                 TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+cluster-ip-service   ClusterIP   10.100.187.222   <none>        80/TCP    4m6s
+kubernetes           ClusterIP   10.96.0.1        <none>        443/TCP   6m13s
+]
+
+% minikube service cluster-ip-service
+control + c
+]
+
+% kubectl delete -f kubectl/cluster-ip-deployment-service.yaml
+
+***************************************************************************************************************************
+
+2. NodePort Service
+
+***************************************************************************************************************************
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices
+
+% nano kubectl/node-port-deployment-service.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-port-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nodejs
+      environment: runtime
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: nodejs
+        environment: runtime
+    spec:
+      containers:
+      - name: nodejs-21-container
+        image: "dockerrajani/node-21-express-app-macos-arm64:version1.0.0"
+        env:
+        - name: "PORT"
+          value: "50000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-port-service
+spec:
+  type: NodePort
+  selector:
+    app: nodejs
+    environment: runtime
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 50000
+]
+% cat kubectl/node-port-deployment-service.yaml
+% kubectl apply -f kubectl/node-port-deployment-service.yaml
+[
+% kubectl delete -f kubectl/node-port-deployment-service.yaml
+]
+
+% kubectl get pods 
+[
+NAME                                    READY   STATUS    RESTARTS   AGE
+node-port-deployment-858fdfc885-6rn5s   1/1     Running   0          35s
+node-port-deployment-858fdfc885-9vwsj   1/1     Running   0          35s
+node-port-deployment-858fdfc885-nr4kj   1/1     Running   0          35s
+]
+
+% kubectl exec -it node-port-deployment-858fdfc885-6rn5s -- sh
+[
+/usr/src/app $ apk --version
+/usr/src/app $ env
+/usr/src/app $ ls
+/usr/src/app $ wget -S -O - http://localhost:3000/
+[
+Connecting to localhost:3000 (127.0.0.1:3000)
+wget: can't connect to remote host (127.0.0.1): Connection refused
+]
+/usr/src/app $ PORT=5000 node index.js
+[
+App listening on http://localhost:5000
+]
+control + C
+/usr/src/app $ exit
+]
+
+[
+# Replace NODE_PORT with the value of the nodePort field of the Service.
+
+% gcloud compute firewall-rules create test-node-port \
+    --allow tcp:NODE_PORT
+]
+
+[
+# Terminal New Window
+% sudo minikube tunnel
+]
+
+% kubectl get services
+[
+NAME                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+kubernetes          ClusterIP   10.96.0.1       <none>        443/TCP        12m
+node-port-service   NodePort    10.100.86.108   <none>        80:30701/TCP   4m25s
+]
+
+% minikube service node-port-service
+
+% kubectl delete -f kubectl/node-port-deployment-service.yaml
+
+***************************************************************************************************************************
+
+3. LoadBalancer Service
+
+***************************************************************************************************************************
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices
+
+NB:
+# Deployment
+        env:
+        - name: "PORT"
+          value: "8080"
+targetPort: 50001
+# kind: Service
+    targetPort: 50001
+
+% nano kubectl/load-balancer-deployment-service.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-balancer-deployment
+spec:
+  selector:
+    matchLabels:
+      app: expressjs
+      framework: server
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: expressjs
+        framework: server
+    spec:
+      containers:
+      - name: expressjs-4-container
+        image: "dockerrajani/node-21-express-app-macos-arm64:version1.0.0"
+        env:
+        - name: "PORT"
+          value: "50001"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: load-balancer-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: expressjs
+    framework: server
+  ports:
+  - protocol: TCP
+    port: 60000
+    targetPort: 50001
+]
+% cat kubectl/load-balancer-deployment-service.yaml
+% kubectl apply -f kubectl/load-balancer-deployment-service.yaml
+[
+% kubectl delete -f kubectl/load-balancer-deployment-service.yaml
+]
+
+% kubectl get pods 
+[
+NAME                                        READY   STATUS    RESTARTS   AGE
+load-balancer-deployment-768f799d87-fclvm   1/1     Running   0          99s
+load-balancer-deployment-768f799d87-h4gxc   1/1     Running   0          99s
+load-balancer-deployment-768f799d87-ldwn5   1/1     Running   0          99s
+]
+
+% kubectl exec -it load-balancer-deployment-768f799d87-fclvm -- sh
+[
+/usr/src/app $ apk --version
+/usr/src/app $ env
+/usr/src/app $ ls
+/usr/src/app $ wget -S -O - http://localhost:3000/
+[
+Connecting to localhost:3000 (127.0.0.1:3000)
+wget: can't connect to remote host (127.0.0.1): Connection refused
+]
+/usr/src/app $ PORT=5000 node index.js 
+[
+App listening on http://localhost:5000
+]
+control + C
+/usr/src/app $ exit
+]
+
+% kubectl get services
+[
+NAME                    TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)           AGE
+kubernetes              ClusterIP      10.96.0.1      <none>        443/TCP           24m
+load-balancer-service   LoadBalancer   10.100.13.44   <pending>     60000:32606/TCP   5m7s
+]
+
+# Terminal New Window
+% sudo minikube tunnel
+
+% kubectl get services
+[
+NAME                    TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)           AGE
+kubernetes              ClusterIP      10.96.0.1      <none>        443/TCP           25m
+load-balancer-service   LoadBalancer   10.100.13.44   127.0.0.1     60000:32606/TCP   5m20s
+]
+
+% curl http://127.0.0.1:60000/
+[
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Thu, 07 Dec 2023 02:09:12 GMT
+]
+
+% curl http://localhost:60000/
+[
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Thu, 07 Dec 2023 02:09:12 GMT
+]
+
+% open http://localhost:60000/
+
+# Terminal Window <sudo minikube tunnel> 
+control + C
+
+# Original Terminal Window
+% kubectl get services
+[     
+NAME                    TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)           AGE
+kubernetes              ClusterIP      10.96.0.1      <none>        443/TCP           28m
+load-balancer-service   LoadBalancer   10.100.13.44   <pending>     60000:32606/TCP   8m16s
+]
+
+% minikube service load-balancer-service
+control + C
+
+% kubectl delete -f kubectl/load-balancer-deployment-service.yaml
+
+***************************************************************************************************************************
+
+4. ExternalName Service
+
+# As an alternative to writing a Service manifest, you can create a Service by using kubectl expose to expose a Deployment.
+
+***************************************************************************************************************************
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices
+
+[
+% rm -rf kubectl/namespace-production.yaml
+]
+% nano kubectl/namespace-production.yaml
+[
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: production
+]
+% cat kubectl/namespace-production.yaml
+% kubectl apply -f kubectl/namespace-production.yaml
+[
+% kubectl delete -f kubectl/namespace-production.yaml
+]
+]
+# Or
+% kubectl create namespace production
+[
+% kubectl delete namespace production
+]
+
+[
+% rm -rf kubectl/external-name-service.yaml
+]
+% nano kubectl/external-name-service.yaml
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-name-service
+  namespace: production
+spec:
+  type: ExternalName
+  externalName: example.com
+  selector:
+    app: expressjs
+    framework: server
+]
+% kubectl get namespaces production
+% cat kubectl/external-name-service.yaml
+% kubectl apply -f kubectl/external-name-service.yaml
+[
+% kubectl delete -f kubectl/external-name-service.yaml
+]
+
+[
+% rm -rf kubectl/external-name-deployment.yaml
+]
+% nano kubectl/external-name-deployment.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-name-deployment
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: openjs
+      engine: v8
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: openjs
+        engine: v8
+    spec:
+      containers:
+      - name: expressjs-4-container
+        image: "dockerrajani/node-21-express-dns-app-macos-arm64:version1.0.0"
+        env:
+        - name: "PORT"
+          value: "3000"
+        env:
+        - name: "HOST"
+          value: "external-name-service.production.svc.cluster.local"
+]
+% kubectl get namespaces production
+% cat kubectl/external-name-deployment.yaml
+% kubectl apply -f kubectl/external-name-deployment.yaml
+[
+% kubectl delete -f kubectl/external-name-deployment.yaml
+]
+
+% kubectl get pods -n production --watch
+
+% kubectl get pods -n production
+[
+NAME                                       READY   STATUS    RESTARTS   AGE
+external-name-deployment-f78dfb9c4-4zr2m   1/1     Running   0          26s
+external-name-deployment-f78dfb9c4-cvhx4   1/1     Running   0          26s
+external-name-deployment-f78dfb9c4-xvhqv   1/1     Running   0          26s
+]
+
+% kubectl get services -n production
+
+[
+% kubectl exec -it external-name-deployment-f78dfb9c4-4zr2m -n production -- cat /etc/hosts
+]
+% kubectl exec -it external-name-deployment-f78dfb9c4-4zr2m -n production -- cat /etc/resolv.conf
+% kubectl exec -it external-name-deployment-f78dfb9c4-4zr2m -n production -- sh
+[
+/usr/src/app $ apk --version
+/usr/src/app $ env
+/usr/src/app $ ls
+/usr/src/app $ wget -S -O - http://localhost:3000/
+/usr/src/app $ DOMAIN="external-name-service.production.svc.cluster.local" PORT=5000 node index.js
+[
+App listening on http://localhost:5000
+[ 'example.com' ]
+]
+control + C
+/usr/src/app $ exit
+]
+
+# Terminal New Window
+% kubectl exec -it external-name-deployment-f78dfb9c4-4zr2m -n production -- sh
+/usr/src/app $ wget -S -O - http://localhost:5000/
+[
+Connecting to localhost:5000 (127.0.0.1:5000)
+  HTTP/1.1 200 OK
+  X-Powered-By: Express
+  Content-Type: text/html; charset=utf-8
+  Content-Length: 103
+  ETag: W/"67-FzgCVCVUysu9+lFeb6hN4wQUoQE"
+  Date: Fri, 08 Dec 2023 16:49:00 GMT
+  Connection: close
+  
+writing to stdout
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Fri, 08 Dec 2023 16:48:20 GMT
+<br/><br/>
+
+-                    100% |****************************************************************************************************************|   103  0:00:00 ETA
+written to stdout
+/usr/src/app $ wget -S -O - http://localhost:5000/
+Connecting to localhost:5000 (127.0.0.1:5000)
+  HTTP/1.1 200 OK
+  X-Powered-By: Express
+  Content-Type: text/html; charset=utf-8
+  Content-Length: 114
+  ETag: W/"72-NxxX8GO/+8m93rKbMb36CYeLtEI"
+  Date: Fri, 08 Dec 2023 16:49:40 GMT
+  Connection: close
+  
+writing to stdout
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Fri, 08 Dec 2023 16:49:32 GMT
+<br/><br/>
+example.com
+-                    100% |****************************************************************************************************************|   114  0:00:00 ETA
+written to stdout
+]
+
+$ nslookup external-name-service.production.svc.cluster.local
+[
+Server:		10.96.0.10
+Address:	10.96.0.10:53
+
+external-name-service.production.svc.cluster.local	canonical name = example.com
+Name:	example.com
+Address: 93.184.216.34
+
+external-name-service.production.svc.cluster.local	canonical name = example.com
+Name:	example.com
+Address: 2606:2800:220:1:248:1893:25c8:1946
+]
+
+$ nslookup example.com
+[
+Server:		10.96.0.10
+Address:	10.96.0.10:53
+
+Non-authoritative answer:
+Name:	example.com
+Address: 93.184.216.34
+
+Non-authoritative answer:
+Name:	example.com
+Address: 2606:2800:220:1:248:1893:25c8:1946
+]
+
+===========================================================================================================================
+
+# Debugging DNS Resolution
+
+===========================================================================================================================
+
+# Check if the DNS pod is running 
+% kubectl get pods --namespace=kube-system -l k8s-app=kube-dns
+
+# Check for errors in the DNS pod
+$ kubectl logs --namespace=kube-system -l k8s-app=kube-dns
+
+# Is DNS service up?
+% kubectl get svc --namespace=kube-system
+
+# Are DNS endpoints exposed?
+% kubectl get endpoints kube-dns --namespace=kube-system
+
+# Are DNS queries being received/processed?
+% kubectl -n kube-system edit configmap coredns
+
+# NB:
+[
+# Verify if queries are being received by CoreDNS by adding the log plugin to the CoreDNS configuration (aka Corefile).
+
+# The CoreDNS Corefile is held in a ConfigMap named coredns. To edit it, use the command:
+
+% kubectl -n kube-system edit configmap coredns
+
+Then add log in the Corefile section per the example below:
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns
+  namespace: kube-system
+data:
+  Corefile: |
+    .:53 {
+        log
+        errors
+        health
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
+          pods insecure
+          upstream
+          fallthrough in-addr.arpa ip6.arpa
+        }
+        prometheus :9153
+        forward . /etc/resolv.conf
+        cache 30
+        loop
+        reload
+        loadbalance
+    }    
+
+# After saving the changes, it may take up to minute or two for Kubernetes to propagate these changes to the CoreDNS pods.
+
+# Next, make some queries and view the logs per the sections above in this document.
+
+# If CoreDNS pods are receiving the queries, you should see them in the logs.
+
+# Here is an example of a query in the log:
+
+.:53
+2018/08/15 14:37:15 [INFO] CoreDNS-1.2.0
+2018/08/15 14:37:15 [INFO] linux/amd64, go1.10.3, 2e322f6
+CoreDNS-1.2.0
+linux/amd64, go1.10.3, 2e322f6
+2018/09/07 15:29:04 [INFO] plugin/reload: Running configuration MD5 = 162475cdf272d8aa601e6fe67a6ad42f
+2018/09/07 15:29:04 [INFO] Reloading complete
+172.17.0.18:41675 - [07/Sep/2018:15:29:11 +0000] 59925 "A IN kubernetes.default.svc.cluster.local. udp 54 false 512" NOERROR qr,aa,rd,ra 106 0.000066649s
+]
+
+# Does CoreDNS have sufficient permissions?
+% kubectl describe clusterrole system:coredns -n kube-system
+
+# NB:
+[
+Expected output:
+
+PolicyRule:
+  Resources                        Non-Resource URLs  Resource Names  Verbs
+  ---------                        -----------------  --------------  -----
+  endpoints                        []                 []              [list watch]
+  namespaces                       []                 []              [list watch]
+  pods                             []                 []              [list watch]
+  services                         []                 []              [list watch]
+  endpointslices.discovery.k8s.io  []                 []              [list watch]
+If any permissions are missing, edit the ClusterRole to add them:
+
+kubectl edit clusterrole system:coredns -n kube-system
+Example insertion of EndpointSlices permissions:
+
+...
+- apiGroups:
+  - discovery.k8s.io
+  resources:
+  - endpointslices
+  verbs:
+  - list
+  - watch
+...
+]
+
+# Are you in the right namespace for the service?
+% kubectl exec -i -t external-name-deployment-f78dfb9c4-4zr2m -n production -- nslookup external-name-service
+
+===========================================================================================================================
+
+[
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices
+]
+
+% kubectl delete -f kubectl/external-name-deployment.yaml
+
+% kubectl delete -f kubectl/external-name-service.yaml
+
+% kubectl delete -f kubectl/namespace-production.yaml
+
+***************************************************************************************************************************
+
+# Using kubectl expose to create Services
+
+***************************************************************************************************************************
+===========================================================================================================================
+
+# Expose a Deployment to create a ClusterIP Service
+
+===========================================================================================================================
+
+[
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices
+]
+
+[
+% rm -rf kubectl/js-deployment.yaml
+]
+% nano kubectl/js-deployment.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: js-deployment
+spec:
+  selector:
+    matchLabels:
+      app: js
+      ecosystem: javascript
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: js
+        ecosystem: javascript
+    spec:
+      containers:
+      - name: js-container
+        image: "dockerrajani/node-21-express-app-macos-arm64:version1.0.0"
+]
+% cat kubectl/js-deployment.yaml
+% kubectl apply -f kubectl/js-deployment.yaml
+[
+% kubectl delete -f kubectl/js-deployment.yaml
+]
+
+% kubectl expose deployment js-deployment --name deployment-exposed-to-cluster-ip-service \
+    --type ClusterIP --protocol TCP --port 80 --target-port 8080
+
+% kubectl get pods --watch
+
+% kubectl get pods
+[
+NAME                             READY   STATUS    RESTARTS   AGE
+js-deployment-749cb44b47-gsbqv   1/1     Running   0          89s
+js-deployment-749cb44b47-mlsrb   1/1     Running   0          89s
+js-deployment-749cb44b47-t9qhm   1/1     Running   0          89s
+]
+
+% kubectl exec -it js-deployment-749cb44b47-gsbqv -- sh
+[
+/usr/src/app $ apk --version
+/usr/src/app $ env
+/usr/src/app $ ls
+/usr/src/app $ wget -S -O - http://localhost:3000/
+/usr/src/app $ PORT=5000 node index.js 
+control + C
+/usr/src/app $ exit
+]
+
+% kubectl get services
+
+[
+# Terminal New Window
+% sudo minikube tunnel
+
+% kubectl get services
+
+% minikube service deployment-exposed-to-cluster-ip-service
+control + c
+]
+
+% kubectl delete -f kubectl/js-deployment.yaml
+
+% kubectl delete services deployment-exposed-to-cluster-ip-service
+
+===========================================================================================================================
+
+# Expose a Deployment to create a NodePort Service
+
+===========================================================================================================================
+
+[
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices
+]
+
+[
+% rm -rf kubectl/node-deployment.yaml
+]
+% nano kubectl/node-deployment.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-deployment
+spec:
+  selector:
+    matchLabels:
+      app: node
+      architecture: event-driven
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: node
+        architecture: event-driven
+    spec:
+      containers:
+      - name: node-21-container
+        image: "dockerrajani/node-21-express-app-macos-arm64:version1.0.0"
+        env:
+        - name: "PORT"
+          value: "50000"
+]
+% cat kubectl/node-deployment.yaml
+% kubectl apply -f kubectl/node-deployment.yaml
+[
+% kubectl delete -f kubectl/node-deployment.yaml
+]
+
+% kubectl expose deployment node-deployment --name deployment-exposed-to-node-port-service \
+    --type NodePort --protocol TCP --port 80 --target-port 50000
+
+% kubectl get services
+
+[
+# Terminal New Window
+% sudo minikube tunnel
+]
+
+% kubectl get services
+
+% minikube service deployment-exposed-to-node-port-service
+control + c
+
+% kubectl delete -f kubectl/node-deployment.yaml
+
+% kubectl delete services deployment-exposed-to-node-port-service
+
+===========================================================================================================================
+
+# Expose a Deployment to create a LoadBalancer Service
+
+===========================================================================================================================
+
+[
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices
+]
+
+[
+% rm -rf kubectl/express-deployment.yaml
+]
+% nano kubectl/express-deployment.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: express-deployment
+spec:
+  selector:
+    matchLabels:
+      app: express
+      api: restful 
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: express
+        api: restful
+    spec:
+      containers:
+      - name: express-4-container
+        image: "dockerrajani/node-21-express-app-macos-arm64:version1.0.0"
+        env:
+        - name: "PORT"
+          value: "50001"
+]
+% cat kubectl/express-deployment.yaml
+% kubectl apply -f kubectl/express-deployment.yaml
+[
+% kubectl delete -f kubectl/express-deployment.yaml
+]
+
+% kubectl expose deployment express-deployment --name deployment-exposed-to-load-balancer-service \
+    --type LoadBalancer --port 60000 --target-port 50001
+
+% kubectl get services
+
+# Terminal New Window
+% sudo minikube tunnel
+
+% kubectl get services
+
+% minikube service deployment-exposed-to-load-balancer-service
+control + c
+
+% kubectl delete -f kubectl/express-deployment.yaml
+
+% kubectl delete services deployment-exposed-to-load-balancer-service
+
+===========================================================================================================================
+***************************************************************************************************************************
+
+5. Headless Service
+
+***************************************************************************************************************************
+
+[
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices
+]
+
+[
+% rm -rf kubectl/headless-service.yaml
+]
+% nano kubectl/headless-service.yaml
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  clusterIP: None
+  selector:
+    app: nginx
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+]
+% cat kubectl/headless-service.yaml
+% kubectl apply -f kubectl/headless-service.yaml
+[
+% kubectl delete -f kubectl/headless-service.yaml
+]
+
+[
+% rm -rf kubectl/nginx-deployment.yaml
+]
+% nano kubectl/nginx-deployment.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+]
+% cat kubectl/nginx-deployment.yaml
+% kubectl apply -f kubectl/nginx-deployment.yaml
+[
+% kubectl delete -f kubectl/nginx-deployment.yaml
+]
+
+% kubectl get pods --watch --show-labels
+
+% kubectl get pods 
+[
+NAME                                READY   STATUS    RESTARTS   AGE
+nginx-deployment-7c5ddbdf54-cprkv   1/1     Running   0          11s
+nginx-deployment-7c5ddbdf54-q8r4d   1/1     Running   0          11s
+]
+
+% kubectl exec -it nginx-deployment-7c5ddbdf54-cprkv -- sh
+[
+# apt-get update
+
+# apt-get install dnsutils
+
+# cat /etc/resolv.conf
+[
+nameserver 10.96.0.10
+search default.svc.cluster.local svc.cluster.local cluster.local
+options ndots:5
+]
+# dig +short nginx.default.svc.cluster.local
+[
+10.244.0.29
+10.244.0.28
+]
+
+# dig +short +search nginx
+[
+10.244.0.28
+10.244.0.29
+]
+
+# curl 10.244.0.28
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+
+# apt-get install wget
+
+# wget -S -O - 10.244.0.28
+--2023-12-08 19:40:46--  http://10.244.0.28/
+Connecting to 10.244.0.28:80... connected.
+HTTP request sent, awaiting response... 
+  HTTP/1.1 200 OK
+  Server: nginx/1.25.3
+  Date: Fri, 08 Dec 2023 19:40:46 GMT
+  Content-Type: text/html
+  Content-Length: 615
+  Last-Modified: Tue, 24 Oct 2023 13:46:47 GMT
+  Connection: keep-alive
+  ETag: "6537cac7-267"
+  Accept-Ranges: bytes
+Length: 615 [text/html]
+Saving to: 'STDOUT'
+
+-                                         0%[                                                                                ]       0  --.-KB/s               <!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+-                                       100%[===============================================================================>]     615  --.-KB/s    in 0s      
+
+2023-12-08 19:40:46 (72.9 MB/s) - written to stdout [615/615]
+# exit
+]
+
+[
+% kubectl get deployments --show-labels
+
+% kubectl get services --show-labels
+]
+
+% kubectl get services
+
+[
+# Terminal New Window 
+% sudo minikube tunnel      
+
+% minikube service nginx
+]
+
+% kubectl delete -f kubectl/nginx-deployment.yaml
+
+% kubectl delete -f kubectl/headless-service.yaml
+
+===========================================================================================================================
+
+# Create a headless Service with a single command, and headless Services are easy to update and scale.
+
+===========================================================================================================================
+
+[
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices
+]
+
+% kubectl create service clusterip nginx --clusterip="None" --dry-run=client -o yaml > kubectl/headless-service-via-command.yaml
+
+% kubectl apply -f kubectl/headless-service-via-command.yaml
+
+% kubectl apply -f kubectl/nginx-deployment.yaml
+
+% kubectl get pods --watch --show-labels
+
+% kubectl get pods 
+[
+NAME                                READY   STATUS    RESTARTS   AGE
+nginx-deployment-7c5ddbdf54-5r4pq   1/1     Running   0          11s
+nginx-deployment-7c5ddbdf54-gczm4   1/1     Running   0          11s
+]
+
+% kubectl exec -it nginx-deployment-7c5ddbdf54-5r4pq -- sh
+[
+# apt-get update
+
+# apt-get install dnsutils
+
+# cat /etc/resolv.conf
+[
+nameserver 10.96.0.10
+search default.svc.cluster.local svc.cluster.local cluster.local
+options ndots:5
+]
+
+# dig +short nginx.default.svc.cluster.local
+[
+10.244.0.33
+10.244.0.32
+]
+
+# dig +short +search nginx
+[
+10.244.0.33
+10.244.0.32
+]
+
+# curl 10.244.0.33
+[
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+]
+
+# curl 10.244.0.32
+[
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+]
+
+# apt-get install wget
+
+# wget -S -O - 10.244.0.33
+[
+--2023-12-08 20:43:43--  http://10.244.0.33/
+Connecting to 10.244.0.33:80... connected.
+HTTP request sent, awaiting response... 
+  HTTP/1.1 200 OK
+  Server: nginx/1.25.3
+  Date: Fri, 08 Dec 2023 20:43:43 GMT
+  Content-Type: text/html
+  Content-Length: 615
+  Last-Modified: Tue, 24 Oct 2023 13:46:47 GMT
+  Connection: keep-alive
+  ETag: "6537cac7-267"
+  Accept-Ranges: bytes
+Length: 615 [text/html]
+Saving to: 'STDOUT'
+
+-                                         0%[                                                                                ]       0  --.-KB/s               <!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+-                                       100%[===============================================================================>]     615  --.-KB/s    in 0s      
+
+2023-12-08 20:43:43 (70.0 MB/s) - written to stdout [615/615]
+]
+
+# wget -S -O - 10.244.0.32
+[
+--2023-12-08 20:43:56--  http://10.244.0.32/
+Connecting to 10.244.0.32:80... connected.
+HTTP request sent, awaiting response... 
+  HTTP/1.1 200 OK
+  Server: nginx/1.25.3
+  Date: Fri, 08 Dec 2023 20:43:56 GMT
+  Content-Type: text/html
+  Content-Length: 615
+  Last-Modified: Tue, 24 Oct 2023 13:46:47 GMT
+  Connection: keep-alive
+  ETag: "6537cac7-267"
+  Accept-Ranges: bytes
+Length: 615 [text/html]
+Saving to: 'STDOUT'
+
+-                                         0%[                                                                                ]       0  --.-KB/s               <!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+-                                       100%[===============================================================================>]     615  --.-KB/s    in 0s      
+
+2023-12-08 20:43:56 (85.8 MB/s) - written to stdout [615/615]
+]
+
+# exit
+]
+
+% kubectl delete deployment nginx-deployment
+
+% kubectl delete -f kubectl/headless-service-via-command.yaml
+
+===========================================================================================================================
+***************************************************************************************************************************
+
+# Arbitrary Service ports
+
+# The value of the port field in a Service manifest is arbitrary. 
+
+# However, the value of targetPort is not arbitrary.
+
+# Each member Pod must have a container listening on targetPort.
+
+# Here's a Service, of type LoadBalancer, that has a port value of 55555:
+
+***************************************************************************************************************************
+
+[
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices
+]
+
+# NB:
+[
+The Service "load-balancer-nginx-service" is invalid: spec.clusterIPs: Invalid value: []string{"10.11.241.93"}: failed to allocate IP 10.11.241.93: the provided IP (10.11.241.93) is not in the valid range. The range of valid IPs is 10.96.0.0/12
+]
+
+NB:
+# Deployment
+        env:
+        - name: "PORT"
+          value: "8080"
+targetPort: 8080
+# kind: Service
+    targetPort: 8080
+
+[
+% rm -rf kubectl/load-balancer-node-deployment-service-arbitrary-port-arbitrary-nonarbitrary-targetPort.yaml
+]
+% nano kubectl/load-balancer-node-deployment-service-arbitrary-port-arbitrary-nonarbitrary-targetPort.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-balancer-node-deployment
+spec:
+  selector:
+    matchLabels:
+      app: load-balancer-node-app
+      paradigm: client-server
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: load-balancer-node-app
+        paradigm: client-server
+    spec:
+      containers:
+      - name: load-balancer-node-app-container
+        image: "dockerrajani/node-21-express-app-macos-arm64:version1.0.0"
+        env:
+        - name: "PORT"
+          value: "8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: load-balancer-node-service
+spec:
+  clusterIP: 10.96.0.12
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 30641
+    port: 55555
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: load-balancer-node-app
+    paradigm: client-server
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 203.0.113.200
+]
+% cat kubectl/load-balancer-node-deployment-service-arbitrary-port-arbitrary-nonarbitrary-targetPort.yaml
+% kubectl apply -f kubectl/load-balancer-node-deployment-service-arbitrary-port-arbitrary-nonarbitrary-targetPort.yaml
+[
+% kubectl delete -f kubectl/load-balancer-node-deployment-service-arbitrary-port-arbitrary-nonarbitrary-targetPort.yaml
+]
+
+% kubectl get pods 
+[
+NAME                                             READY   STATUS    RESTARTS   AGE
+load-balancer-node-deployment-7856d86d89-6pw6k   1/1     Running   0          4m36s
+load-balancer-node-deployment-7856d86d89-74b2f   1/1     Running   0          4m36s
+load-balancer-node-deployment-7856d86d89-m8sjj   1/1     Running   0          4m36s
+]
+
+[
+% kubectl exec -it load-balancer-node-deployment-7856d86d89-6pw6k -- sh
+[
+/usr/src/app $ apk --version
+/usr/src/app $ env
+/usr/src/app $ ls
+/usr/src/app $ wget -S -O - http://localhost:3000/
+/usr/src/app $ PORT=5000 node index.js 
+control + C
+/usr/src/app $ exit
+]
+
+# Terminal New Window
+% kubectl exec -it load-balancer-node-deployment-7856d86d89-6pw6k -- sh
+/usr/src/app $ wget -S -O - http://localhost:5000/
+Connecting to localhost:5000 (127.0.0.1:5000)
+  HTTP/1.1 200 OK
+  X-Powered-By: Express
+  Content-Type: text/html; charset=utf-8
+  Content-Length: 91
+  ETag: W/"5b-cJunI1p7QbROpzkfSTie6IzMwuo"
+  Date: Fri, 08 Dec 2023 22:50:20 GMT
+  Connection: close
+  
+writing to stdout
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Fri, 08 Dec 2023 22:49:58 GMT
+-                    100% |****************************************************************************************************************|    91  0:00:00 ETA
+written to stdout
+/usr/src/app $ exit
+]
+
+# Terminal New Window
+% sudo minikube tunnel
+
+% kubectl get services
+
+% minikube service load-balancer-node-service
+control + C
+
+# NB:
+# A client calls the Service at 203.0.113.200 on TCP port 55555. The request is forwarded to one of the member Pods on TCP port 8080.
+
+% kubectl delete -f kubectl/load-balancer-node-deployment-service-arbitrary-port-arbitrary-nonarbitrary-targetPort.yaml
+
+***************************************************************************************************************************
+
+# Multiple ports
+
+# The ports field of a Service is an array of ServicePort objects. 
+
+# The ServicePort object has these fields:
+• name
+• protocol
+• port
+• targetPort
+• nodePort
+
+# If you have more than one ServicePort, each ServicePort must have a unique name.
+
+# Here is a Service, of type LoadBalancer, that has two ServicePort objects:
+
+***************************************************************************************************************************
+
+[
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices
+]
+
+# NB:
+The Service "my-tp-service" is invalid: spec.clusterIPs: Invalid value: []string{"10.11.242.196"}: failed to allocate IP 10.11.242.196: the provided IP (10.11.242.196) is not in the valid range. The range of valid IPs is 10.96.0.0/12
+
+NB:
+# Deployment
+        env:
+        - name: "PORT"
+          value: "40000"
+targetPort: 8080
+# kind: Service
+    targetPort: 40000
+
+[
+% rm -rf kubectl/load-balancer-express-deployment-service-arbitrary-port-arbitrary-nonarbitrary-targetPort.yaml
+]
+% nano kubectl/load-balancer-express-deployment-service-arbitrary-port-arbitrary-nonarbitrary-targetPort.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-balancer-express-deployment
+spec:
+  selector:
+    matchLabels:
+      app: load-balancer-express-app
+      features: robust
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: load-balancer-express-app
+        features: robust
+    spec:
+      containers:
+      - name: load-balancer-express-app-container
+        image: "dockerrajani/node-21-express-app-macos-arm64:version1.0.0"
+        env:
+        - name: "PORT"
+          value: "40000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: load-balancer-express-service
+spec:
+  clusterIP: 10.96.0.12
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: load-balancer-express-first-service-port
+    nodePort: 31233
+    port: 60000
+    protocol: TCP
+    targetPort: 40000
+  - name: load-balancer-express--second-service-port
+    nodePort: 31081
+    port: 60001
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: load-balancer-express-app
+    features: robust
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 203.0.113.201
+]
+% cat kubectl/load-balancer-express-deployment-service-arbitrary-port-arbitrary-nonarbitrary-targetPort.yaml
+% kubectl apply -f kubectl/load-balancer-express-deployment-service-arbitrary-port-arbitrary-nonarbitrary-targetPort.yaml
+[
+% kubectl delete -f kubectl/load-balancer-express-deployment-service-arbitrary-port-arbitrary-nonarbitrary-targetPort.yaml
+]
+
+% kubectl get pods 
+[
+NAME                                                READY   STATUS    RESTARTS   AGE
+load-balancer-express-deployment-66b9dcf76c-frjht   1/1     Running   0          5s
+load-balancer-express-deployment-66b9dcf76c-hdndc   1/1     Running   0          5s
+load-balancer-express-deployment-66b9dcf76c-wkk7q   1/1     Running   0          5s
+]
+
+[
+% kubectl exec -it load-balancer-express-deployment-66b9dcf76c-frjht -- sh
+[
+/usr/src/app $ apk --version
+/usr/src/app $ env
+/usr/src/app $ ls
+/usr/src/app $ wget -S -O - http://localhost:3000/
+/usr/src/app $ PORT=5000 node index.js 
+control + C
+/usr/src/app $ exit
+]
+
+# Terminal New Window
+% kubectl exec -it load-balancer-express-deployment-66b9dcf76c-frjht -- sh
+[
+/usr/src/app $ wget -S -O - http://localhost:5000/
+[
+Connecting to localhost:5000 (127.0.0.1:5000)
+  HTTP/1.1 200 OK
+  X-Powered-By: Express
+  Content-Type: text/html; charset=utf-8
+  Content-Length: 91
+  ETag: W/"5b-cJunI1p7QbROpzkfSTie6IzMwuo"
+  Date: Fri, 08 Dec 2023 22:50:20 GMT
+  Connection: close
+  
+writing to stdout
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Fri, 08 Dec 2023 22:49:58 GMT
+-                    100% |****************************************************************************************************************|    91  0:00:00 ETA
+written to stdout
+/usr/src/app $ exit
+rajaniapple@Rajanis-MacBook-Pro ~ % open http://127.0.0.1:54804
+rajaniapple@Rajanis-MacBook-Pro ~ % curl http://127.0.0.1:54804
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Fri, 08 Dec 2023 23:13:27 GMT
+rajaniapple@Rajanis-MacBook-Pro ~ % curl http://127.0.0.1:54805
+curl: (56) Recv failure: Connection reset by peer
+rajaniapple@Rajanis-MacBook-Pro ~ % kubectl exec -it load-balancer-express-deployment-66b9dcf76c-frjht -- sh
+/usr/src/app $ wget -S -O - http://localhost:5000/
+Connecting to localhost:5000 (127.0.0.1:5000)
+  HTTP/1.1 200 OK
+  X-Powered-By: Express
+  Content-Type: text/html; charset=utf-8
+  Content-Length: 91
+  ETag: W/"5b-fy1EQooJozyKU9GrBea9n9jzqwg"
+  Date: Fri, 08 Dec 2023 23:27:21 GMT
+  Connection: close
+  
+writing to stdout
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Fri, 08 Dec 2023 23:26:57 GMT
+-                    100% |****************************************************************************************************************|    91  0:00:00 ETA
+written to stdout
+]
+/usr/src/app $ exit
+]
+
+# Terminal New Window
+% sudo minikube tunnel
+
+% kubectl get services
+
+% minikube service load-balancer-express-service
+[
+|-----------|-------------------------------|--------------------------------------------------|---------------------------|
+| NAMESPACE |             NAME              |                   TARGET PORT                    |            URL            |
+|-----------|-------------------------------|--------------------------------------------------|---------------------------|
+| default   | load-balancer-express-service | load-balancer-express-first-service-port/60000   | http://192.168.49.2:31233 |
+|           |                               | load-balancer-express--second-service-port/60001 | http://192.168.49.2:31081 |
+|-----------|-------------------------------|--------------------------------------------------|---------------------------|
+🏃  Starting tunnel for service load-balancer-express-service.
+|-----------|-------------------------------|-------------|------------------------|
+| NAMESPACE |             NAME              | TARGET PORT |          URL           |
+|-----------|-------------------------------|-------------|------------------------|
+| default   | load-balancer-express-service |             | http://127.0.0.1:54804 |
+|           |                               |             | http://127.0.0.1:54805 |
+|-----------|-------------------------------|-------------|------------------------|
+[default load-balancer-express-service  http://127.0.0.1:54804
+http://127.0.0.1:54805]
+❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+]
+control + C
+
+# Terminal New Window
+% curl http://127.0.0.1:54804
+[
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Fri, 08 Dec 2023 23:13:27 GMT
+]
+
+% curl http://127.0.0.1:54805
+curl: (56) Recv failure: Connection reset by peer
+
+# NB: 
+A maximum of five ports can be specified for a LoadBalancer service.
+
+# In the preceding example, if a client calls the Service at 203.0.113.201 on TCP port 60000, the request is forwarded to a member Pod on TCP port 40000.
+# But if a client calls the Service at 203.0.113.201 on TCP port 60001, the request is forwarded to a member Pod on TCP port 8080.
+
+# Each member Pod must have a container listening on TCP port 40000 and a container listening on TCP port 8080.
+# This could be a single container with two threads, or two containers running in the same Pod.
+
+% kubectl delete -f kubectl/load-balancer-express-deployment-service-arbitrary-port-arbitrary-nonarbitrary-targetPort.yaml
+
+***************************************************************************************************************************
+
+# Service endpoints
+
+# When a Service is created, Kubernetes creates an Endpoints object that has the same name as the Service.
+
+# Kubernetes uses the Endpoints object to keep track of which Pods are members of the Service.
+
+***************************************************************************************************************************
+
+# Single-stack and dual-stack Services
+
+# An IPv6 Service of type ClusterIP or NodePort can be created. 
+
+# GKE supports dual-stack Services of type LoadBalancer during Preview which carries no SLA or technical support.
+
+# For each of these Service types, ipFamilies and ipFamilyPolicy fields can be defined as either IPv4, IPv6, or a dual-stack Service.
+
+***************************************************************************************************************************
+
+# Docker cleanup
+
+***************************************************************************************************************************
+
+[
+% docker ps --all --quiet
+% docker stop $(docker ps -a -q)
+% docker rm $(docker ps -a -q) --force
+]
+% docker container list --all --quiet
+% docker stop $(docker container list -a -q)
+% docker rm $(docker container list -a -q) --force
+% docker container prune
+
+% docker image list --all --quiet
+% docker rmi $(docker image list -a -q) --force 
+% docker image prune --all
+
+% docker volume list --quiet
+% docker volume rm $(docker volume list --quiet) --force
+% docker volume prune
+
+% docker network list --quiet --filter "type=custom"
+% docker network rm $(docker network list --quiet --filter "type=custom")
+% docker network prune
+
+% docker system info
+% docker system prune --all --volumes
+
+***************************************************************************************************************************
+
+# minikube # kubectl # cleanup
+
+***************************************************************************************************************************
+
+% minikube stop
+% minikube delete
+
+% ls ~/.minikube
+% rm -rf ~/.minikube
+% ls ~/.kube
+% rm -rf ~/.kube
+
+***************************************************************************************************************************

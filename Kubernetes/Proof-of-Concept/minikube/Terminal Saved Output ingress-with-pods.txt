@@ -1,0 +1,205 @@
+Last login: Wed Oct 25 14:52:22 on ttys001
+rajaniapple@Rajanis-MacBook-Pro ~ % sw_vers                                                                                         
+ProductName:		macOS
+ProductVersion:		14.0
+BuildVersion:		23A344
+rajaniapple@Rajanis-MacBook-Pro ~ % arch
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % pwd
+/Users/rajaniapple
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube           
+rajaniapple@Rajanis-MacBook-Pro minikube % docker version
+Client:
+ Cloud integration: v1.0.35
+ Version:           24.0.2
+ API version:       1.43
+ Go version:        go1.20.4
+ Git commit:        cb74dfc
+ Built:             Thu May 25 21:51:16 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.21.1 (114176)
+ Engine:
+  Version:          24.0.2
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.4
+  Git commit:       659604f
+  Built:            Thu May 25 21:50:59 2023
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.21
+  GitCommit:        3dce8eb055cbb6872793272b4f20ed16117344f8
+ runc:
+  Version:          1.1.7
+  GitCommit:        v1.1.7-0-g860f061
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube version
+minikube version: v1.31.2
+commit: fd7ecd9c4599bef9f04c0986c4a0187f98a4396e
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube start
+😄  minikube v1.31.2 on Darwin 14.0 (arm64)
+✨  Automatically selected the docker driver
+📌  Using Docker Desktop driver with root privileges
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+💾  Downloading Kubernetes v1.27.4 preload ...
+    > preloaded-images-k8s-v18-v1...:  327.74 MiB / 327.74 MiB  100.00% 2.24 Mi
+    > gcr.io/k8s-minikube/kicbase...:  404.50 MiB / 404.50 MiB  100.00% 2.60 Mi
+🔥  Creating docker container (CPUs=2, Memory=4000MB) ...
+🐳  Preparing Kubernetes v1.27.4 on Docker 24.0.4 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   10s
+rajaniapple@Rajanis-MacBook-Pro minikube % nano sample-ingress-with-pods.yaml 
+rajaniapple@Rajanis-MacBook-Pro minikube % cat sample-ingress-with-pods.yaml              
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: goglides-foo-app
+  labels:
+    app: goglides-foo
+spec:
+  containers:
+  - name: goglides-foo-app
+    image: hashicorp/http-echo:0.2.3
+    args:
+    - "-text=goglides-foo hoooo"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: goglides-foo-service
+spec:
+  selector:
+    app: goglides-foo
+  ports:
+  # Default port used by the image
+  - port: 5678
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: goglides-host-ingress
+spec:
+  rules:
+  - host: "foo.goglides.local"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/foo"
+        backend:
+          service: 
+            name: goglides-foo-service
+            port:
+              number: 5678
+---
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl create -f sample-ingress-with-pods.yaml
+pod/goglides-foo-app created
+service/goglides-foo-service created
+ingress.networking.k8s.io/goglides-host-ingress created
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get all                                
+NAME                   READY   STATUS              RESTARTS   AGE
+pod/goglides-foo-app   0/1     ContainerCreating   0          7s
+
+NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/goglides-foo-service   ClusterIP   10.106.42.189   <none>        5678/TCP   7s
+service/kubernetes             ClusterIP   10.96.0.1       <none>        443/TCP    79s
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get ns                
+NAME              STATUS   AGE
+default           Active   5m46s
+kube-node-lease   Active   5m46s
+kube-public       Active   5m46s
+kube-system       Active   5m46s
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get ingress               
+NAME                    CLASS    HOSTS                ADDRESS   PORTS   AGE
+goglides-host-ingress   <none>   foo.goglides.local             80      4m14s
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube ip
+192.168.49.2
+rajaniapple@Rajanis-MacBook-Pro minikube % sudo nano /etc/hosts                                                                  
+Password:
+rajaniapple@Rajanis-MacBook-Pro minikube % cat /etc/hosts
+##
+# Host Database
+#
+# localhost is used to configure the loopback interface
+# when the system is booting.  Do not change this entry.
+##
+127.0.0.1	localhost
+255.255.255.255	broadcasthost
+::1             localhost
+# Added by Docker Desktop
+# To allow the same kube context to work on the host and the container:
+127.0.0.1 kubernetes.docker.internal
+192.168.49.2 foo.goglides.local
+# End of section
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get ingress -n default
+NAME                    CLASS    HOSTS                ADDRESS   PORTS   AGE
+goglides-host-ingress   <none>   foo.goglides.local             80      7m11s
+rajaniapple@Rajanis-MacBook-Pro minikube % ping foo.goglides.local                
+PING foo.goglides.local (192.168.49.2): 56 data bytes
+Request timeout for icmp_seq 0
+Request timeout for icmp_seq 1
+Request timeout for icmp_seq 2
+Request timeout for icmp_seq 3
+Request timeout for icmp_seq 4
+Request timeout for icmp_seq 5
+Request timeout for icmp_seq 6
+Request timeout for icmp_seq 7
+^C
+--- foo.goglides.local ping statistics ---
+9 packets transmitted, 0 packets received, 100.0% packet loss
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube addons list
+|-----------------------------|----------|--------------|--------------------------------|
+|         ADDON NAME          | PROFILE  |    STATUS    |           MAINTAINER           |
+|-----------------------------|----------|--------------|--------------------------------|
+| ambassador                  | minikube | disabled     | 3rd party (Ambassador)         |
+| auto-pause                  | minikube | disabled     | minikube                       |
+| cloud-spanner               | minikube | disabled     | Google                         |
+| csi-hostpath-driver         | minikube | disabled     | Kubernetes                     |
+| dashboard                   | minikube | disabled     | Kubernetes                     |
+| default-storageclass        | minikube | enabled ✅   | Kubernetes                     |
+| efk                         | minikube | disabled     | 3rd party (Elastic)            |
+| freshpod                    | minikube | disabled     | Google                         |
+| gcp-auth                    | minikube | disabled     | Google                         |
+| gvisor                      | minikube | disabled     | minikube                       |
+| headlamp                    | minikube | disabled     | 3rd party (kinvolk.io)         |
+| helm-tiller                 | minikube | disabled     | 3rd party (Helm)               |
+| inaccel                     | minikube | disabled     | 3rd party (InAccel             |
+|                             |          |              | [info@inaccel.com])            |
+| ingress                     | minikube | disabled     | Kubernetes                     |
+| ingress-dns                 | minikube | disabled     | minikube                       |
+| inspektor-gadget            | minikube | disabled     | 3rd party                      |
+|                             |          |              | (inspektor-gadget.io)          |
+| istio                       | minikube | disabled     | 3rd party (Istio)              |
+| istio-provisioner           | minikube | disabled     | 3rd party (Istio)              |
+| kong                        | minikube | disabled     | 3rd party (Kong HQ)            |
+| kubevirt                    | minikube | disabled     | 3rd party (KubeVirt)           |
+| logviewer                   | minikube | disabled     | 3rd party (unknown)            |
+| metallb                     | minikube | disabled     | 3rd party (MetalLB)            |
+| metrics-server              | minikube | disabled     | Kubernetes                     |
+| nvidia-driver-installer     | minikube | disabled     | 3rd party (Nvidia)             |
+| nvidia-gpu-device-plugin    | minikube | disabled     | 3rd party (Nvidia)             |
+| olm                         | minikube | disabled     | 3rd party (Operator Framework) |
+| pod-security-policy         | minikube | disabled     | 3rd party (unknown)            |
+| portainer                   | minikube | disabled     | 3rd party (Portainer.io)       |
+| registry                    | minikube | disabled     | minikube                       |
+| registry-aliases            | minikube | disabled     | 3rd party (unknown)            |
+| registry-creds              | minikube | disabled     | 3rd party (UPMC Enterprises)   |
+| storage-provisioner         | minikube | enabled ✅   | minikube                       |
+| storage-provisioner-gluster | minikube | disabled     | 3rd party (Gluster)            |
+| volumesnapshots             | minikube | disabled     | Kubernetes                     |
+|-----------------------------|----------|--------------|--------------------------------|
+rajaniapple@Rajanis-MacBook-Pro minikube % 

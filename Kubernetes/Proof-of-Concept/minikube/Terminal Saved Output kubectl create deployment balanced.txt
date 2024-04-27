@@ -1,0 +1,24 @@
+Last login: Tue Oct 24 10:05:13 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % kubectl create deployment balanced --image=kicbase/echo-server:1.0
+deployment.apps/balanced created
+rajaniapple@Rajanis-MacBook-Pro ~ % kubectl expose deployment balanced --type=LoadBalancer --port=8080
+service/balanced exposed
+rajaniapple@Rajanis-MacBook-Pro ~ % kubectl get services balanced
+NAME       TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+balanced   LoadBalancer   10.102.99.14   127.0.0.1     8080:32282/TCP   57s
+rajaniapple@Rajanis-MacBook-Pro ~ % 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

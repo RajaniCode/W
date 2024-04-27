@@ -1,0 +1,12 @@
+// Java 16
+// OpenJDK 16
+// % export PATH="/Users/rajaniapple/Downloads/Software/OpenJDK/JDK16.0.2/jdk-16.0.2.jdk/Contents/Home/bin/":$PATH
+
+// Java 16
+// Microsoft Build of OpenJDK
+// % export PATH="/Users/rajaniapple/Downloads/Software/OpenJDK/MicrosoftBuildofOpenJDK/jdk-16.0.2+7/Contents/Home/bin/":$PATH
+
+// % java --add-modules jdk.incubator.foreign -Dforeign.restricted=permit ForeignLinkerAPIIncubator.java
+// Or
+// % javac --add-modules jdk.incubator.foreign ForeignLinkerAPIIncubator.java
+// % java --add-modules jdk.incubator.foreign -Dforeign.restricted=permit ForeignLinkerAPIIncubator

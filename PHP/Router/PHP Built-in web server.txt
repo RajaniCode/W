@@ -1,0 +1,13 @@
+% brew install php
+% php --version
+
+# Server
+% php -S 127.0.0.1:8000 /Users/rajaniapple/Desktop/GitHub/PHP/PHP/PHP/Router/router.php
+[
+Development Server (http://127.0.0.1:8000) started
+]
+
+% php -S localhost:8000 /Users/rajaniapple/Desktop/GitHub/PHP/PHP/PHP/Router/router.php
+[
+Development Server (http://localhost:8000) started
+]

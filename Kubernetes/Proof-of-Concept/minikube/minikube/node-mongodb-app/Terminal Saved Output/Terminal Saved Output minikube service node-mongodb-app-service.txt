@@ -1,0 +1,269 @@
+Last login: Wed Nov  8 19:47:29 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker
+rajaniapple@Rajanis-MacBook-Pro Docker % docker version
+Client:
+ Cloud integration: v1.0.35+desktop.5
+ Version:           24.0.6
+ API version:       1.43
+ Go version:        go1.20.7
+ Git commit:        ed223bc
+ Built:             Mon Sep  4 12:28:49 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.25.0 (126437)
+ Engine:
+  Version:          24.0.6
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.7
+  Git commit:       1a79695
+  Built:            Mon Sep  4 12:31:36 2023
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.22
+  GitCommit:        8165feabfdfe38c65b599c4993d227328c231fca
+ runc:
+  Version:          1.1.8
+  GitCommit:        v1.1.8-0-g82f18fe
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro Docker % minikube version
+minikube version: v1.31.2
+commit: fd7ecd9c4599bef9f04c0986c4a0187f98a4396e
+rajaniapple@Rajanis-MacBook-Pro Docker % minikube start
+😄  minikube v1.31.2 on Darwin 14.0 (arm64)
+✨  Automatically selected the docker driver
+📌  Using Docker Desktop driver with root privileges
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+💾  Downloading Kubernetes v1.27.4 preload ...
+    > preloaded-images-k8s-v18-v1...:  327.74 MiB / 327.74 MiB  100.00% 2.35 Mi
+    > gcr.io/k8s-minikube/kicbase...:  404.50 MiB / 404.50 MiB  100.00% 2.58 Mi
+🔥  Creating docker container (CPUs=2, Memory=4000MB) ...
+🐳  Preparing Kubernetes v1.27.4 on Docker 24.0.4 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+rajaniapple@Rajanis-MacBook-Pro Docker % minikube ip
+192.168.49.2
+rajaniapple@Rajanis-MacBook-Pro Docker % minikube profile list
+|----------|-----------|---------|--------------|------|---------|---------|-------|--------|
+| Profile  | VM Driver | Runtime |      IP      | Port | Version | Status  | Nodes | Active |
+|----------|-----------|---------|--------------|------|---------|---------|-------|--------|
+| minikube | docker    | docker  | 192.168.49.2 | 8443 | v1.27.4 | Running |     1 | *      |
+|----------|-----------|---------|--------------|------|---------|---------|-------|--------|
+rajaniapple@Rajanis-MacBook-Pro Docker % minikube service list -p minikube
+|-------------|------------|--------------|-----|
+|  NAMESPACE  |    NAME    | TARGET PORT  | URL |
+|-------------|------------|--------------|-----|
+| default     | kubernetes | No node port |     |
+| kube-system | kube-dns   | No node port |     |
+|-------------|------------|--------------|-----|
+rajaniapple@Rajanis-MacBook-Pro Docker % kubectl version
+Client Version: v1.28.3
+Kustomize Version: v5.0.4-0.20230601165947-6ce0bf390ce3
+Server Version: v1.27.4
+rajaniapple@Rajanis-MacBook-Pro Docker % kubectl config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /Users/rajaniapple/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Wed, 08 Nov 2023 19:51:26 IST
+        provider: minikube.sigs.k8s.io
+        version: v1.31.2
+      name: cluster_info
+    server: https://127.0.0.1:49832
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Wed, 08 Nov 2023 19:51:26 IST
+        provider: minikube.sigs.k8s.io
+        version: v1.31.2
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /Users/rajaniapple/.minikube/profiles/minikube/client.crt
+    client-key: /Users/rajaniapple/.minikube/profiles/minikube/client.key
+rajaniapple@Rajanis-MacBook-Pro Docker % minikube image list --format table
+|-----------------------------------------|---------|---------------|--------|
+|                  Image                  |   Tag   |   Image ID    |  Size  |
+|-----------------------------------------|---------|---------------|--------|
+| registry.k8s.io/kube-apiserver          | v1.27.4 | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4 | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/kube-controller-manager | v1.27.4 | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/kube-proxy              | v1.27.4 | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1 | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/etcd                    | 3.5.7-0 | 24bc64e911039 | 181MB  |
+| registry.k8s.io/pause                   | 3.9     | 829e9de338bd5 | 514kB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5      | ba04bb24b9575 | 29MB   |
+|-----------------------------------------|---------|---------------|--------|
+rajaniapple@Rajanis-MacBook-Pro Docker % docker ps
+CONTAINER ID   IMAGE                                 COMMAND                  CREATED         STATUS         PORTS                                                                                                                                  NAMES
+263e1b93e470   gcr.io/k8s-minikube/kicbase:v0.0.40   "/usr/local/bin/entr…"   2 minutes ago   Up 2 minutes   127.0.0.1:49833->22/tcp, 127.0.0.1:49829->2376/tcp, 127.0.0.1:49831->5000/tcp, 127.0.0.1:49832->8443/tcp, 127.0.0.1:49830->32443/tcp   minikube
+rajaniapple@Rajanis-MacBook-Pro Docker % mkdir -p kube
+rajaniapple@Rajanis-MacBook-Pro Docker % nano kube/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always.yaml
+rajaniapple@Rajanis-MacBook-Pro Docker % cat kube/load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-mongodb-app-service
+spec:
+  selector:
+    app: node-mongodb-app
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-mongodb-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-mongodb-app
+  template:
+    metadata:
+      labels:
+        app: node-mongodb-app
+    spec:
+      containers:
+        - name: node-mongodb-app-container
+          image: dockerrajani/node-mongodb-app:version1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo-service:27017/dev
+rajaniapple@Rajanis-MacBook-Pro Docker % nano kube/cluster-ip-service-mongo-imagepull-always.yaml
+rajaniapple@Rajanis-MacBook-Pro Docker % cat kube/cluster-ip-service-mongo-imagepull-always.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-persistentvolumeclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo-container
+          image: dockerrajani/mongo:version1.0.0
+          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mongo-persistentvolumeclaim
+rajaniapple@Rajanis-MacBook-Pro Docker % tree kube/
+kube/
+├── cluster-ip-service-mongo-imagepull-always.yaml
+└── load-balancer-service-dockerrajani-node-mongodb-app-image-pull-always.yaml
+
+1 directory, 2 files
+rajaniapple@Rajanis-MacBook-Pro Docker % minikube status
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+rajaniapple@Rajanis-MacBook-Pro Docker % kubectl apply -f kube
+persistentvolumeclaim/mongo-persistentvolumeclaim created
+service/mongo-service created
+deployment.apps/mongo-deployment created
+service/node-mongodb-app-service created
+deployment.apps/node-mongodb-app-deployment created
+rajaniapple@Rajanis-MacBook-Pro Docker % kubectl get pods --watch
+NAME                                           READY   STATUS              RESTARTS   AGE
+mongo-deployment-75dcb8465f-gcnh4              0/1     ContainerCreating   0          5s
+node-mongodb-app-deployment-55f56c7884-qdphr   0/1     ContainerCreating   0          5s
+node-mongodb-app-deployment-55f56c7884-qdphr   1/1     Running             0          27s
+mongo-deployment-75dcb8465f-gcnh4              1/1     Running             0          85s
+^C%                                                                                                                                                             rajaniapple@Rajanis-MacBook-Pro Docker % minikube image list --format table
+|-----------------------------------------|--------------|---------------|--------|
+|                  Image                  |     Tag      |   Image ID    |  Size  |
+|-----------------------------------------|--------------|---------------|--------|
+| registry.k8s.io/kube-apiserver          | v1.27.4      | 64aece92d6bde | 115MB  |
+| registry.k8s.io/kube-controller-manager | v1.27.4      | 389f6f052cf83 | 107MB  |
+| registry.k8s.io/pause                   | 3.9          | 829e9de338bd5 | 514kB  |
+| docker.io/dockerrajani/node-mongodb-app | version1.0.0 | 10c849696651c | 291MB  |
+| registry.k8s.io/kube-scheduler          | v1.27.4      | 6eb63895cb67f | 56.2MB |
+| registry.k8s.io/kube-proxy              | v1.27.4      | 532e5a30e948f | 66.5MB |
+| registry.k8s.io/coredns/coredns         | v1.10.1      | 97e04611ad434 | 51.4MB |
+| registry.k8s.io/etcd                    | 3.5.7-0      | 24bc64e911039 | 181MB  |
+| gcr.io/k8s-minikube/storage-provisioner | v5           | ba04bb24b9575 | 29MB   |
+| docker.io/dockerrajani/mongo            | version1.0.0 | 8b10e7ef02081 | 712MB  |
+|-----------------------------------------|--------------|---------------|--------|
+rajaniapple@Rajanis-MacBook-Pro Docker % docker ps
+CONTAINER ID   IMAGE                                 COMMAND                  CREATED         STATUS         PORTS                                                                                                                                  NAMES
+263e1b93e470   gcr.io/k8s-minikube/kicbase:v0.0.40   "/usr/local/bin/entr…"   5 minutes ago   Up 5 minutes   127.0.0.1:49833->22/tcp, 127.0.0.1:49829->2376/tcp, 127.0.0.1:49831->5000/tcp, 127.0.0.1:49832->8443/tcp, 127.0.0.1:49830->32443/tcp   minikube
+rajaniapple@Rajanis-MacBook-Pro Docker % minikube service node-mongodb-app-service
+|-----------|--------------------------|-------------|---------------------------|
+| NAMESPACE |           NAME           | TARGET PORT |            URL            |
+|-----------|--------------------------|-------------|---------------------------|
+| default   | node-mongodb-app-service |          80 | http://192.168.49.2:32072 |
+|-----------|--------------------------|-------------|---------------------------|
+🏃  Starting tunnel for service node-mongodb-app-service.
+|-----------|--------------------------|-------------|------------------------|
+| NAMESPACE |           NAME           | TARGET PORT |          URL           |
+|-----------|--------------------------|-------------|------------------------|
+| default   | node-mongodb-app-service |             | http://127.0.0.1:49920 |
+|-----------|--------------------------|-------------|------------------------|
+🎉  Opening service default/node-mongodb-app-service in default browser...
+❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+

@@ -1,0 +1,93 @@
+Last login: Wed Jul 19 06:38:24 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % arch
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % java -version
+openjdk version "20.0.2" 2023-07-18
+OpenJDK Runtime Environment (build 20.0.2+9-78)
+OpenJDK 64-Bit Server VM (build 20.0.2+9-78, mixed mode, sharing)
+rajaniapple@Rajanis-MacBook-Pro ~ % gradle -v
+
+------------------------------------------------------------
+Gradle 8.2.1
+------------------------------------------------------------
+
+Build time:   2023-07-10 12:12:35 UTC
+Revision:     a38ec64d3c4612da9083cc506a1ccb212afeecaa
+
+Kotlin:       1.8.20
+Groovy:       3.0.17
+Ant:          Apache Ant(TM) version 1.10.13 compiled on January 4 2023
+JVM:          20.0.2 (Oracle Corporation 20.0.2+9-78)
+OS:           Mac OS X 13.0.1 aarch64
+
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Working/Java/Gradle 
+rajaniapple@Rajanis-MacBook-Pro Gradle % mkdir demo
+rajaniapple@Rajanis-MacBook-Pro Gradle % cd demo
+rajaniapple@Rajanis-MacBook-Pro demo % gradle init
+
+Select type of project to generate:
+  1: basic
+  2: application
+  3: library
+  4: Gradle plugin
+Enter selection (default: basic) [1..4] 2
+
+Select implementation language:
+  1: C++
+  2: Groovy
+  3: Java
+  4: Kotlin
+  5: Scala
+  6: Swift
+Enter selection (default: Java) [1..6] 3
+
+Generate multiple subprojects for application? (default: no) [yes, no] 
+Select build script DSL:
+  1: Kotlin
+  2: Groovy
+Enter selection (default: Kotlin) [1..2] 2
+
+Select test framework:
+  1: JUnit 4
+  2: TestNG
+  3: Spock
+  4: JUnit Jupiter
+Enter selection (default: JUnit Jupiter) [1..4] 
+
+Project name (default: demo): 
+Source package (default: demo): 
+Enter target version of Java (min. 7) (default: 20): 
+Generate build using new APIs and behavior (some features may change in the next minor release)? (default: no) [yes, no] 
+
+> Task :init
+To learn more about Gradle by exploring our Samples at https://docs.gradle.org/8.2.1/samples/sample_building_java_applications.html
+
+BUILD SUCCESSFUL in 1m 7s
+2 actionable tasks: 2 executed
+rajaniapple@Rajanis-MacBook-Pro demo % ./gradlew run
+
+> Task :app:run
+Hello World!
+
+BUILD SUCCESSFUL in 13s
+2 actionable tasks: 2 executed
+rajaniapple@Rajanis-MacBook-Pro demo % ./gradlew build
+
+BUILD SUCCESSFUL in 5s
+7 actionable tasks: 6 executed, 1 up-to-date
+rajaniapple@Rajanis-MacBook-Pro demo % ./gradlew build --scan
+
+BUILD SUCCESSFUL in 14s
+7 actionable tasks: 7 up-to-date
+Resolving local hostname is slow, see https://gradle.com/help/gradle-slow-host-name
+
+Publishing a build scan to scans.gradle.com requires accepting the Gradle Terms of Service defined at https://gradle.com/terms-of-service. Do you accept these terms? [yes, no] yes
+
+Gradle Terms of Service accepted.
+
+Publishing build scan...
+https://gradle.com/s/oxpqamkuq2j66
+
+rajaniapple@Rajanis-MacBook-Pro demo % e
+
+

@@ -1,0 +1,850 @@
+# Services in Kubernetes
+
+• Services without selectors
+
+• Multi-port Services
+
+• Service type
+type: ClusterIP
+type: NodePort
+type: LoadBalancer
+type: ExternalName
+
+• Headless Services
+With selectors
+Without selectors
+
+
+
+% kubectl get services -n default --sort-by=.spec.type | awk {'print $1" " $2" "$3" "$4" "$5'} | column -t
+NAME          		TYPE        	CLUSTER-IP      EXTERNAL-IP			PORT(S)   
+kubernetes		ClusterIP	10.128.0.1	<none>				443/TCP
+multi-port-service   	ClusterIP   	10.110.244.83   <none>        			80/TCP,443/TCP
+x-headless		ClusterIP	None		<none>				27017/ TCP
+y-nodeport		NodePort	10.128.202.9	<none>				3200:30008/TCP
+z-loadbalancer		LoadBalancer	10.128.233.22	172.104.255.5			3200:30010/ TCP
+external-name-service   ExternalName  	<none>          external-name-service.com  	<none>
+
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/K8s
+
+% docker --version
+
+% docker version
+
+% docker info
+
+% minikube version
+
+% minikube start
+
+% minikube ip
+
+% minikube profile list
+
+% minikube service list -p minikube
+
+% kubectl version
+
+% kubectl config view
+
+% kubectl cluster-info
+
+
+% nano kubectl/cluster-ip-default-service.yaml # default # type: ClusterIP
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-ip-default-service-app-deployment
+  labels:
+    app: cluster-ip-default-service-app
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: cluster-ip-default-service-app
+  template:
+    metadata:
+      labels:
+        app: cluster-ip-default-service-app
+    spec:
+      containers:
+      - name: cluster-ip-default-service-app-container
+        image: dockerrajani/node-21-express-app-macos-arm64:version1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-ip-default-service
+  labels:
+    app: cluster-ip-default-service-app
+spec:
+  ports:
+  - port: 8080
+    targetPort: http-server
+]
+% cat kubectl/cluster-ip-default-service.yaml 
+% kubectl apply -f kubectl/cluster-ip-default-service.yaml
+[
+% kubectl delete -f kubectl/cluster-ip-default-service.yaml
+]
+
+[
+% docker container list --all
+[
+CONTAINER ID   IMAGE                                 COMMAND                  CREATED             STATUS             PORTS                                                                                                                                  NAMES
+5472b5d72995   gcr.io/k8s-minikube/kicbase:v0.0.42   "/usr/local/bin/entr…"   About an hour ago   Up About an hour   127.0.0.1:54701->22/tcp, 127.0.0.1:54702->2376/tcp, 127.0.0.1:54699->5000/tcp, 127.0.0.1:54700->8443/tcp, 127.0.0.1:54703->32443/tcp   minikube
+]
+
+[
+% docker exec -it 5472b5d72995 sh
+]
+% docker exec -it 5472b5d72995 bash
+root@minikube:/# ls
+root@minikube:/# apt-get --version
+root@minikube:/# apt-get update
+root@minikube:/# apt-get install curl
+root@minikube:/# exit
+exit
+]
+
+% kubectl get pods
+[  
+NAME                                                        READY   STATUS    RESTARTS   AGE
+cluster-ip-default-service-app-deployment-f5d68b644-8gzz8  1/1     Running   0          7m8s
+]
+
+% kubectl exec -it cluster-ip-default-service-app-deployment-f5d68b644-8gzz8 -- sh
+[
+/usr/src/app $ apk --version
+/usr/src/app $ ls
+[
+index.js        node_modules    package.json    pnpm-lock.yaml
+]
+/usr/src/app $ wget -S -O - http://localhost:3000/
+[
+Connecting to localhost:3000 (127.0.0.1:3000)
+  HTTP/1.1 200 OK
+  X-Powered-By: Express
+  Content-Type: text/html; charset=utf-8
+  Content-Length: 91
+  ETag: W/"5b-EFS5jKSMz2YUbuJNvfYetEufiTY"
+  Date: Wed, 06 Dec 2023 21:28:20 GMT
+  Connection: close
+  
+writing to stdout
+Node.js Version: v21.3.0 - Coordinated Universal Time (UTC): Wed, 06 Dec 2023 21:23:08 GMT
+-                    100% |**********************************************************************************************************************************************************************************************************************|    91  0:00:00 ETA
+written to stdout
+]
+/usr/src/app $ PORT=5000 node index.js
+[
+App listening on http://localhost:5000
+^C
+]
+/usr/src/app $ exit
+]
+
+[
+# Terminal New Window
+% sudo minikube tunnel
+
+% kubectl get services 
+
+% minikube service cluster-ip-default-service
+]
+
+***************************************************************************************************************************
+
+# External IPs
+
+***************************************************************************************************************************
+
+# If there are external IPs that route to one or more cluster nodes, Kubernetes Services can be exposed on those externalIPs. 
+# When network traffic arrives into the cluster, with the external IP (as destination IP) and the port matching that Service, rules and routes that Kubernetes has configured ensure that the traffic is routed to one of the endpoints for that Service.
+# When you define a Service, you can specify externalIPs for any service type. 
+# Note: Kubernetes does not manage allocation of externalIPs; these are the responsibility of the cluster administrator.
+
+% nano kubectl/cluster-ip-default-external-ip-service.yaml # default # type: ClusterIP
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-ip-default-external-ip-service-app-deployment
+  labels:
+    app: cluster-ip-default-external-ip-service-app
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: cluster-ip-default-external-ip-service-app 
+  template:
+    metadata:
+      labels:
+        app: cluster-ip-default-external-ip-service-app
+    spec:
+      containers:
+      - name: cluster-ip-default-external-ip-service-app-container
+        image: dockerrajani/node-21-express-app-macos-arm64:version1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-ip-default-external-ip-service
+spec:
+  selector:
+    app.kubernetes.io/name: cluster-ip-default-external-ip-service-app
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 49152
+  externalIPs:
+    - 198.51.100.32
+]
+% cat kubectl/cluster-ip-default-service-external-ip-service.yaml
+% kubectl apply -f kubectl/cluster-ip-default-external-ip-service.yaml
+[
+% kubectl delete -f kubectl/cluster-ip-default-external-ip-service.yaml
+]
+
+% kubectl get pods
+[
+NAME                                                              READY   STATUS    RESTARTS   AGE
+cluster-ip-default-external-ip-service-app-deployment-6769gtrtq   1/1     Running   0          10m
+]
+
+% kubectl exec -it cluster-ip-default-external-ip-service-app-deployment-6769gtrtq -- sh
+[
+/usr/src/app $ apk --version
+/usr/src/app $ ls
+/usr/src/app $ wget -S -O - http://localhost:3000/
+/usr/src/app $ PORT=5000 node index.js 
+control + C
+/usr/src/app $ exit
+]
+
+[
+# Terminal New Window
+% sudo minikube tunnel
+
+% kubectl get services 
+[
+NAME                                        TYPE        CLUSTER-IP       EXTERNAL-IP     PORT(S)     AGE
+cluster-ip-default-external-ip-service      ClusterIP   10.103.101.121   198.51.100.32   80/TCP      12m
+kubernetes                                  ClusterIP   10.96.0.1        <none>          443/TCP     117m
+]
+
+% minikube service cluster-ip-default-external-ip-service
+]
+
+***************************************************************************************************************************
+
+
+***************************************************************************************************************************
+
+# Using a single, multi-port service exposes all the service's ports through a single cluster IP.
+
+***************************************************************************************************************************
+
+% nano kubectl/cluster-ip-multi-port-service.yaml # spec # type: ClusterIP
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-ip-multi-port-service-app-deployment
+  labels:
+    app: cluster-ip-multi-port-service-app-label
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: cluster-ip-multi-port-service-app-label  
+  template:
+    metadata:
+      labels:
+        app: cluster-ip-multi-port-service-app-label  
+    spec:
+      containers:
+      - name: cluster-ip-multi-port-service-app-container
+        image: dockerrajani/node-21-express-app-macos-arm64:version1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: kube-dns
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: CoreDNS
+  name: cluster-ip-multi-port-service
+  namespace: default
+spec:
+  clusterIP: 10.96.0.5
+  ports:
+  - name: dns
+    port: 53
+    protocol: UDP
+    targetPort: 53
+  - name: dns-tcp
+    port: 53
+    protocol: TCP
+    targetPort: 53
+  selector:
+    k8s-app: kube-dns
+  type: ClusterIP
+]
+% cat kubectl/cluster-ip-multi-port-service.yaml
+% kubectl apply -f kubectl/cluster-ip-multi-port-service.yaml
+[
+% kubectl delete -f kubectl/cluster-ip-multi-port-service.yaml
+]
+
+% kubectl get pods
+[
+NAME                                                            READY   STATUS    RESTARTS   AGE
+cluster-ip-multi-port-service-app-deployment-7c9f766d56-gs22l   1/1     Running   0          22s
+]
+
+% kubectl exec -it cluster-ip-multi-port-service-app-deployment-7c9f766d56-gs22l -- sh
+[
+/usr/src/app $ apk --version
+/usr/src/app $ ls
+/usr/src/app $ wget -S -O - http://localhost:3000/
+/usr/src/app $ PORT=5000 node index.js 
+control + C
+/usr/src/app $ exit
+]
+
+[
+# Terminal New Window
+% sudo minikube tunnel
+
+% kubectl get services 
+[
+NAME                                        TYPE        CLUSTER-IP       EXTERNAL-IP     PORT(S)     AGE
+
+]
+
+% minikube service cluster-ip-multi-port-service
+]
+
+# A headless Service is a type of Kubernetes Service that does not allocate a cluster IP address.
+# Instead, a headless Service uses DNS to expose the IP addresses of the Pods that are associated with the Service.
+# This allows you to connect directly to the Pods, instead of going through a proxy.
+% nano kubectl/cluster-ip-headless-service-with-selector.yaml # spec # clusterIP: None
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-ip-headless-service-with-selector-app-deployment
+  labels:
+    app: cluster-ip-headless-service-with-selector-app
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: cluster-ip-headless-service-with-selector-app
+  template:
+    metadata:
+      labels:
+        app: cluster-ip-headless-service-with-selector-app
+    spec:
+      containers:
+      - name: cluster-ip-headless-service-with-selector-app-container
+        image: dockerrajani/node-21-express-app-macos-arm64:version1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3002
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-ip-headless-service-with-selector
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: cluster-ip-headless-service-with-selector-app
+  ports:
+    - protocol: TCP
+      port: 38128
+      targetPort: 38128
+]
+% cat kubectl/cluster-ip-headless-service-with-selector.yaml
+% kubectl apply -f kubectl/cluster-ip-headless-service-with-selector.yaml
+[
+% kubectl delete -f kubectl/cluster-ip-headless-service-with-selector.yaml
+]
+
+% kubectl get pods
+[
+NAME                                                            READY   STATUS    RESTARTS   AGE
+cluster-ip-multi-port-service-app-deployment-7c9f766d56-gs22l   1/1     Running   0          22s
+]
+
+% kubectl exec -it cluster-ip-multi-port-service-app-deployment-7c9f766d56-gs22l -- sh
+[
+/usr/src/app $ apk --version
+/usr/src/app $ ls
+/usr/src/app $ wget -S -O - http://localhost:3000/
+/usr/src/app $ PORT=5000 node index.js 
+control + C
+/usr/src/app $ exit
+]
+
+[
+# Terminal New Window
+% sudo minikube tunnel
+
+% kubectl get services 
+
+% minikube service cluster-ip-multi-port-service
+]
+
+
+% nano kubectl/cluster-ip-headless-service-without-selector-service.yaml # spec # clusterIP: None
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-ip-headless-service-without-selector-app-deployment
+spec:
+  replicas: 1            
+  template:
+    metadata:
+      labels:
+        app: cluster-ip-headless-service-without-selector-app-label  
+    spec:
+      containers:
+      - name: cluster-ip-headless-service-without-selector-app
+        image: dockerrajani/node-21-express-app-macos-arm64:version1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-ip-headless-service-without-selector-service
+spec:
+  clusterIP: None
+  ports:
+    - protocol: TCP
+      # When you define a headless Service without a selector, the port must match the targetPort.
+      port: 16906
+      targetPort: 16906
+]
+% cat kubectl/cluster-ip-headless-service-without-selector-service.yaml
+% kubectl apply -f kubectl/cluster-ip-headless-service-without-selector-service.yaml
+[
+% kubectl delete -f kubectl/cluster-ip-headless-service-without-selector-service.yaml
+]
+
+% nano kubectl/node-port-service.yaml # spec # type: NodePort
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-port-app-deployment
+  labels:
+    app: node-port-app-label
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: node-port-app-label  
+  template:
+    metadata:
+      labels:
+        app: node-port-app-label  
+    spec:
+      containers:
+      - name: node-port-app
+        image: dockerrajani/node-21-express-app-macos-arm64:version1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-port-service
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: node-port-service-app
+  ports:
+    - port: 80
+      # By default and for convenience, the `targetPort` is set to
+      # the same value as the `port` field.
+      targetPort: 80
+      # Optional field
+      # By default and for convenience, the Kubernetes control plane
+      # will allocate a port from a range (default: 30000-32767)
+      nodePort: 30007
+]
+% cat kubectl/node-port-service.yaml
+% kubectl apply -f kubectl/node-port-service.yaml
+[
+% kubectl delete -f kubectl/node-port-service.yaml
+]
+
+% nano kubectl/load-balancer-service.yaml # spec # type: LoadBalancer 
+# clusterIP # The range of valid IPs is 10.96.0.0/12 
+# The Service will now have an external IP assigned with minikube tunnel running, without which the external IP will be removed
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-balancer-app-deployment
+  labels:
+    app: lload-balancer-app-label
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: load-balancer-app-label  
+  template:
+    metadata:
+      labels:
+        app: load-balancer-app-label  
+    spec:
+      containers:
+      - name: load-balancer-app
+        image: dockerrajani/node-21-express-app-macos-arm64:version1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: load-balancer-service
+spec:
+  selector:
+    app: l-app-label 
+  ports:
+    - protocol: TCP
+      port: 3200
+      targetPort: 3000
+      # You can configure a load balanced Service to omit assigning a node port, provided that the cloud provider implementation supports this.
+      # nodePort: 30010
+  clusterIP: 10.96.0.11
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 192.0.2.127
+]
+% cat kubectl/load-balancer-service.yaml 
+% kubectl apply -f kubectl/load-balancer-service.yaml 
+[
+% kubectl delete -f kubectl/load-balancer-service.yaml 
+]
+
+
+[
+% nano kubectl/namespace-production.yaml
+[
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: production
+]
+% cat kubectl/namespace-production.yaml
+% kubectl apply -f kubectl/namespace-production.yaml
+[
+% kubectl delete -f kubectl/namespace-production.yaml
+]
+]
+# Or
+% kubectl create namespace production
+[
+% kubectl delete namespace production
+]
+
+% kubectl get namespaces
+
+% nano kubectl/external-name-service.yaml # spec # type: ExternalName
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-name-service
+  namespace: production
+spec:
+  type: ExternalName
+  externalName: external.name.service.com
+]
+% cat kubectl/external-name-service.yaml
+% kubectl apply -f kubectl/external-name-service.yaml
+[
+% kubectl delete -f kubectl/external-name-service.yaml
+]
+
+% kubectl get services --all-namespaces --sort-by=.spec.type | awk {'print $1" " $2" "$3" "$4" "$5" "$6'} | column -t
+
+% kubectl get services --all-namespaces --sort-by=.spec.type | awk {'print $2" "$3" "$4" "$5" "$6'} | column -t
+
+% kubectl get nodes,services,deployments,pods,replicasets,ingresses -o wide
+
+
+
+
+
+
+# Ingress exposes HTTP and HTTPS routes from outside the cluster to services within the cluster.
+# An Ingress does not expose arbitrary ports or protocols.
+# Exposing services other than HTTP and HTTPS to the internet typically uses a service of type Service.Type=NodePort or Service.Type=LoadBalancer.
+% nano kubectl/ingress-to-cluster-ip-service-and-node-port-service.yaml
+[
+kind: Pod
+apiVersion: v1
+metadata:
+  name: x-pod
+  labels:
+    app: x-app
+spec:
+  containers:
+    - name: x-app-container
+      image: 'kicbase/echo-server:1.0'
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: cluster-ip-service-from-ingress
+spec:
+  type: ClusterIP
+  selector:
+    app: x-app
+  ports:
+    - port: 8080
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: y-pod
+  labels:
+    app: y-app
+spec:
+  containers:
+    - name: y-pod-container
+      image: 'kicbase/echo-server:1.0'
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: node-port-service-from-ingress
+spec:
+  type: NodePort
+  selector:
+    app: y-app
+  ports:
+    - port: 8080
+      nodePort: 30008
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-to-cluster-ip-service-and-node-port-service
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /x
+            backend:
+              service:
+                name: cluster-ip-service-from-ingress
+                port:
+                  number: 8080
+          - pathType: Prefix
+            path: /y
+            backend:
+              service:
+                name: node-port-service-from-ingress
+                port:
+                  number: 8080
+---
+]
+% cat kubectl/ingress-to-cluster-ip-service-and-node-port-service.yaml
+% kubectl apply -f kubectl/ingress-to-cluster-ip-service-and-node-port-service.yaml
+[
+% kubectl delete -f kubectl/ingress-to-cluster-ip-service-and-node-port-service.yaml
+]
+
+% docker --version
+% docker version
+% docker info
+
+% minikube version
+% minikube start
+% minikube ip
+% minikube profile list
+% minikube service list -p minikube
+% minikube addons list
+% minikube addons enable ingress
+[
+% minikube addons disable ingress
+]
+
+% kubectl version
+% kubectl config view
+% kubectl cluster-info
+
+% tree kubectl/
+
+% kubectl apply -f kubectl/namespace-production.yaml
+% kubectl apply -f kubectl/
+[
+% kubectl delete -f kubectl/
+]
+
+% kubectl get pods --all-namespaces --watch
+% kubectl get pods --all-namespaces 
+
+% kubectl get ingresses --all-namespaces -o wide
+
+% kubectl get services --all-namespaces --sort-by=.spec.type | awk {'print $1" " $2" "$3" "$4" "$5'} | column -t
+
+kubectl get services --all-namespaces --sort-by=.spec.type --field-selector "metadata.name!=kube-dns,metadata.name!=kubernetes" | awk {'print $1" " $2" "$3" "$4" "$5'} | column -t
+
+
+
+% kubectl get nodes,services,deployments,pods,replicasets,ingresses -o wide
+
+
+
+# In another window # minikube tunnel
+% sudo minikube tunnel
+
+# Switch back to the terminal where you ran minikube start
+% curl http://127.0.0.1:80/x
+% open http://127.0.0.1:80/x
+% curl http://127.0.0.1:80/y
+% open http://127.0.0.1:80/y
+
+[
+# get # service # waldo-service # EXTERNAL-IP # <none> #
+% kubectl get services waldo-service
+# get # service # xyzzy-service # EXTERNAL-IP # <none> #
+% kubectl get services xyzzy-service
+
+% minikube service foo-service
+% minikube service xyzzy-service
+]
+
+
+% minikube service cluster-ip-default-service
+% minikube service cluster-ip-default-service-external-ip
+% minikube service cluster-ip-headless-service-with-selector
+% minikube service cluster-ip-headless-service-without-selector
+% minikube service cluster-ip-multi-port-service
+% minikube service cluster-ip-service-from-ingress
+% minikube service load-balancer-service
+% minikube service node-port-service
+% minikube service node-port-service-from-ingress
+% minikube service ingress-nginx-controller
+% minikube service external-name-service -n producttion
+
+% minikube service
+
+
+% minikube service cluster-ip-service-from-ingress
+
+% minikube service node-port-service-from-ingress
+
+% minikube service list | awk {'print $4'} | column -t
+[
+% minikube service kubernetes
+% minikube service cluster-ip-default-service
+% minikube service cluster-ip-default-service-external-ip
+% minikube service cluster-ip-headless-service-with-selector
+% minikube service cluster-ip-headless-service-without-selector
+% minikube service cluster-ip-multi-port-service
+% minikube service waldo-service
+% minikube service xyzzy-service
+% minikube service external-name-service
+% minikube service load-balancer-service
+% minikube service node-port-service
+]
+
+[
+% minikube service kubernetes
+% minikube service cluster-ip-service
+% minikube service external-ip-service
+% minikube service headless-service-with-selector
+% minikube service headless-service-without-selector
+% minikube service multi-port-service
+[
+% minikube service external-name-service
+❌  Exiting due to SVC_NOT_FOUND: Service '{default external-name-service [] []}' was not found in 'default' namespace.
+You may select another namespace by using 'minikube service {default external-name-service [] []} -n <namespace>'. Or list out all the services using 'minikube service list'
+% minikube service load-balancer-service
+|-----------|-----------------------|-------------|---------------------------|
+| NAMESPACE |         NAME          | TARGET PORT |            URL            |
+|-----------|-----------------------|-------------|---------------------------|
+| default   | load-balancer-service |        3200 | http://192.168.49.2:30544 |
+|-----------|-----------------------|-------------|---------------------------|
+
+❌  Exiting due to SVC_UNREACHABLE: service not available: no running pod for service load-balancer-service found
+
+╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                                                          │
+│    😿  If the above advice does not help, please let us know:                                                            │
+│    👉  https://github.com/kubernetes/minikube/issues/new/choose                                                          │
+│                                                                                                                          │
+│    Please run `minikube logs --file=logs.txt` and attach logs.txt to the GitHub issue.                                   │
+│    Please also attach the following file to the GitHub issue:                                                            │
+│    - /var/folders/sr/qqd7qg150d7006zgzlcsy_4m0000gn/T/minikube_service_83164bd0bbb4fec261ea0d09eac56da4cfbe484f_0.log    │
+│                                                                                                                          │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+% minikube service node-port-service
+|-----------|-------------------|-------------|---------------------------|
+| NAMESPACE |       NAME        | TARGET PORT |            URL            |
+|-----------|-------------------|-------------|---------------------------|
+| default   | node-port-service |          80 | http://192.168.49.2:30007 |
+|-----------|-------------------|-------------|---------------------------|
+
+❌  Exiting due to SVC_UNREACHABLE: service not available: no running pod for service node-port-service found
+
+╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                                                          │
+│    😿  If the above advice does not help, please let us know:                                                            │
+│    👉  https://github.com/kubernetes/minikube/issues/new/choose                                                          │
+│                                                                                                                          │
+│    Please run `minikube logs --file=logs.txt` and attach logs.txt to the GitHub issue.                                   │
+│    Please also attach the following file to the GitHub issue:                                                            │
+│    - /var/folders/sr/qqd7qg150d7006zgzlcsy_4m0000gn/T/minikube_service_c9c375670c5602d9b3b157ef420639d79f9a4c0c_0.log    │
+│                                                                                                                          │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+]
+]
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+

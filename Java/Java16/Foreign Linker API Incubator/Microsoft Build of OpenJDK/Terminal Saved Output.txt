@@ -1,0 +1,50 @@
+Last login: Fri Sep 29 10:11:52 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % arch -x86_64 zsh
+rajaniapple@Rajanis-MacBook-Pro ~ % arch
+i386
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Working/Java/Java16/Foreign\ Linker\ API\ Incubator 
+rajaniapple@Rajanis-MacBook-Pro Foreign Linker API Incubator % ls
+Backup				ForeignLinkerAPIIncubator.java	msys64-mingw64.c
+rajaniapple@Rajanis-MacBook-Pro Foreign Linker API Incubator % gcc msys64-mingw64.c -o msys64-mingw64
+rajaniapple@Rajanis-MacBook-Pro Foreign Linker API Incubator % ./msys64-mingw64
+number function call
+1234567890
+Hello, World!
+zsh: illegal hardware instruction  ./msys64-mingw64
+rajaniapple@Rajanis-MacBook-Pro Foreign Linker API Incubator % msys64-mingw64 
+zsh: command not found: msys64-mingw64
+rajaniapple@Rajanis-MacBook-Pro Foreign Linker API Incubator % .\msys64-mingw64
+zsh: command not found: .msys64-mingw64
+rajaniapple@Rajanis-MacBook-Pro Foreign Linker API Incubator % ./msys64-mingw64
+number function call
+1234567890
+Hello, World!
+zsh: illegal hardware instruction  ./msys64-mingw64
+rajaniapple@Rajanis-MacBook-Pro Foreign Linker API Incubator % gcc -c -fPIC msys64-mingw64.c
+rajaniapple@Rajanis-MacBook-Pro Foreign Linker API Incubator % gcc -shared -o msys64-mingw64.so msys64-mingw64.o
+rajaniapple@Rajanis-MacBook-Pro Foreign Linker API Incubator % export PATH="/Users/rajaniapple/Downloads/Software/OpenJDK/MicrosoftBuildofOpenJDK/jdk-16.0.2+7/Contents/Home/bin/":$PATH
+rajaniapple@Rajanis-MacBook-Pro Foreign Linker API Incubator % java --version
+openjdk 16.0.2 2021-07-20
+OpenJDK Runtime Environment Microsoft-25298 (build 16.0.2+7)
+OpenJDK 64-Bit Server VM Microsoft-25298 (build 16.0.2+7, mixed mode)
+rajaniapple@Rajanis-MacBook-Pro Foreign Linker API Incubator % java --add-modules jdk.incubator.foreign -Dforeign.restricted=permit ForeignLinkerAPIIncubator.java
+WARNING: Using incubator modules: jdk.incubator.foreign
+warning: using incubating module(s): jdk.incubator.foreign
+1 warning
+OS Name: Mac OS X
+OS Version: 13.5.2
+OS Architecture: aarch64
+Java Version: 16.0.2
+
+# 389: Foreign Linker API (Incubator)
+Exception in thread "main" java.lang.UnsatisfiedLinkError: /Users/rajaniapple/Desktop/Working/Java/Java16/Foreign Linker API Incubator/msys64-mingw64.so: dlopen(/Users/rajaniapple/Desktop/Working/Java/Java16/Foreign Linker API Incubator/msys64-mingw64.so, 0x0001): tried: '/Users/rajaniapple/Desktop/Working/Java/Java16/Foreign Linker API Incubator/msys64-mingw64.so' (mach-o file, but is an incompatible architecture (have 'x86_64', need 'arm64')), '/System/Volumes/Preboot/Cryptexes/OS/Users/rajaniapple/Desktop/Working/Java/Java16/Foreign Linker API Incubator/msys64-mingw64.so' (no such file), '/Users/rajaniapple/Desktop/Working/Java/Java16/Foreign Linker API Incubator/msys64-mingw64.so' (mach-o file, but is an incompatible architecture (have 'x86_64', need 'arm64'))
+	at java.base/jdk.internal.loader.NativeLibraries.load(Native Method)
+	at java.base/jdk.internal.loader.NativeLibraries$NativeLibraryImpl.open(NativeLibraries.java:383)
+	at java.base/jdk.internal.loader.NativeLibraries.loadLibrary(NativeLibraries.java:227)
+	at java.base/jdk.internal.loader.NativeLibraries.loadLibrary(NativeLibraries.java:169)
+	at jdk.incubator.foreign/jdk.internal.foreign.LibrariesHelper.lambda$load$1(LibrariesHelper.java:75)
+	at jdk.incubator.foreign/jdk.internal.foreign.LibrariesHelper.lookup(LibrariesHelper.java:92)
+	at jdk.incubator.foreign/jdk.internal.foreign.LibrariesHelper.load(LibrariesHelper.java:75)
+	at jdk.incubator.foreign/jdk.incubator.foreign.LibraryLookup.ofPath(LibraryLookup.java:129)
+	at ForeignLinkerAPIIncubator.main(ForeignLinkerAPIIncubator.java:47)
+rajaniapple@Rajanis-MacBook-Pro Foreign Linker API Incubator % 

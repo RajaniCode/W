@@ -1,0 +1,235 @@
+% docker version
+
+
+# The connection to the server 127.0.0.1:49400 was refused - did you specify the right host or port? # % minikube start
+% kubectl version --output=yaml
+
+
+% kubectl config view
+
+
+% minikube version
+
+
+
+
+## Using Multi-Node Clusters
+# Start a cluster with 2 nodes in the driver of your choice:
+% minikube start --nodes 2 -p multinode-demo
+
+# NB
+[
+% kubectl get po -A -o wide
+
+% kubectl cluster-info
+
+% kubectl get nodes -o wide
+
+% kubectl get services -o wide
+
+% kubectl get events -o wide
+
+% kubectl get all
+]
+&
+[
+% minikube profile list
+
+# status of node # multinode-demo
+% minikube status -p multinode-demo
+
+# service # multinode-demo
+% minikube service list -p multinode-demo
+
+# deployment rollout status
+% kubectl rollout status deployment/hello
+]
+
+# Get the list of your nodes:
+% kubectl get nodes
+
+
+# You can also check the status of your nodes:
+% minikube status -p multinode-demo
+
+
+# Deploy our hello world deployment:
+% nano hello-deployment.yaml
+# hello-deployment.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 100%
+  selector:
+    matchLabels:
+      app: hello
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      affinity:
+        # ⬇⬇⬇ This ensures pods will land on separate hosts
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions: [{ key: app, operator: In, values: [hello] }]
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: hello-from
+          image: pbitty/hello-from:latest
+          ports:
+            - name: http
+              containerPort: 80
+      terminationGracePeriodSeconds: 1
+]
+% cat hello-deployment.yaml
+% kubectl apply -f hello-deployment.yaml
+
+# NB
+[
+% kubectl get po -A -o wide
+
+% kubectl cluster-info
+
+% kubectl get nodes -o wide
+
+% kubectl get services -o wide
+
+% kubectl get events -o wide
+
+% kubectl get all
+
+% kubectl get deployments -o wide
+
+% kubectl get pods -o wide
+
+% kubectl get replicasets -o wide
+]
+
+
+# deployment rollout status
+% kubectl rollout status deployment/hello
+
+
+# Deploy our hello world service, which just spits back the IP address the request was served from:
+% nano hello-svc.yaml
+[
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+spec:
+  type: NodePort
+  selector:
+    app: hello
+  ports:
+    - protocol: TCP
+      nodePort: 31000
+      port: 80
+      targetPort: http
+]
+% cat hello-svc.yaml
+% kubectl apply -f hello-svc.yaml
+
+[
+% kubectl get all
+]
+
+
+# Check out the IP addresses of our pods, to note for future reference
+% kubectl get pods -o wide
+[
+NAME                     READY   STATUS    RESTARTS   AGE     IP           NODE                 NOMINATED NODE   READINESS GATES
+hello-77c947d946-pprg2   1/1     Running   0          3m16s   10.244.0.3   multinode-demo       <none>           <none>
+hello-77c947d946-tzblc   1/1     Running   0          3m16s   10.244.1.2   multinode-demo-m02   <none>           <none>
+]
+
+
+# Look at our service, to know what URL to hit
+[
+% minikube service list -p multinode-demo
+|-------------|------------|--------------|-----|
+|  NAMESPACE  |    NAME    | TARGET PORT  | URL |
+|-------------|------------|--------------|-----|
+| default     | hello      |           80 |     |
+| default     | kubernetes | No node port |     |
+| kube-system | kube-dns   | No node port |     |
+|-------------|------------|--------------|-----|
+]
+% minikube profile list
+
+
+# Let’s hit the URL a few times and see what comes back
+% curl http://192.168.49.2:31000
+
+
+
+
+## Clean up
+# hello
+% kubectl delete service hello
+# hello
+% kubectl delete deployment hello
+
+
+# Stop the Minikube cluster
+% minikube stop
+
+
+# Delete the Minikube VM:
+% minikube delete
+
+
+# minikube delete all profiles
+% minikube delete --all
+
+
+# remove folder # .docker # .minikube # .kube
+# % rm -rf /Users/rajaniapple/.docker
+% rm -rf /Users/rajaniapple/.minikube
+% rm -rf /Users/rajaniapple/.kube
+
+
+
+
+# NB
+[
+% kubectl get po -A -o wide
+
+% kubectl cluster-info
+
+% kubectl get nodes -o wide
+
+% kubectl get services -o wide
+
+% kubectl get events -o wide
+
+% kubectl get all
+
+% kubectl get deployments -o wide
+
+% kubectl get pods -o wide
+
+% kubectl get replicasets -o wide
+]
+&
+[
+% minikube profile list
+
+# status of node # multinode-demo
+% minikube status -p multinode-demo
+
+# service # multinode-demo
+% minikube service list -p multinode-demo
+
+# deployment rollout status
+% kubectl rollout status deployment/hello
+]

@@ -1,0 +1,153 @@
+% docker version
+
+
+# The connection to the server 127.0.0.1:49400 was refused - did you specify the right host or port? # % minikube start
+# % kubectl version --output=yaml
+# % kubectl version
+
+
+% minikube version
+
+
+
+
+## Create a minikube cluster
+% minikube start
+
+
+% minikube ip
+
+
+% minikube profile list
+
+
+# profile # minikube
+% minikube service list -p minikube
+
+
+% minikube addons list
+
+
+% kubectl version
+
+
+% kubectl config view
+
+
+# Open the Dashboard
+# Start a new terminal, and leave this running
+% minikube dashboard --url
+# http://127.0.0.1:49392/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/
+# Now, switch back to the terminal where you ran minikube start
+
+
+
+
+## Getting a shell to a container
+In this exercise, you create a Pod that has one container. The container runs the nginx image. Here is the configuration file for the Pod:
+
+
+% curl -L https://k8s.io/examples/application/shell-demo.yaml
+# % wget https://k8s.io/examples/application/shell-demo.yaml
+% nano pod-shell-demo.yaml
+[
+apiVersion: v1
+kind: Pod
+metadata:
+  name: shell-demo
+spec:
+  volumes:
+  - name: shared-data
+    emptyDir: {}
+  containers:
+  - name: nginx
+    image: nginx
+    volumeMounts:
+    - name: shared-data
+      mountPath: /usr/share/nginx/html
+  hostNetwork: true
+  dnsPolicy: Default
+]
+# Create the Pod:
+[
+% kubectl apply -f https://k8s.io/examples/application/shell-demo.yaml
+]
+% cat pod-shell-demo.yaml
+% kubectl apply -f pod-shell-demo.yaml
+[
+% kubectl delete -f pod-shell-demo.yaml
+]
+
+
+# Verify that the container is running:
+% kubectl get pods shell-demo
+
+# Get a shell to the running container:
+% kubectl exec --stdin --tty shell-demo -- /bin/bash
+
+# Note: The double dash (--) separates the arguments you want to pass to the command from the kubectl arguments.
+# In your shell, list the root directory:
+# Run this inside the container
+root@minikube:/# ls /
+
+# In your shell, experiment with other commands. Here are some examples:
+# You can run these example commands inside the container
+root@minikube:/# ls /
+root@minikube:/# cat /proc/mounts
+root@minikube:/# cat /proc/1/maps
+root@minikube:/# apt-get update
+root@minikube:/# apt-get install -y tcpdump
+root@minikube:/# tcpdump
+[
+ctrl + c
+]
+root@minikube:/# apt-get install -y lsof
+root@minikube:/# lsof
+root@minikube:/# apt-get install -y procps
+root@minikube:/# ps aux
+root@minikube:/# ps aux | grep nginx
+
+# Writing the root page for nginx
+# Look again at the configuration file for your Pod. The Pod has an emptyDir volume, and the container mounts the volume at /usr/share/nginx/html.
+
+# nginx # status
+root@minikube:/# service nginx status
+root@minikube:/# /etc/init.d/nginx status
+root@minikube:/# lsof -i TCP:80
+
+# In your shell, create an index.html file in the /usr/share/nginx/html directory:
+
+# Run this inside the container
+root@minikube:/# echo 'Hello shell demo' > /usr/share/nginx/html/index.html
+
+# In your shell, send a GET request to the nginx server:
+
+# Run this in the shell inside your container
+root@minikube:/# apt-get update
+root@minikube:/# apt-get install curl
+root@minikube:/# curl http://localhost/
+
+# The output shows the text that you wrote to the index.html file:
+Hello shell demo
+
+# When you are finished with your shell, enter exit.
+# To quit the shell in the container
+root@minikube:/# exit
+
+
+# Running individual commands in a container
+# In an ordinary command window, not your shell, list the environment variables in the running container:
+% kubectl exec shell-demo -- env
+
+# Experiment with running other commands. Here are some examples:
+% kubectl exec shell-demo -- ps aux
+% kubectl exec shell-demo -- ls /
+% kubectl exec shell-demo -- cat /proc/1/mounts
+
+# Opening a shell when a Pod has more than one container
+# If a Pod has more than one container, use --container or -c to specify a container in the kubectl exec command. For example, suppose you have a Pod named my-pod, and the Pod has two containers named main-app and helper-app. The following command would open a shell to the main-app container.
+[
+% kubectl exec -i -t my-pod --container main-app -- /bin/bash
+]
+
+# Note: The short options -i and -t are the same as the long options --stdin and --tty

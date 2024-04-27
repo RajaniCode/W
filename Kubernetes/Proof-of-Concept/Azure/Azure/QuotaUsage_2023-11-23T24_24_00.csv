@@ -1,0 +1,276 @@
+Filter,Selected Values,,,
+Subscription Name,Free Trial,,,
+Subscription ID,5b2c1232-b617-4802-890e-498e4604b577,,,
+Providers ,Compute,,,
+Regions ,"Australia Central, Australia Central 2, Australia East, Australia Southeast, Brazil South, Brazil Southeast, Brazil US, Canada Central, Canada East, Central India, Central US, Central US EUAP, East Asia, East US, East US 2, East US 2 EUAP, East US STG, France Central, France South, Germany North, Germany West Central, Israel Central, Italy North, Japan East, Japan West, Jio India Central, Jio India West, Korea Central, Korea South, North Central US, North Europe, Norway East, Norway West, Poland Central, Qatar Central, South Africa North, South Africa West, South Central US, South Central US STG, South India, Southeast Asia, Sweden Central, Switzerland North, Switzerland West, UAE Central, UAE North, UK South, UK West, West Central US, West Europe, West India, West US, West US 2, West US 3",,,
+Show by usage,Show all,,,
+Report Generated Date and Time,"Invalid Date NaN, NaN 24:24:00",,,
+,,,,
+Quota,Region,Usage,Current Limit,Usage%
+Availability Sets,Central US,0,2500,0%
+Total Regional vCPUs,Central US,0,4,0%
+Virtual Machines,Central US,0,25000,0%
+Virtual Machine Scale Sets,Central US,0,2500,0%
+Dedicated vCPUs,Central US,0,0,0%
+Cloud Services,Central US,0,2500,0%
+Total Regional Spot vCPUs,Central US,0,3,0%
+Basic A Family vCPUs,Central US,0,4,0%
+Standard A0-A7 Family vCPUs,Central US,0,4,0%
+Standard A8-A11 Family vCPUs,Central US,0,4,0%
+Standard D Family vCPUs,Central US,0,4,0%
+Standard Dv2 Family vCPUs,Central US,0,4,0%
+Standard DS Family vCPUs,Central US,0,4,0%
+Standard DSv2 Family vCPUs,Central US,0,4,0%
+Standard G Family vCPUs,Central US,0,4,0%
+Standard GS Family vCPUs,Central US,0,4,0%
+Standard F Family vCPUs,Central US,0,4,0%
+Standard FS Family vCPUs,Central US,0,4,0%
+Standard NV Family vCPUs,Central US,0,6,0%
+Standard NC Family vCPUs,Central US,0,6,0%
+Standard H Family vCPUs,Central US,0,0,0%
+Standard Av2 Family vCPUs,Central US,0,4,0%
+Standard LS Family vCPUs,Central US,0,4,0%
+Standard Dv2 Promo Family vCPUs,Central US,0,4,0%
+Standard DSv2 Promo Family vCPUs,Central US,0,4,0%
+Standard MS Family vCPUs,Central US,0,0,0%
+Standard Dv3 Family vCPUs,Central US,0,4,0%
+Standard DSv3 Family vCPUs,Central US,0,4,0%
+Standard Ev3 Family vCPUs,Central US,0,4,0%
+Standard ESv3 Family vCPUs,Central US,0,4,0%
+Standard Dv4 Family vCPUs,Central US,0,4,0%
+Standard DDv4 Family vCPUs,Central US,0,4,0%
+Standard DSv4 Family vCPUs,Central US,0,4,0%
+Standard DDSv4 Family vCPUs,Central US,0,4,0%
+Standard Ev4 Family vCPUs,Central US,0,4,0%
+Standard EDv4 Family vCPUs,Central US,0,4,0%
+Standard ESv4 Family vCPUs,Central US,0,4,0%
+Standard EDSv4 Family vCPUs,Central US,0,4,0%
+Standard BS Family vCPUs,Central US,0,4,0%
+Standard FSv2 Family vCPUs,Central US,0,4,0%
+Standard NDS Family vCPUs,Central US,0,0,0%
+Standard NCSv2 Family vCPUs,Central US,0,0,0%
+Standard NCSv3 Family vCPUs,Central US,0,0,0%
+Standard LSv2 Family vCPUs,Central US,0,4,0%
+Standard PBS Family vCPUs,Central US,0,0,0%
+Standard EIv3 Family vCPUs,Central US,0,4,0%
+Standard EISv3 Family vCPUs,Central US,0,4,0%
+Standard DCS Family vCPUs,Central US,0,0,0%
+Standard NVSv2 Family vCPUs,Central US,0,0,0%
+Standard MSv2 Family vCPUs,Central US,0,0,0%
+Standard HBS Family vCPUs,Central US,0,0,0%
+Standard HCS Family vCPUs,Central US,0,0,0%
+Standard NVSv3 Family vCPUs,Central US,0,0,0%
+Standard NV Promo Family vCPUs,Central US,0,6,0%
+Standard NC Promo Family vCPUs,Central US,0,6,0%
+Standard H Promo Family vCPUs,Central US,0,0,0%
+Standard DAv4 Family vCPUs,Central US,0,4,0%
+Standard DASv4 Family vCPUs,Central US,0,4,0%
+Standard EAv4 Family vCPUs,Central US,0,4,0%
+Standard EASv4 Family vCPUs,Central US,0,4,0%
+Standard NDSv3 Family vCPUs,Central US,0,0,0%
+Standard DCSv2 Family vCPUs,Central US,0,0,0%
+Standard NVSv4 Family vCPUs,Central US,0,0,0%
+Standard NDSv2 Family vCPUs,Central US,0,0,0%
+Standard NPS Family vCPUs,Central US,0,4,0%
+Standard HBrsv2 Family vCPUs,Central US,0,0,0%
+Standard NCASv3_T4 Family vCPUs,Central US,0,0,0%
+Standard NDASv4_A100 Family vCPUs,Central US,0,0,0%
+Standard EIDSv4 Family vCPUs,Central US,0,4,0%
+Standard XEISv4 Family vCPUs,Central US,0,4,0%
+Standard EIASv4 Family vCPUs,Central US,0,4,0%
+Standard HBv3 Family vCPUs,Central US,0,0,0%
+Standard MDSMediumMemoryv2 Family vCPUs,Central US,0,0,0%
+Standard MIDSMediumMemoryv2 Family vCPUs,Central US,0,0,0%
+Standard MSMediumMemoryv2 Family vCPUs,Central US,0,0,0%
+Standard MISMediumMemoryv2 Family vCPUs,Central US,0,0,0%
+Standard DASv5 Family vCPUs,Central US,0,4,0%
+Standard EASv5 Family vCPUs,Central US,0,4,0%
+Standard Ev5 Family vCPUs,Central US,0,4,0%
+Standard EIv5 Family vCPUs,Central US,0,4,0%
+Standard EDv5 Family vCPUs,Central US,0,4,0%
+Standard EIDv5 Family vCPUs,Central US,0,4,0%
+Standard ESv5 Family vCPUs,Central US,0,4,0%
+Standard EISv5 Family vCPUs,Central US,0,4,0%
+Standard EDSv5 Family vCPUs,Central US,0,4,0%
+Standard EIDSv5 Family vCPUs,Central US,0,4,0%
+Standard Dv5 Family vCPUs,Central US,0,4,0%
+Standard DDv5 Family vCPUs,Central US,0,4,0%
+Standard DSv5 Family vCPUs,Central US,0,4,0%
+Standard DDSv5 Family vCPUs,Central US,0,4,0%
+Standard DLSv5 Family vCPUs,Central US,0,4,0%
+Standard DLDSv5 Family vCPUs,Central US,0,4,0%
+Standard LSv3 Family vCPUs,Central US,0,4,0%
+Standard LASv3 Family vCPUs,Central US,0,4,0%
+Standard DCSv3 Family vCPUs,Central US,0,4,0%
+Standard DDCSv3 Family vCPUs,Central US,0,4,0%
+Standard DADSv5 Family vCPUs,Central US,0,4,0%
+Standard EADSv5 Family vCPUs,Central US,0,4,0%
+Standard FXMDVS Family vCPUs,Central US,0,0,0%
+Standard DPLDSv5 Family vCPUs,Central US,0,4,0%
+Standard DPLSv5 Family vCPUs,Central US,0,4,0%
+Standard DPDSv5 Family vCPUs,Central US,0,4,0%
+Standard DPSv5 Family vCPUs,Central US,0,4,0%
+Standard EPDSv5 Family vCPUs,Central US,0,4,0%
+Standard EPSv5 Family vCPUs,Central US,0,4,0%
+Standard NDAMSv4_A100Family vCPUs,Central US,0,0,0%
+Standard DCASv5 Family vCPUs,Central US,0,4,0%
+Standard ECASv5 Family vCPUs,Central US,0,4,0%
+Standard ECIASv5 Family vCPUs,Central US,0,0,0%
+Standard DCADSv5 Family vCPUs,Central US,0,4,0%
+Standard ECADSv5 Family vCPUs,Central US,0,4,0%
+Standard ECIADSv5 Family vCPUs,Central US,0,0,0%
+Standard NVADSA10v5 Family vCPUs,Central US,0,0,0%
+Standard NCADS_A100_v4 Family vCPUs,Central US,0,0,0%
+Standard EBDSv5 Family vCPUs,Central US,0,4,0%
+Standard EBSv5 Family vCPUs,Central US,0,4,0%
+Standard EIASv5 Family vCPUs,Central US,0,4,0%
+Standard EIADSv5 Family vCPUs,Central US,0,0,0%
+Standard NCADSA10v4 Family vCPUs,Central US,0,0,0%
+standard DCACCV5 Family vCPUs,Central US,0,4,0%
+standard DCADCCV5 Family vCPUs,Central US,0,4,0%
+standard ECACCV5 Family vCPUs,Central US,0,4,0%
+standard ECADCCV5 Family vCPUs,Central US,0,4,0%
+Standard EIBDSv5 Family vCPUs,Central US,0,4,0%
+Standard EIBSv5 Family vCPUs,Central US,0,4,0%
+Standard HBv4 Family vCPUs,Central US,0,0,0%
+Standard HX Family vCPUs,Central US,0,0,0%
+Standard Bpsv2 Family vCPUs,Central US,0,4,0%
+Standard Bsv2 Family vCPUs,Central US,0,4,0%
+Standard Basv2 Family vCPUs,Central US,0,4,0%
+Standard NDSH100v5 Family vCPUs,Central US,0,0,0%
+Availability Sets,West US,0,2500,0%
+Total Regional vCPUs,West US,0,4,0%
+Virtual Machines,West US,0,25000,0%
+Virtual Machine Scale Sets,West US,0,2500,0%
+Dedicated vCPUs,West US,0,0,0%
+Cloud Services,West US,0,2500,0%
+Total Regional Spot vCPUs,West US,0,3,0%
+Basic A Family vCPUs,West US,0,4,0%
+Standard A0-A7 Family vCPUs,West US,0,4,0%
+Standard A8-A11 Family vCPUs,West US,0,4,0%
+Standard D Family vCPUs,West US,0,4,0%
+Standard Dv2 Family vCPUs,West US,0,4,0%
+Standard DS Family vCPUs,West US,0,4,0%
+Standard DSv2 Family vCPUs,West US,0,4,0%
+Standard G Family vCPUs,West US,0,4,0%
+Standard GS Family vCPUs,West US,0,4,0%
+Standard F Family vCPUs,West US,0,4,0%
+Standard FS Family vCPUs,West US,0,4,0%
+Standard NV Family vCPUs,West US,0,6,0%
+Standard NC Family vCPUs,West US,0,6,0%
+Standard H Family vCPUs,West US,0,0,0%
+Standard Av2 Family vCPUs,West US,0,4,0%
+Standard LS Family vCPUs,West US,0,4,0%
+Standard Dv2 Promo Family vCPUs,West US,0,4,0%
+Standard DSv2 Promo Family vCPUs,West US,0,4,0%
+Standard MS Family vCPUs,West US,0,0,0%
+Standard Dv3 Family vCPUs,West US,0,4,0%
+Standard DSv3 Family vCPUs,West US,0,4,0%
+Standard Ev3 Family vCPUs,West US,0,4,0%
+Standard ESv3 Family vCPUs,West US,0,4,0%
+Standard Dv4 Family vCPUs,West US,0,4,0%
+Standard DDv4 Family vCPUs,West US,0,4,0%
+Standard DSv4 Family vCPUs,West US,0,4,0%
+Standard DDSv4 Family vCPUs,West US,0,4,0%
+Standard Ev4 Family vCPUs,West US,0,4,0%
+Standard EDv4 Family vCPUs,West US,0,4,0%
+Standard ESv4 Family vCPUs,West US,0,4,0%
+Standard EDSv4 Family vCPUs,West US,0,4,0%
+Standard BS Family vCPUs,West US,0,4,0%
+Standard FSv2 Family vCPUs,West US,0,4,0%
+Standard NDS Family vCPUs,West US,0,0,0%
+Standard NCSv2 Family vCPUs,West US,0,0,0%
+Standard NCSv3 Family vCPUs,West US,0,0,0%
+Standard LSv2 Family vCPUs,West US,0,4,0%
+Standard PBS Family vCPUs,West US,0,0,0%
+Standard EIv3 Family vCPUs,West US,0,4,0%
+Standard EISv3 Family vCPUs,West US,0,4,0%
+Standard DCS Family vCPUs,West US,0,0,0%
+Standard NVSv2 Family vCPUs,West US,0,0,0%
+Standard MSv2 Family vCPUs,West US,0,0,0%
+Standard HBS Family vCPUs,West US,0,0,0%
+Standard HCS Family vCPUs,West US,0,0,0%
+Standard NVSv3 Family vCPUs,West US,0,0,0%
+Standard NV Promo Family vCPUs,West US,0,6,0%
+Standard NC Promo Family vCPUs,West US,0,6,0%
+Standard H Promo Family vCPUs,West US,0,0,0%
+Standard DAv4 Family vCPUs,West US,0,4,0%
+Standard DASv4 Family vCPUs,West US,0,4,0%
+Standard EAv4 Family vCPUs,West US,0,4,0%
+Standard EASv4 Family vCPUs,West US,0,4,0%
+Standard NDSv3 Family vCPUs,West US,0,0,0%
+Standard DCSv2 Family vCPUs,West US,0,0,0%
+Standard NVSv4 Family vCPUs,West US,0,0,0%
+Standard NDSv2 Family vCPUs,West US,0,0,0%
+Standard NPS Family vCPUs,West US,0,4,0%
+Standard HBrsv2 Family vCPUs,West US,0,0,0%
+Standard NCASv3_T4 Family vCPUs,West US,0,0,0%
+Standard NDASv4_A100 Family vCPUs,West US,0,0,0%
+Standard EIDSv4 Family vCPUs,West US,0,4,0%
+Standard XEISv4 Family vCPUs,West US,0,4,0%
+Standard EIASv4 Family vCPUs,West US,0,4,0%
+Standard HBv3 Family vCPUs,West US,0,0,0%
+Standard MDSMediumMemoryv2 Family vCPUs,West US,0,0,0%
+Standard MIDSMediumMemoryv2 Family vCPUs,West US,0,0,0%
+Standard MSMediumMemoryv2 Family vCPUs,West US,0,0,0%
+Standard MISMediumMemoryv2 Family vCPUs,West US,0,0,0%
+Standard DASv5 Family vCPUs,West US,0,4,0%
+Standard EASv5 Family vCPUs,West US,0,4,0%
+Standard Ev5 Family vCPUs,West US,0,4,0%
+Standard EIv5 Family vCPUs,West US,0,4,0%
+Standard EDv5 Family vCPUs,West US,0,4,0%
+Standard EIDv5 Family vCPUs,West US,0,4,0%
+Standard ESv5 Family vCPUs,West US,0,4,0%
+Standard EISv5 Family vCPUs,West US,0,4,0%
+Standard EDSv5 Family vCPUs,West US,0,4,0%
+Standard EIDSv5 Family vCPUs,West US,0,4,0%
+Standard Dv5 Family vCPUs,West US,0,4,0%
+Standard DDv5 Family vCPUs,West US,0,4,0%
+Standard DSv5 Family vCPUs,West US,0,4,0%
+Standard DDSv5 Family vCPUs,West US,0,4,0%
+Standard DLSv5 Family vCPUs,West US,0,4,0%
+Standard DLDSv5 Family vCPUs,West US,0,4,0%
+Standard LSv3 Family vCPUs,West US,0,4,0%
+Standard LASv3 Family vCPUs,West US,0,4,0%
+Standard DCSv3 Family vCPUs,West US,0,4,0%
+Standard DDCSv3 Family vCPUs,West US,0,4,0%
+Standard DADSv5 Family vCPUs,West US,0,4,0%
+Standard EADSv5 Family vCPUs,West US,0,4,0%
+Standard FXMDVS Family vCPUs,West US,0,0,0%
+Standard DPLDSv5 Family vCPUs,West US,0,4,0%
+Standard DPLSv5 Family vCPUs,West US,0,4,0%
+Standard DPDSv5 Family vCPUs,West US,0,4,0%
+Standard DPSv5 Family vCPUs,West US,0,4,0%
+Standard EPDSv5 Family vCPUs,West US,0,4,0%
+Standard EPSv5 Family vCPUs,West US,0,4,0%
+Standard NDAMSv4_A100Family vCPUs,West US,0,0,0%
+Standard DCASv5 Family vCPUs,West US,0,4,0%
+Standard ECASv5 Family vCPUs,West US,0,4,0%
+Standard ECIASv5 Family vCPUs,West US,0,0,0%
+Standard DCADSv5 Family vCPUs,West US,0,4,0%
+Standard ECADSv5 Family vCPUs,West US,0,4,0%
+Standard ECIADSv5 Family vCPUs,West US,0,0,0%
+Standard NVADSA10v5 Family vCPUs,West US,0,0,0%
+Standard NCADS_A100_v4 Family vCPUs,West US,0,0,0%
+Standard EBDSv5 Family vCPUs,West US,0,4,0%
+Standard EBSv5 Family vCPUs,West US,0,4,0%
+Standard EIASv5 Family vCPUs,West US,0,4,0%
+Standard EIADSv5 Family vCPUs,West US,0,0,0%
+Standard NCADSA10v4 Family vCPUs,West US,0,0,0%
+standard DCACCV5 Family vCPUs,West US,0,4,0%
+standard DCADCCV5 Family vCPUs,West US,0,4,0%
+standard ECACCV5 Family vCPUs,West US,0,4,0%
+standard ECADCCV5 Family vCPUs,West US,0,4,0%
+Standard EIBDSv5 Family vCPUs,West US,0,4,0%
+Standard EIBSv5 Family vCPUs,West US,0,4,0%
+Standard DCEV5 Family vCPUs,West US,0,4,0%
+Standard DCEDV5 Family vCPUs,West US,0,4,0%
+Standard ECEV5 Family vCPUs,West US,0,4,0%
+Standard ECEDV5 Family vCPUs,West US,0,4,0%
+Standard HBv4 Family vCPUs,West US,0,0,0%
+Standard HX Family vCPUs,West US,0,0,0%
+Standard Bpsv2 Family vCPUs,West US,0,4,0%
+Standard Bsv2 Family vCPUs,West US,0,4,0%
+Standard Basv2 Family vCPUs,West US,0,4,0%
+Standard ECIEV5 Family vCPUs,West US,0,4,0%
+Standard ECIEDV5 Family vCPUs,West US,0,4,0%

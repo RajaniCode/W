@@ -1,0 +1,110 @@
+Last login: Wed Jul 19 06:10:08 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % arch   
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % java -version
+openjdk version "20.0.2" 2023-07-18
+OpenJDK Runtime Environment (build 20.0.2+9-78)
+OpenJDK 64-Bit Server VM (build 20.0.2+9-78, mixed mode, sharing)
+rajaniapple@Rajanis-MacBook-Pro ~ % gradle -v
+
+------------------------------------------------------------
+Gradle 8.2.1
+------------------------------------------------------------
+
+Build time:   2023-07-10 12:12:35 UTC
+Revision:     a38ec64d3c4612da9083cc506a1ccb212afeecaa
+
+Kotlin:       1.8.20
+Groovy:       3.0.17
+Ant:          Apache Ant(TM) version 1.10.13 compiled on January 4 2023
+JVM:          20.0.2 (Oracle Corporation 20.0.2+9-78)
+OS:           Mac OS X 13.0.1 aarch64
+
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Working/Java/GradleLegacy 
+rajaniapple@Rajanis-MacBook-Pro GradleLegacy % mkdir -p src/main/java/hello
+rajaniapple@Rajanis-MacBook-Pro GradleLegacy % touch src/main/java/hello/HelloWorld.java
+rajaniapple@Rajanis-MacBook-Pro GradleLegacy % touch src/main/java/hello/Greeter.java
+rajaniapple@Rajanis-MacBook-Pro GradleLegacy % gradle
+Starting a Gradle Daemon (subsequent builds will be faster)
+
+> Task :help
+
+Welcome to Gradle 8.2.1.
+
+Directory '/Users/rajaniapple/Desktop/Working/Java/GradleLegacy' does not contain a Gradle build.
+
+To create a new build in this directory, run gradle init
+
+For more detail on the 'init' task, see https://docs.gradle.org/8.2.1/userguide/build_init_plugin.html
+
+For more detail on creating a Gradle build, see https://docs.gradle.org/8.2.1/userguide/tutorial_using_tasks.html
+
+To see a list of command-line options, run gradle --help
+
+For more detail on using Gradle, see https://docs.gradle.org/8.2.1/userguide/command_line_interface.html
+
+For troubleshooting, visit https://help.gradle.org
+
+BUILD SUCCESSFUL in 2s
+1 actionable task: 1 executed
+rajaniapple@Rajanis-MacBook-Pro GradleLegacy % gradle build
+
+> Task :compileJava
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.2.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 2s
+2 actionable tasks: 2 executed
+rajaniapple@Rajanis-MacBook-Pro GradleLegacy % gradle wrapper --gradle-version 8.2.1
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.2.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 986ms
+1 actionable task: 1 executed
+rajaniapple@Rajanis-MacBook-Pro GradleLegacy % ./gradlew build
+Downloading https://services.gradle.org/distributions/gradle-8.2.1-bin.zip
+............10%............20%............30%.............40%............50%............60%............70%.............80%............90%............100%
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.2.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 30s
+2 actionable tasks: 2 up-to-date
+rajaniapple@Rajanis-MacBook-Pro GradleLegacy % jar tvf build/libs/gs-gradle-0.1.0.jar
+     0 Wed Jul 19 06:24:58 IST 2023 META-INF/
+    25 Wed Jul 19 06:21:42 IST 2023 META-INF/MANIFEST.MF
+     0 Wed Jul 19 06:24:58 IST 2023 hello/
+   988 Wed Jul 19 06:24:58 IST 2023 hello/HelloWorld.class
+   369 Wed Jul 19 06:24:58 IST 2023 hello/Greeter.class
+rajaniapple@Rajanis-MacBook-Pro GradleLegacy % ./gradlew run
+
+> Task :run
+The current local time is: 06:32:20.283
+Hello world!
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.2.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 524ms
+2 actionable tasks: 1 executed, 1 up-to-date
+rajaniapple@Rajanis-MacBook-Pro GradleLegacy % 
+
+

@@ -1,0 +1,24 @@
+# Google Cloud # cloudshell # /bin/sh
+
+$ docker run  \
+  --name=aci-tutorial-sidecar \
+  --rm \
+  mcr.microsoft.com/azuredocs/aci-tutorial-sidecar
+
+[
+$ docker exec -it aci-tutorial-sidecar bash
+]
+
+$ docker exec -it aci-tutorial-sidecar /bin/sh
+
+$ docker logs aci-tutorial-sidecar --follow
+
+$ docker rm $(docker container list -a -q) --force
+
+$ docker rmi $(docker image list -a -q) --force 
+
+$ docker volume rm $(docker volume list --quiet) --force
+
+$ docker network rm $(docker network list --quiet --filter "type=custom")
+
+$ docker system prune --all --volumes

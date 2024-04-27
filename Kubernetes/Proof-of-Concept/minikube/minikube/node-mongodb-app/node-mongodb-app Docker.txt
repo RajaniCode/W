@@ -1,0 +1,408 @@
+## node:20.9-slim
+# https://hub.docker.com/layers/library/node/20.9-slim/images/sha256-5d7b108ace8af7f430e7704e411d4b1c31716de471e03e81afb3bbb18384eef2?context=repo&tab=vulnerabilities
+
+% sw_vers
+
+% arch
+
+% node -v
+
+% npm -v
+
+% pwd
+
+% cd /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app
+
+% pwd
+
+% mkdir -p Docker/Build
+
+% cp -r index.js package.json package-lock.json node_modules public views Docker/Build
+
+% cd Docker/Build
+
+% pwd
+
+% ls public/uploads
+
+% rm -rf public/uploads
+
+
+% nano Dockerfile
+[
+FROM node:20.9-slim
+COPY . .
+RUN npm install
+CMD [ "node", "index.js" ]
+]
+% cat Dockerfile
+
+
+% docker version
+
+
+% docker build -t node-mongodb-app .
+
+
+[
+% docker save node-mongodb-app > node-mongodb-app.tar
+% ls node-mongodb-app.tar
+% tar -tf node-mongodb-app.tar
+]
+
+
+[
+% docker image ls
+% docker images
+]
+% docker image list
+
+
+# docker # network
+[
+% docker network ls
+]
+% docker network create node-mongodb-network
+[
+% docker network rm node-mongodb-network 
+]
+
+
+% docker run \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-network \
+  mongo
+
+
+# In another terminal window
+% docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  node-mongodb-app
+
+
+# In another terminal window
+% open http://localhost:3000
+[
+http://localhost:3000
+...
+A Node MongoDB app.
+...
+]
+
+
+# In another terminal window
+% docker stop node-mongodb-app mongo
+[      
+node-mongodb-app
+mongo
+]
+[
+% docker ps
+[
+CONTAINER ID   IMAGE              COMMAND                  CREATED              STATUS              PORTS                    NAMES
+4adf4e2f11cf   node-mongodb-app   "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:3000->3000/tcp   node-mongodb-app
+731e4925e9a9   mongo              "docker-entrypoint.s…"   2 minutes ago        Up 2 minutes        27017/tcp                mongo
+]
+
+% docker # stop # node-mongodb-app
+% docker stop 4adf4e2f11cf
+
+% docker # stop # mongo
+% docker stop 731e4925e9a9
+]
+
+
+
+# docker # remove # container(s)
+[
+% docker rm node-mongodb-app mongo
+]
+# docker # remove and un-tag image(s) # Local
+[
+% docker rmi images node-mongodb-app mongo
+]
+
+
+
+
+## Docker Hub
+# Docker Desktop
+[
+Delete All Containers
+Delete All Images
+Delete All Volumes
+% docker network prune
+]
+
+
+% docker version
+
+
+% cd /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker
+
+
+% docker build -t node-mongodb-app .
+[
+[
+% docker network ls
+]
+% docker network create node-mongodb-network
+[
+% docker network rm node-mongodb-network 
+]
+
+% docker run \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-network \
+  mongo
+
+# In another terminal window
+% docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  node-mongodb-app
+
+http://localhost:3000
+
+# In another terminal window
+% docker stop node-mongodb-app mongo
+]
+
+
+% docker login
+
+
+% docker-credential-$(
+  jq -r .credsStore ~/.docker/config.json
+) list | jq -r '
+  . |
+    to_entries[] |
+    select(
+      .key | 
+      contains("docker.io")
+    ) |
+    last(.value)
+'
+
+
+% docker tag node-mongodb-app dockerrajani/node-mongodb-app:version1.0
+[
+% docker rmi dockerrajani/node-mongodb-app:version1.0
+]
+
+
+% docker push dockerrajani/node-mongodb-app:version1.0
+
+
+https://hub.docker.com/repository/docker/dockerrajani/node-mongodb-app
+
+
+% docker network ls
+
+% docker run \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-network \
+  mongo
+
+# In another terminal window
+% docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  dockerrajani/node-mongodb-app:version1.0
+
+http://localhost:3000
+
+% docker stop node-mongodb-app mongo
+node-mongodb-app
+mongo
+
+
+# Local
+% docker rmi dockerrajani/node-mongodb-app:version1.0 mongo
+
+
+https://hub.docker.com/repository/docker/dockerrajani/node-mongodb-app
+
+
+
+
+## Docker Hub # pull mongo # tag mongo dockerrajani/mongo:version1.0
+# Docker Desktop
+[
+Delete All Containers
+Delete All Images
+Delete All Volumes
+% docker network prune
+]
+
+
+% docker version
+
+
+% docker pull mongo
+
+
+% docker image list
+[
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+mongo        latest    8b10e7ef0208   3 weeks ago   712MB
+]
+
+% docker tag mongo dockerrajani/mongo:version1.0
+
+
+% docker image list
+[
+REPOSITORY           TAG          IMAGE ID       CREATED       SIZE
+dockerrajani/mongo   version1.0   8b10e7ef0208   3 weeks ago   712MB
+mongo                latest       8b10e7ef0208   3 weeks ago   712MB
+]
+
+
+% docker login
+
+
+% docker push dockerrajani/mongo:version1.0
+
+
+https://hub.docker.com/repository/docker/dockerrajani/mongo
+
+
+[
+% docker network ls
+]
+% docker network create node-mongodb-network
+[
+% docker network rm node-mongodb-network 
+]
+% docker run \
+  --name=mongo \
+  --rm \
+  --network=node-mongodb-network \
+  dockerrajani/mongo:version1.0
+
+[
+% docker logs mongo --follow
+
+# volume
+% docker run -d \
+    -p 27017:27017 \
+    --name=mongo \
+    --volume=mongo-data-volume:/data/db \
+    dockerrajani/mongo:version1.0
+
+% docker volume ls
+
+# config
+% docker run -d \
+    --name=mongo \
+    --volume=mongo-data-volume:/data/db \
+    --volume ./mongo.conf:/etc/mongo/mongo.conf \
+    dockerrajani/mongo:version1.0 --config /etc/mongo/mongo.conf
+
+# evv # MONGODB_INITDB_ROOT_USERNAME # MONGODB_INITDB_ROOT_PASSWORD # $MongoDB@7.0.2
+% docker run -d \
+    --name=mongo \
+    --volume=mongo-data-volume:/data/db \
+    --env=MONGODB_INITDB_ROOT_USERNAME=docker-rajani-mongo \
+    --env=MONGODB_INITDB_ROOT_PASSWORD=$MongoDB@7.0.2 \
+    dockerrajani/mongo:version1.0 --config /etc/mongo/mongo.conf
+
+# evv # MONGODB_INITDB_ROOT_USERNAME # MONGODB_INITDB_ROOT_PASSWORD_FILE
+% docker run -d \
+    --name=mongo \
+    --volume=mongo-data-volume:/data/db \
+    --env=MONGODB_INITDB_ROOT_USERNAME=docker-rajani-mongo \
+    --env=MONGODB_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo-root-pw \
+    dockerrajani/mongo:version1.0 --config /etc/mongo/mongo.conf
+]
+
+
+# container # mongo # shell
+% docker exec -it mongo bash
+root@44d2152f50af:/# mongosh
+test> show dbs
+test> exit
+root@44d2152f50af:/# exit
+
+
+# In another terminal window
+% ps aux | grep -v grep | grep mongod # kill <mongod pid>
+
+
+# In another terminal window
+% docker run \
+  --name=node-mongodb-app \
+  --rm \
+  --network=node-mongodb-network \
+  -p 3000:3000 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  dockerrajani/node-mongodb-app:version1.0
+
+http://localhost:3000
+# Upload image
+
+# In another terminal window
+% docker exec -it mongo bash
+root@44d2152f50af:/# mongosh
+# Before image upload
+[
+test> show dbs
+admin   40.00 KiB
+config  12.00 KiB
+local   40.00 KiB
+]
+# After image upload
+test> show dbs 
+admin   40.00 KiB
+config  12.00 KiB
+dev     40.00 KiB
+local   40.00 KiB
+test> use dev
+switched to db dev
+dev> show collections
+notes
+dev> db.notes.find()
+[
+  {
+    _id: ObjectId("65484baaff7984a73f3d9352"),
+    description: 'Apache Hadoop Ecosystem ![](/uploads/2083c9ed23b9015361b59476491dc90c)'
+  }
+]
+dev> exit
+root@2d3af5bd7f83:/# exit
+
+
+# In another terminal window
+% docker stop node-mongodb-app mongo
+node-mongodb-app
+mongo
+
+
+# Local
+% docker rmi dockerrajani/node-mongodb-app:version1.0 dockerrajani/mongo:version1.0
+% docker rmi mongo
+
+
+
+
+## Docker Hub # Delete a repository
+# Warning: Deleting a repository deletes all the images it contains and its build settings. This action can't be undone.
+
+Navigate to your repository.
+Select the Settings tab.
+Select Delete repository.
+Enter the name of your repository to confirm.

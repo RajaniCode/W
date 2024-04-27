@@ -1,0 +1,370 @@
+***************************************************************************************************************************
+
+# Node.js
+
+***************************************************************************************************************************
+                                                                                       
+% node --version                                                                                                 
+
+% pnpm --version          
+
+% pnpm update --global
+
+% pnpm upgrade --global
+
+% pnpm outdated --global
+
+[
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices/node-dns-app
+]
+% mkdir -p node-dns-app
+
+% cd node-dns-app
+
+% nano index.js
+[
+const express = require('express')
+const dns = require('node:dns');
+
+const app = express()
+const port = process.env.PORT || 3000
+const utc = new Date().toUTCString()
+const domain = process.env.DOMAIN || 'www.github.com'
+
+async function start() {
+
+  let records = []
+
+  const getCnames = (enodata, result) => {
+    if (enodata) {
+      return records;
+    } else {
+      const cname = result[0];
+      records.push(cname);
+      return dns.resolveCname(cname, getCnames);
+    }
+  }
+
+  dns.resolveCname(`${domain}`, getCnames);
+
+  app.get('/', async (req, res) => {
+    console.log(records);
+    res.send("Node.js Version: " + process.version + " - " + "Coordinated Universal Time (UTC): " + utc + "\n" + "<br/><br/>" + "\n" + `${records}` + "\n")
+  });
+
+  app.listen(port, () => {
+    console.log(`App listening on http://localhost:${port}`)
+  })
+}
+
+start()
+]
+
+% cat index.js
+
+% pnpm init
+
+% pnpm install express                                                                                        
+
+% node index.js  
+
+# Terminal New Window
+% curl http://localhost:3000/
+[
+Node.js Version: v21.6.1 - Coordinated Universal Time (UTC): Wed, 07 Feb 2024 14:06:09 GMT
+<br/><br/>
+github.com
+]
+
+% DOMAIN="www.abc.xyz" node index.js                                                                                                  
+
+# Terminal New Window
+% curl http://localhost:3000/
+[
+Node.js Version: v21.6.1 - Coordinated Universal Time (UTC): Wed, 07 Feb 2024 14:03:06 GMT
+<br/><br/>
+www3.l.google.com
+]
+
+% PORT=5000 DOMAIN="svc.cluster.local" node index.js
+
+# Terminal New Window 
+% curl http://localhost:5000/
+[
+Node.js Version: v21.6.1 - Coordinated Universal Time (UTC): Wed, 07 Feb 2024 14:03:55 GMT
+<br/><br/>
+]
+
+***************************************************************************************************************************
+
+# Docker # docker compose up --build
+
+***************************************************************************************************************************
+
+[
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices/node-dns-app/node-dns-app
+]
+
+% docker --version
+
+% docker version
+
+% docker info
+
+% docker init
+
+% cat Dockerfile
+
+% cat .dockerignore
+
+% cat compose.yaml
+[
+#
+services:
+  server:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+#
+]
+
+% nano compose.yaml
+
+% cat compose.yaml
+[
+#
+services:
+  service:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+#
+]
+
+% docker compose up --build
+
+# Terminal New Window
+% curl http://localhost:3000/
+[
+Node.js Version: v21.6.1 - Coordinated Universal Time (UTC): Wed, 07 Feb 2024 14:25:52 GMT
+<br/><br/>
+github.com
+]
+
+# Terminal Original Window
+control + C
+
+% docker container list --all
+
+% docker image list --all
+
+% docker run \
+  --name=node-dns-app \
+  --rm \
+  -p 3000:3000 \
+  -e PORT=3000 \
+  -e DOMAIN="www.aws.amazon.com" \
+  node-dns-app-service
+
+# Terminal New Window 
+% curl http://localhost:3000/
+[
+Node.js Version: v21.6.1 - Coordinated Universal Time (UTC): Wed, 07 Feb 2024 14:29:41 GMT
+<br/><br/>
+www.cname-proxy.amazon.com,aws.amazon.com,tp.8e49140c2-frontier.amazon.com,dr49lng3n1n2s.cloudfront.net
+]
+
+% docker stop $(docker container list -a -q)
+
+% docker run \
+  --name=node-dns-app5000 \
+  --rm \
+  -p 5000:5000 \
+  -e PORT=5000 \
+  -e DOMAIN="www.azure.microsoft.com" \
+  node-dns-app-service
+
+# Terminal New Window 
+% curl http://localhost:5000/
+[
+Node.js Version: v21.6.1 - Coordinated Universal Time (UTC): Wed, 07 Feb 2024 14:31:49 GMT
+<br/><br/>
+acom-vanity-router-prod-glbl-01.trafficmanager.net,acom-vanity-router-prod-seas-01.azurewebsites.net,waws-prod-sg1-059.sip.azurewebsites.windows.net,waws-prod-sg1-059-2424.southeastasia.cloudapp.azure.com
+]
+
+% docker stop $(docker container list -a -q)
+
+% docker run \
+  --name=node-dns-app7000 \
+  --rm \
+  -p 7000:7000 \
+  -e PORT=7000 \
+  -e DOMAIN="svc.cluster.local" \
+  node-dns-app-service
+
+# Terminal New Window 
+% curl http://localhost:7000/
+[
+Node.js Version: v21.6.1 - Coordinated Universal Time (UTC): Wed, 07 Feb 2024 14:37:44 GMT
+<br/><br/>
+]
+
+% docker stop $(docker container list -a -q)
+
+***************************************************************************************************************************
+
+# Docker # https://hub.docker.com/ # docker push
+
+***************************************************************************************************************************
+
+% docker tag node-dns-app-service dockerrajani/node-21-express-dns-app-macos-arm64:version1.0.0
+
+% docker login
+
+% docker push dockerrajani/node-21-express-dns-app-macos-arm64:version1.0.0
+
+https://hub.docker.com/repository/docker/dockerrajani/node-21-express-dns-app-macos-arm64
+
+% open https://hub.docker.com/repository/docker/dockerrajani/node-21-express-dns-app-macos-arm64
+
+***************************************************************************************************************************
+
+# minikube # kubectl
+
+***************************************************************************************************************************
+
+% minikube version
+
+% minikube start
+
+% minikube ip
+
+% minikube profile list
+
+% minikube service list -p minikube
+
+% kubectl version
+
+% kubectl config view
+
+% kubectl cluster-info
+
+[
+% cd ~/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/KubernetesServices/node-dns-app
+]
+
+% mkdir -p kubectl
+
+[
+% rm -rf kubectl/node-21-express-dns-app-load-balancer-service.yaml
+]
+% nano kubectl/node-21-express-dns-app-load-balancer-service.yaml
+[
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-21-express-dns-app-deployment
+  labels:
+    app: node-21-express-dns-app-label
+spec:
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: node-21-express-dns-app-label  
+  template:
+    metadata:
+      labels:
+        app: node-21-express-dns-app-label  
+    spec:
+      containers:
+      - name: node-21-express-dns-app-container
+        image: "dockerrajani/node-21-express-dns-app-macos-arm64:version1.0.0"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-21-express-dns-app-load-balancer-service 
+spec:
+  selector:
+    app: node-21-express-dns-app-label 
+  type: LoadBalancer     
+  ports:
+  - protocol: TCP        
+    port: 5000           
+    targetPort: 3000    
+    nodePort: 31110
+]
+% cat kubectl/node-21-express-dns-app-load-balancer-service.yaml
+% kubectl apply -f kubectl/node-21-express-dns-app-load-balancer-service.yaml
+[
+% kubectl delete -f kubectl/node-21-express-dns-app-load-balancer-service.yaml
+]
+
+% kubectl get pods --watch
+
+% kubectl get pods
+
+# Terminal New Window 
+% sudo minikube tunnel
+
+# Original Terminal Window 
+% kubectl get services
+
+% minikube service node-21-express-dns-app-load-balancer-service
+
+***************************************************************************************************************************
+
+# Docker cleanup
+
+***************************************************************************************************************************
+
+[
+% docker ps --all --quiet
+% docker stop $(docker ps -a -q)
+% docker rm $(docker ps -a -q) --force
+]
+% docker container list --all --quiet
+% docker stop $(docker container list -a -q)
+% docker rm $(docker container list -a -q) --force
+% docker container prune
+
+% docker image list --all --quiet
+% docker rmi $(docker image list -a -q) --force 
+% docker image prune --all
+
+% docker volume list --quiet
+% docker volume rm $(docker volume list --quiet) --force
+% docker volume prune
+
+% docker network list --quiet --filter "type=custom"
+% docker network rm $(docker network list --quiet --filter "type=custom")
+% docker network prune
+
+% docker system info
+% docker system prune --all --volumes
+
+***************************************************************************************************************************
+
+# minikube # kubectl # cleanup
+
+***************************************************************************************************************************
+
+% minikube stop
+
+% minikube delete
+
+% ls ~/.minikube
+% rm -rf ~/.minikube
+% ls ~/.kube
+% rm -rf ~/.kube
+
+***************************************************************************************************************************

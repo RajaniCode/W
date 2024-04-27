@@ -1,0 +1,20 @@
+Last login: Sun Nov 12 12:51:19 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % sw_vers
+ProductName:		macOS
+ProductVersion:		14.0
+BuildVersion:		23A344
+rajaniapple@Rajanis-MacBook-Pro ~ % arch
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % brew --version
+Homebrew 4.1.19
+rajaniapple@Rajanis-MacBook-Pro ~ % brew update   
+Already up-to-date.
+rajaniapple@Rajanis-MacBook-Pro ~ % lima --version
+limactl version 0.18.0
+rajaniapple@Rajanis-MacBook-Pro ~ % brew uninstall lima
+Uninstalling /opt/homebrew/Cellar/lima/0.18.0... (104 files, 169.8MB)
+rajaniapple@Rajanis-MacBook-Pro ~ % 
+
+
+
+

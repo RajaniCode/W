@@ -1,0 +1,337 @@
+***********************************************************************************************************************************************************
+
+# OpenJDK 17.0.2 2022-01-18
+# Apache Maven 3.8.4
+
+***********************************************************************************************************************************************************
+
+1. Maven Project Template
+
+# mvn archetype:generate -DgroupId={project-packaging} -DartifactId={project-name} -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+# NOTE: Directory Should Be Empty
+
+$ mkdir Exercise
+$ cd Exercise
+$ mvn archetype:generate -DgroupId=com.sample -DartifactId=Example -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
+***********************************************************************************************************************************************************
+
+2. Maven Standard Directory Layout
+
+# mvn archetype Default Standard Directory Layout
+
+Example
+   |-src
+   |---main
+   |-----java
+   |-------com
+   |---------sample
+   |-----------App.java
+   |---test
+   |-----java
+   |-------com
+   |---------sample
+   |-----------AppTest.java
+   |-pom.xml
+
+# mvn archetype Default pom.xml
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sample</groupId>
+  <artifactId>Example</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>Example</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
+
+########################################################################################################
+
+# mvn archetype Default App.java
+
+package com.sample;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args )
+    {
+        System.out.println( "Hello World!" );
+    }
+}
+
+########################################################################################################
+
+# mvn archetype Default AppTest.java
+
+package com.sample;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+/**
+ * Unit test for simple App.
+ */
+public class AppTest 
+    extends TestCase
+{
+    /**
+     * Create the test case
+     *
+     * @param testName name of the test case
+     */
+    public AppTest( String testName )
+    {
+        super( testName );
+    }
+
+    /**
+     * @return the suite of tests being tested
+     */
+    public static Test suite()
+    {
+        return new TestSuite( AppTest.class );
+    }
+
+    /**
+     * Rigourous Test :-)
+     */
+    public void testApp()
+    {
+        assertTrue( true );
+    }
+}
+
+***********************************************************************************************************************************************************
+
+3. pom.xml - Edit JUnit from 3.8.1 to 4.13.1, Add maven-compiler-plugin, Java 1.15
+
+# Edit
+
+# JUnit 3.8.1
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+# JUnit 4.13.1
+
+  <dependencies>
+    <!-- https://mvnrepository.com/artifact/junit/junit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+########################################################################################################
+
+# Add
+
+# maven-compiler-plugin, Java 1.15
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+########################################################################################################
+
+# Updated pom.xml, Java 1.15
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sample</groupId>
+  <artifactId>Example</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>Example</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+    <!-- https://mvnrepository.com/artifact/junit/junit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+
+########################################################################################################
+
+***********************************************************************************************************************************************************
+
+4. App.java, AppTest.java - Edit
+
+# Edit App.java
+
+import java.util.UUID;
+
+    public static void main( String[] args )
+    {
+        System.out.println("Hello, World!");
+        App instance = new App();
+        System.out.println("Unique ID : " + instance.getUUID("123e4567-e89b-12d3-a456-556642440000"));
+    }
+
+    public String getUUID(String universallyUniqueIdentifier) 
+    {
+        String uid = UUID.fromString​(universallyUniqueIdentifier).toString();
+        return uid;
+    }
+
+########################################################################################################
+
+# Updated App.java
+
+package com.sample;
+
+import java.util.UUID;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args )
+    {
+        System.out.println("Hello, World!");
+        App instance = new App();
+        System.out.println("Unique ID : " + instance.getUUID("123e4567-e89b-12d3-a456-556642440000"));
+    }
+
+    public String getUUID(String universallyUniqueIdentifier) 
+    {
+        String uid = UUID.fromString​(universallyUniqueIdentifier).toString();
+        return uid;
+    }
+}
+
+########################################################################################################
+
+# Edit AppTest.java
+
+    public void testApp()
+    {
+        System.out.println("Hola!");
+        App instance = new App();
+        assertTrue(36 == instance.getUUID("123e4567-e89b-12d3-a456-556642440000").length());
+    }
+
+########################################################################################################
+
+# Updated AppTest.java
+
+package com.sample;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+/**
+ * Unit test for simple App.
+ */
+public class AppTest 
+    extends TestCase
+{
+    /**
+     * Create the test case
+     *
+     * @param testName name of the test case
+     */
+    public AppTest( String testName )
+    {
+        super( testName );
+    }
+
+    /**
+     * @return the suite of tests being tested
+     */
+    public static Test suite()
+    {
+        return new TestSuite( AppTest.class );
+    }
+
+    /**
+     * Rigourous Test :-)
+     */
+    public void testApp()
+    {
+        System.out.println("Hola!");
+        App instance = new App();
+        assertTrue(36 == instance.getUUID("123e4567-e89b-12d3-a456-556642440000").length());
+    }
+}
+
+########################################################################################################
+
+***********************************************************************************************************************************************************
+
+5. Maven Package
+
+$ cd Example
+$ mvn package
+
+***********************************************************************************************************************************************************
+
+6. Run target jar
+
+$ java -cp target/Example-1.0-SNAPSHOT.jar com.sample.App
+
+***********************************************************************************************************************************************************
+
+7. Test
+
+$ mvn test
+
+$ mvn -Dtest=AppTest test
+
+$ mvn -Dtest=AppTest#testApp test
+
+***********************************************************************************************************************************************************

@@ -1,0 +1,46 @@
+minikube comes with a built-in kubectl installation
+
+
+minikube uses kubectl
+
+
+Docker Desktop installs kubectl
+
+
+% ls /Users/rajaniapple/.docker
+% rm -rf /Users/rajaniapple/.docker
+
+% ls /Users/rajaniapple/.minikube
+% rm -rf /Users/rajaniapple/.minikube
+
+% ls /Users/rajaniapple/.kube
+% rm -rf /Users/rajaniapple/.kube
+
+
+% ls /Users/rajaniapple/Library/Caches/Homebrew/downloads
+% rm -rf /Users/rajaniapple/Library/Caches/Homebrew/downloads/*
+
+% brew uninstall minikube
+[    
+Uninstalling /opt/homebrew/Cellar/minikube/1.31.2... (9 files, 80MB)
+]
+
+
+% brew uninstall kubectl
+[
+Uninstalling /opt/homebrew/Cellar/kubernetes-cli/1.28.3... (232 files, 58.9MB)
+]
+
+
+[
+# Added by Docker Desktop
+# To allow the same kube context to work on the host and the container:
+# 127.0.0.1 kubernetes.docker.internal
+]
+% sudo nano /etc/hosts
+% cat /etc/hosts
+
+
+# Dockerfile
+% ls /opt/homebrew/Dockerfile
+% rm -rf /opt/homebrew/Dockerfile

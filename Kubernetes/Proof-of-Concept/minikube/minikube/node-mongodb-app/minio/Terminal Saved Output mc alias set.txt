@@ -1,0 +1,85 @@
+Last login: Mon Nov  6 23:06:18 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % mc
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── (q)uit/esc
+NAME:                                                       
+  mc - MinIO Client for object storage and filesystems.     
+                                                            
+USAGE:                                                      
+  mc [FLAGS] COMMAND [COMMAND FLAGS | -h] [ARGUMENTS...]    
+                                                            
+COMMANDS:                                                   
+  alias      manage server credentials in configuration file
+  ls         list buckets and objects                       
+  mb         make a bucket                                  
+  rb         remove a bucket                                
+  cp         copy objects                                   
+  mv         move objects                                   
+  rm         remove object(s)                               
+  mirror     synchronize object(s) to a remote site         
+  cat        display object contents                        
+  head       display first 'n' lines of an object           
+  pipe       stream STDIN to an object                      
+  find       search for objects                             
+  sql        run sql queries on objects                     
+  stat       show object metadata                           
+  tree       list buckets and objects in a tree format      
+                                                                                                                                                               %rajaniapple@Rajanis-MacBook-Pro ~ % mc alias set myminio http://192.168.191.31:9000
+Enter Access Key: minioadmin
+Enter Secret Key: 
+Added `myminio` successfully. 
+rajaniapple@Rajanis-MacBook-Pro ~ % mc alias set myminio http://192.168.191.31:9000 minioadmin
+Enter Secret Key: minioadmin
+Added `myminio` successfully.
+rajaniapple@Rajanis-MacBook-Pro ~ % cat /Users/rajaniapple/Desktop/Working/Technology/Kubernetes/Proof-of-Concept/minikube/minikube/node-mongodb-app/Docker/minio/minio
+
+rajaniapple@Rajanis-MacBook-Pro ~ % cat /Users/rajaniapple/.mc/config.json
+{
+	"version": "10",
+	"aliases": {
+		"gcs": {
+			"url": "https://storage.googleapis.com",
+			"accessKey": "YOUR-ACCESS-KEY-HERE",
+			"secretKey": "YOUR-SECRET-KEY-HERE",
+			"api": "S3v2",
+			"path": "dns"
+		},
+		"local": {
+			"url": "http://localhost:9000",
+			"accessKey": "",
+			"secretKey": "",
+			"api": "S3v4",
+			"path": "auto"
+		},
+		"myminio": {
+			"url": "http://192.168.191.31:9000",
+			"accessKey": "minioadmin",
+			"secretKey": "minioadmin",
+			"api": "s3v4",
+			"path": "auto"
+		},
+		"play": {
+			"url": "https://play.min.io",
+			"accessKey": "Q3AM3UQ867SPQQA43P2F",
+			"secretKey": "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
+			"api": "S3v4",
+			"path": "auto"
+		},
+		"s3": {
+			"url": "https://s3.amazonaws.com",
+			"accessKey": "YOUR-ACCESS-KEY-HERE",
+			"secretKey": "YOUR-SECRET-KEY-HERE",
+			"api": "S3v4",
+			"path": "dns"
+		}
+	}
+}%                                                                                                                                                              rajaniapple@Rajanis-MacBook-Pro ~ % ls /Users/rajaniapple/.mc/share
+downloads.json	uploads.json
+rajaniapple@Rajanis-MacBook-Pro ~ % cat /Users/rajaniapple/.mc/share/uploads.json
+{
+	"version": "1",
+	"shares": {}
+}%                                                                                                                                                              rajaniapple@Rajanis-MacBook-Pro ~ % cat /Users/rajaniapple/.mc/share/downloads.json
+{
+	"version": "1",
+	"shares": {}
+}%                                                                                                                                                              rajaniapple@Rajanis-MacBook-Pro ~ % 

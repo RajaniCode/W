@@ -1,0 +1,79 @@
+% docker version
+
+
+# The connection to the server 127.0.0.1:49400 was refused - did you specify the right host or port? # % minikube start
+% kubectl version --output=yaml
+
+
+% kubectl config view
+
+
+% minikube version
+
+
+# NB
+[
+% kubectl get po -A -o wide
+
+% kubectl cluster-info
+
+% kubectl get nodes -o wide
+
+% kubectl get services -o wide
+
+% kubectl get events -o wide
+
+% kubectl get all
+
+% kubectl get deployments -o wide
+
+% kubectl get pods -o wide
+
+% kubectl get replicasets -o wide
+]
+
+
+% minikube start
+
+# In another window
+[
+% minikube dashboard
+]
+
+
+
+
+## Manage cluster
+
+# Pause Kubernetes without impacting deployed applications:
+% minikube pause
+
+# Unpause a paused instance:
+% minikube unpause
+
+# Halt the cluster:
+% minikube stop
+
+# Change the default memory limit (requires a restart):
+% minikube config set memory 9001
+[
+# These changes will take effect upon a minikube delete and then a minikube start
+% minikube start
+]
+
+# Browse the catalog of easily installed Kubernetes services:
+% minikube addons list
+
+# Create a second cluster running an older Kubernetes release:
+[
+# Exiting due to MK_USAGE: Docker Desktop has only 3933MB memory but you specified 9001MB
+% minikube config set memory 3933M
+]
+
+[
+% minikube start -p aged --kubernetes-version=v1.16.1
+# initialization failed . . .
+]
+
+# Delete all of the minikube clusters:
+% minikube delete --all

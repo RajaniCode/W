@@ -1,0 +1,56 @@
+Last login: Wed Oct 11 16:12:00 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % arch                                                                          
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % pwd                                                                           
+/Users/rajaniapple
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Technology/Kubernetes/Proof-of-Concept/minikube 
+rajaniapple@Rajanis-MacBook-Pro minikube % pwd                                                                           
+/Users/rajaniapple/Desktop/Technology/Kubernetes/Proof-of-Concept/minikube
+rajaniapple@Rajanis-MacBook-Pro ~ % kubectl version --output=yaml                                                 
+clientVersion:
+  buildDate: "2023-09-13T09:29:06Z"
+  compiler: gc
+  gitCommit: 89a4ea3e1e4ddd7f7572286090359983e0387b2f
+  gitTreeState: clean
+  gitVersion: v1.28.2
+  goVersion: go1.20.8
+  major: "1"
+  minor: "28"
+  platform: darwin/arm64
+kustomizeVersion: v5.0.4-0.20230601165947-6ce0bf390ce3
+serverVersion:
+  buildDate: "2023-07-19T12:14:49Z"
+  compiler: gc
+  gitCommit: fa3d7990104d7c1f16943a67f11b154b71f6a132
+  gitTreeState: clean
+  gitVersion: v1.27.4
+  goVersion: go1.20.6
+  major: "1"
+  minor: "27"
+  platform: linux/arm64
+
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube version
+minikube version: v1.31.2
+commit: fd7ecd9c4599bef9f04c0986c4a0187f98a4396e
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube start
+😄  minikube v1.31.2 on Darwin 14.0 (arm64)
+✨  Using the docker driver based on existing profile
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+🤷  docker "minikube" container is missing, will recreate.
+🔥  Creating docker container (CPUs=2, Memory=3885MB) ...
+🐳  Preparing Kubernetes v1.27.4 on Docker 24.0.4 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+🔎  Verifying Kubernetes components...
+💡  After the addon is enabled, please run "minikube tunnel" and your ingress resources would be available at "127.0.0.1"
+    ▪ Using image registry.k8s.io/ingress-nginx/controller:v1.8.1
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+    ▪ Using image registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20230407
+    ▪ Using image registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20230407
+🔎  Verifying ingress addon...
+🌟  Enabled addons: storage-provisioner, default-storageclass, ingress
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+rajaniapple@Rajanis-MacBook-Pro minikube % 

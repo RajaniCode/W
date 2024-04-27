@@ -1,0 +1,188 @@
+% docker version
+
+
+# The connection to the server 127.0.0.1:49400 was refused - did you specify the right host or port? # % minikube start
+% kubectl version --output=yaml
+% kubectl version
+
+
+% kubectl config view
+
+
+% minikube version
+
+
+
+## Ingress DNS
+# Start minikube
+% minikube start
+
+
+# Enable the addons
+% minikube addons enable ingress
+% minikube addons enable ingress-dns
+
+
+# Add the `minikube ip` as a DNS server
+# Create a file in /etc/resolver/minikube-test with the following contents.
+[
+domain test
+nameserver 192.168.99.169
+search_order 1
+timeout 5
+]
+[
+Replace 192.168.99.169 with your minikube ip.
+
+If you have multiple minikube IPs, you must configure a file for each.
+
+See https://www.unix.com/man-page/opendarwin/5/resolver/
+
+Note that the port feature does not work as documented.
+]
+% minikube ip
+% cat /etc/resolv.conf/
+% sudo nano /etc/resolv.conf/
+# 192.168.49.2
+[
+domain test
+nameserver 192.168.49.2
+search_order 1
+timeout 5
+]
+% cat /etc/resolv.conf/ 
+
+
+# 4(optional) Configure in-cluster DNS server to resolve local DNS names inside cluster
+# Sometimes it’s useful to access other applications inside cluster via ingress and by their local DNS name - microservices/APIs/tests.
+# In such case ingress-dns addon should be used by in-cluster DNS server - CoreDNS to resolve local DNS names.
+# Edit your CoreDNS config
+% kubectl edit configmap coredns -n kube-system
+
+# Original # % kubectl edit configmap coredns -n kube-system
+[
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: v1
+data:
+  Corefile: |
+    .:53 {
+        log
+        errors
+        health {
+           lameduck 5s
+        }
+        ready
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
+           pods insecure
+           fallthrough in-addr.arpa ip6.arpa
+           ttl 30
+        }
+        prometheus :9153
+        hosts {
+           192.168.65.254 host.minikube.internal
+           fallthrough
+        }
+        forward . /etc/resolv.conf {
+           max_concurrent 1000
+        }
+        cache 30
+        loop
+        reload
+        loadbalance
+    }
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2023-10-25T05:04:52Z"
+  name: coredns
+  namespace: kube-system
+  resourceVersion: "258"
+  uid: 760620e8-1c4e-453e-8193-d211ea5fed2a
+]
+
+# and add block for your local domain # 192.168.49.2
+
+    test:53 {
+            errors
+            cache 30
+            forward . 192.168.49.2
+    }
+
+# Replace 192.168.99.169 with your minikube ip. # 192.168.49.2
+# The final ConfigMap should look like:
+[
+apiVersion: v1
+data:
+  Corefile: |
+    .:53 {
+        errors
+        health {
+           lameduck 5s
+        }    
+...
+    }
+    test:53 {
+            errors
+            cache 30
+            forward . 192.168.49.2
+    }
+kind: ConfigMap
+metadata:
+...
+]
+# See https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/
+
+
+# Testing
+# Add the test ingress
+[
+% kubectl apply -f https://raw.githubusercontent.com/kubernetes/minikube/master/deploy/addons/ingress-dns/example/example.yaml
+]
+% curl https://raw.githubusercontent.com/kubernetes/minikube/master/deploy/addons/ingress-dns/example/example.yaml
+% wget https://raw.githubusercontent.com/kubernetes/minikube/master/deploy/addons/ingress-dns/example/example.yaml
+% cat example.yaml
+% kubectl apply -f example.yaml
+# Note: Minimum Kubernetes version for the example ingress is 1.19
+
+
+# Confirm that DNS queries are returning A records
+% nslookup hello-john.test $(minikube ip)
+% nslookup hello-jane.test $(minikube ip)
+
+
+
+## Clean up
+[
+domain test
+nameserver 192.168.49.2
+search_order 1
+timeout 5
+]
+% sudo nano /etc/resolv.conf/ 
+% cat /etc/resolv.conf/ 
+
+
+# web
+% kubectl delete service web
+# web
+% kubectl delete deployment web
+
+
+# Stop the Minikube cluster
+% minikube stop
+
+
+# Delete the Minikube VM:
+% minikube delete
+
+
+# minikube delete all profiles
+% minikube delete --all
+
+
+# remove folder # .docker # .minikube # .kube
+# % rm -rf /Users/rajaniapple/.docker
+% rm -rf /Users/rajaniapple/.minikube
+% rm -rf /Users/rajaniapple/.kube

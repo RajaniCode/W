@@ -1,0 +1,190 @@
+Last login: Tue Oct 24 17:18:42 on ttys000
+rajaniapple@Rajanis-MacBook-Pro ~ % sw_vers                 
+ProductName:		macOS
+ProductVersion:		14.0
+BuildVersion:		23A344
+rajaniapple@Rajanis-MacBook-Pro ~ % arch
+arm64
+rajaniapple@Rajanis-MacBook-Pro ~ % docker version
+Client:
+ Cloud integration: v1.0.35
+ Version:           24.0.2
+ API version:       1.43
+ Go version:        go1.20.4
+ Git commit:        cb74dfc
+ Built:             Thu May 25 21:51:16 2023
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.21.1 (114176)
+ Engine:
+  Version:          24.0.2
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.4
+  Git commit:       659604f
+  Built:            Thu May 25 21:50:59 2023
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.21
+  GitCommit:        3dce8eb055cbb6872793272b4f20ed16117344f8
+ runc:
+  Version:          1.1.7
+  GitCommit:        v1.1.7-0-g860f061
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+rajaniapple@Rajanis-MacBook-Pro ~ % kubectl version --output=yaml
+clientVersion:
+  buildDate: "2023-10-18T11:33:16Z"
+  compiler: gc
+  gitCommit: a8a1abc25cad87333840cd7d54be2efaf31a3177
+  gitTreeState: clean
+  gitVersion: v1.28.3
+  goVersion: go1.20.10
+  major: "1"
+  minor: "28"
+  platform: darwin/arm64
+kustomizeVersion: v5.0.4-0.20230601165947-6ce0bf390ce3
+
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+rajaniapple@Rajanis-MacBook-Pro ~ % kubectl config view
+apiVersion: v1
+clusters: null
+contexts: null
+current-context: ""
+kind: Config
+preferences: {}
+users: null
+rajaniapple@Rajanis-MacBook-Pro ~ % minikube version
+minikube version: v1.31.2
+commit: fd7ecd9c4599bef9f04c0986c4a0187f98a4396e
+rajaniapple@Rajanis-MacBook-Pro ~ % minikube start --nodes 2 -p multinode-demo
+😄  [multinode-demo] minikube v1.31.2 on Darwin 14.0 (arm64)
+✨  Automatically selected the docker driver
+📌  Using Docker Desktop driver with root privileges
+👍  Starting control plane node multinode-demo in cluster multinode-demo
+🚜  Pulling base image ...
+🔥  Creating docker container (CPUs=2, Memory=2200MB) ...
+🐳  Preparing Kubernetes v1.27.4 on Docker 24.0.4 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔗  Configuring CNI (Container Networking Interface) ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+
+👍  Starting worker node multinode-demo-m02 in cluster multinode-demo
+🚜  Pulling base image ...
+🔥  Creating docker container (CPUs=2, Memory=2200MB) ...
+🌐  Found network options:
+    ▪ NO_PROXY=192.168.49.2
+🐳  Preparing Kubernetes v1.27.4 on Docker 24.0.4 ...
+    ▪ env NO_PROXY=192.168.49.2
+🔎  Verifying Kubernetes components...
+🏄  Done! kubectl is now configured to use "multinode-demo" cluster and "default" namespace by default
+rajaniapple@Rajanis-MacBook-Pro ~ % kubectl get nodes
+NAME                 STATUS   ROLES           AGE   VERSION
+multinode-demo       Ready    control-plane   36s   v1.27.4
+multinode-demo-m02   Ready    <none>          17s   v1.27.4
+rajaniapple@Rajanis-MacBook-Pro ~ % minikube status -p multinode-demo
+multinode-demo
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+multinode-demo-m02
+type: Worker
+host: Running
+kubelet: Running
+
+rajaniapple@Rajanis-MacBook-Pro ~ % cd /Users/rajaniapple/Desktop/Technology/Kubernetes/Proof-of-Concept/minikube 
+rajaniapple@Rajanis-MacBook-Pro minikube % cat hello-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 100%
+  selector:
+    matchLabels:
+      app: hello
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      affinity:
+        # ⬇⬇⬇ This ensures pods will land on separate hosts
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions: [{ key: app, operator: In, values: [hello] }]
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: hello-from
+          image: pbitty/hello-from:latest
+          ports:
+            - name: http
+              containerPort: 80
+      terminationGracePeriodSeconds: 1
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl apply -f hello-deployment.yaml
+deployment.apps/hello created
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl rollout status deployment/hello
+deployment "hello" successfully rolled out
+rajaniapple@Rajanis-MacBook-Pro minikube % cat hello-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+spec:
+  type: NodePort
+  selector:
+    app: hello
+  ports:
+    - protocol: TCP
+      nodePort: 31000
+      port: 80
+      targetPort: http
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl apply -f hello-svc.yaml
+service/hello created
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get all
+NAME                         READY   STATUS    RESTARTS   AGE
+pod/hello-77c947d946-5lmdh   1/1     Running   0          38s
+pod/hello-77c947d946-hrb9f   1/1     Running   0          38s
+
+NAME                 TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+service/hello        NodePort    10.103.213.243   <none>        80:31000/TCP   8s
+service/kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP        2m13s
+
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello   2/2     2            2           38s
+
+NAME                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/hello-77c947d946   2         2         2       38s
+rajaniapple@Rajanis-MacBook-Pro minikube % kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE   IP           NODE                 NOMINATED NODE   READINESS GATES
+hello-77c947d946-5lmdh   1/1     Running   0          48s   10.244.0.3   multinode-demo       <none>           <none>
+hello-77c947d946-hrb9f   1/1     Running   0          48s   10.244.1.2   multinode-demo-m02   <none>           <none>
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube service list -p multinode-demo
+|-------------|------------|--------------|-----|
+|  NAMESPACE  |    NAME    | TARGET PORT  | URL |
+|-------------|------------|--------------|-----|
+| default     | hello      |           80 |     |
+| default     | kubernetes | No node port |     |
+| kube-system | kube-dns   | No node port |     |
+|-------------|------------|--------------|-----|
+rajaniapple@Rajanis-MacBook-Pro minikube % minikube profile list
+|----------------|-----------|---------|--------------|------|---------|---------|-------|--------|
+|    Profile     | VM Driver | Runtime |      IP      | Port | Version | Status  | Nodes | Active |
+|----------------|-----------|---------|--------------|------|---------|---------|-------|--------|
+| multinode-demo | docker    | docker  | 192.168.49.2 | 8443 | v1.27.4 | Running |     2 |        |
+|----------------|-----------|---------|--------------|------|---------|---------|-------|--------|
+rajaniapple@Rajanis-MacBook-Pro minikube % 
