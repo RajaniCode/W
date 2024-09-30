@@ -6,7 +6,7 @@ Research and Development
 Courtesies:  
 ----------- 
 https://developer.apple.com/  
-https://visualstudio.microsoft.com/vs/mac/  
+https://visualstudio.microsoft.com/
 https://kubernetes.io/  
 https://docker.com/  
 https://minikube.sigs.k8s.io/  
