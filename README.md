@@ -2,7 +2,8 @@ Working  🅰️😊💲
 -------  
 
 ![image](https://media.licdn.com/dms/image/v2/D5612AQFa_nUgllBNWA/
-![image](https://drive.google.com/file/d/1UJdo5PSLPaY2Io0dvsHDA7QEF4UO5xj5/view?usp=sharing)
+![image](https://drive.usercontent.google.com/uc?id=1UJdo5PSLPaY2Io0dvsHDA7QEF4UO5xj5&export=download)
+
 
 Credits
 -------
