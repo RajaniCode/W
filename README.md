@@ -1,7 +1,7 @@
 Working  🅰️😊💲
 -------  
 
-![image](https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg)
+![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/Amazon_Web_Services.svg)
 
 ![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/OS.svg)
 
