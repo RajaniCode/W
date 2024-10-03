@@ -6,9 +6,6 @@ Working
 ![image](https://raw.githubusercontent.com/RajaniCode/Working/a95d81e62360367dde226b7742a35bb1b903cddd/Kubernetes/AWS.svg)](https://aws.amazon.com/)
 
 
-![image](https://drive.google.com/uc?export=view&id=1hLm96wSXAENdg--KyyKEqMbmJtNjBOcp)
-
-
 Credits
 -------
 [![image](https://raw.githubusercontent.com/RajaniCode/Working/80b22db202f9a631ca7225c2d4ecc7d4c555625d/Kubernetes/developer.apple.com.svg)](https://developer.apple.com/)
