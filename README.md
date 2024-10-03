@@ -1,7 +1,6 @@
 Working  🅰️😊💲
 -------  
 
-![image](https://media.licdn.com/dms/image/v2/D5612AQFa_nUgllBNWA/
 ![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/OS.svg)
 
 
