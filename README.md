@@ -1,7 +1,7 @@
 Working  
 -------  
 
-![image](https://en.m.wikipedia.org/wiki/File:Amazon_Web_Services_Logo.svg)
+![image](https://media.licdn.com/dms/image/v2/D5612AQFa_nUgllBNWA/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1714158037106?e=2147483647&v=beta&t=DetXpjgBaP6FpiPCFjFoA37dsaCf6VGRgx4rlMvNUrA)
 
 Courtesies:  
 ----------- 
