@@ -1,4 +1,4 @@
-Working  🅰️😊💲
+Working
 -------  
 
 ![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/Amazon_Web_Services.svg)
