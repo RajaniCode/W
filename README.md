@@ -1,6 +1,6 @@
 Working
 -------  
-![image](https://raw.githubusercontent.com/RajaniCode/Working/1dad7189f156a2fe9bd0a59be4fa2ef7e6f2567b/Kubernetes/Amazon_Web_Services.svg)]
+![image](https://raw.githubusercontent.com/RajaniCode/Working/1dad7189f156a2fe9bd0a59be4fa2ef7e6f2567b/Kubernetes/Amazon_Web_Services.svg)
 
 
 ![image](https://raw.githubusercontent.com/RajaniCode/Working/46e6cacbf98c78ed17700a56602b6a0d0aa75dcf/Kubernetes/AWS.svg)
