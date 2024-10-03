@@ -8,8 +8,8 @@ Working
 
 Credits
 -------
-[![image]
-(https://raw.githubusercontent.com/RajaniCode/Working/80b22db202f9a631ca7225c2d4ecc7d4c555625d/Kubernetes/developer.apple.com.svg)](https://developer.apple.com/)
+
+![image](https://raw.githubusercontent.com/RajaniCode/Working/80b22db202f9a631ca7225c2d4ecc7d4c555625d/Kubernetes/developer.apple.com.svg)
 
 https://developer.apple.com/  
 https://visualstudio.microsoft.com/
