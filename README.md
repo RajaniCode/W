@@ -3,8 +3,7 @@ Working
 
 ![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/Amazon_Web_Services.svg)
 
-![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/AWS.svg)
-
+![image](https://raw.githubusercontent.com/RajaniCode/Working/46e6cacbf98c78ed17700a56602b6a0d0aa75dcf/Kubernetes/AWS.svg)
 
 Credits
 -------
