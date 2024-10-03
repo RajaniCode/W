@@ -3,7 +3,7 @@ Working  🅰️😊💲
 
 ![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/Amazon_Web_Services.svg)
 
-![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/OS.svg)
+![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/AWS.svg)
 
 
 Credits
