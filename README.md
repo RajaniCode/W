@@ -1,7 +1,7 @@
 Working  
 -------  
 
-![image](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://github.com/&ved=2ahUKEwjj9c3vk_KIAxXJjGMGHSDnKTYQFnoECAkQAQ&usg=AOvVaw38IHvcyBra8HGhmSxvlCGw)
+![image](https://en.m.wikipedia.org/wiki/File:Amazon_Web_Services_Logo.svg)
 
 Courtesies:  
 ----------- 
