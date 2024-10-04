@@ -18,16 +18,16 @@ Credits
 
 
 
-![elixir-lang org](https://github.com/user-attachments/assets/51004915-a62d-436a-829b-39bd7f974841)](https://elixir-lang.org/)
+[![elixir-lang org](https://github.com/user-attachments/assets/51004915-a62d-436a-829b-39bd7f974841)](https://elixir-lang.org/)
 
 
-![git-scm com](https://github.com/user-attachments/assets/9034c022-7450-4e57-9bb6-e7f51edda29f)](https://git-scm.com/)
+[![git-scm com](https://github.com/user-attachments/assets/9034c022-7450-4e57-9bb6-e7f51edda29f)](https://git-scm.com/)
 
 
-![r-project org](https://github.com/user-attachments/assets/194fb77b-67ac-4e75-9f07-4efbaf24908b)](https://r-project.org/)
+[![r-project org](https://github.com/user-attachments/assets/194fb77b-67ac-4e75-9f07-4efbaf24908b)](https://r-project.org/)
 
 
-![ruby-lang](https://github.com/user-attachments/assets/edd7d449-2f81-4f77-b7a5-2ba7425c2fad)](https://ruby-lang.org/)
+[![ruby-lang](https://github.com/user-attachments/assets/edd7d449-2f81-4f77-b7a5-2ba7425c2fad)](https://ruby-lang.org/)
 
 
 
