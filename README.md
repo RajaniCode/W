@@ -15,6 +15,13 @@ Credits
 
 [![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/developer.apple.com.svg?raw=true)](https://developer.apple.com/)
 
+
+![elixir-lang org](https://github.com/user-attachments/assets/d444ff8a-c7cb-42b2-a20e-06de3b44219b)
+![git-scm com](https://github.com/user-attachments/assets/bad9ba0e-8283-4756-bd68-78d0ea3a10fc)
+![r-project org](https://github.com/user-attachments/assets/5cd5c0e3-739d-4eb0-ab85-eaa00bf3f1cf)
+![ruby-lang](https://github.com/user-attachments/assets/b3c74ccb-8b33-4b7b-8c38-15d2c6fd3883)
+
+
 https://developer.apple.com/  
 https://visualstudio.microsoft.com/
 https://kubernetes.io/  
