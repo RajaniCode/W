@@ -32,7 +32,7 @@ Credits
 
 [![ruby-lang](https://github.com/user-attachments/assets/edd7d449-2f81-4f77-b7a5-2ba7425c2fad)](https://ruby-lang.org/)
 
-[![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/developer.apple.com.svg?raw=true)](https://github.com/RajaniCode/C/blob/main/Blazor/Reference/WebAssembly/What%20can't%20WebAssembly%20do.mp4)
+[![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/developer.apple.com.svg?raw=true)](https://github.com/RajaniCode/C/blob/main/Blazor/Reference/WebAssembly/What%20can't%20WebAssembly%20do.mp4?raw=true)
 
 https://visualstudio.microsoft.com/
 https://kubernetes.io/  
