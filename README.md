@@ -34,7 +34,7 @@ Credits
 
 [![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/developer.apple.com.svg?raw=true)](https://github.com/RajaniCode/C/blob/main/Blazor/Reference/WebAssembly/What%20can't%20WebAssembly%20do.mp4?raw=true)
 
-<video src='https://github.com/RajaniCode/C/blob/main/Blazor/Reference/WebAssembly/What%20can't%20WebAssembly%20do.mp4' width=180/>
+<video src='https://github.com/RajaniCode/C/blob/main/Blazor/Reference/WebAssembly/What%20can't%20WebAssembly%20do.mp4?raw=true' width=180/>
 
 https://visualstudio.microsoft.com/
 https://kubernetes.io/  
