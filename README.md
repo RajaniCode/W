@@ -5,8 +5,7 @@ Working
 [![AWS](https://github.com/user-attachments/assets/03cba219-864e-4531-9111-9eba2afc32e2)](https://aws.amazon.com/)
 
 
-[
-![image](https://raw.githubusercontent.com/RajaniCode/Working/a95d81e62360367dde226b7742a35bb1b903cddd/Kubernetes/AWS.svg)](https://aws.amazon.com/)
+[![image](https://raw.githubusercontent.com/RajaniCode/Working/a95d81e62360367dde226b7742a35bb1b903cddd/Kubernetes/AWS.svg)](https://aws.amazon.com/)
 
 
 Credits
@@ -18,16 +17,16 @@ Credits
 [![image](https://github.com/RajaniCode/Working/blob/main/Kubernetes/developer.apple.com.svg?raw=true)](https://developer.apple.com/)
 
 
-[![image]
+
 ![elixir-lang org](https://github.com/user-attachments/assets/51004915-a62d-436a-829b-39bd7f974841)](https://elixir-lang.org/)
 
-[![image]
+
 ![git-scm com](https://github.com/user-attachments/assets/9034c022-7450-4e57-9bb6-e7f51edda29f)](https://git-scm.com/)
 
-[![image]
+
 ![r-project org](https://github.com/user-attachments/assets/194fb77b-67ac-4e75-9f07-4efbaf24908b)](https://r-project.org/)
 
-[![image]
+
 ![ruby-lang](https://github.com/user-attachments/assets/edd7d449-2f81-4f77-b7a5-2ba7425c2fad)](https://ruby-lang.org/)
 
 
