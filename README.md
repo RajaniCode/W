@@ -5,7 +5,7 @@ Working
 - ![#c5f015](https://via.placeholder.com/15/c5f015/000000?text=+) `#c5f015`
 - ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) `#1589F0`
 
-<p style="color:#FF0000";>Red paragraph text</p>
+$${\color{red}Welcome \space \color{lightblue}To \space \color{orange}Stackoverflow}$$
 
 Credits
 -------
