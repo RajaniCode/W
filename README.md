@@ -5,7 +5,7 @@ Working
 - ![#c5f015](https://via.placeholder.com/15/c5f015/000000?text=+) `#c5f015`
 - ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) `#1589F0`
 
-$${\color{red}Welcome \space \color{lightblue}To \space \color{orange}Stackoverflow}$$
+$${\color{red}R \space \color{green}G \space \color{blue}B}$$
 
 $${\color{blue}Hola!}$$
 
